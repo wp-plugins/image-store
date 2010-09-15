@@ -1,6 +1,6 @@
 === Image Store ===
 Contributors: Hafid R. Trujillo, hax
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=D64HFDXBBMXEG/
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8SJEQXK5NK4ES
 Tags: e-commerce,shop,store,photo,picture,image,galleries,web2.0,paypal,imstore,image-store,slideshow
 Requires at least: 3.0.0
 Tested up to: 3.0.1
@@ -12,7 +12,7 @@ Image Store (ImStore) is a Image Gallery and Store plugin for WordPress with a s
 
 NOTE: BETA RELEASE (0.5.0)
 This version shouldn't be install on live/production website untill is fully tested. please let me know of any issues on the plugin blog
-[Support Forum](http:http://wordpress.org/tags/image-store?forum_id=10 "Support Forum")
+<a href="http://wordpress.org/tags/image-store?forum_id=10">Wordpres Forums Posts</a>
 
 Image Store (ImStore) is a Image Gallery and Store plugin for WordPress with a slideshow option. This 
 plugin was created because I saw the need of the worpress community to have a images store that didn't required the installation of multiple
