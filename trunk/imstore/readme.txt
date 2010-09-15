@@ -1,6 +1,6 @@
 === Image Store ===
 Contributors: Hafid R. Trujillo, hax
-Donate link: #
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=D64HFDXBBMXEG/
 Tags: e-commerce,shop,store,photo,picture,image,galleries,web2.0,paypal,imstore,image-store,slideshow
 Requires at least: 3.0.0
 Tested up to: 3.0.1
@@ -59,7 +59,7 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 == Installation ==
 
 * Download the latest version of the plugin to your computer.
-* With an FTP program, access your site’s server.
+* With an FTP program, access your site's server.
 * Upload the plugin folder to the /wp-content/plugins folder.
 * In the WordPress administration panels, click on plugins from the menu on the left side.
 * You should see the "Image Store" plugin listed.
@@ -72,7 +72,7 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * Apache 2.2.11
 * Linux
 
-windows/mac
+
 * Explorer 8
 * Safari 4.1
 * Firefox 3.5
