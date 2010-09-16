@@ -1,7 +1,7 @@
 === Image Store ===
 Contributors: Hafid R. Trujillo, hax
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8SJEQXK5NK4ES
-Tags: e-commerce,shop,store,photo,picture,image,galleries,web2.0,paypal,imstore,image-store,slideshow
+Tags: e-commerce,shop,store,photo,picture,image,galleries,web2.0,imstore,image-store,slideshow,gallery,sale,photographers,shop
 Requires at least: 3.0.0
 Tested up to: 3.0.1
 Stable tag: 0.5.0
@@ -33,10 +33,10 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * CSV sales download
 * CSV customer download
 * Sales menu: To keep track of you sales
-* Disable Store: To be use just as a gallery plugin
 * Image upload: Via a zip-file ( no zip-mod required )
 * Watermark function: You can add a watermark image or text 
-* Image download: allow user to download image after purchase
+* Image download: Allow user to download image after purchase
+* Disable Store: Use just as a gallery manager and not a store
 * Folder import: add galleries by just uploading image through FTP
 * Public Galleries:  display your photos so that anybody can buy them.
 * Hidden image url: so that users don't know where your images are store
