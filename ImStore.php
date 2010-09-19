@@ -4,7 +4,7 @@ Plugin Name: Image Store
 Plugin URI: http://imstore.xparkmedia.com
 Description: Your very own image store within wordpress "ImStore"
 Author: Hafid R. Trujillo Huizar
-Version: 0.5.0
+Version: 0.5.1
 Author URI: http://www.xparkmedia.com
 Requires at least: 3.0.0
 Tested up to: 3.0.1
@@ -177,7 +177,7 @@ class ImStore{
 	 * @since 0.5.0 
 	 */
 	function add_var_for_rewrites( $vars ){
-		array_push( $vars, 'imsgalid', 'imspage', 'imsmessage' );
+		array_push( $vars, 'imsgalid', 'imspage', 'imsmessage', 'imslogout' );
 		return $vars;
 	}
 	
@@ -191,21 +191,25 @@ class ImStore{
 	 */
 	function add_rewrite_rules( $wp_rewrite ) {	
 	
-		$wp_rewrite->add_rewrite_tag( '%imspage%', '(.+?)', 'imspage=');
-		$wp_rewrite->add_rewrite_tag( '%imsgalid%', '(.+?)', 'imsgalid=');
-		$wp_rewrite->add_rewrite_tag( '%imsmessage%', '(.+?)', 'imsmessage=');
+		$wp_rewrite->add_rewrite_tag( '%imspage%', '([^/]+)', 'imspage=');
+		$wp_rewrite->add_rewrite_tag( '%imsgalid%', '([0-9]+)', 'imsgalid=');
+		$wp_rewrite->add_rewrite_tag( '%imslogout%', '([^/]+)', 'imslogout=');
+		$wp_rewrite->add_rewrite_tag( '%imsmessage%', '([0-9]+)', 'imsmessage=');
 		
 		$new_rules = array(
-			"(.+?)/imstore/(.+?)/([0-9]+)/ms/(.+?)/?$" => 
+			"(.+?)/([^/]+)/gal-([0-9]+)/ms/?([0-9]+)/?$" => 
 			"index.php?pagename=" . $wp_rewrite->preg_index(1).
 			'&imspage=' . $wp_rewrite->preg_index(2).
 			'&imsgalid=' . $wp_rewrite->preg_index(3).
 			'&imsmessage=' . $wp_rewrite->preg_index(4),
-			"(.+?)/imstore/(.+?)/([0-9]+)/?$" => 
+			"(.+?)/([^/]+)/gal-([0-9]+)/?$" => 
 			"index.php?pagename=" . $wp_rewrite->preg_index(1).
 			'&imspage=' . $wp_rewrite->preg_index(2).
 			'&imsgalid=' . $wp_rewrite->preg_index(3),
-			"(.+?)/imstore/(.+?)/?$" => 
+			"(.+?)/logout/?([^/]+)?$" => 
+			"index.php?pagename=" . $wp_rewrite->preg_index(1).
+			'&imslogout=' . $wp_rewrite->preg_index(2),
+			"(.+?)/([^/]+)/?$" => 
 			"index.php?pagename=" . $wp_rewrite->preg_index(1).
 			'&imspage=' . $wp_rewrite->preg_index(2),
 

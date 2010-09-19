@@ -81,13 +81,13 @@ class ImStoreFront{
 	 */
 	function get_permalink( $galid, $page = '' ){
 		if( $this->permalinks ){
-			$link = get_permalink( ) . "/imstore/". sanitize_title( $this->pages[$page] ) . "/$galid";
-			if( $this->success ) $link .= '/ms/' . $this->success;
+			$link =  "/". sanitize_title( $this->pages[$page] ) . "/gal-$galid/";
+			if( $this->success ) $link .= 'ms/' . $this->success;
 		}else{
-			$link = get_permalink( ) . '&imspage=' . $page . '&imsgalid=' . $galid ;
+			$link = '&imspage=' . $page . '&imsgalid=' . $galid ;
 			if( $this->success ) $link .= '&imsmessage=' . $this->success; 
 		}
-		return $link;
+		return get_permalink( ) . str_replace( '//', '/', $link );
 	}
 	
 	
@@ -143,8 +143,9 @@ class ImStoreFront{
 		if ( !empty( $_POST['checkout'] ) )
 			$this->redirect_form_post_data( $this->gateway[$this->opts['gateway']], $_POST );
 		
+		
 		//logout user
-		if ( $_REQUEST['logout'] == true ){
+		if ( $this->logout == true ){
 			ImStore::logout_ims_user( );
 			wp_redirect( get_permalink( ) ); 
 		}
@@ -240,6 +241,7 @@ class ImStoreFront{
 		
 		$this->imspage		= get_query_var( 'imspage' );
 		$this->query_id 	= get_query_var( 'imsgalid' );
+		$this->logout		= get_query_var( 'imslogout' );
 		$this->permalinks 	= get_option( 'permalink_structure' );
 		$this->message		= $messages[get_query_var( 'imsmessage' )];
 				
@@ -502,9 +504,9 @@ class ImStoreFront{
 	 */
 	function display_galleries( ){ 
 		
-		$itemtag 	= 'dl';
-		$icontag 	= 'dt';
-		$captiontag = 'dd';
+		$itemtag 	= 'ul';
+		$icontag 	= 'li';
+		$captiontag = 'div';
 		$columns 	= intval( $this->opts['displaycolmns'] );
 		$itemwidth	= $columns > 0 ? floor(100/$columns) : 100;
 		$nonce 		= '_wpnonce=' . wp_create_nonce( 'ims_secure_img' );
@@ -513,24 +515,24 @@ class ImStoreFront{
 		foreach ( $this->attachments as $image ){
 			if( $image->post_parent ){
 				$title = get_the_title( $image->post_parent );
-				$link = $this->get_permalink( $image->post_parent );
+				$link = $this->get_permalink( $image->post_parent, 1 );
 			}else{
 				$link = IMSTORE_URL . "image.php?$nonce&amp;img={$image->ID}";
 				$title = $image->post_title;
 			}
-			$imagetag = '<img src="' . $image->meta_value['sizes']['thumbnail']['url'] . '" width="' . $itemwidth . '%" alt="' . $title . '" />'; 			$title_att = ( $this->is_galleries ) ? $title : $image->post_excerpt ;
-			
+			$imagetag = '<img src="' . $image->meta_value['sizes']['thumbnail']['url'] . '" alt="' . $title . '" />'; 
+			$title_att = ( $this->is_galleries ) ? $title : $image->post_excerpt ;
 			$output .= "<{$icontag}>";
 			if( !$this->opts['disablestore'] && ( $this->query_id || $this->is_secure ) ) 
 				$output .= '<input name="imgs[]" type="checkbox" value="' . $image->ID . '" />';
 			$output .= '<a href="' . $link . '" class="ims-colorbox" title="' . $title_att . '">' . $imagetag . '</a>';
-			$output .= "</{$icontag}>";
 			if ( $this->is_galleries ) {
 				$output .= "
 					<{$captiontag} class='gallery-caption'>
 					" . wptexturize( $title ) . "
 					</{$captiontag}>";
 			}
+			$output .= "</{$icontag}>";
 		}
 		
 		echo $output .= "</{$itemtag}>";
@@ -552,11 +554,13 @@ class ImStoreFront{
 			$css = ( $key == $this->imspage || ( $key == 1 && empty( $this->imspage ) ) ) ? ' current': '';
 			$nav .= '<li class="imsmenu-' . $title . $css .'"><a href="' . $this->get_permalink( $this->gallery_id, $key ) .'">' . $page . '</a></li>' . "\n";
 		}
-		if( $this->is_secure && !is_user_logged_in( ) )
-			$nav .= '<li class="imsmenu-' . $title . $css .'"><a href="' . $this->get_permalink( $this->gallery_id ) .'&amp;logout=true">' . __( "Log Out Gallery", ImStore::domain ) . '</a></li>' . "\n";
-		else
+		if( $this->is_secure && !is_user_logged_in( ) && $this->permalinks )
+			$nav .= '<li class="imsmenu-' . $title . $css .'"><a href="' . get_permalink( ) .'/logout/true">' . __( "Log Out Gallery", ImStore::domain ) . '</a></li>' . "\n";
+		elseif( $this->is_secure && !is_user_logged_in( ) )
+			$nav .= '<li class="imsmenu-' . $title . $css .'"><a href="' . get_permalink( ) .'&amp;imslogout=true">' . __( "Log Out Gallery", ImStore::domain ) . '</a></li>' . "\n";
+		elseif( $this->is_secure )
 			$nav .= '<li class="imsmenu-' . $title . $css .'">' . wp_loginout( get_permalink( ), false ) . '</li>' . "\n";
-		echo $nav . "<ul>\n";
+		echo $nav . "</ul>\n";
 	}
 	
 	

@@ -270,7 +270,7 @@ $images = get_posts( array(
 					<option value="DESC"<?php selected('DESC', $_sort )?>><?php _e( 'Descending', ImStore::domain )?></option> 
 				</select>
 				<input type="submit" name="dosort" value="<?php _e( 'Sort', ImStore::domain )?>" class="button action" /> |
-				<a href="<?php echo get_permalink( $pageid ) . "&imsgalid=$gal_id{$nonce}"?>" class="button"><?php _e( "View", ImStore::domain )?></a> 
+				<a href="<?php echo get_bloginfo( 'url' ) . "?page_id=$pageid&imsgalid=$gal_id{$nonce}"?>" class="button"><?php _e( "View", ImStore::domain )?></a> 
 				<?php endif?>
 			</div>
 			

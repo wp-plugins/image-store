@@ -18,9 +18,9 @@
 .ims-message.success { padding:5px 8px; background-color:#f8ffed; border:solid 1px #8ead4c; margin-bottom:10px;}
 .ims-add-error, .ims-message.error { padding:5px 8px; background-color:#fff1ed; border:solid 1px #ad5555; margin-bottom:10px;}
 .ims-innerbox{ padding:10px 0; }
-.ims-gallery dt{ float:left; position:relative; padding:2.5px 5px 0;}
-.ims-gallery dt input[type=checkbox]{ position:absolute;}
-.ims-gallery dd{ float:left; font-size:.7em; clear:both; padding:0 5px; margin:0; display:inline; line-height:120%}
+ul.ims-gallery { float:left; position:relative; padding:2.5px 5px 0; list-style:none; margin:0}
+ul.ims-gallery li {font-size:.7em; padding:0 5px; margin:0; display:block; float:left; line-height:120%; list-style:none}
+ul.ims-gallery li input[type=checkbox]{ position:absolute;}
 
 .ims-image-count{ padding:20px 10px 10px; clear:both; font-size:1.5em; font-weight:bold}
 .ims-instructions{ padding:0 10px 10px; clear:both;}
