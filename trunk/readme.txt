@@ -4,17 +4,18 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: e-commerce,shop,store,photo,picture,image,galleries,web2.0,imstore,image-store,slideshow,gallery,sale,photographers,shop
 Requires at least: 3.0.0
 Tested up to: 3.0.1
-Stable tag: 0.5.0
+Stable tag: 0.5.1
 
-Image Store (ImStore) is a Image Gallery and Store plugin for WordPress with a slideshow option.
+Image Store (ImStore) is a image gallery and store plugin for WordPress with a slideshow and paypal integration.
 
 == Description ==
 
 NOTE: BETA RELEASE (0.5.0)
-This version shouldn't be install on live/production website untill is fully tested. please let me know of any issues on the plugin blog
-<a href="http://wordpress.org/tags/image-store?forum_id=10">Wordpres Forums Posts</a>
+This version shouldn't be install on live/production website untill is fully tested. please let me know of any issues on the
+<a href="http://wordpress.org/tags/image-store?forum_id=10">wordpres forums posts</a> or
+<a href="http://imstore.xparkmedia.com/">wordpres forums posts</a> 
 
-Image Store (ImStore) is a Image Gallery and Store plugin for WordPress with a slideshow option. This 
+Image Store (ImStore) is a image gallery and store plugin for WordPress with a slideshow and paypal integration. This 
 plugin was created because I saw the need of the worpress community to have a images store that didn't required the installation of multiple
 plugins to get this accomplished or to go through a lot of settings. :@)
 
@@ -34,6 +35,7 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * CSV customer download
 * Sales menu: To keep track of you sales
 * Image upload: Via a zip-file ( no zip-mod required )
+* Dynamic generation of sepia and black & white images
 * Watermark function: You can add a watermark image or text 
 * Image download: Allow user to download image after purchase
 * Disable Store: Use just as a gallery manager and not a store
@@ -47,9 +49,9 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 
 
 = To Come =
-
 * Google checkout integration
 * Add image size units ( in. cm. px.)
+* Add max images per page on slideshow.
 * Sales Dashboard: display monthly highlihts on sales
 * Media RSS feed : Add the Cooliris Effect to your gallery
 * Sidebar Widget : show images from your unsecure galleries
@@ -71,7 +73,6 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * MySQL 5.1.26 
 * Apache 2.2.11
 * Linux
-
 
 * Explorer 8
 * Safari 4.1
@@ -100,6 +101,15 @@ With the plugin installed navigate to Image Store > settings and click on the do
 
 == Changelog ==
 
+= 0.5.1 =
+* html clean up
+* CSS modifications.
+* Add image cache( htaccess ).
+* Fix permalinks admin/frontend.
+* Remove login link from unsecure galleries.
+* Fix images displaying on the frontend with trash status.
+* Increase RAM memory for swfupload to process big images.
+
 = 0.5.0 =
 * Beta release
 
@@ -116,7 +126,8 @@ Ronnie Garcia, Benj Arriola, RonnieSan ( http://www.uploadify.com/ )
 
 
 == Upgrade Notice ==
-	none
+* Upgrade from 0.5.0 to 0.5.0 may change your permalinks. 
+
 
 == Screenshots ==
 

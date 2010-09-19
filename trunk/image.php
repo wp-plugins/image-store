@@ -59,6 +59,7 @@ class ImStoreImage{
 		
 		//use to process big images
 		ini_set('memory_limit', '216M');
+		ini_set('set_time_limit', '900');
 		
 		$filetype 	= wp_check_filetype( basename( $this->image_dir ) );
 		$gmdate_mod = gmdate( "D, d M Y H:i:s", filemtime( $this->image_dir ) );

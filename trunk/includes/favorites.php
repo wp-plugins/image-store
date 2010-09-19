@@ -37,7 +37,7 @@ $this->get_favorite_images( );
 		<ul class="ims-tools-nav">
 			<li class="ims-select-all"><a href="#" rel="nofollow"><?php _e( "Select all", ImStore::domain )?></a></li>
 			<li class="ims-unselect-all"><a href="#" rel="nofollow"><?php _e( "Unselect all", ImStore::domain )?></a></li>
-			<li class="add-images-to-cart"><a href="#"rel="nofollow"><?php _e( "Add to cart", ImStore::domain )?></a></li>
+			<li class="add-images-to-cart"><a href="#" rel="nofollow"><?php _e( "Add to cart", ImStore::domain )?></a></li>
 			<li class="remove-from-favorite"><a href="#" rel="nofollow"><?php _e( "Remove", ImStore::domain )?></a></li>
 		</ul>
 	</div>

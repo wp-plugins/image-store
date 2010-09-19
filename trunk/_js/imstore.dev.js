@@ -93,7 +93,7 @@ jQuery(document).ready(function($){
 	if( $('#ims-thumbs').length > 0 ){
 		var gallery = $('#ims-thumbs').galleriffic({
 			delay:					2500,
-			numThumbs:       		8,
+			numThumbs:       		7,
 			preloadAhead:      		10,
 			maxPagesToShow:     	5,
 			enableTopPager:     	true,

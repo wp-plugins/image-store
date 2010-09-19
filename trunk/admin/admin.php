@@ -584,6 +584,7 @@ class ImStoreAdmin extends ImStore{
 	function show_menu( ){
 		global $pagenowurl, $user_ID;
 		
+		$this->permalinks 	= get_option( 'permalink_structure' );
 		$pagenowurl = admin_url( ) . 'admin.php?page=' . $_GET['page'];
 		
 		// display page

@@ -16,6 +16,10 @@ header( 'Cache-control: private');
 header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' );
 header( 'Cache-control: no-cache, no-store, must-revalidate, max-age=0');;
 
+//use to process big images
+ini_set('memory_limit', '216M');
+ini_set('set_time_limit', '900');
+		
 if ( !empty( $_FILES ) ) {
 	
 	$abspath = str_replace( "\\","/", __FILE__ );
@@ -35,12 +39,15 @@ if ( !empty( $_FILES ) ) {
 		if( !file_exists( $targetfile ) ){
 			move_uploaded_file( $tempfile, $targetfile );
 			@chmod( $targetfile, 0755 );
+			@unlink( tempfile )
 			echo $targetfile; return;
 		}else{
+			@unlink( tempfile )
 			echo "x";
 			return;
 		}
 	}
+	@unlink( tempfile )
 	return;
 }
 die( );

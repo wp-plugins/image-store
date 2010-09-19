@@ -172,7 +172,7 @@ $galleries 	= get_ims_galleries( $this->per_page ) ;
 								<a href="<?php echo $pagenowurl . "&amp;action=pending&amp;id=$id{$nonce}"?>"><?php _e( "Restore", ImStore::domain )?></a>
 								<?php else:?>
 								<a href="<?php echo $pagenowurl . "&amp;edit=1&amp;id=$id{$nonce}"?>"><?php _e( "Edit", ImStore::domain )?></a> |
-								<a href="<?php echo get_permalink( $pageid ) . "&imsgalid=$id{$nonce}"?>"><?php _e( "View", ImStore::domain )?></a> | 
+								<a href="<?php echo get_bloginfo( 'url' ) . "?page_id=$pageid&imsgalid=$id{$nonce}"?>"><?php _e( "View", ImStore::domain )?></a> | 
 								<a href="<?php echo $pagenowurl . "&amp;action=trash&amp;id=$id{$nonce}"?>"><?php _e( "Trash", ImStore::domain )?></a>
 								<?php endif?>
 							</div>
