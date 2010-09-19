@@ -13,7 +13,7 @@ Image Store (ImStore) is a image gallery and store plugin for WordPress with a s
 NOTE: BETA RELEASE (0.5.0)
 This version shouldn't be install on live/production website untill is fully tested. please let me know of any issues on the
 <a href="http://wordpress.org/tags/image-store?forum_id=10">wordpres forums posts</a> or
-<a href="http://imstore.xparkmedia.com/">wordpres forums posts</a> 
+<a href="http://imstore.xparkmedia.com/">Plugin site</a> 
 
 Image Store (ImStore) is a image gallery and store plugin for WordPress with a slideshow and paypal integration. This 
 plugin was created because I saw the need of the worpress community to have a images store that didn't required the installation of multiple
