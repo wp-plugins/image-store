@@ -101,8 +101,8 @@ class ImStoreImage{
 				$info = getimagesize( $this->image_dir );
 				$tb = imagettfbbox( $font_size, 0, $font, $opts["watermarktext"] );
 				
-				$y = $info[1]/1.05;
-				$y = ceil(( $info[0] - $tb[2]) / 2);
+				$y = $info[1]/1.15;
+				$x = ceil(( $info[0] - $tb[2]) / 2);
 				
 				imagettftext( $image, $font_size, 0, $x, $y, $black, $font, $opts["watermarktext"] );
 				imagettftext( $image, $font_size, 0, $x, $y, $color, $font, $opts["watermarktext"] );
