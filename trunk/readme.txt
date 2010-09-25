@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: e-commerce,shop,store,photo,picture,image,galleries,web2.0,imstore,image-store,slideshow,gallery,sale,photographers,shop
 Requires at least: 3.0.0
 Tested up to: 3.0.1
-Stable tag: 0.5.1
+Stable tag: 0.5.2
 
 Image Store (ImStore) is a image gallery and store plugin for WordPress with a slideshow and paypal integration.
 
@@ -101,13 +101,26 @@ With the plugin installed navigate to Image Store > settings and click on the do
 
 == Changelog ==
 
+= 0.5.2 =
+* CSS compression.
+* CSS modifications.
+* Fix: js errors on IE.
+* Added: Slideshow options
+* Fix: watermark text location.
+* Fix: expire gallery query/cron
+* Text change: Inside USA to Local.
+* Added: colorbox gallery feature.
+* Relocated colorbox styles and images.
+* Fix: CSS AlphaImageLoader image url for (color box)IE.
+
+
 = 0.5.1 =
-* html clean up
+* HTML clean up
 * CSS modifications.
 * Add image cache( htaccess ).
-* Fix permalinks admin/frontend.
-* Remove login link from unsecure galleries.
-* Fix images displaying on the frontend with trash status.
+* Fix: permalinks admin/frontend.
+* Remove: login link from unsecure galleries.
+* Fix: images displaying on the frontend with trash status.
 * Increase RAM memory for swfupload to process big images.
 
 = 0.5.0 =
@@ -126,6 +139,7 @@ Ronnie Garcia, Benj Arriola, RonnieSan ( http://www.uploadify.com/ )
 
 
 == Upgrade Notice ==
+* Upgrade from previous to 0.5.2 slideshow options will be addes or reset setting to update options. 
 * Upgrade from 0.5.0 to 0.5.0 may change your permalinks. 
 
 

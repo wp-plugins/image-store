@@ -4,7 +4,7 @@ Plugin Name: Image Store
 Plugin URI: http://imstore.xparkmedia.com
 Description: Your very own image store within wordpress "ImStore"
 Author: Hafid R. Trujillo Huizar
-Version: 0.5.1
+Version: 0.5.2
 Author URI: http://www.xparkmedia.com
 Requires at least: 3.0.0
 Tested up to: 3.0.1
@@ -230,13 +230,14 @@ class ImStore{
 		global $wpdb;
 		$wpdb->query( 
 			"UPDATE $wpdb->posts SET post_status = 'expire' 
-			WHERE post_expire = '" . date( 'Y-m-d', current_time( 'timestamp' ) ) . "'"
+			WHERE post_expire <= '" . date( 'Y-m-d', current_time( 'timestamp' ) ) . "'
+			AND post_type = 'ims_gallery'"
 		);
 		$wpdb->query( 
 			"DELETE p,pm FROM $wpdb->posts p 
 			LEFT JOIN $wpdb->postmeta pm ON ( p.ID = pm.post_id ) 
-			WHERE post_expire = '" . date( 'Y-m-d', current_time( 'timestamp' ) ) . "'
-			AND post_type = 'ims_order'"
+			WHERE post_expire <='" . date( 'Y-m-d', current_time( 'timestamp' ) ) . "'
+			AND post_type = 'ims_order' AND post_status = 'draft'"
 		);
 		$wpdb->query( "OPTIMIZE TABLE $wpdb->terms, $wpdb->postmeta, $wpdb->posts, $wpdb->term_relationships, $wpdb->term_taxonomy" );
 	}
@@ -265,6 +266,32 @@ class ImStore{
 			}
 		}
 	}
+	
+
+	/**
+	 * temporaty upgrade function
+	 * will be remove on nex release
+	 *
+	 * @return void
+	 * @since 0.5.2 
+	 */
+	 function add_slideshow_options( ){
+		$ims_ft_opts = get_option( 'ims_front_options' );
+		$ims_ft_opts['numThumbs']		= 8;
+		$ims_ft_opts['maxPagesToShow']	= 5;
+		$ims_ft_opts['transitionTime']	= 1000;
+		$ims_ft_opts['slideshowSpeed']	= 3200;
+		$ims_ft_opts['autoStart']		= 'false';
+		$ims_ft_opts['playLinkText']	= __( 'Pay', ImStore::domain );
+		$ims_ft_opts['pauseLinkTex']	= __( 'Pause', ImStore::domain );
+		$ims_ft_opts['closeLinkText']	= __( 'Close', ImStore::domain );
+		$ims_ft_opts['prevLinkText']	= __( 'Previous', ImStore::domain );
+		$ims_ft_opts['nextLinkText']	= __( 'Next', ImStore::domain );
+		$ims_ft_opts['nextPageLinkText']= __( 'Next &rsaquo;', ImStore::domain );
+		$ims_ft_opts['prevPageLinkText']= __( '&lsaquo; Prev', ImStore::domain );
+		update_option( 'ims_front_options', $ims_ft_opts );
+	 }
+	 
 
 }
 
