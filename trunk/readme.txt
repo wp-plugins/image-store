@@ -10,7 +10,7 @@ Image Store (ImStore) is a image gallery and store plugin for WordPress with a s
 
 == Description ==
 
-NOTE: BETA RELEASE (0.5.0) - (0.5.3)
+NOTE: BETA RELEASE (0.5.0) - (0.5.4)
 This version shouldn't be install on live/production website untill is fully tested. please let me know of any issues on the
 <a href="http://wordpress.org/tags/image-store?forum_id=10">wordpres forums posts</a> or
 <a href="http://imstore.xparkmedia.com/">Plugin site</a> 
