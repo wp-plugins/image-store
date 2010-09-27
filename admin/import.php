@@ -467,7 +467,7 @@ function get_ims_galleries( ){
 		SELECT ID, post_title 
 		FROM $wpdb->posts
 		WHERE post_type = 'ims_gallery'
-		AND post_status = 'publish'"
+		AND post_status != 'publish'"
 	);
 }
 
