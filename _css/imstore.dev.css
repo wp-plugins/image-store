@@ -67,7 +67,8 @@ div.pagination span.ellipsis{ border: none; padding: 5px 0 3px 2px;}
 #ims-thumbs .thumbs{ list-style:none; padding:0; margin:0}
 #ims-thumbs .thumbs li{ list-style:none; margin:0; padding:2px 4px; float:left}
 #ims-thumbs .thumbs li .caption{ display:none}
-
+.ims-slideshow-box{ margin-bottom:15px}
+.ims-slideshow-box .cl{ clear:both}
 
 /*Tables*/
 table.ims-table { border:none; border-spacing:0; border-collapse:separate; }

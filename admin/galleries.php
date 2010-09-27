@@ -257,7 +257,7 @@ function get_ims_galleries( $perpage ){
 		$datef $srch
 		GROUP BY ID
 		ORDER BY post_date DESC 
-	  LIMIT $limit, $perpage"
+	 LIMIT $limit, $perpage"
 	);
 	
 	if( empty( $r ) )

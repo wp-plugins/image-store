@@ -43,6 +43,7 @@ class ImStoreFront{
 		add_action( 'wp_head', array( &$this, 'print_ie_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( &$this, 'load_scripts_styles' ) );
 		add_shortcode( 'image-store', array( &$this, 'imstore_shortcode' ) );
+		if( $this->opts['imswidget'] ) include_once ( IMSTORE_ABSPATH . '/admin/widget.php' );
 	}
 	
 		
@@ -54,12 +55,12 @@ class ImStoreFront{
 	 */
 	function load_scripts_styles( ){
 		global $wp_styles;
-		wp_enqueue_style( 'colorbox', IMSTORE_URL .'_css/colorbox.css', NULL, '0.5.0' );
-		if( $this->opts['stylesheet'] ) wp_enqueue_style( 'imstore', IMSTORE_URL .'_css/imstore.css', NULL, '0.5.0' );
+		wp_enqueue_style( 'colorbox', IMSTORE_URL .'_css/colorbox.css', NULL, '0.5.2' );
+		if( $this->opts['stylesheet'] ) wp_enqueue_style( 'imstore', IMSTORE_URL .'_css/imstore.css', NULL, '0.5.2' );
 		wp_enqueue_script( 'colorbox', IMSTORE_URL .'_js/jquery.galleriffic.js', array( 'jquery' ), '1.3.6 ', true); 
 		wp_enqueue_script( 'galleriffic', IMSTORE_URL .'_js/jquery.colorbox.js', array( 'jquery' ), '1.1.6 ', true); 	
-		wp_enqueue_script( 'imstorejs', IMSTORE_URL .'_js/imstore.js', array( 'jquery', 'colorbox', 'galleriffic' ), '0.5.0', true); 
-		wp_enqueue_style( 'colorboxie', IMSTORE_URL .'_css/colorbox.ie.php', array( 'colorbox' ), '0.5.0' );
+		wp_enqueue_script( 'imstorejs', IMSTORE_URL .'_js/imstore.js', array( 'jquery', 'colorbox', 'galleriffic' ), '0.5.2', true); 
+		wp_enqueue_style( 'colorboxie', IMSTORE_URL .'_css/colorbox.ie.php', array( 'colorbox' ), '0.5.2' );
 		
 		//upgrade function 0.5.1 = 0.5.2
 		if( empty($this->opts['numThumbs'] ) )
@@ -81,9 +82,6 @@ class ImStoreFront{
 		));
 	}
 
-	
-	
-	
 	/**
 	 * Print IE styles
 	 *
@@ -92,7 +90,7 @@ class ImStoreFront{
 	 */
 	function print_ie_styles( ){
 		if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false))
-			echo '<!--[if IE]><link rel="stylesheet" id="colorboxie-css"  href="'.IMSTORE_URL.'_css/colorbox.ie.php?url='.IMSTORE_URL.'&amp;ver=0.5.0" type="text/css" media="all" /><![endif]-->';
+			echo '<!--[if IE]><link rel="stylesheet" id="colorboxie-css" href="'.IMSTORE_URL.'_css/colorbox.ie.php?url='.IMSTORE_URL.'&amp;ver=0.5.0" type="text/css" media="all" /><![endif]-->';
 	}
 	
 		
@@ -117,7 +115,7 @@ class ImStoreFront{
 	 */
 	function get_permalink( $galid, $page = '' ){
 		if( $this->permalinks ){
-			$link =  "/". sanitize_title( $this->pages[$page] ) . "/gal-$galid/";
+			$link = "/". sanitize_title( $this->pages[$page] ) . "/gal-$galid/";
 			if( $this->success ) $link .= 'ms/' . $this->success;
 		}else{
 			$link = '&imspage=' . $page . '&imsgalid=' . $galid ;
@@ -468,9 +466,9 @@ class ImStoreFront{
 	function get_gallery_images( ){
 		global $wpdb;
 		
-		$posts = $wpdb->get_results( $wpdb->prepare(
+		$this->attachments = $wpdb->get_results( $wpdb->prepare(
 			"SELECT ID, post_title, guid,
-			meta_value, post_excerpt
+			meta_value, post_excerpt, post_expire
 			FROM $wpdb->posts AS p 
 			LEFT JOIN $wpdb->postmeta AS pm
 			ON p.ID = pm.post_id
@@ -480,17 +478,14 @@ class ImStoreFront{
 			AND post_parent = %d
 			ORDER BY $this->sortby $this->order " 
 		, $this->gallery_id ));
-		
-		if( empty( $posts ) ){
-			$this->attachments = $posts;
+ 
+		if( empty( $this->attachments ) )
 			return;
-		}
 		
-		foreach( $posts as $post ){
+		foreach( $this->attachments as $post ){
 			$post->meta_value = unserialize( $post->meta_value );
 			$images[] = $post;
 		}
-		
 		$this->attachments = $images;
 	}
 	
@@ -544,7 +539,6 @@ class ImStoreFront{
 		$icontag 	= 'li';
 		$captiontag = 'div';
 		$columns 	= intval( $this->opts['displaycolmns'] );
-		$itemwidth	= $columns > 0 ? floor(100/$columns) : 100;
 		$nonce 		= '_wpnonce=' . wp_create_nonce( 'ims_secure_img' );
 		
 		$output = "<{$itemtag} class='ims-gallery'>";
@@ -556,12 +550,16 @@ class ImStoreFront{
 				$link = IMSTORE_URL . "image.php?$nonce&amp;img={$image->ID}";
 				$title = $image->post_title;
 			}
-			$imagetag = '<img src="' . $image->meta_value['sizes']['thumbnail']['url'] . '" alt="' . $title . '" />'; 
+			
 			$title_att = ( $this->is_galleries ) ? $title : $image->post_excerpt ;
+			$imagetag = '<img src="' . $image->meta_value['sizes']['thumbnail']['url'] . '" alt="' . $title . '" />'; 
+			$tagatts = ( $this->is_galleries ) ? ' class="ims-image" rel="image" ' : ' class="ims-colorbox" rel="gallery" ';
+			
 			$output .= "<{$icontag}>";
 			if( !$this->opts['disablestore'] && ( $this->query_id || $this->is_secure ) ) 
 				$output .= '<input name="imgs[]" type="checkbox" value="' . $image->ID . '" />';
-			$output .= '<a href="' . $link . '" class="ims-colorbox" title="' . $title_att . '" rel="gallery">' . $imagetag . '</a>';
+			
+			$output .= '<a href="' . $link . '"' . $tagatts .'title="' .$title_att . '">' . $imagetag . '</a>';
 			if ( $this->is_galleries ) {
 				$output .= "
 					<{$captiontag} class='gallery-caption'>
@@ -899,9 +897,8 @@ class ImStoreFront{
 		}
 		
 	}
-	
-	
+
 	
 }
-
+new ImStoreFront( )
 ?>

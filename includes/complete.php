@@ -18,7 +18,7 @@ $loc 	= $this->opts['clocal'];
 $format = array( '', "$sym%s", "$sym %s", "%s$sym", "%s $sym"); 
 $nonce = wp_create_nonce( "ims_download_img" );
 
-$cart  = get_post_meta( $_POST['custom'], '_ims_order_data', true );
+$cart = get_post_meta( $_POST['custom'], '_ims_order_data', true );
 $labels = array(
 		'color' 	=> __( 'Color', ImStore::domain ),
 		'ims_bw'	=> __( 'Black & White', ImStore::domain ),

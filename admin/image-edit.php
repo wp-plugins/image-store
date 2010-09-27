@@ -80,14 +80,14 @@ if ( is_string($content_func) )
 
 <div class="ims-edit-image">
  <table class="slidetoggle describe form-table">
-  <thead class="media-item-info" id="media-head-<?php echo $id?>">
-   <tr valign="top">
-    <td class="A1B1" id="thumbnail-head-<?php echo $id?>">
-     <p><img src="http://localhost/wp3/wp-admin/images/wpspin_light.gif" class="imgedit-wait-spin" alt="loading"></p>
-    </td>
-   </tr>
-  </thead>
-  <tbody><tr><td class="image-editor" id="image-editor-<?php echo $id?>"></td></tr></tbody>
+ <thead class="media-item-info" id="media-head-<?php echo $id?>">
+  <tr valign="top">
+  <td class="A1B1" id="thumbnail-head-<?php echo $id?>">
+   <p><img src="http://localhost/wp3/wp-admin/images/wpspin_light.gif" class="imgedit-wait-spin" alt="loading"></p>
+  </td>
+  </tr>
+ </thead>
+ <tbody><tr><td class="image-editor" id="image-editor-<?php echo $id?>"></td></tr></tbody>
  </table>
 </div>
 

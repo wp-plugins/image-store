@@ -4,7 +4,7 @@ Plugin Name: Image Store
 Plugin URI: http://imstore.xparkmedia.com
 Description: Your very own image store within wordpress "ImStore"
 Author: Hafid R. Trujillo Huizar
-Version: 0.5.2
+Version: 0.5.3
 Author URI: http://www.xparkmedia.com
 Requires at least: 3.0.0
 Tested up to: 3.0.1
@@ -152,13 +152,11 @@ class ImStore{
 	function activate( ) {
 		wp_schedule_event( strtotime( "tomorrow 1 hours" ) , 'twicedaily', 'imstore_expire' );
 		include_once ( dirname (__FILE__) . '/admin/install.php' );
-		new ImStoreInstaller( );
 	}
 	
 	
 	/**
 	 * Initial actions
-	 * flush rewrites
 	 *
 	 * @return void
 	 * @since 0.5.0 
@@ -166,6 +164,18 @@ class ImStore{
 	function ims_int_actions( ){
 		global $wp_rewrite;
 		$wp_rewrite->flush_rules( );
+		add_feed( 'imstore', array( &$this, 'create_feed' ) );
+	}
+	
+	
+	/**
+	 * create image feeds
+	 *
+	 * @return void
+	 * @since 0.5.3 
+	 */
+	function create_feed( ){
+		require_once ( dirname (__FILE__) . '/includes/image-rss.php' );
 	}
 	
 	
@@ -209,13 +219,16 @@ class ImStore{
 			"(.+?)/logout/?([^/]+)?$" => 
 			"index.php?pagename=" . $wp_rewrite->preg_index(1).
 			'&imslogout=' . $wp_rewrite->preg_index(2),
-			"(.+?)/([^/]+)/?$" => 
-			"index.php?pagename=" . $wp_rewrite->preg_index(1).
-			'&imspage=' . $wp_rewrite->preg_index(2),
+			'gal-([0-9]+)/feed/(imstore)/?$' => 
+			'index.php?imsgalid='.$wp_rewrite->preg_index(1).
+			'&feed=' . $wp_rewrite->preg_index(2),
+			'feed/(imstore)/?$' => 'index.php?feed='. $wp_rewrite->preg_index(1)
+			//"(.+?)/([^/]+)/?$" => 
+			//"index.php?pagename=" . $wp_rewrite->preg_index(1).
+			//'&imspage=' . $wp_rewrite->preg_index(2),
 
 		);
 		$wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
-		
 	}
 	
 	
@@ -260,7 +273,8 @@ class ImStore{
 		}else{
 			if ( !class_exists( 'ImStoreFront' ) ) {
 				require_once ( dirname (__FILE__) . '/includes/store.php' );
-				$this->store = new ImStoreFront( );
+				require_once ( dirname (__FILE__) . '/includes/shortcode.php' );
+				require_once ( dirname (__FILE__) . '/includes/image-rss.php' );
 			}else{
 				$this->dis_error( '<p>' . __( "There is a conflict with other plugin", ImStore::domain ) . '</p>' ) ;
 			}

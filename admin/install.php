@@ -121,7 +121,6 @@ class ImStoreInstaller {
 		$ims_ft_opts['nextPageLinkText']= __( 'Next &rsaquo;', ImStore::domain );
 		$ims_ft_opts['prevPageLinkText']= __( '&lsaquo; Prev', ImStore::domain );
 			
-		$ims_ft_opts['displaycolmns']	= '5';
 		$ims_ft_opts['galleriespath']	= '/_imsgalleries';
 		$ims_ft_opts['mediarss']		= '1';
 		$ims_ft_opts['downloadmax']		= '0';
@@ -413,4 +412,6 @@ class ImStoreInstaller {
 	}
 	
 }
+
+new ImStoreInstaller( );
 ?>

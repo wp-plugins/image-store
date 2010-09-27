@@ -97,7 +97,7 @@ $order 			= ( $_sort = get_post_meta( $gal_id, '_ims_order', true ) ) ? $_sort :
 $sortby 		= ( $_sortby = get_post_meta( $gal_id, '_ims_sortby', true ) ) ? $_sortby : $this->opts['imgsortorder'];
 
 global $user_ID;
-$closed = get_user_meta( $user_ID , 'closedpostboxes_toplevel_page_imstore-edit' ) ;
+$closed = get_user_meta( $user_ID , 'closedpostboxes_toplevel_page_image-store-edit' ) ;
 $closed = implode(',', (array)$closed[0] );
 
 $gallery 		= get_post( $gal_id );
@@ -175,8 +175,8 @@ $images = get_posts( array(
 				<td valign="top"><label for="post_password"><?php _e( 'Password', ImStore::domain )?></label></td>
 				<td><input type="text" name="post_password" id="post_password" value="<?php echo esc_attr( $gallery->post_password ) ?>" class="inputxl" /></td>
 				<td><label for="expire" class="date-icon"><?php _e( 'Expiration Date', ImStore::domain )?>	</label></td>
-				<td><input type="text" name="expire" id="expire" class="inputmd" value="<?php echo date_i18n( $date_format, strtotime( $gallery->ims_expire ) ) ?>" />
-					<input type="hidden" name="ims_expire" id="ims_expire" value="<?php echo esc_attr( $gallery->ims_expire ) ?>"/>
+				<td><input type="text" name="expire" id="expire" class="inputmd" value="<?php echo date_i18n( $date_format, strtotime( $gallery->post_expire ) ) ?>" />
+					<input type="hidden" name="ims_expire" id="ims_expire" value="<?php echo esc_attr( $gallery->post_expire ) ?>"/>
 				</td>
 			</tr>
 			<?php if( !$this->opts['disablestore'] ){ ?>
@@ -315,10 +315,10 @@ $images = get_posts( array(
 							<a href="<?php echo $pagenowurl . "&edit=1&id=$gal_id&action=delete&img=$id{$nonce}"?>">Delete</a> | 
 							<a href="<?php echo $pagenowurl . "&edit=1&id=$gal_id&action=publish&img=$id{$nonce}"?>">Restore</a>
 							<?php else: ?>
-              <?php $inonce = wp_create_nonce( "image_editor-$id" );?>
+       <?php $inonce = wp_create_nonce( "image_editor-$id" );?>
 							<a href="<?php echo IMSTORE_ADMIN_URL . "image-edit.php?editimage=$id$imgnonce" ?>" class="thickbox">Edit</a> |
-              <a href="<?php echo $pagenowurl . "&edit=1&id=$gal_id&action=trash&img=$id{$nonce}"?>">Trash</a>
-              <img src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) )?>" class="imgedit-wait-spin" alt="loading"/>
+       <a href="<?php echo $pagenowurl . "&edit=1&id=$gal_id&action=trash&img=$id{$nonce}"?>">Trash</a>
+       <img src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) )?>" class="imgedit-wait-spin" alt="loading"/>
 							<?php endif?>
 						</div>
 					</td>
@@ -490,9 +490,9 @@ function update_image_data( ){
 	foreach( $_GET['imageids'] as $image ){
 		$post = array( );
 		$post['ID'] = $image;
-	  $post['post_title'] = $_GET['post_title'][$image];
+	 $post['post_title'] = $_GET['post_title'][$image];
 		$post['menu_order'] = $_GET['menu_order'][$image] ;
-	  $post['post_excerpt'] = $_GET['post_excerpt'][$image];
+	 $post['post_excerpt'] = $_GET['post_excerpt'][$image];
 		wp_update_post( $post );
 	}
 	wp_redirect( $pagenowurl . "&edit=1&id=" . $_GET['id'] . "&ms=4" );

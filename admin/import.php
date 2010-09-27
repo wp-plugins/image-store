@@ -91,7 +91,7 @@ $post_date 		= ( $_POST['post_name'] ) ? esc_attr( $_POST['post_name'] ) : date(
 			<li class="tabs"><a href="#upload-zip"><?php _e( 'Upload a Zip-File', ImStore::domain )?></a></li>
 			<li class="tabs"><a href="#import-folder"><?php _e( 'Import folder', ImStore::domain )?></a></li>
 			<li class="tabs"><a href="#upload-images"><?php _e( 'Upload Images', ImStore::domain )?></a></li>
-    	<li class="tabs"><a href="#new-gallery"><?php _e( 'New Gallery', ImStore::domain )?></a></li>
+  	<li class="tabs"><a href="#new-gallery"><?php _e( 'New Gallery', ImStore::domain )?></a></li>
 		</ul>
 		
 		<!-- Upload zip file -->
@@ -226,9 +226,9 @@ $post_date 		= ( $_POST['post_name'] ) ? esc_attr( $_POST['post_name'] ) : date(
 		<!-- NEW GALLERY -->
 		
 		<div id="new-gallery" class="ims-box" >
-      <form method="POST" action="<?php echo $pagenowurl . '#new-gallery' ?>" >
+   <form method="POST" action="<?php echo $pagenowurl . '#new-gallery' ?>" >
 			<?php wp_nonce_field( 'ims_new_gallery' )?>
-      <table class="ims-table" >
+   <table class="ims-table" >
 				<tr>
 					<td width="18%">
 						<label for="post_title"><?php _e( 'Gallery Name', ImStore::domain )?>
@@ -332,8 +332,8 @@ $post_date 		= ( $_POST['post_name'] ) ? esc_attr( $_POST['post_name'] ) : date(
 					</td>
 				</tr>
 			</table>
-     </form>
-    </div>
+   </form>
+  </div>
 
 	</div>
 	
@@ -386,7 +386,7 @@ function upload_ims_zipfile( $galspath ){
 			return $errors;
 		}
 
-		if ( $_FILES['zipfile']['error'] != '0' || $_FILES['zipfile']['size']  == 0 ) {
+		if ( $_FILES['zipfile']['error'] != '0' || $_FILES['zipfile']['size'] == 0 ) {
 			$errors->add( 'fail_uploadload_2' , __( 'Upload failed. Make sure to check your file uplaod size limit!!', ImStore::domain ) );
 		 	return $errors;
 		}
@@ -428,7 +428,7 @@ function upload_ims_zipfile( $galspath ){
 	$PclZip 		= new PclZip( $download_file );
 	$ziped			= $PclZip->extract( PCLZIP_OPT_PATH, $gallerypath,
 							 PCLZIP_OPT_REMOVE_ALL_PATH,
-        			 PCLZIP_CB_PRE_EXTRACT, '_ims_unzip_images',
+    			 PCLZIP_CB_PRE_EXTRACT, '_ims_unzip_images',
 							 PCLZIP_CB_POST_EXTRACT, '_ims_create_img_metadata',
 							 PCLZIP_OPT_SET_CHMOD, 0775
 	); 
@@ -868,12 +868,12 @@ function add_ims_gallery( $galspath, $to_expire, $disablestore ){
  * @since 0.5.2
  */
 function return_bytes( $size_str ){
-    switch (substr ($size_str, -1)){
-        case 'M': case 'm': return (int)$size_str * 1048576;
-        case 'K': case 'k': return (int)$size_str * 1024;
-        case 'G': case 'g': return (int)$size_str * 1073741824;
-        default: return $size_str;
-    }
+  switch (substr ($size_str, -1)){
+    case 'M': case 'm': return (int)$size_str * 1048576;
+    case 'K': case 'k': return (int)$size_str * 1024;
+    case 'G': case 'g': return (int)$size_str * 1073741824;
+    default: return $size_str;
+  }
 }
 
 ?>

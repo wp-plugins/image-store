@@ -627,8 +627,8 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 						<?php break;
 						
 						default:?>
-      <td class="column-<?php echo $key?>" >&nbsp;</td>
-      
+   <td class="column-<?php echo $key?>" >&nbsp;</td>
+   
 					<?php }?>
 				<?php endforeach?>
 				</tr>
@@ -689,7 +689,7 @@ function get_ims_promos( ){
 	
 	foreach( $r as $promo ){
 		foreach ( get_post_meta( $promo->ID, '_ims_promo_data', true ) as $akey => $aval ) 
-   $promo->{$akey} = $aval;
+  $promo->{$akey} = $aval;
 		$promos[] = $promo;
 	}
 	return $promos;

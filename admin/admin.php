@@ -25,7 +25,7 @@ class ImStoreAdmin extends ImStore{
 	 */
 	function __construct( ){
 		global $pagenow;
-		
+
 		//ad a unique Gallery IDentifier to make sure that the actions come from this widget
 		if ( ( 'media-upload.php' == $pagenow || 'async-upload.php' == $pagenow ) && isset( $_GET[ 'imstore' ] ) ){
 			add_filter( 'media_send_to_editor', array( &$this, 'media_send_to_editor'), 1, 3 );
@@ -37,9 +37,12 @@ class ImStoreAdmin extends ImStore{
 		add_filter( 'wp_update_attachment_metadata', array( &$this, 'update_attachment_metadata' ), 15, 2 );
 		add_filter( 'intermediate_image_sizes', array( &$this, 'ims_image_sizes' ), 15, 1 );
 		
+		$this->opts = (array)get_option( 'ims_front_options' );
+		if( $this->opts['imswidget'] ) include_once ( dirname (__FILE__) . '/widget.php' );		
+		
 		//speed up ajax we don't need this
 		if( defined('DOING_AJAX') ) return;
-		
+
 		add_action( 'admin_menu', array( &$this, 'add_menu'), 10 );	
 		add_action( 'set_current_user', array( &$this, 'apply_user_caps') );	
 		add_filter( 'editable_roles', array( &$this, 'remove_role_display'), 10, 1 );
@@ -545,9 +548,7 @@ class ImStoreAdmin extends ImStore{
 	 * @since 0.5.0 
 	 */
 	function add_menu( ) { 
-	
-		$this->opts = (array)get_option( 'ims_front_options' );
-		
+
 		add_object_page( __( 'Image Store', ImStore::domain ), __( 'Image Store', ImStore::domain ), 
 					'ims_manage_galleries', IMSTORE_FOLDER, array(&$this, 'show_menu'), IMSTORE_URL .'_img/imstore.png' );
 		
