@@ -24,7 +24,7 @@ if ( !empty( $_POST['updategalleries'] ) ) {
 	foreach( array( '_wpnonce', '_wp_http_referer', 'updateoption' ) as $key )
 		unset( $_POST[$key] );
 
-	foreach( array( 'deletefiles', 'securegalleries', 'mediarss', 'disablestore', 'stylesheet' ) as $box )
+	foreach( array( 'deletefiles', 'securegalleries', 'imswidget', 'mediarss', 'disablestore', 'stylesheet' ) as $box )
 		if( empty( $_POST[$box] ) ) $_POST[$box] = '';
 	
 	//make sure gallerypath has a trailing slash
@@ -93,7 +93,7 @@ if ( !empty( $_POST['updateimages'] ) ) {
 
 }
 
-//slideshow  settings 
+//slideshow settings 
 if ( !empty( $_POST['updateslideshow'] ) ) { 
 	check_admin_referer( 'ims_slideshow_settings' );
 	
@@ -173,6 +173,7 @@ $message[2] = 		__( 'The user was updated.', ImStore::domain );
 $message[3] = 		__( 'All settings were reseted.', ImStore::domain );
 $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 ?>
+
 <div class="wrap imstore">
 	
 	<form action="https://www.paypal.com/cgi-bin/webscr" method="post" class="paypal-donate">
@@ -228,16 +229,22 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 				<td><input type="checkbox" name="securegalleries" id="securegalleries" value="1" <?php checked( '1', $this->_vr( 'securegalleries' ) )?>/>
 					<small><?php _e( 'Secure all new galleries with a password by default.', ImStore::domain )?></small></td>
 			</tr>
-			<!--<tr class="alternate">
+			<tr class="alternate">
 				<td scope="row" width="22%"><label for="mediarss"><?php _e( 'Media RSS feed', ImStore::domain )?></label></td>
 				<td><input type="checkbox" name="mediarss" id="mediarss" value="1" <?php checked( '1', $this->_vr( 'mediarss' ) )?>/>
 				<small><?php _e( 'Add RSS feed the blog header for unsercure galleries. Useful for CoolIris/PicLens', ImStore::domain )?></small>
 				</td>
-			</tr>-->
-			<tr class="alternate">
+			</tr>
+			<tr>
 				<td scope="row" width="22%"><label for="stylesheet"><?php _e( 'Use CSS', ImStore::domain )?></label></td>
 				<td><input type="checkbox" name="stylesheet" id="stylesheet" value="1" <?php checked( '1', $this->_vr( 'stylesheet' ) )?>/>
 				<small><?php _e( 'Use the Image Store stylesheet?', ImStore::domain )?></small>
+				</td>
+			</tr>
+			<tr class="alternate">
+				<td scope="row" width="22%"><label for="imswidget"><?php _e( 'Widget', ImStore::domain )?></label></td>
+				<td><input type="checkbox" name="imswidget" id="imswidget" value="1" <?php checked( '1', $this->_vr( 'imswidget' ) )?>/>
+				<small><?php _e( 'Enable the use of the Image Store Widget', ImStore::domain )?></small>
 				</td>
 			</tr>
 			<tr>
@@ -245,23 +252,23 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 				<td><input type="checkbox" name="disablestore" id="disablestore" value="1" <?php checked( '1', $this->_vr( 'disablestore' ) )?> />
 					<small><?php _e( 'Use as a gallery manager only, not a store.', ImStore::domain )?></small></td>
 			</tr>
-			<tr class="alternate">
+			<!--<tr class="alternate">
 				<td scope="row" width="22%"><label for="stylesheet"><?php _e( 'Gallery columns', ImStore::domain )?></label></td>
 				<td><input type="text" name="displaycolmns" id="displaycolmns" class="inputsm" value="<?php $this->_v( 'displaycolmns' )?>" />
 				<small><?php _e( 'Display gallery in how many columns', ImStore::domain )?></small>
 				</td>
 			</tr>
-			<!--<tr class="alternate">
+			<tr class="alternate">
 				<td scope="row"><label for="downloadmax"><?php _e( 'Downloads allowed', ImStore::domain )?></label></td>
 				<td><input type="text" name="downloadmax" id="downloadmax" class="inputsm" value="<?php $this->_v( 'downloadmax' )?>" />
 					<small><?php _e( 'Default number of downloads.', ImStore::domain )?></small></td>
 			</tr>-->
-			<tr>
+			<tr class="alternate">
 				<td scope="row"><label for="galleryexpire"><?php _e( 'Galleries expire after ', ImStore::domain )?></label></td>
 				<td><input type="text" name="galleryexpire" id="galleryexpire" class="inputxm" value="<?php $this->_v( 'galleryexpire' )?>"/>
 					( <?php _e( 'days' )?> )</td>
 			</tr>
-			<tr class="alternate">
+			<tr>
 				<td valign="top"><?php _e( 'Sort images', ImStore::domain )?></td>
 				<td><label><input name="imgsortorder" type="radio" value="menu_order" <?php checked('menu_order', $this->_vr( 'imgsortorder'))?> />
 					<?php _e( 'Custom order', ImStore::domain )?></label><br />
@@ -272,7 +279,7 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 					<label><input name="imgsortorder" type="radio" value="post_date" <?php checked('post_date',$this->_vr( 'imgsortorder'))?>/>
 					<?php _e( 'Image date', ImStore::domain )?></label></td>
 			</tr>
-			<tr>
+			<tr class="alternate">
 				<td><?php _e( 'Sort direction', ImStore::domain )?>:</td>
 				<td><label><input name="imgsortdirect" type="radio" value="ASC" <?php checked('ASC', $this->_vr( 'imgsortdirect') )?>/>
 					<?php _e( 'Ascending', ImStore::domain )?></label>

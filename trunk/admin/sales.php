@@ -46,7 +46,7 @@ if( isset( $_GET['deleteall'] ) ){
 $sym 		= $this->opts['symbol']; 
 $loc 		= $this->opts['clocal'];	
 $date_format= get_option( 'date_format' );
-$orders  	= get_ims_orders( $this->per_page );
+$orders 	= get_ims_orders( $this->per_page );
 $columns 	= get_column_headers( 'image-store_page_ims-sales' );	
 $format 	= array( '', "$sym%s", "$sym %s", "%s$sym", "%s $sym"); 
 $is_trash	= ( isset( $_GET['status'] ) ) && ( $_GET['status'] == 'trash' );

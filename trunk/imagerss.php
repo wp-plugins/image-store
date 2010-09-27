@@ -2,14 +2,13 @@
 
 
 /**
- * Image store - secure image
+ * Image store - image rss
  * 
  * @package Image Store
  * @author Hafid Trujillo
  * @copyright 20010-2011
- * @since 0.5.0 
+ * @since 0.5.3 
 */
-
 
 //define constants
 define( 'DOING_AJAX', true );
@@ -17,13 +16,6 @@ define( 'DOING_AJAX', true );
 //load wp
 require_once '../../../wp-load.php';
 
-//make sure that the request came from the same domain	
-if ( stripos( $_SERVER['HTTP_REFERER'], get_bloginfo('siteurl')) === false ) 
-	die( );
-
-if( !wp_verify_nonce( $_REQUEST["_wpnonce"], 'ims_secure_img') )
-	die( );
-	
 class ImStoreImage{
 	
 	
@@ -31,14 +23,16 @@ class ImStoreImage{
 	 * Constructor
 	 *
 	 * @return void
-	 * @since 0.5.0 
+	 * @since 0.5.3 
 	 */
 	function __construct( ){
 		
 		if( empty( $_REQUEST['img'] ) ) die( );
 		$this->attachment = get_post_meta( $_REQUEST['img'], '_wp_attachment_metadata', true );
 		
-		if( $this->attachment['sizes']['preview']['url'] ) 
+		if( $_REQUEST['thumb'] ) 
+			$this->image_dir = str_ireplace( WP_CONTENT_URL, WP_CONTENT_DIR, $this->attachment['sizes']['thumbnail']['url'] );
+		elseif( $this->attachment['sizes']['preview']['url'] ) 
 			$this->image_dir = str_ireplace( WP_CONTENT_URL, WP_CONTENT_DIR, $this->attachment['sizes']['preview']['url'] );
 		else $this->image_dir = WP_CONTENT_DIR . $this->attachment['file'];
 		
@@ -151,20 +145,6 @@ class ImStoreImage{
 				}
 			}
 			
-		}
-		
-		
-		//gray scale
-		if( $_REQUEST['c'] == 'g' ){
-			imagefilter( $image, IMG_FILTER_GRAYSCALE);
-			imagefilter( $image, IMG_FILTER_BRIGHTNESS, +10 );
-		}
-		
-		//sepia
-		if( $_REQUEST['c'] == 's' ){
-			imagefilter( $image, IMG_FILTER_GRAYSCALE); 
-			imagefilter( $image, IMG_FILTER_BRIGHTNESS, -10);
-			imagefilter( $image, IMG_FILTER_COLORIZE, 35, 25, 10);
 		}
 		
 		//create new image

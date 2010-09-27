@@ -58,7 +58,7 @@ jQuery(document).ready(function($){
 		var clas = ( count % 2 ) ? '' : ' alternate';
 		var row = '<tr class="t image-size'+clas+'"><td scope="row">';
 		row += '<input type="checkbox" name="imgid_'+count+'" class="inputmd" /></td>';
-    row += '<td><input type="text" name="imagesize_'+count+'[name]" class="inputmd" /></td>';
+  row += '<td><input type="text" name="imagesize_'+count+'[name]" class="inputmd" /></td>';
 		row += '<td><label><input type="text" name="imagesize_'+count+'[w]" class="inputsm" /></label></td>';
 		row += '<td><label><input type="text" name="imagesize_'+count+'[h]" class="inputsm" /></label></td>';
 		row += '<td><label><input type="text" name="imagesize_'+count+'[q]" class="inputsm" />(%)</label></td>';

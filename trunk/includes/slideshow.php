@@ -36,7 +36,7 @@ if( preg_match( '#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'] ) )
 	
 		<div class="ims-imgs-nav">
 			<div id="ims-thumbs">
-				<ul class="thumbs noscript">
+				<ul class="thumbs">
 				<?php if( !empty( $this->attachments ) ){
 					$nonce = '_wpnonce=' . wp_create_nonce( 'ims_secure_img' );
 					foreach( $this->attachments as $image ){

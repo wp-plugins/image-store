@@ -4,13 +4,13 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: e-commerce,shop,store,photo,picture,image,galleries,web2.0,imstore,image-store,slideshow,gallery,sale,photographers,shop
 Requires at least: 3.0.0
 Tested up to: 3.0.1
-Stable tag: 0.5.2
+Stable tag: 0.5.3
 
 Image Store (ImStore) is a image gallery and store plugin for WordPress with a slideshow and paypal integration.
 
 == Description ==
 
-NOTE: BETA RELEASE (0.5.0)
+NOTE: BETA RELEASE (0.5.0) - (0.5.3)
 This version shouldn't be install on live/production website untill is fully tested. please let me know of any issues on the
 <a href="http://wordpress.org/tags/image-store?forum_id=10">wordpres forums posts</a> or
 <a href="http://imstore.xparkmedia.com/">Plugin site</a> 
@@ -28,11 +28,15 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * Paypal Cart integration
 * Payment notification
 * WP edit image integration
+* Image RSS
 * Promotions
+* Gallery widget
+* Galley shortcode
 * Gallery expiration
 * Sort images feature
 * CSV sales download
 * CSV customer download
+* Customer Mailpress integration.
 * Sales menu: To keep track of you sales
 * Image upload: Via a zip-file ( no zip-mod required )
 * Dynamic generation of sepia and black & white images
@@ -40,22 +44,19 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * Image download: Allow user to download image after purchase
 * Disable Store: Use just as a gallery manager and not a store
 * Folder import: add galleries by just uploading image through FTP
-* Public Galleries:  display your photos so that anybody can buy them.
+* Public Galleries: display your photos so that anybody can buy them.
 * Hidden image url: so that users don't know where your images are store
-* Secure Galleries: Secure clients photos  so that they can only see them
+* Secure Galleries: Secure clients photos so that they can only see them
 * User Permissions: Give access to users to specific sections of the plugin
 * Customer menu: Keep track of your galleries and customers
-* Pugin uninstall: Remove all entries added by the plugin  
+* Pugin uninstall: Remove all entries added by the plugin 
 
 
 = To Come =
 * Google checkout integration
 * Add image size units ( in. cm. px.)
-* Add max images per page on slideshow.
 * Sales Dashboard: display monthly highlihts on sales
-* Media RSS feed : Add the Cooliris Effect to your gallery
-* Sidebar Widget : show images from your unsecure galleries
-* Customer/User sync: allow user  keep track of their downloads and galleries
+* Customer/User sync: allow user keep track of their downloads and galleries
 
 
 == Installation ==
@@ -82,17 +83,44 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 
 = Recomendations =
 
-* Change your upload folder "Gallery folder path" for security purpose  Image Store > settings > gallery settings.
-* Before installing the plugin set  "Thumbnail size" setting to the decired size Wordpress admin > settings > media.
-* Use DB [Cache Reloaded ]( http://wordpress.org/extend/plugins/db-cache-reloaded ) for better performace 
+* Change your upload folder "Gallery folder path" for security purpose Image Store > settings > gallery settings.
+* Before installing the plugin set "Thumbnail size" setting to the decired size Wordpress admin > settings > media.
 * DON'T provide download option for print size images use this option only for pixel sizes. 
 
+
+= Shortcode Option =
+v0.5.3 and older
+[ims-gallery] will display recent images added from all galleries.
+Defaults: [ims-gallery id="0" slideshow="0" caption="1" orderby="0" order="0" number="false" ]
+
+Options:
+$id: gallery id.
+$slideshow:
+	(1/true) display gallery as slideshow
+	(0/false) display imaes only
+$caption: (optional)
+	(1/true) show caption
+	(0/false) do not display caption
+$orderby:
+	(0/false) use gallery default option set on setting or gallery sort.
+	(date) sort by image upload date.
+	(title) sort by image title.
+	(custom) sort by custom order.
+	(caption) sort by caption.
+$order:
+	(0/false) use gallery default option set on setting or gallery sort.
+	(ASC) ascending order 
+	(DESC) descending order 
+$number:
+	(false) show all the images on gallery or 10 if no gallery id is provided.
+	(any number) how many images to show. 
+	
 
 == Frequently Asked Questions ==
 
 * How do I change the thumbnail side on the fromend for the photo page?
 Before installing the plugin set the "Thumbnail size" setting under Wordpress admin > settings > media to the decired size.
-After the plugin was installed set the  "Thumbnail size" and reset the Image store settings to their defaults Imstore 
+After the plugin was installed set the "Thumbnail size" and reset the Image store settings to their defaults Imstore 
 under Image Store > Settings > Reset
 
 * How can I make donation to continue the plugin development?
@@ -101,17 +129,27 @@ With the plugin installed navigate to Image Store > settings and click on the do
 
 == Changelog ==
 
+= 0.5.3 =
+* Added: widget.
+* Added: image rss.
+* Added: gallery shortcode.
+* Fix: permalink confict.
+* Fix: js error with new slideshow options.
+* Fix: admind displaying wrong expiration date.
+* Removed: columns setting, not needed controled by css.
+
+
 = 0.5.2 =
 * CSS compression.
 * CSS modifications.
-* Fix: js errors on IE.
 * Added: Slideshow options
+* Added: colorbox gallery feature.
+* Fix: js errors on IE.
 * Fix: watermark text location.
 * Fix: expire gallery query/cron
-* Text change: Inside USA to Local.
-* Added: colorbox gallery feature.
-* Relocated colorbox styles and images.
 * Fix: CSS AlphaImageLoader image url for (color box)IE.
+* Text change: Inside USA to Local.
+* Relocated colorbox styles and images.
 
 
 = 0.5.1 =
@@ -119,8 +157,8 @@ With the plugin installed navigate to Image Store > settings and click on the do
 * CSS modifications.
 * Add image cache( htaccess ).
 * Fix: permalinks admin/frontend.
-* Remove: login link from unsecure galleries.
 * Fix: images displaying on the frontend with trash status.
+* Remove: login link from unsecure galleries.
 * Increase RAM memory for swfupload to process big images.
 
 = 0.5.0 =

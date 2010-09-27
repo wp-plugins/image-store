@@ -5,14 +5,14 @@ header( "Content-type: text/css" );
 ?>
 
 /*
-  The following fixes png-transparency for IE6. 
-  It is also necessary for png-transparency in IE7 & IE8 to avoid 'black halos' with the fade transition
-  
-  Since this method does not support CSS background-positioning, it is incompatible with CSS sprites.
-  Colorbox preloads navigation hover classes to account for this.
-  
-  !! Important Note: AlphaImageLoader src paths are relative to the HTML document,
-  while regular CSS background images are relative to the CSS document.
+ The following fixes png-transparency for IE6. 
+ It is also necessary for png-transparency in IE7 & IE8 to avoid 'black halos' with the fade transition
+ 
+ Since this method does not support CSS background-positioning, it is incompatible with CSS sprites.
+ Colorbox preloads navigation hover classes to account for this.
+ 
+ !! Important Note: AlphaImageLoader src paths are relative to the HTML document,
+ while regular CSS background images are relative to the CSS document.
 */
 .cboxIE div#cboxTopLeft { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $_REQUEST['url'] ?>_css/colorbox/images/borderTopLeft.png);}
 .cboxIE div#cboxTopCenter { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $_REQUEST['url'] ?>_css/colorbox/images/borderTopCenter.png);}

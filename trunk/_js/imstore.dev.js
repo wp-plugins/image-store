@@ -90,7 +90,7 @@ jQuery(document).ready(function($){
 
 	
 	// image colorbox
-	$("#ims-mainbox .ims-colorbox").colorbox({
+	$(".ims-gallery .ims-colorbox").colorbox({
 		current:'',
 		photo:true, 
 		maxWidth:"95%", 
@@ -104,25 +104,25 @@ jQuery(document).ready(function($){
 	//slideshow
 	if( $('#ims-thumbs').length > 0 ){
 		var gallery = $('#ims-thumbs').galleriffic({
-			preloadAhead:      		10,
-			enableTopPager:     	true,
+			preloadAhead:   		10,
+			enableTopPager:   	true,
 			enableBottomPager:		true,
 			renderSSControls:		true,
 			renderNavControls:		true,
 			controlsContainerSel:	'#ims-player',
 			captionContainerSel:	'#ims-caption',
 			imageContainerSel:		'#ims-slideshow',
-			numThumbs:       		imstore.numThumbs,
-			maxPagesToShow:     	imstore.maxPagesToShow,
+			numThumbs:    		parseFloat(imstore.numThumbs),
+			maxPagesToShow:   	parseFloat(imstore.maxPagesToShow),
 			playLinkText:			imstore.playLinkText,
-       		pauseLinkText:			imstore.pauseLinkTex,
-        	prevLinkText:			imstore.prevLinkText,
-        	nextLinkText:			imstore.nextLinkText,
-			delay:					imstore.slideshowSpeed,
-        	nextPageLinkText:		imstore.nextPageLinkText,
-        	prevPageLinkText:		imstore.prevPageLinkText,
-			autoStart:              imstore.autoStart,
-			defaultTransitionDuration: imstore.transitionTime,
+    		pauseLinkText:			imstore.pauseLinkTex,
+    	prevLinkText:			imstore.prevLinkText,
+    	nextLinkText:			imstore.nextLinkText,
+			delay:					parseFloat(imstore.slideshowSpeed),
+    	nextPageLinkText:		imstore.nextPageLinkText,
+    	prevPageLinkText:		imstore.prevPageLinkText,
+			autoStart:       imstore.autoStart,
+			defaultTransitionDuration: parseFloat(imstore.transitionTime),
 			onSlideChange: function( prevIndex, nextIndex ) {
 				$(".ims-slideshow-tools [type='checkbox']").removeAttr('checked');
 			},
@@ -180,7 +180,8 @@ jQuery(document).ready(function($){
 		});
 		
 	};
-
+	
+	/*$(".gallery-icon a").colorbox({photo:true, maxWidth:"95%",maxHeight:'90%'});*/
 
 /*--------------------------------------------------------------------------*
 	ZOOM GALLERY FUNCTION
