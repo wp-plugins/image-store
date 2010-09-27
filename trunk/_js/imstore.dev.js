@@ -73,7 +73,7 @@ jQuery(document).ready(function($){
 		$('#ims-color-sepia').attr({checked:''});
 		$('.image-wrapper img').animate({opacity:0},400,function(){
 			$(this).attr({ src: $('.image-wrapper img').attr('src').replace('&c=g','').replace('&c=s','') + color})
-			.delay(900/2).animate({opacity:1},700);
+			.delay(900/1.5).animate({opacity:1},700);
 		});
 	});
 	
@@ -84,7 +84,7 @@ jQuery(document).ready(function($){
 		color = ($(this).is(':checked'))? '&c=s': '';
 		$('.image-wrapper img').animate({opacity:0},400,function(){
 			$(this).attr({ src: $('.image-wrapper img').attr('src').replace('&c=g','').replace('&c=s','') + color})
-			.delay(900/2).animate({opacity:1},700);
+			.delay(900/1.5).animate({opacity:1},700);
 		});
 	});
 

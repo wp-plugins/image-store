@@ -80,6 +80,7 @@ if ( !empty( $_POST['updateimages'] ) ) {
 		$sizes = array_merge( $sizes, $newsizes );
 	
 	$preview['preview'] = $_POST['preview'];
+	$preview['preview']['name'] = 'preview';
 	$resize = array_merge( $resize, $preview );
 	update_option( 'ims_dis_images', $resize );
 	
