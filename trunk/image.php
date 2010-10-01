@@ -38,7 +38,11 @@ class ImStoreImage{
 		if( empty( $_REQUEST['img'] ) ) die( );
 		$this->attachment = get_post_meta( $_REQUEST['img'], '_wp_attachment_metadata', true );
 		
-		if( $this->attachment['sizes']['preview']['url'] ) 
+		if( $_REQUEST['mini'] ) 
+			$this->image_dir = str_ireplace( WP_CONTENT_URL, WP_CONTENT_DIR, $this->attachment['sizes']['mini']['url'] );
+		elseif( $_REQUEST['thumb'] ) 
+			$this->image_dir = str_ireplace( WP_CONTENT_URL, WP_CONTENT_DIR, $this->attachment['sizes']['thumbnail']['url'] );
+		elseif( $this->attachment['sizes']['preview']['url'] ) 
 			$this->image_dir = str_ireplace( WP_CONTENT_URL, WP_CONTENT_DIR, $this->attachment['sizes']['preview']['url'] );
 		else $this->image_dir = WP_CONTENT_DIR . $this->attachment['file'];
 		
@@ -65,7 +69,7 @@ class ImStoreImage{
 		$gmdate_mod = gmdate( "D, d M Y H:i:s", filemtime( $this->image_dir ) );
 		
 		//header( 'Pragma: no-cache' );
-		//header( 'Cache-control: private');
+		header( 'Cache-control: private');
 		header( 'Expires: ' . $gmdate_mod );
 		header( 'Last-Modified: ' . $gmdate_mod );
 		header( 'Content-Type: ' . $filetype['type'] );
@@ -87,7 +91,7 @@ class ImStoreImage{
 		
 		//add water mark		
 		$opts = get_option( 'ims_front_options' );
-		if( $opts['watermark'] ){
+		if( $opts['watermark'] && !($_REQUEST['thumb'] || $_REQUEST['mini']) ){
 			
 			//text watermark
 			if( $opts['watermark'] == 1 ){

@@ -31,7 +31,6 @@ div#colorbox,div#cboxWrapper,div#cboxLoadedContent,div#cboxContent{ overflow:vis
  order/nesting of the generated HTML, so that the structure easier to understand.
 */
 #cboxOverlay { background:#f7f5ee; }
-#colorBox { }
 #cboxTopLeft { width:25px; height:25px; background:url(../_img/border1.png) 0 0 no-repeat; }
 #cboxTopCenter { height:25px; background:url(../_img/border1.png) 0 -50px repeat-x; }
 #cboxTopRight { width:25px; height:25px; background:url(../_img/border1.png) -25px 0 no-repeat; }

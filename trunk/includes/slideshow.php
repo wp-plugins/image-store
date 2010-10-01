@@ -43,7 +43,7 @@ if( preg_match( '#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'] ) )
 						$title = $image->post_title;
 						$w = $image->meta_value['sizes']['mini']['width'];
 						$h = $image->meta_value['sizes']['mini']['height'];
-						$imagetag = '<img src="' . $image->meta_value['sizes']['mini']['url'] . '" width="' . $w . '" height="' . $h . '" alt="'. $title . '" />'; 
+						$imagetag = '<img src="' . IMSTORE_URL . "image.php?$nonce&amp;img={$image->ID}&amp;mini=1" . '" width="' . $w . '" height="' . $h . '" alt="'. $title . '" />'; 
 						echo '<li class="ims-thumb"><a class="thumb" href="' . IMSTORE_URL . "image.php?$nonce&amp;img={$image->ID}" . '" rel="nofollow">' . $imagetag . '</a>
 						<span class="caption">' . $image->post_excerpt . '</span></li>';
 					}

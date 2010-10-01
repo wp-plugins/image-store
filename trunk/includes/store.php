@@ -60,7 +60,6 @@ class ImStoreFront{
 		wp_enqueue_script( 'colorbox', IMSTORE_URL .'_js/jquery.galleriffic.js', array( 'jquery' ), '1.3.6 ', true); 
 		wp_enqueue_script( 'galleriffic', IMSTORE_URL .'_js/jquery.colorbox.js', array( 'jquery' ), '1.1.6 ', true); 	
 		wp_enqueue_script( 'imstorejs', IMSTORE_URL .'_js/imstore.js', array( 'jquery', 'colorbox', 'galleriffic' ), '0.5.2', true); 
-		wp_enqueue_style( 'colorboxie', IMSTORE_URL .'_css/colorbox.ie.php', array( 'colorbox' ), '0.5.2' );
 		
 		//upgrade function 0.5.1 = 0.5.2
 		if( empty($this->opts['numThumbs'] ) )
@@ -501,7 +500,16 @@ class ImStoreFront{
 		
 		$ids = get_post_meta( $this->gallery_id, '_ims_favorites', true );
 		$ids = ( is_array($ids) ) ? $wpdb->escape( implode( ',', $ids ) ) : 0;
+		
 		$posts = $wpdb->get_results(
+			"SELECT ID, post_title, guid, post_excerpt
+			FROM $wpdb->posts AS p 
+			WHERE post_type = 'ims_image'
+			AND ID IN ( $ids )
+			ORDER BY $this->sortby $this->order " 
+		);
+		
+		/*$posts = $wpdb->get_results(
 			"SELECT ID, post_title, guid,
 			meta_value, post_excerpt
 			FROM $wpdb->posts AS p 
@@ -511,7 +519,7 @@ class ImStoreFront{
 			AND meta_key = '_wp_attachment_metadata'
 			AND ID IN ( $ids )
 			ORDER BY $this->sortby $this->order " 
-		);
+		);*/
 		
 		if( empty( $posts ) ){
 			$this->attachments = $posts;
@@ -519,7 +527,7 @@ class ImStoreFront{
 		}
 		
 		foreach( $posts as $post ){
-			$post->meta_value = unserialize( $post->meta_value );
+			//$post->meta_value = unserialize( $post->meta_value );
 			$images[] = $post;
 		}
 		
@@ -552,7 +560,7 @@ class ImStoreFront{
 			}
 			
 			$title_att = ( $this->is_galleries ) ? $title : $image->post_excerpt ;
-			$imagetag = '<img src="' . $image->meta_value['sizes']['thumbnail']['url'] . '" alt="' . $title . '" />'; 
+			$imagetag = '<img src="' . IMSTORE_URL . "image.php?$nonce&amp;img={$image->ID}&amp;thumb=1" . '" alt="' . $title . '" />'; 
 			$tagatts = ( $this->is_galleries ) ? ' class="ims-image" rel="image" ' : ' class="ims-colorbox" rel="gallery" ';
 			
 			$output .= "<{$icontag}>";

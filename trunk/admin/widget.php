@@ -121,6 +121,15 @@ class ImStoreWidget extends WP_Widget {
 		if( $limit ) $limit = "LIMIT $limit";
 		
 		$result = $wpdb->get_results( $wpdb->prepare(
+			"SELECT ID, post_title, guid, post_excerpt
+			FROM $wpdb->posts AS p 
+			WHERE post_type = 'ims_image'
+			AND post_status = 'publish'
+			AND post_parent $parent
+			ORDER BY $orderby $order $limit"
+		, $this->gallery_id ));
+		
+		/*$result = $wpdb->get_results( $wpdb->prepare(
 			"SELECT ID, post_title, guid,
 			meta_value, post_excerpt
 			FROM $wpdb->posts AS p 
@@ -131,13 +140,13 @@ class ImStoreWidget extends WP_Widget {
 			AND post_status = 'publish'
 			AND post_parent $parent
 			ORDER BY $orderby $order $limit"
-		, $this->gallery_id ));
+		, $this->gallery_id ));*/
  		
 		if( empty( $result ) )
 			return;
 		
 		foreach( $result as $post ){
-			$post->meta_value = unserialize( $post->meta_value );
+			//$post->meta_value = unserialize( $post->meta_value );
 			$images[] = $post;
 		}
 		return $images;
@@ -161,7 +170,7 @@ class ImStoreWidget extends WP_Widget {
 		foreach ( $images as $image ){
 
 			$output .= "<{$icontag}>";
-			$output .= '<img src="' . $image->meta_value['sizes']['mini']['url'] . '" class="ims-widget-img" alt="' . $image->post_title .'" />';			$output .= "</{$icontag}>";
+			$output .= '<img src="' . IMSTORE_URL . "image.php?$nonce&amp;img={$image->ID}&amp;mini=1" . '" class="ims-widget-img" alt="' . $image->post_title .'" />';			$output .= "</{$icontag}>";
 		}
 		echo $output .= "</{$itemtag}>";
 	}

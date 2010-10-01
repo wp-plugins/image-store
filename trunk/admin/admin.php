@@ -32,10 +32,10 @@ class ImStoreAdmin extends ImStore{
 			add_filter( 'media_upload_form_url', array( &$this, 'media_upload_form_url' ), 1, 1 ); 
 		}
 		
+		add_filter( 'intermediate_image_sizes', array( &$this, 'ims_image_sizes' ), 15, 1 );
 		add_filter( 'get_attached_file', array( &$this, 'return_ims_attached_file' ), 15, 2 );
 		add_filter( 'load_image_to_edit_path', array( &$this, 'load_ims_image_path' ), 15, 2 ); 
 		add_filter( 'wp_update_attachment_metadata', array( &$this, 'update_attachment_metadata' ), 15, 2 );
-		add_filter( 'intermediate_image_sizes', array( &$this, 'ims_image_sizes' ), 15, 1 );
 		
 		$this->opts = (array)get_option( 'ims_front_options' );
 		if( $this->opts['imswidget'] ) include_once ( dirname (__FILE__) . '/widget.php' );		

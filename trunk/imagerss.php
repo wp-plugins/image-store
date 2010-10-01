@@ -16,7 +16,7 @@ define( 'DOING_AJAX', true );
 //load wp
 require_once '../../../wp-load.php';
 
-class ImStoreImage{
+class ImStoreImageRSS{
 	
 	
 	/**
@@ -208,5 +208,5 @@ class ImStoreImage{
 }
 
 //do that thing you do 
-$ImStoreImage = new ImStoreImage( );
+$ImStoreImageRSS = new ImStoreImageRSS( );
 ?>
