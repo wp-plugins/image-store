@@ -4,13 +4,13 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: e-commerce,shop,store,photo,picture,image,galleries,web2.0,imstore,image-store,slideshow,gallery,sale,photographers,shop
 Requires at least: 3.0.0
 Tested up to: 3.0.1
-Stable tag: 0.5.4
+Stable tag: 0.5.5
 
 Image Store (ImStore) is a image gallery and store plugin for WordPress with a slideshow and paypal integration.
 
 == Description ==
 
-NOTE: BETA RELEASE (0.5.0) - (0.5.4)
+NOTE: BETA RELEASE (0.5.0) - (0.5.5)
 This version shouldn't be install on live/production website untill is fully tested. please let me know of any issues on the
 <a href="http://wordpress.org/tags/image-store?forum_id=10">wordpres forums posts</a> or
 <a href="http://imstore.xparkmedia.com/">Plugin site</a> 
@@ -19,7 +19,7 @@ Image Store (ImStore) is a image gallery and store plugin for WordPress with a s
 plugin was created because I saw the need of the worpress community to have a images store that didn't required the installation of multiple
 plugins to get this accomplished or to go through a lot of settings. :@)
 
-The plugin fully integrated with the wordpress database the only thing that is created is a post_expire column on the posts table.
+The plugin fully integrated with the WordPress database the only thing that is created is a post_expire column on the posts table.
 so you will not find extra tables on your database ( Cool!.. at least for me I hate extra tables ).
 
 
@@ -42,11 +42,11 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * Dynamic generation of sepia and black & white images
 * Watermark function: You can add a watermark image or text 
 * Image download: Allow user to download image after purchase
-* Disable Store: Use just as a gallery manager and not a store
+* Disable Store: Use it just like a gallery manager and not a store
 * Folder import: add galleries by just uploading image through FTP
-* Public Galleries: display your photos so that anybody can buy them.
+* Public Galleries: display your photos so that anybody can buy them
 * Hidden image url: so that users don't know where your images are store
-* Secure Galleries: Secure clients photos so that they can only see them
+* Secure Galleries: Secure clients photos so that only they can see them
 * User Permissions: Give access to users to specific sections of the plugin
 * Customer menu: Keep track of your galleries and customers
 * Pugin uninstall: Remove all entries added by the plugin 
@@ -56,7 +56,7 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * Google checkout integration
 * Add image size units ( in. cm. px.)
 * Sales Dashboard: display monthly highlihts on sales
-* Customer/User sync: allow user keep track of their downloads and galleries
+* Customer/User sync: allow user keep track of their downloads and galleries.
 
 
 == Installation ==
@@ -94,26 +94,26 @@ v0.5.3 and older
 Defaults: [ims-gallery id="0" slideshow="0" caption="1" orderby="0" order="0" number="false" ]
 
 Options:
-$id: gallery id.
-$slideshow:
-	(1/true) display gallery as slideshow
-	(0/false) display imaes only
-$caption: (optional)
-	(1/true) show caption
-	(0/false) do not display caption
-$orderby:
-	(0/false) use gallery default option set on setting or gallery sort.
-	(date) sort by image upload date.
-	(title) sort by image title.
-	(custom) sort by custom order.
-	(caption) sort by caption.
-$order:
-	(0/false) use gallery default option set on setting or gallery sort.
-	(ASC) ascending order 
-	(DESC) descending order 
-$number:
-	(false) show all the images on gallery or 10 if no gallery id is provided.
-	(any number) how many images to show. 
+* $id: gallery id.
+* $slideshow:
+	- (1/true) display gallery as slideshow
+	- (0/false) display imaes only
+* $caption: (optional)
+	- (1/true) show caption
+	- (0/false) do not display caption
+* $orderby:
+	- (0/false) use gallery default option set on setting or gallery sort.
+	- (date) sort by image upload date.
+	- (title) sort by image title.
+	- (custom) sort by custom order.
+	- (caption) sort by caption.
+* $order:
+	- (0/false) use gallery default option set on setting or gallery sort.
+	- (ASC) ascending order 
+	- (DESC) descending order 
+* $number:
+	- (false) show all the images on gallery or 10 if no gallery id is provided.
+	- (any number) how many images to show. 
 	
 
 == Frequently Asked Questions ==
@@ -128,6 +128,12 @@ With the plugin installed navigate to Image Store > settings and click on the do
 
 
 == Changelog ==
+= 0.5.5 =
+* Added: drag and drop image sort (admin).
+* Security fix: hide url location to original image (front-end).
+* Fix: Image edit didn't create new image when thumb only was selected.
+* Fix: php error on dinymic css file for IE colorbox support.
+
 
 = 0.5.4 =
 * Fix: Flash image upload

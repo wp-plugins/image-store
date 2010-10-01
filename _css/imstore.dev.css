@@ -92,3 +92,9 @@ table.ims-table th { font-family:'Helvetica Neue', Arial, Helvetica, sans-serif;
 #ims-mainbox.shopping-cart table.ims-table th { padding-left:0px; padding-right:0px; }
 #ims-mainbox.shopping-cart tfoot tr td { padding-left:15px}
 #ims-mainbox td.ims-download { text-align:center;}
+
+
+/*WIDGET*/
+.ims-widget ul.ims-gallery { margin:0 auto; padding:0; display:inline}
+.ims-widget ul.ims-gallery li { margin:0; padding:0; height:auto; width:auto}
+.ims-widget ul.ims-gallery li img{ width:75px; height:auto; float:left; margin:0 10px 10px 0;}
