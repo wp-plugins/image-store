@@ -38,14 +38,22 @@ class ImStoreImage{
 		if( empty( $_REQUEST['img'] ) ) die( );
 		$this->attachment = get_post_meta( $_REQUEST['img'], '_wp_attachment_metadata', true );
 		
-		if( $this->attachment['sizes']['preview']['url'] ) 
+		if( $_REQUEST['mini'] ) 
+			$this->image_dir = str_ireplace( WP_CONTENT_URL, WP_CONTENT_DIR, $this->attachment['sizes']['mini']['url'] );
+		elseif( $_REQUEST['thumb'] ) 
+			$this->image_dir = str_ireplace( WP_CONTENT_URL, WP_CONTENT_DIR, $this->attachment['sizes']['thumbnail']['url'] );
+		elseif( $this->attachment['sizes']['preview']['url'] ) 
 			$this->image_dir = str_ireplace( WP_CONTENT_URL, WP_CONTENT_DIR, $this->attachment['sizes']['preview']['url'] );
 		else $this->image_dir = WP_CONTENT_DIR . $this->attachment['file'];
 		
 		if( !file_exists ( $this->image_dir ) ) die( ); 
+
 		
-		$this->display_image( );
-		
+		if( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) && ( strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) <= filemtime($this->image_dir)) ){
+			header ('HTTP/1.1 304 Not Modified'); 
+			die( );
+		} else $this->display_image( );
+			 
 	}
 	
 	
@@ -62,14 +70,17 @@ class ImStoreImage{
 		ini_set('set_time_limit', '1000');
 		
 		$filetype 	= wp_check_filetype( basename( $this->image_dir ) );
-		$gmdate_mod = gmdate( "D, d M Y H:i:s", filemtime( $this->image_dir ) );
+		$modified 	= gmdate( "D, d M Y H:i:s", filemtime( $this->image_dir ) );
+		$expired	= gmdate( "D, d M Y H:i:s", (filemtime( $this->image_dir ) + strtotime('+1 month')) );
 		
 		//header( 'Pragma: no-cache' );
 		//header( 'Cache-control: private');
-		header( 'Expires: ' . $gmdate_mod );
-		header( 'Last-Modified: ' . $gmdate_mod );
+		header( 'Expires: ' . $expired );
+		header( 'Last-Modified: ' . $modified );
 		header( 'Content-Type: ' . $filetype['type'] );
+		header( 'Cache-Control: max-age='.strtotime('+1 month').', must-revalidate');
 		//header( 'Cache-control: no-cache, no-store, must-revalidate, max-age=0');
+		
 
 		switch( $filetype['ext'] ){
 			case "jpg":
@@ -87,7 +98,7 @@ class ImStoreImage{
 		
 		//add water mark		
 		$opts = get_option( 'ims_front_options' );
-		if( $opts['watermark'] ){
+		if( $opts['watermark'] && !($_REQUEST['thumb'] || $_REQUEST['mini']) ){
 			
 			//text watermark
 			if( $opts['watermark'] == 1 ){

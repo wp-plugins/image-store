@@ -19,7 +19,6 @@ jQuery(document).ready(function($){
 		return false;
 	});
 	
-	
 	//tabs select
 	if( hash = window.location.hash ){
 		$('.imstore .ims-box').hide();
@@ -45,7 +44,6 @@ jQuery(document).ready(function($){
 		tb_show('Attach File', 'media-upload.php?imstore=1&TB_iframe=true'); 				 
 	});
 	
-	
 	//add watermark url
 	window.add_watermark_url = function( image ) {
 		jQuery('#watermarkurl').val( image );
@@ -66,7 +64,6 @@ jQuery(document).ready(function($){
 		$('.ims-image-sizes').before( row );	
 		return false;
 	});
-	
 	
 	/******** DRAG/DROP/SORT **********/
 	
@@ -99,13 +96,26 @@ jQuery(document).ready(function($){
 		}
 	});
 	
+	$("table.sort-images tbody").sortable({
+		axis: 'y',
+		cursor: 'move',
+		helper: 'clone',
+		placeholder: 'widget-placeholder',
+		update : function () { 
+			$(this).find('tr').each(function(i) {
+				$(this).find('.column-order input').val(i+1);
+				if( (i%2) != 0 ) $(this).removeClass('alternate').addClass('alternate');
+				else $(this).removeClass('alternate');
+			});
+		} 
+	});
+	
 	$("#packages .sizes-list .size").draggable({
 		helper: 'clone',
 		revert: 'invalid',
 		handle: '.move',
 		connectToSortable: '.package-list tbody'
 	});
-	
 
 	$("tr.size").disableSelection();
 	$('td.x').live( 'click', function(){
@@ -200,6 +210,7 @@ jQuery(document).ready(function($){
 		}
 	});
 	*/
+	
 	//promotions 
 	$("#promo_type").change(function(){
 		if( $(this).val() == 3 ){
@@ -275,7 +286,6 @@ jQuery(document).ready(function($){
 		 return false; 
 	 });
 
-
 	// run every time a file is uploaded
 	function ims_file_uploaded( event, ID, fileObj, response, data ){
 		if(response == 'x'){
@@ -292,7 +302,6 @@ jQuery(document).ready(function($){
 		}
 	};
 	
-	
 	//redirect after files uploaded
 	function ims_upload_complete( event, data ){
 		setTimeout(function( ){
@@ -302,13 +311,11 @@ jQuery(document).ready(function($){
 				'</p></div>').insertBefore('.add-menu-item-tabs');
 		}, 2000 );
 	};
-
 	
 	//show uploading icon
 	$('#zipupload, #importfolder ').click(function(){
 		$(this).parents('td').find('div.loading').show( );	
 	});
-	
 	
 	/******** DATE PICKERS **********/
 	$("#date").datepicker({ altField: '#post_date', altFormat: 'yy-m-d', dateFormat: imslocal.dateformat });
@@ -318,4 +325,3 @@ jQuery(document).ready(function($){
 	$("#expires").datepicker({ altField: '#expiration_date', altFormat: 'yy-m-d', dateFormat: imslocal.dateformat });
 	
 });
-

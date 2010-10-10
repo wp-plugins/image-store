@@ -4,12 +4,12 @@ Plugin Name: Image Store
 Plugin URI: http://imstore.xparkmedia.com
 Description: Your very own image store within wordpress "ImStore"
 Author: Hafid R. Trujillo Huizar
-Version: 0.5.4
+Version: 1.0.1
 Author URI: http://www.xparkmedia.com
 Requires at least: 3.0.0
 Tested up to: 3.0.1
 
-Copyright 2009-2010 by Hafid Trujillo http://www.xparkmedia.com
+Copyright 2010-2011 by Hafid Trujillo http://www.xparkmedia.com
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ class ImStore{
 	 * Make sure that new language(.mo) files have 'ims-' as base name
 	 */
 	const domain	= 'ims';
-	const version	= '0.5.0';
+	const version	= '1.0.1';
 	
 	
 	/**
@@ -108,7 +108,7 @@ class ImStore{
 	function load_text_domain( ) {
 		if ( function_exists( 'load_plugin_textdomain' ) ){
 			$plugin_dir = basename( dirname( __FILE__ ) ) . '/langs';
-			load_plugin_textdomain( $this->domain, 'wp-content/plugins/' . $plugin_dir, $plugin_dir );
+			load_plugin_textdomain( ImStore::domain, WP_CONTENT_DIR. '/plugins/' . $plugin_dir, $plugin_dir );
 		}
 	}
 	
@@ -296,7 +296,7 @@ class ImStore{
 		$ims_ft_opts['transitionTime']	= 1000;
 		$ims_ft_opts['slideshowSpeed']	= 3200;
 		$ims_ft_opts['autoStart']		= 'false';
-		$ims_ft_opts['playLinkText']	= __( 'Pay', ImStore::domain );
+		$ims_ft_opts['playLinkText']	= __( 'Play', ImStore::domain );
 		$ims_ft_opts['pauseLinkTex']	= __( 'Pause', ImStore::domain );
 		$ims_ft_opts['closeLinkText']	= __( 'Close', ImStore::domain );
 		$ims_ft_opts['prevLinkText']	= __( 'Previous', ImStore::domain );

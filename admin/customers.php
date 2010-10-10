@@ -82,8 +82,8 @@ $message[1] = __( 'A new customer was added successfully.', ImStore::domain);
 $message[2] = __( 'Customer updated.', ImStore::domain );
 $message[3] = __( 'Status successfully updated.', ImStore::domain);
 $message[4] = __( 'Customer deleted.', ImStore::domain);
-$message[5] = sprintf( __( '%d customer(s) updated.', ImStore::domain ), $_GET['c'] );
-$message[6] = sprintf( __( '%d customer(s) deleted.', ImStore::domain ), $_GET['c'] );
+$message[5] = sprintf( __( '%d customers updated.', ImStore::domain ), $_GET['c'] );
+$message[6] = sprintf( __( '%d customers deleted.', ImStore::domain ), $_GET['c'] );
 
 $customers 	= get_ims_customers( $this->per_page );
 $nonce 		= '_wpnonce=' . wp_create_nonce( 'ims_link_customer' );

@@ -195,8 +195,8 @@ $images = get_posts( array(
 					</select>
 				</td>
 			</tr>
-			<!--<tr>
-				<td valign="top"><label for="ims_downloads"><?php _e( 'Downloads', ImStore::domain )?></label></td>
+			<tr>
+				<!--<td valign="top"><label for="ims_downloads"><?php _e( 'Downloads', ImStore::domain )?></label></td>
 				<td><input type="text" name="ims_downloads" id="ims_downloads" value="<?php echo $gallery->ims_downloads ?>" class="inputsm"/></td>
 				<td valign="top"><label for="ims_download_max"><?php _e( 'Downloads allowed', ImStore::domain )?></label></td>
 				<td><input type="text" name="ims_download_max" id="ims_download_max" value="<?php echo $gallery->ims_download_max ?>" class="inputsm"/></td>-->
@@ -281,7 +281,7 @@ $images = get_posts( array(
 		</div>
 		
 		
-		<table class="widefat post fixed imstore-table">
+		<table class="widefat post fixed imstore-table sort-images">
 			<thead>
 				<tr><?php print_column_headers( 'toplevel_page_' . IMSTORE_FOLDER . '-edit' )?></tr>
 			</thead>
@@ -457,7 +457,7 @@ function delete_ims_images( $delete_files ){
 				foreach( $metadata[0]['sizes'] as $size )
 					@unlink( WP_CONTENT_DIR . $folder . '/' . $size['file'] );
 				@unlink( WP_CONTENT_DIR . $metadata[0]['file'] );
-				@unlink( WP_CONTENT_DIR . str_replace( '_resized/', '', $metadata[0]['file'] ) );
+				@unlink( WP_CONTENT_DIR . str_replace( '_resized/', '', str_replace(' ', '-' ,$metadata[0]['file']) ) );
 			}
 		}
 		wp_delete_post( $image , true );
@@ -523,7 +523,7 @@ function empty_image_trash( $delete_files ){
 				foreach( $metadata[0]['sizes'] as $size )
 					@unlink( WP_CONTENT_DIR . $folder . '/' . $size['file'] );
 				@unlink( WP_CONTENT_DIR . $metadata[0]['file'] );
-				@unlink( WP_CONTENT_DIR . str_replace( '_resized/', '', $metadata[0]['file'] ) );
+				@unlink( WP_CONTENT_DIR . str_replace( '_resized/', '', str_replace(' ', '-' ,$metadata[0]['file']) ) );
 			}
 		}
 		wp_delete_post( $image->ID , true );

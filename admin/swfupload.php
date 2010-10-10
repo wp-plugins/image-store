@@ -38,7 +38,7 @@ if ( !empty( $_FILES ) ) {
 	if( preg_match( '/(png|jpg|jpeg|gif)$/i', $filename ) ){
 		if( !file_exists( $targetfile ) ){
 			move_uploaded_file( $tempfile, $targetfile );
-			@chmod( $targetfile, 0755 );
+			@chmod( $targetfile, 0775 );
 			@unlink( tempfile );
 			echo $targetfile; return;
 		}else{

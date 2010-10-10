@@ -83,7 +83,6 @@ if ( is_string($content_func) )
  <thead class="media-item-info" id="media-head-<?php echo $id?>">
   <tr valign="top">
   <td class="A1B1" id="thumbnail-head-<?php echo $id?>">
-   <p><img src="http://localhost/wp3/wp-admin/images/wpspin_light.gif" class="imgedit-wait-spin" alt="loading"></p>
   </td>
   </tr>
  </thead>
@@ -97,18 +96,45 @@ $nonce = wp_create_nonce( "image_editor-" . $id );
 ?>
 <script type="text/javascript">
 imageEdit.open( <?php echo $id . ',"' . $nonce . '"'?>); if(typeof wpOnload=='function')wpOnload();
-jQuery("input[value='Cancel']").live('click', function(){ setTimeout( "parent.tb_remove()", 500 ); });
-jQuery("input[value='Restore image']").live('click', function( ){ 
-	setTimeout( "parent.tb_remove()", 2000 ); 
-	setTimeout( "parent.location.reload()", 2000 ); 
-}); jQuery("input[value='Save']").live('click', function( ){ 
-	if( jQuery(this).attr('disabled') != 'disabled' ){
-		setTimeout( "parent.tb_remove()", 2150 ); 
-		setTimeout( "parent.location.reload()", 2150 ); 
-	}
+jQuery(document).ready(function($){
+	
+	var target = 'all';
+	
+	$("input[value='Cancel']").live('click', function(){ setTimeout( "parent.tb_remove()", 500 ); });
+	
+	$("input[value='Restore image']").live('click', function( ){ 
+		setTimeout( "parent.tb_remove()", 2000 ); 
+		setTimeout( "parent.location.reload()", 2000 ); 
+	});
+	
+	$("input[value='Save']").live('click', function( ){ 
+		if( jQuery(this).attr('disabled') != 'disabled' ){
+			if( target == 'thumbnail' ){
+				var postid = <?php echo $id?>; 
+				var data, history = imageEdit.filterHistory(postid, 0);
+				
+				if ( '' == history )
+					return false;
+					
+				data = {
+					imgid		: postid,
+					history		: history,
+					action		: 'edit-mini-image',
+					_wpnonce	: '<?php echo $nonce ?>'
+				};
+				setTimeout( function(){ $.get( '<?php echo IMSTORE_ADMIN_URL . 'ajax.php'?>', data ) }, 2130 )
+			}
+			setTimeout( "parent.tb_remove()", 2130 ); 
+			setTimeout( "parent.location.reload()", 2130 ); 
+		}
+	});
+	
+	$(".imgedit-group input[type='radio']").live('click',function(){
+		target = $(this).val(); 
+	});
+	
 });
+
 </script>
 </body>
 </html>
-<?php
-

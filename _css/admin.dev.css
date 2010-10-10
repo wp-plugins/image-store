@@ -29,6 +29,7 @@
 #icon-sales						{ background:url(../_img/icons.png) no-repeat 50% 50% }
 #icon-pricing					{ background:url(../_img/icons.png) no-repeat 0 50% }
 
+
 /******** TABLES **********/
 
 tr.filler						{ display:none; text-align:center; line-height:3em; vertical-align:middle; font-size:.9em; color:#999}
@@ -43,7 +44,7 @@ tr.filler						{ display:none; text-align:center; line-height:3em; vertical-alig
 .ims-table .trash a 			{ color:#666; text-decoration:none; }
 .ims-table .trash:hover 		{ background:#f00!important}
 .trash:hover a					{ color:#fff;}
-
+.imstore-table.sort-images tr	{ cursor:move}
 
 table.store-detail td			{ vertical-align:middle}
 table.price-list,

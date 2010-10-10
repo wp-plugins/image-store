@@ -32,10 +32,10 @@ class ImStoreAdmin extends ImStore{
 			add_filter( 'media_upload_form_url', array( &$this, 'media_upload_form_url' ), 1, 1 ); 
 		}
 		
+		add_filter( 'intermediate_image_sizes', array( &$this, 'ims_image_sizes' ), 15, 1 );
 		add_filter( 'get_attached_file', array( &$this, 'return_ims_attached_file' ), 15, 2 );
 		add_filter( 'load_image_to_edit_path', array( &$this, 'load_ims_image_path' ), 15, 2 ); 
 		add_filter( 'wp_update_attachment_metadata', array( &$this, 'update_attachment_metadata' ), 15, 2 );
-		add_filter( 'intermediate_image_sizes', array( &$this, 'ims_image_sizes' ), 15, 1 );
 		
 		$this->opts = (array)get_option( 'ims_front_options' );
 		if( $this->opts['imswidget'] ) include_once ( dirname (__FILE__) . '/widget.php' );		
@@ -90,7 +90,8 @@ class ImStoreAdmin extends ImStore{
 	 * @since 0.5.0 
 	 */	
 	function update_attachment_metadata( $data, $post_id ){
-		if( $data['sizes']['mini'] ){
+		
+		if( $data['sizes']['mini'] && !stristr( $data['file'], date('Y/m') ) ){
 			
 			$cont_dir = str_replace( "\\", "/", WP_CONTENT_DIR );
 			$dir = str_replace( "\\", "/", dirname( $data['file'] ) );
@@ -98,11 +99,11 @@ class ImStoreAdmin extends ImStore{
 			if( stristr( $dir, $cont_dir ) ){
 				$relative = str_replace( $cont_dir, "", $dir ); 
 				$path = $dir; 
-				$url = WP_CONTENT_URL . $relative; 
+				$url  = trim( WP_CONTENT_URL, '/') . '/' . $relative;
 				$data['file'] = $relative . '/' . basename( $data['file'] );
 			}else{
 				$path = $condir . $dir; 
-				$url = WP_CONTENT_URL . $dir; 
+				$url  = trim( WP_CONTENT_URL, '/') . '/' . $dir;
 			}
 			
 			foreach( $data['sizes'] as $size => $filedata ){
@@ -319,8 +320,28 @@ class ImStoreAdmin extends ImStore{
 		} 
 		return array_filter( $input ); 
 	} 
-
 	
+	
+	/**
+	 * Merge arrays recursively
+	 *
+	 * @parm array $input 
+	 * @return array
+	 * @since 1.0.0
+	 */
+	function array_merge_recursive_distinct( array &$array1, array &$array2 ){
+		$merged = $array1;
+		foreach ( $array2 as $key => &$value ){
+			if ( is_array ( $value ) && isset ( $merged [$key] ) && is_array ( $merged [$key] ) ){
+				$merged [$key] = $this->array_merge_recursive_distinct ( $merged [$key], $value );
+			}else{
+				$merged [$key] = $value;
+			}
+		}
+		return $merged;
+	}
+
+
 	/**
 	 * Load admin styles
 	 *
@@ -490,9 +511,9 @@ class ImStoreAdmin extends ImStore{
 			'dateformat'	=> $format,
 			'imsurl'		=> IMSTORE_URL,
 			'imsajax' 		=> IMSTORE_ADMIN_URL . 'ajax.php',
-			'flastxt'		=> __( 'Select files', ImStore::domain ),
-			'exists'		=> __( ' files existed', ImStore::domain ),
-			'uploaded'		=> __( ' files uploaded, ', ImStore::domain ),
+			'flastxt'		=> __( 'Select files.', ImStore::domain ),
+			'exists'		=> __( ' files existed.', ImStore::domain ),
+			'uploaded'		=> __( ' files uploaded. ', ImStore::domain ),
 			'selectgal' 	=> __( 'Please, select a gallery!', ImStore::domain ),
 			'deletelist' 	=> __( 'Are you sure that you want to delete this list?', ImStore::domain ),
 			'deletepackage' => __( 'Are you sure that you want to delete package?', ImStore::domain ),

@@ -112,7 +112,7 @@ $colors_options = array(
 						<td colspan="2" class="shipping">
 							<?php $meta = get_post_meta( $this->pricelist_id, '_ims_list_opts', true );?>
 							<select name="shipping_1" id="shipping_1" class="shipping-opt">
-								<option value="<?php echo $meta['ims_ship_local']?>"<?php $this->selected( $meta['ims_ship_local'], $this->cart['shipping'] )?>><?php echo __( 'Inside U.S.A + ', ImStore::domain ) . sprintf( $format[$loc], $meta['ims_ship_local'] )?></option>
+								<option value="<?php echo $meta['ims_ship_local']?>"<?php $this->selected( $meta['ims_ship_local'], $this->cart['shipping'] )?>><?php echo __( 'Local + ', ImStore::domain ) . sprintf( $format[$loc], $meta['ims_ship_local'] )?></option>
 								<option value="<?php echo $meta['ims_ship_inter']?>"<?php $this->selected( $meta['ims_ship_inter'], $this->cart['shipping'] )?>><?php echo __( 'International + ', ImStore::domain ) . sprintf( $format[$loc], $meta['ims_ship_inter'] )?></option>
 							</select>
 						</td>
