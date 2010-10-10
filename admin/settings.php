@@ -63,10 +63,12 @@ if ( !empty( $_POST['updateimages'] ) ) {
 			$downlaodsizes[] = $_POST['imagesize_' . $x];
 		}
 
-		$newsizes[] = array( 'name' => $_POST['imagesize_' . $x]['w'] . 'x' . $_POST['imagesize_' . $x]['h'] );
+		if( $_POST['imagesize_' . $x]['w'] )
+			$newsizes[] = array( 'name' => $_POST['imagesize_' . $x]['w'] . 'x' . $_POST['imagesize_' . $x]['h'] );
+		
 		unset( $_POST['imagesize_' . $x] );
 		unset( $_POST['imgid_' . $x] );
-		
+
 		$x++;
 	}while( !empty( $_POST['imagesize_' . $x] ) );
 	
@@ -76,8 +78,8 @@ if ( !empty( $_POST['updateimages'] ) ) {
 		update_option( $values['name'] . "_size_w", $values['w'] );
 	}
 	
-	if( is_array( $newsizes) && !empty( $newsizes ) )
-		$sizes = array_merge( $sizes, $newsizes );
+	if( is_array( $newsizes ) && !empty( $newsizes ) )
+		$this->array_merge_recursive_distinct( $sizes, $newsizes );
 	
 	$preview['preview'] = $_POST['preview'];
 	$preview['preview']['name'] = 'preview';
@@ -233,7 +235,7 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 			<tr class="alternate">
 				<td scope="row" width="22%"><label for="mediarss"><?php _e( 'Media RSS feed', ImStore::domain )?></label></td>
 				<td><input type="checkbox" name="mediarss" id="mediarss" value="1" <?php checked( '1', $this->_vr( 'mediarss' ) )?>/>
-				<small><?php _e( 'Add RSS feed the blog header for unsercure galleries. Useful for CoolIris/PicLens', ImStore::domain )?></small>
+				<small><?php _e( 'Add RSS feed the blog header for unsecured galleries. Useful for CoolIris/PicLens', ImStore::domain )?></small>
 				</td>
 			</tr>
 			<tr>
@@ -333,7 +335,7 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 				<input type="text" name="textcolor" class="inputxm" value="<?php $this->_v( 'textcolor' )?>" /> <small>Hex </small></label>
 				<label><?php _e( 'Font size', ImStore::domain )?>
 				<input type="text" name="fontsize" class="inputxm" value="<?php $this->_v( 'fontsize' )?>" /></label>
-				<label><?php _e( 'Transperency', ImStore::domain )?>
+				<label><?php _e( 'Transparency', ImStore::domain )?>
 				<input type="text" name="transperency" class="inputxm" value="<?php $this->_v( 'transperency' )?>" /> (0-127)</label></td>
 			</tr>
 			<tr>
@@ -343,7 +345,7 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 				<input type="text" name="watermarkurl" id="watermarkurl" class="inputlg" value="<?php $this->_v( 'watermarkurl')?>"/></td>
 			</tr>
 			<tr><td scope="row" colspan="6">&nbsp;</td></tr>
-			<tr class="alternate"><td scope="row" colspan="6"><?php _e( 'Downlaodable image sizes', ImStore::domain )?></td></tr>
+			<tr class="alternate"><td scope="row" colspan="6"><?php _e( 'Downloadable image sizes', ImStore::domain )?></td></tr>
 			<tr class="t">
 				<td scope="row"><?php _e( 'Delete', ImStore::domain )?></td>
 				<td scope="row"><?php _e( 'Image Size', ImStore::domain )?></td>

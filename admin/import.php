@@ -58,7 +58,7 @@ if( isset( $_POST['addnewgallery'] ) ){
 }
 
 $this->opts 	+= (array)get_option( 'ims_back_options' );
-$message[1] 	= sprintf( __( '%1$d image(s) added.', ImStore::domain ), $_GET['c'] );
+$message[1] 	= sprintf( __( '%1$d images added.', ImStore::domain ), $_GET['c'] );
 $message[2] 	= __( 'Image added.', ImStore::domain ) ;
 $message[3] 	= __( 'New gallery succesfully created.', ImStore::domain ) ;
 
@@ -157,8 +157,7 @@ $post_date 		= ( $_POST['post_name'] ) ? esc_attr( $_POST['post_name'] ) : date(
 					</td> 
 					<td>
 						<input type="text" name="galleryfolder" id="galleryfolder" class="inputxl" /><br />
-						<small><?php _e( "New galleries will be created using the folder's name and default gallery settings.
-										Path relative to the gallery folder path set on the settings page", ImStore::domain )?></small>
+						<small><?php _e( "New galleries will be created using the folder's name and default gallery settings. Path relative to the gallery folder path set on the settings page", ImStore::domain )?></small>
 					</td> 
 				</tr>
 				<tr>
@@ -428,7 +427,7 @@ function upload_ims_zipfile( $galspath ){
 	$PclZip 		= new PclZip( $download_file );
 	$ziped			= $PclZip->extract( PCLZIP_OPT_PATH, $gallerypath,
 							 PCLZIP_OPT_REMOVE_ALL_PATH,
-    			 PCLZIP_CB_PRE_EXTRACT, '_ims_unzip_images',
+    			 			 PCLZIP_CB_PRE_EXTRACT, '_ims_unzip_images',
 							 PCLZIP_CB_POST_EXTRACT, '_ims_create_img_metadata',
 							 PCLZIP_OPT_SET_CHMOD, 0775
 	); 
@@ -511,7 +510,7 @@ function _ims_create_img_metadata( $p_event, &$p_header ){
 	
 	if ( $p_header['status'] == 'ok' ) {
 
-		$filename = basename( $p_header['filename'] );
+		$filename = sanitize_file_name( basename( $p_header['filename'] ) );
 		$filetype = wp_check_filetype( $filename );
 		$des_path = dirname( $p_header['filename'] ) . '/_resized' ;
 		$relative = str_replace( str_replace( '\\' , '/', WP_CONTENT_DIR ), '', str_replace( '\\' , '/', $des_path . '/' . $filename ));

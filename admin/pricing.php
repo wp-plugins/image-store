@@ -97,7 +97,7 @@ $type[3] 	= __( 'Free Shipping', ImStore::domain );
 $message[1] = __( 'Promotion updated.', ImStore::domain );
 $message[2] = __( 'Promotion deleted.', ImStore::domain );
 $message[3] = __( 'New promotion added.', ImStore::domain );
-$message[4] = __( 'A package was updated.', ImStore::domain);
+$message[4] = __( 'The package was updated.', ImStore::domain);
 $message[5] = __( 'Price list was updated.', ImStore::domain);
 $message[6] = __( 'The new package was created.', ImStore::domain) ;
 $message[7] = __( 'A new image size was created.', ImStore::domain);
@@ -523,7 +523,7 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 									<input type="radio" name="free-type" value="1" class="shipping" <?php checked( $_POST['shipping'], '1' )?>/></label>
 								</td>
 								<td>
-									<label class="show-free"><?php _e( 'Downlaod', ImStore::domain )?>
+									<label class="show-free"><?php _e( 'Download', ImStore::domain )?>
 									<input type="radio" name="free-type" value="2" class="promo-download" <?php checked( $_POST['download'], '1' )?>/></label>
 								</td>-->
 								<td>

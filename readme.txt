@@ -4,24 +4,17 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: e-commerce,shop,store,photo,picture,image,galleries,web2.0,imstore,image-store,slideshow,gallery,sale,photographers,shop
 Requires at least: 3.0.0
 Tested up to: 3.0.1
-Stable tag: 0.5.5
+Stable tag: 1.0.0
 
-Image Store (ImStore) is a image gallery and store plugin for WordPress with a slideshow and paypal integration.
+Image Store (ImStore) is a image gallery and store/shop plugin for WordPress with a slideshow and paypal integration.
 
 == Description ==
-
-NOTE: BETA RELEASE (0.5.0) - (0.5.5)
-This version shouldn't be install on live/production website untill is fully tested. please let me know of any issues on the
-<a href="http://wordpress.org/tags/image-store?forum_id=10">wordpres forums posts</a> or
-<a href="http://imstore.xparkmedia.com/">Plugin site</a> 
-
 Image Store (ImStore) is a image gallery and store plugin for WordPress with a slideshow and paypal integration. This 
 plugin was created because I saw the need of the worpress community to have a images store that didn't required the installation of multiple
 plugins to get this accomplished or to go through a lot of settings. :@)
 
 The plugin fully integrated with the WordPress database the only thing that is created is a post_expire column on the posts table.
 so you will not find extra tables on your database ( Cool!.. at least for me I hate extra tables ).
-
 
 = Features =
 
@@ -74,7 +67,6 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * MySQL 5.1.26 
 * Apache 2.2.11
 * Linux
-
 * Explorer 8
 * Safari 4.1
 * Firefox 3.5
@@ -89,32 +81,33 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 
 
 = Shortcode Option =
-v0.5.3 and older
-[ims-gallery] will display recent images added from all galleries.
-Defaults: [ims-gallery id="0" slideshow="0" caption="1" orderby="0" order="0" number="false" ]
+**v0.5.3 and older**
 
-Options:
-* $id: gallery id.
+`[ims-gallery] // will display recent images added from all galleries.`
+`[ims-gallery id="0" slideshow="0" caption="1" orderby="0" order="0" number="false" ]`
+
+= Options =
+* $id:
+	- gallery id.
 * $slideshow:
-	- (1/true) display gallery as slideshow
-	- (0/false) display imaes only
-* $caption: (optional)
-	- (1/true) show caption
-	- (0/false) do not display caption
+	- (1|true) display gallery as slideshow
+	- (0|false) display imaes only
+* $caption:
+	- (1|true) show caption
+	- (0|false) do not display caption
 * $orderby:
-	- (0/false) use gallery default option set on setting or gallery sort.
+	- (0|false) use gallery default option set on setting or gallery sort.
 	- (date) sort by image upload date.
 	- (title) sort by image title.
 	- (custom) sort by custom order.
 	- (caption) sort by caption.
 * $order:
-	- (0/false) use gallery default option set on setting or gallery sort.
+	- (0|false) use gallery default option set on setting or gallery sort.
 	- (ASC) ascending order 
 	- (DESC) descending order 
 * $number:
 	- (false) show all the images on gallery or 10 if no gallery id is provided.
 	- (any number) how many images to show. 
-	
 
 == Frequently Asked Questions ==
 
@@ -128,11 +121,21 @@ With the plugin installed navigate to Image Store > settings and click on the do
 
 
 == Changelog ==
+= 1.0.0 =
+* Improved dynamic image cache.
+* Fix: misspells.
+* Fix: save gallery settings.
+* Fix: double slash on permalinks.
+* Removed "add to favorites" link from unsecure galleries.
+* Added: Spanish translation
+* Fix: WP thumbnail preview conflict.
+* Fix: file not being deleted from server when image was deleted.
+
 = 0.5.5 =
 * Added: drag and drop image sort (admin).
-* Security fix: hide url location to original image (front-end).
+* Security fix: image url.
 * Fix: Image edit didn't create new image when thumb only was selected.
-* Fix: php error on dinymic css file for IE colorbox support.
+* Fix: php error on dynamic css file for IE colorbox support.
 
 
 = 0.5.4 =
@@ -189,7 +192,7 @@ Ronnie Garcia, Benj Arriola, RonnieSan ( http://www.uploadify.com/ )
 
 
 == Upgrade Notice ==
-* Upgrade from previous to 0.5.2 slideshow options will be addes or reset setting to update options. 
+* Upgrade from previous to 0.5.2 slideshow options will be added or reset setting to update options. 
 * Upgrade from 0.5.0 to 0.5.0 may change your permalinks. 
 
 
