@@ -121,6 +121,10 @@ With the plugin installed navigate to Image Store > settings and click on the do
 
 
 == Changelog ==
+
+= 1.0.1 =
+* Fix: Translation issues.
+
 = 1.0.0 =
 * Improved dynamic image cache.
 * Fix: misspells.
