@@ -100,13 +100,13 @@ function ajax_ims_flash_image_data( ){
 	if( !current_user_can( 'ims_import_images' ) )
 		return false;
 	
-	$galleid = $_GET['galleryid'];
-	$filename = $_GET['imagename'];
-	$abspath = $_GET['filepath'];
-	$filetype = wp_check_filetype( $filename );
-	$des_path = dirname( $abspath ) . '/_resized' ;
-	$relative = str_replace( str_replace( '\\' , '/', WP_CONTENT_DIR ), '', str_replace( '\\' , '/', $des_path . '/' . $filename ));
-	$guid = WP_CONTENT_URL . $relative;
+	$galleid 	=  $_GET['galleryid'];
+	$filename 	= sanitize_file_name($_GET['imagename'] );
+	$abspath 	= $_GET['filepath'];
+	$filetype 	= wp_check_filetype( $filename );
+	$des_path 	= dirname( $abspath ) . '/_resized' ;
+	$relative 	= str_replace( str_replace( '\\' , '/', WP_CONTENT_DIR ), '', str_replace( '\\' , '/', $des_path . '/' . $filename ));
+	$guid 		= WP_CONTENT_URL . $relative;
 	if( !file_exists( $des_path ) ) @mkdir( $des_path, 0775 );
 
 	$attachment = array(

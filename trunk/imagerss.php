@@ -38,7 +38,10 @@ class ImStoreImageRSS{
 		
 		if( !file_exists ( $this->image_dir ) ) die( ); 
 		
-		$this->display_image( );
+		if( strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= filemtime( $this->image_dir )){
+			header ('HTTP/1.1 304 Not Modified'); 
+			die();
+		} else $this->display_image( );
 		
 	}
 	
@@ -56,13 +59,15 @@ class ImStoreImageRSS{
 		ini_set('set_time_limit', '1000');
 		
 		$filetype 	= wp_check_filetype( basename( $this->image_dir ) );
-		$gmdate_mod = gmdate( "D, d M Y H:i:s", filemtime( $this->image_dir ) );
+		$modified 	= gmdate( "D, d M Y H:i:s \G\M\T", filemtime( $this->image_dir ) );
+		$expired	= gmdate( "D, d M Y H:i:s \G\M\T", (filemtime( $this->image_dir ) + (24*60*60*5 )) );
 		
 		//header( 'Pragma: no-cache' );
 		//header( 'Cache-control: private');
-		header( 'Expires: ' . $gmdate_mod );
-		header( 'Last-Modified: ' . $gmdate_mod );
+		header( 'Expires: ' . $expired );
+		header( 'Last-Modified: ' . $modified );
 		header( 'Content-Type: ' . $filetype['type'] );
+		//header( 'Cache-Control: max-age=864000, must-revalidate');
 		//header( 'Cache-control: no-cache, no-store, must-revalidate, max-age=0');
 
 		switch( $filetype['ext'] ){

@@ -64,7 +64,8 @@ if( preg_match( '#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'] ) )
 				<form action="" method="post" class="ims-slideshow-tools">
 					<?php if( $this->pages[5] ){?>
 					<div class="add-images-to-cart-single"><a href="#"><?php _e( 'Add to cart', ImStore::domain)?></a></div>
-					<div class="add-to-favorite-single"><a href="#"><?php _e( 'Add to favorites', ImStore::domain)?></a></div>
+					<?php if( $this->is_secure ){?>
+					<div class="add-to-favorite-single"><a href="#"><?php _e( 'Add to favorites', ImStore::domain)?></a></div><?php }?>
 					<div class="image-color">
 						<label><input type="checkbox" name="ims-color" id="ims-color-bw" value="bandw" /> <?php _e( 'Black &amp; White', ImStore::domain)?></label>
 						<label><input type="checkbox" name="ims-color" id="ims-color-sepia" value="sepia" /> <?php _e( 'Sepia', ImStore::domain)?> </label>

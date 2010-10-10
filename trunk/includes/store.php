@@ -120,7 +120,7 @@ class ImStoreFront{
 			$link = '&imspage=' . $page . '&imsgalid=' . $galid ;
 			if( $this->success ) $link .= '&imsmessage=' . $this->success; 
 		}
-		return get_permalink( ) . str_replace( '//', '/', $link );
+		return  trim( get_permalink( ), '/') . str_replace( '//', '/', $link );
 	}
 	
 	
@@ -708,12 +708,12 @@ class ImStoreFront{
 		}
 		
 		if( empty( $_POST['ims-image-size'] ) ){
-			$this->error = __( 'Please, select and image size', ImStore::domain );
+			$this->error = __( 'Please, select an image size.', ImStore::domain );
 			return;
 		}
 			
 		if( empty( $_POST['ims-to-cart-ids'] ) ){
-			$this->error = __( 'There was an error adding images to cart', ImStore::domain );
+			$this->error = __( 'There was an error adding images to cart.', ImStore::domain );
 			return;
 		}
 		

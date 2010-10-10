@@ -457,7 +457,7 @@ function delete_ims_images( $delete_files ){
 				foreach( $metadata[0]['sizes'] as $size )
 					@unlink( WP_CONTENT_DIR . $folder . '/' . $size['file'] );
 				@unlink( WP_CONTENT_DIR . $metadata[0]['file'] );
-				@unlink( WP_CONTENT_DIR . str_replace( '_resized/', '', $metadata[0]['file'] ) );
+				@unlink( WP_CONTENT_DIR . str_replace( '_resized/', '', str_replace(' ', '-' ,$metadata[0]['file']) ) );
 			}
 		}
 		wp_delete_post( $image , true );
@@ -523,7 +523,7 @@ function empty_image_trash( $delete_files ){
 				foreach( $metadata[0]['sizes'] as $size )
 					@unlink( WP_CONTENT_DIR . $folder . '/' . $size['file'] );
 				@unlink( WP_CONTENT_DIR . $metadata[0]['file'] );
-				@unlink( WP_CONTENT_DIR . str_replace( '_resized/', '', $metadata[0]['file'] ) );
+				@unlink( WP_CONTENT_DIR . str_replace( '_resized/', '', str_replace(' ', '-' ,$metadata[0]['file']) ) );
 			}
 		}
 		wp_delete_post( $image->ID , true );

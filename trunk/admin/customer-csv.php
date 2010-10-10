@@ -44,8 +44,8 @@ if( empty( $results ) )
 	die( );
 	
 $colums = array( 
-	'first_name'	=> __( 'Firstname', ImStore::domain ),
-	'last_name'		=> __( 'Lastname', ImStore::domain ),
+	'first_name'	=> __( 'First Name', ImStore::domain ),
+	'last_name'		=> __( 'Last Name', ImStore::domain ),
 	'user_email'	=> __( 'E-mail', ImStore::domain ),
 	'ims_address'	=> __( 'Address', ImStore::domain ),
 	'ims_city'		=> __( 'City', ImStore::domain ),
