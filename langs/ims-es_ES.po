@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Image Store 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-08 21:09-0800\n"
-"PO-Revision-Date: 2010-10-08 21:09-0800\n"
+"POT-Creation-Date: 2010-10-10 02:03-0800\n"
+"PO-Revision-Date: 2010-10-10 02:05-0800\n"
 "Last-Translator: hax <none>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -71,64 +71,64 @@ msgstr "&lsaquo; Anterior"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:513
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:514
 msgid "Select files."
 msgstr "Seleccionar archivos."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:514
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:515
 msgid " files existed."
 msgstr " archivos existentes."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:515
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:516
 msgid " files uploaded. "
 msgstr " archivos subidos."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:516
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:517
 #: Documents\04_WebDesign\_subversion\trunk/admin/import.php:690
 msgid "Please, select a gallery!"
 msgstr "íPor favor, selecciona una galería!"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:517
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:518
 msgid "Are you sure that you want to delete this list?"
 msgstr "¿Realmente deseas eliminar esta lista?"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:518
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:519
 msgid "Are you sure that you want to delete package?"
 msgstr "¿Realmente deseas eliminar este paquete?"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:519
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:520
 msgid "Are you sure that you want to delete this entry?"
 msgstr "¿Realmente deseas eliminar este tamaño?"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:537
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:590
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:538
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:591
 msgid "Customers"
 msgstr "Clientes"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:541
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:542
 msgid "Orders"
 msgstr "Ordenes"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:545
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:575
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:546
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:576
 #: Documents\04_WebDesign\_subversion\trunk/admin/galleries.php:85
 #: Documents\04_WebDesign\_subversion\trunk/admin/gallery-edit.php:123
 msgid "Galleries"
@@ -136,38 +136,38 @@ msgstr "Galerías"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:553
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:554
 msgid "Show per page"
 msgstr "Mostrar por página"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:572
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:573
 msgid "Image Store"
 msgstr "Image Store"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:578
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:579
 msgid "Add New"
 msgstr "Nueva"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:583
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:584
 msgid "Sales"
 msgstr "Ventas"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:586
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:587
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:112
 msgid "Pricing"
 msgstr "Precios"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:593
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:594
 msgid "Settings"
 msgstr "Configuración"
 
@@ -2071,19 +2071,19 @@ msgstr "Todos las configuraciones han sido actualizadas."
 #: and Settings\HP_Administrator\My
 #: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:198
 msgid "Gallery Settings"
-msgstr "Configuración de galerías"
+msgstr "Galerías"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
 #: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:199
 msgid "Image Settings"
-msgstr "Configuración de imagenes"
+msgstr "Imagenes"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
 #: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:200
 msgid "Slideshow Settings"
-msgstr "Configuración de la presenatción."
+msgstr "Presenatción."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
