@@ -143,17 +143,20 @@ $colors_options = array(
 						<td scope="row" colspan="4">&nbsp;</td>
 						<td colspan="3">
 							<input name="applychanges" type="submit" value="<?php _e( 'Update Cart', ImStore::domain )?>" class="secondary" />
-							<input name="checkout" type="submit" value="<?php _e( 'Check out', ImStore::domain )?>" class="primary" />						</td>
+							<input name="<?php echo ($this->opts['gateway'] == 'notification' ) ? 'enotification' : 'checkout' ?>" type="submit" value="<?php _e( 'Check out', ImStore::domain )?>" class="primary" />
+						</td>
 					</tr>
 				</tfoot>
 			</table>
 			
 			<div class="ims-terms-condtitions"><?php echo $this->opts['termsconds'] ?></div>
 			
+			<input type="hidden" name="ims-total" value="<?php echo $this->cart['total'] ?>" />
+
 			<input type="hidden" name="rm" value="2" />
-			<input type="hidden" name="lc" value="US" />
 			<input type="hidden" name="upload" value="1"/>
 			<input type="hidden" name="cmd" value="_cart"/>
+			<input type="hidden" name="lc" value="<?php echo $this->opts['currency'] ?>" />
 			<input type="hidden" name="page_style" value="<?php bloginfo( 'name' )?>"/>
 			<input type="hidden" name="custom" value="<?php echo $this->cart_cookie ?>"/>
 			<input type="hidden" name="return" value="<?php echo $this->get_permalink( $this->gallery_id, 8 )?>"/>

@@ -546,30 +546,30 @@ function _ims_create_img_metadata( $p_event, &$p_header ){
 					'width' => $info[0],
 					'height'=> $info[1],
 				);
+			
+				//copy file to be use when plugin is uninstall
+				@copy( $p_header['filename'], $des_path . '/' . $filename ); 
+				
+				//create metadata
+				$imagesize = getimagesize( $p_header['filename'] );
+				$metadata['width'] = $imagesize[0];
+				$metadata['height'] = $imagesize[1];
+				list($uwidth, $uheight) = wp_constrain_dimensions( $metadata['width'], $metadata['height'], 100, 100 );
+				$metadata['hwstring_small'] = "height='$uheight' width='$uwidth'";
+				
+				switch( $imagesize['channels'] ){ 
+					case 1: $metadata['color'] = 'BW'; break;
+					case 3: $metadata['color'] = 'RGB'; break;
+					case 4: $metadata['color'] = 'CMYK'; break;
+					default: $metadata['color'] = __( 'Unknown', ImStore::domain );
+				}
+	
+				$metadata['file'] = $relative;
+				$metadata['sizes'][$img_size['name']] = $data;
+				$metadata['image_meta'] = wp_read_image_metadata( $p_header['filename'] );
 			}
 			
-			//copy file to be use when plugin is uninstall
-			@copy( $p_header['filename'], $des_path . '/' . $filename ); 
-			
-			//create metadata
-			$imagesize = getimagesize( $p_header['filename'] );
-			$metadata['width'] = $imagesize[0];
-			$metadata['height'] = $imagesize[1];
-			list($uwidth, $uheight) = wp_constrain_dimensions( $metadata['width'], $metadata['height'], 100, 100 );
-			$metadata['hwstring_small'] = "height='$uheight' width='$uwidth'";
-			
-			switch( $imagesize['channels'] ){ 
-				case 1: $metadata['color'] = 'BW'; break;
-				case 3: $metadata['color'] = 'RGB'; break;
-				case 4: $metadata['color'] = 'CMYK'; break;
-				default: $metadata['color'] = __( 'Unknown', ImStore::domain );
-			}
-
-			$metadata['file'] = $relative;
-			$metadata['sizes'][$img_size['name']] = $data;
-			$metadata['image_meta'] = wp_read_image_metadata( $p_header['filename'] );
 		}
-		
 		wp_update_attachment_metadata( $attach_id, $metadata );
 	}
 	

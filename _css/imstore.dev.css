@@ -93,6 +93,16 @@ table.ims-table th { font-family:'Helvetica Neue', Arial, Helvetica, sans-serif;
 #ims-mainbox.shopping-cart tfoot tr td { padding-left:15px}
 #ims-mainbox td.ims-download { text-align:center;}
 
+/*FORMS*/
+#ims-mainbox .shipping-info { padding-top:20px;}
+#ims-mainbox .shipping-info .req{ color:#900; padding-left:5px}
+#ims-mainbox .shipping-info .ims-p{ clear:both}
+#ims-mainbox .shipping-info label{ width:70px; display:block; float:left}
+#ims-mainbox .shipping-info input[type=text]{ float:left; margin-right:20px; width:190px}
+#ims-mainbox .shipping-info input#user_email{ width:480px}
+#ims-mainbox .shipping-info input#address_street{ width:480px}
+#ims-mainbox .shipping-info .order-info span{ display:block; float:left; text-align:center; width:49%; }
+#ims-mainbox .shipping-info .submit-buttons{ text-align:right}
 
 /*WIDGET*/
 .ims-widget ul.ims-gallery { margin:0 auto; padding:0; display:inline}

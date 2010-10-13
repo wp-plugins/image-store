@@ -172,11 +172,27 @@ class ImStoreFront{
 		if ( !empty( $_POST['applychanges'] ) )
 			$this->upate_cart( );
 		
+		//cancel checkout
+		if ( !empty( $_POST['cancelcheckout'] ) ) 
+			wp_redirect( $this->get_permalink( $this->gallery_id, 5 ) ); 
+			
 		//checkout
 		if ( !empty( $_POST['checkout'] ) )
 			$this->redirect_form_post_data( $this->gateway[$this->opts['gateway']], $_POST );
 		
+		//checkout email notification only get user info	
+		if ( !empty( $_POST['enotification'] ) ) 
+			wp_redirect( $this->get_permalink( $this->gallery_id, 9 ) ); 
+
 		
+		//update user statuts
+		if( !empty( $_POST['enoticecheckout'] ) ){
+			check_admin_referer( 'ims_submit_order' );
+			$this->error = $this->validate_user_input( );
+			if( is_wp_error( $this->error ) ) $css = ' error';
+		}
+
+
 		//logout user
 		if ( $this->logout == true ){
 			ImStore::logout_ims_user( );
@@ -242,6 +258,7 @@ class ImStoreFront{
 			$this->pages[6] = $this->opts['listener'];
 			$this->pages[7] = $this->opts['cancelpage'];
 			$this->pages[8] = $this->opts['returnpage'];
+			$this->pages[9] = __( 'Shipping', ImStore::domain );
 		}
 		
 		$this->gateway = array(
@@ -297,6 +314,59 @@ class ImStoreFront{
 			$this->cart = get_post_meta( $this->cart_cookie, '_ims_order_data', true );
 		
 	}
+	
+	/**
+	 * Validate user input from 
+	 * shipping information
+	 *
+	 * @since 1.0.2
+	 * return array|errors
+	 */
+	function validate_user_input( ){
+		
+		$errors = new WP_Error() ;
+		
+		if( empty( $_POST['first_name'] ) )
+			$errors->add( 'empty_first_name', __( 'The first name is required.', ImStore::domain ) );
+	
+		if( empty( $_POST['user_email'] ) )
+			$errors->add( 'empty_last_name', __( 'The email is required.', ImStore::domain ) );
+		
+		if( empty( $_POST['address_street'] ) )
+			$errors->add( 'empty_address', __( 'The addresss is required.', ImStore::domain ) );
+		
+		if( empty( $_POST['address_zip'] ) )
+			$errors->add( 'empty_zip', __( 'The zip code is required.', ImStore::domain ) );
+			
+		if( !is_email( $_POST['user_email'] ) )
+			$errors->add( 'empty_last_name', __( 'Wrong email format.', ImStore::domain ) );
+			
+		if( !empty( $errors->errors ) )
+			return $errors;
+		
+		if( $_POST['mc_currency'] != $this->opts['currency'])
+			return false;
+		
+		if( $_POST['payment_gross'] != $this->cart['total'])
+			return false;
+	
+		wp_update_post( array( 
+			'post_expire' => '0', 
+			'ID' => $this->cart_cookie, 
+			'post_status' => 'pending',
+			'post_date' => current_time('timestamp') 
+		));
+		update_post_meta( $this->cart_cookie, '_response_data', $_POST );
+			
+		$to 		= $this->opts['notifyemail'];
+		$subject 	= $this->opts['notifysubj'];
+		$message 	= preg_replace( $this->opts['tags'], $this->subtitutions, $this->opts['notifymssg'] );
+		$headers 	= "From: Image Store <imstore@".$_SERVER['HTTP_HOST'].">\r\n";
+		wp_mail( $to, $subject, $message, $headers );
+		
+		$this->imspage = 8;
+	}
+	
 	
 	
 	/**
@@ -509,18 +579,6 @@ class ImStoreFront{
 			ORDER BY $this->sortby $this->order " 
 		);
 		
-		/*$posts = $wpdb->get_results(
-			"SELECT ID, post_title, guid,
-			meta_value, post_excerpt
-			FROM $wpdb->posts AS p 
-			LEFT JOIN $wpdb->postmeta AS pm
-			ON p.ID = pm.post_id
-			WHERE post_type = 'ims_image'
-			AND meta_key = '_wp_attachment_metadata'
-			AND ID IN ( $ids )
-			ORDER BY $this->sortby $this->order " 
-		);*/
-		
 		if( empty( $posts ) ){
 			$this->attachments = $posts;
 			return;
@@ -591,7 +649,7 @@ class ImStoreFront{
 	function store_nav( ){
 		$nav = '<ul id="imstore-nav" class="imstore-nav" >'. "\n";
 		foreach( $this->pages as $key => $page ){
-			if( $key == 6 || $key == 7 || $key == 8 ) continue;
+			if( $key == 6 || $key == 7 || $key == 8 || $key == 9 ) continue;
 			$title = sanitize_title( $page );
 			$css = ( $key == $this->imspage || ( $key == 1 && empty( $this->imspage ) ) ) ? ' current': '';
 			$nav .= '<li class="imsmenu-' . $title . $css .'"><a href="' . $this->get_permalink( $this->gallery_id, $key ) .'">' . $page . '</a></li>' . "\n";
@@ -900,13 +958,16 @@ class ImStoreFront{
 			case "8":
 				include_once ( dirname (__FILE__) . '/complete.php' );
 				break;
+			case "9":
+				include_once ( dirname (__FILE__) . '/checkoutinfo.php' );
+				break;
 			default:
-			include_once ( dirname (__FILE__) . '/photos.php' );
+				include_once ( dirname (__FILE__) . '/photos.php' );
 		}
 		
 	}
 
 	
 }
-new ImStoreFront( )
+$this->store = new ImStoreFront( )
 ?>

@@ -380,7 +380,7 @@ function ims_customers_count_links( ){
 function create_ims_customer( ){
 	global $wpdb, $pagenowurl;
 	
-	$errors = new WP_Error() ;
+	$errors = new WP_Error();
 	
 	if( empty( $_POST['first_name'] ) )
 		$errors->add( 'empty_first_name', __( 'The first name is required.', ImStore::domain ) );

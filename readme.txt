@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: e-commerce,shop,store,photo,picture,image,galleries,web2.0,imstore,image-store,slideshow,gallery,sale,photographers,shop
 Requires at least: 3.0.0
 Tested up to: 3.0.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 
 Image Store (ImStore) is a image gallery and store/shop plugin for WordPress with a slideshow and paypal integration.
 
@@ -15,6 +15,9 @@ plugins to get this accomplished or to go through a lot of settings. :@)
 
 The plugin fully integrated with the WordPress database the only thing that is created is a post_expire column on the posts table.
 so you will not find extra tables on your database ( Cool!.. at least for me I hate extra tables ).
+
+example http://imstore.xparkmedia.com/image-store/
+laguages http://imstore.xparkmedia.com/languages/
 
 = Features =
 
@@ -84,7 +87,7 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 **v0.5.3 and older**
 
 `[ims-gallery] // will display recent images added from all galleries.`
-`[ims-gallery id="0" slideshow="0" caption="1" orderby="0" order="0" number="false" ]`
+`[ims-gallery id="0" slideshow="0" caption="1" orderby="0" order="0" number="false"]`
 
 = Options =
 * $id:
@@ -107,7 +110,8 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 	- (DESC) descending order 
 * $number:
 	- (false) show all the images on gallery or 10 if no gallery id is provided.
-	- (any number) how many images to show. 
+	- (any number) how many images to show.
+
 
 == Frequently Asked Questions ==
 
@@ -121,6 +125,13 @@ With the plugin installed navigate to Image Store > settings and click on the do
 
 
 == Changelog ==
+
+= 1.0.2 =
+* Fix: Paypal IPN issues.
+* Fix: Disable image rss.
+* Fix: Incorrect paypal cart currency type.
+* Fix: "mini" image size showing instead of preview.
+* Added: Orders by email notification only (disable paypal).
 
 = 1.0.1 =
 * Fix: Translation issues.
