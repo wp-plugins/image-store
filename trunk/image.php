@@ -38,9 +38,9 @@ class ImStoreImage{
 		if( empty( $_REQUEST['img'] ) ) die( );
 		$this->attachment = get_post_meta( $_REQUEST['img'], '_wp_attachment_metadata', true );
 		
-		if( $_REQUEST['mini'] ) 
+		if( $_REQUEST['mini'] == 1 ) 
 			$this->image_dir = str_ireplace( WP_CONTENT_URL, WP_CONTENT_DIR, $this->attachment['sizes']['mini']['url'] );
-		elseif( $_REQUEST['thumb'] ) 
+		elseif( $_REQUEST['thumb'] == 1 ) 
 			$this->image_dir = str_ireplace( WP_CONTENT_URL, WP_CONTENT_DIR, $this->attachment['sizes']['thumbnail']['url'] );
 		elseif( $this->attachment['sizes']['preview']['url'] ) 
 			$this->image_dir = str_ireplace( WP_CONTENT_URL, WP_CONTENT_DIR, $this->attachment['sizes']['preview']['url'] );

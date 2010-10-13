@@ -83,7 +83,13 @@ if ( !empty( $_POST['updateimages'] ) ) {
 	
 	$preview['preview'] = $_POST['preview'];
 	$preview['preview']['name'] = 'preview';
+	$preview['preview']['crop'] = 1;
 	$resize = array_merge( $resize, $preview );
+	
+	update_option( 'preview_crop', 1 );
+	update_option( 'preview_size_w', $_POST['preview']['w'] );
+	update_option( 'preview_size_h', $_POST['preview']['h'] );
+	
 	update_option( 'ims_dis_images', $resize );
 	
 	unset( $_POST['preview'] );
@@ -491,6 +497,7 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 			<select name="gateway" id="gateway">
 				<!--<option value="manual"<?php selected('manual', $this->_vr( 'gateway') )?>><?php _e( 'Manual', ImStore::domain )?></option>
 				<option value="merchant"<?php selected('merchant', $this->_vr( 'gateway') )?>><?php _e( 'Merchant Account', ImStore::domain )?></option>-->
+				<option value="notification"<?php selected('notification', $this->_vr( 'gateway') )?>><?php _e( 'Email notification only', ImStore::domain)?> </option>
 				<option value="paypalsand"<?php selected('paypalsand', $this->_vr( 'gateway') )?>><?php _e( 'Paypal Cart Sanbox', ImStore::domain)?> </option>
 				<option value="paypalprod"<?php selected('paypalprod', $this->_vr( 'gateway') )?>><?php _e( 'Paypal Cart Production', ImStore::domain )?></option>
 				<!--<option value="googlesand"<?php selected('googlesand', $this->_vr( 'gateway') )?>><?php _e( 'Google Checkout Sandbox', ImStore::domain )?></option>
@@ -514,18 +521,15 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 		<tr><td scope="row" colspan="4">&nbsp;</td></tr>
 		<tr>
 			<td scope="row"><label for="listener"><?php _e( 'IPN Listener page', ImStore::domain )?></label></td>
-			<td colspan="4"><?php echo get_permalink( $this->_vr('mangerpage') )?>
-			<input type="text" name="listener" id="listener" class="inputlg" value="<?php $this->_v( 'listener' )?>" /></td>
+			<td colspan="4"><input type="text" name="listener" id="listener" class="inputlg" value="<?php $this->_v( 'listener' )?>" /></td>
 		</tr>
 		<tr class="alternate">
 			<td scope="row"><label for="cancelpage"><?php _e( 'Cancel page', ImStore::domain )?></label></td>
-			<td colspan="4"><?php echo get_permalink( $this->_vr('mangerpage') )?>
-			<input type="text" name="cancelpage" id="cancelpage" class="inputlg" value="<?php $this->_v( 'cancelpage' )?>" /></td>
+			<td colspan="4"><input type="text" name="cancelpage" id="cancelpage" class="inputlg" value="<?php $this->_v( 'cancelpage' )?>" /></td>
 		</tr>
 		<tr>
 			<td scope="row"><label for="returnpage"><?php _e( 'Return page', ImStore::domain )?></label></td>
-			<td colspan="4"><?php echo get_permalink( $this->_vr('mangerpage') )?>
-				<input type="text" name="returnpage" id="returnpage" class="inputlg" value="<?php $this->_v( 'returnpage' )?>" /></td>
+			<td colspan="4"><input type="text" name="returnpage" id="returnpage" class="inputlg" value="<?php $this->_v( 'returnpage' )?>" /></td>
 		</tr>
 		<tr><td scope="row" colspan="4">&nbsp;</td></tr>
 		<!--<tr class="alternate">
@@ -606,6 +610,10 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 			<td colspan="3"><textarea name="termsconds" id="termsconds" rows="6" class="inputlg" ><?php echo stripslashes( $this->_v( 'termsconds' ) )?></textarea></td>
 		</tr>
 		<tr>
+			<td valign="top"><label for="shippingmessage"><?php _e( 'Shipping Message', ImStore::domain )?></label></td>
+			<td colspan="3"><textarea name="shippingmessage" id="shippingmessage" rows="6" class="inputlg" ><?php echo stripslashes( $this->_v( 'shippingmessage' ) )?></textarea></td>
+		</tr>
+		<tr class="alternate">
 			<td scope="row">&nbsp;</td>
 			<td class="submit">
 				<input type="submit" name="updatecheckout" class="button-primary" value="<?php _e( 'Save Changes', ImStore::domain )?>"/>

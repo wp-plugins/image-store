@@ -31,7 +31,9 @@ class ImStoreFeeds{
 	 * @since 0.5.3 
 	 */
 	function print_rss_link( ){
-		echo '<link rel="alternate" type="application/rss+xml" title="Image RSS Feed" href="' . $this->get_feed_url( ) . '" />' . "\n";
+		global $ImStore;
+		if( $ImStore->store->opts['mediarss'] )
+			echo '<link rel="alternate" type="application/rss+xml" title="Image RSS Feed" href="' . $this->get_feed_url( ) . '" />' . "\n";
 	}
 	
 	
