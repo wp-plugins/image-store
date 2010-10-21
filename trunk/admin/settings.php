@@ -24,7 +24,7 @@ if ( !empty( $_POST['updategalleries'] ) ) {
 	foreach( array( '_wpnonce', '_wp_http_referer', 'updateoption' ) as $key )
 		unset( $_POST[$key] );
 
-	foreach( array( 'deletefiles', 'securegalleries', 'imswidget', 'mediarss', 'disablestore', 'stylesheet' ) as $box )
+	foreach( array( 'deletefiles', 'securegalleries', 'imswidget', 'mediarss', 'disablestore', 'stylesheet', 'wplightbox' ) as $box )
 		if( empty( $_POST[$box] ) ) $_POST[$box] = '';
 	
 	//make sure gallerypath has a trailing slash
@@ -59,42 +59,36 @@ if ( !empty( $_POST['updateimages'] ) ) {
 			unset( $_POST['imagesize_' . $x]);
 		
 		if( $_POST['imagesize_' . $x]['name'] ){
-			$_POST['imagesize_' . $x]['crop'] = 0;
+			update_option( $_POST['imagesize_' . $x]['name'] . "_crop", 0 );
+			update_option( $_POST['imagesize_' . $x]['name'] . "_size_h", $_POST['imagesize_' . $x]['h'] );
+			update_option( $_POST['imagesize_' . $x]['name'] . "_size_w", $_POST['imagesize_' . $x]['w'] );
 			$downlaodsizes[] = $_POST['imagesize_' . $x];
 		}
 
-		if( $_POST['imagesize_' . $x]['w'] )
-			$newsizes[] = array( 'name' => $_POST['imagesize_' . $x]['w'] . 'x' . $_POST['imagesize_' . $x]['h'] );
+		$newsizes[] = array( 'name' => $_POST['imagesize_' . $x]['w'] . 'x' . $_POST['imagesize_' . $x]['h'], 'unit' => 'px',);
 		
-		unset( $_POST['imagesize_' . $x] );
 		unset( $_POST['imgid_' . $x] );
+		unset( $_POST['imagesize_' . $x] );
 
 		$x++;
 	}while( !empty( $_POST['imagesize_' . $x] ) );
 	
-	foreach( (array)$downlaodsizes as $values ){
-		update_option( $values['name'] . "_crop", 0 );
-		update_option( $values['name'] . "_size_h", $values['w'] );
-		update_option( $values['name'] . "_size_w", $values['w'] );
-	}
-	
 	if( is_array( $newsizes ) && !empty( $newsizes ) )
-		$this->array_merge_recursive_distinct( $sizes, $newsizes );
+		$sizes = $this->array_merge_recursive_distinct( $sizes, $newsizes );
 	
-	$preview['preview'] = $_POST['preview'];
+	$preview['preview']['crop'] = 0;
 	$preview['preview']['name'] = 'preview';
-	$preview['preview']['crop'] = 1;
+	$preview['preview'] += $_POST['preview'];
 	$resize = array_merge( $resize, $preview );
 	
-	update_option( 'preview_crop', 1 );
+	update_option( 'preview_crop', 0 );
 	update_option( 'preview_size_w', $_POST['preview']['w'] );
 	update_option( 'preview_size_h', $_POST['preview']['h'] );
-	
-	update_option( 'ims_dis_images', $resize );
 	
 	unset( $_POST['preview'] );
 	
 	update_option( 'ims_sizes', $sizes );
+	update_option( 'ims_dis_images', $resize );
 	update_option( 'ims_download_sizes', $downlaodsizes );
 	update_option( 'ims_front_options', wp_parse_args( $_POST, $this->opts ) );
 	
@@ -126,7 +120,13 @@ if ( !empty( $_POST['updatecheckout'] ) ) {
 		
 	foreach( array( 'registercheckout', 'sameasbilling' ) as $box )
 		if( empty( $_POST[$box] ) ) $_POST[$box] = '';
-
+	
+	if( is_array($_POST['required']) ){
+		foreach( $_POST['required'] as $key => $val )
+			$_POST['requiredfields'][] = $key;
+	}
+	
+	unset( $_POST['required'] );
 	update_option( 'ims_front_options', wp_parse_args( $_POST, $this->opts ) );
 	wp_redirect( $pagenowurl . '&ms=4#checkout-settings' );	
 }
@@ -181,6 +181,7 @@ $message[1] = 		__( "Cache cleared.", ImStore::domain );
 $message[2] = 		__( 'The user was updated.', ImStore::domain );
 $message[3] = 		__( 'All settings were reseted.', ImStore::domain );
 $message[4] = 		__( 'The settings were updated.', ImStore::domain );
+ 
 ?>
 
 <div class="wrap imstore">
@@ -261,23 +262,17 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 				<td><input type="checkbox" name="disablestore" id="disablestore" value="1" <?php checked( '1', $this->_vr( 'disablestore' ) )?> />
 					<small><?php _e( 'Use as a gallery manager only, not a store.', ImStore::domain )?></small></td>
 			</tr>
-			<!--<tr class="alternate">
-				<td scope="row" width="22%"><label for="stylesheet"><?php _e( 'Gallery columns', ImStore::domain )?></label></td>
-				<td><input type="text" name="displaycolmns" id="displaycolmns" class="inputsm" value="<?php $this->_v( 'displaycolmns' )?>" />
-				<small><?php _e( 'Display gallery in how many columns', ImStore::domain )?></small>
-				</td>
+			<tr class="alternate">
+				<td scope="row"><label for="wplightbox"><?php _e( 'Ligthbox for WP', ImStore::domain )?></label></td>
+				<td><input type="checkbox" name="wplightbox" id="wplightbox" value="1" <?php checked( '1', $this->_vr( 'wplightbox' ) )?>/>
+					<small><?php _e( 'Use lightbox on WordPress Galleries.', ImStore::domain )?></small></td>
 			</tr>
-			<tr class="alternate">
-				<td scope="row"><label for="downloadmax"><?php _e( 'Downloads allowed', ImStore::domain )?></label></td>
-				<td><input type="text" name="downloadmax" id="downloadmax" class="inputsm" value="<?php $this->_v( 'downloadmax' )?>" />
-					<small><?php _e( 'Default number of downloads.', ImStore::domain )?></small></td>
-			</tr>-->
-			<tr class="alternate">
+			<tr>
 				<td scope="row"><label for="galleryexpire"><?php _e( 'Galleries expire after ', ImStore::domain )?></label></td>
 				<td><input type="text" name="galleryexpire" id="galleryexpire" class="inputxm" value="<?php $this->_v( 'galleryexpire' )?>"/>
 					( <?php _e( 'days' )?> )</td>
 			</tr>
-			<tr>
+			<tr class="alternate">
 				<td valign="top"><?php _e( 'Sort images', ImStore::domain )?></td>
 				<td><label><input name="imgsortorder" type="radio" value="menu_order" <?php checked('menu_order', $this->_vr( 'imgsortorder'))?> />
 					<?php _e( 'Custom order', ImStore::domain )?></label><br />
@@ -288,14 +283,14 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 					<label><input name="imgsortorder" type="radio" value="post_date" <?php checked('post_date',$this->_vr( 'imgsortorder'))?>/>
 					<?php _e( 'Image date', ImStore::domain )?></label></td>
 			</tr>
-			<tr class="alternate">
+			<tr >
 				<td><?php _e( 'Sort direction', ImStore::domain )?>:</td>
 				<td><label><input name="imgsortdirect" type="radio" value="ASC" <?php checked('ASC', $this->_vr( 'imgsortdirect') )?>/>
 					<?php _e( 'Ascending', ImStore::domain )?></label>
 					<label><input name="imgsortdirect" type="radio" value="DESC" <?php checked('DESC', $this->_vr( 'imgsortdirect') )?>/>
 					<?php _e( 'Descending', ImStore::domain )?></label></td>
 			</tr>
-			<tr>
+			<tr class="alternate">
 				<td>&nbsp;</td>
 				<td class="submit">
 					<input type="submit" name="updategalleries" class="button-primary" value="<?php _e( 'Save Changes', ImStore::domain )?>"/>
@@ -315,17 +310,17 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 		<tbody>
 			<tr class="t alternate">
 				<td colspan="2" scope="row"><?php _e( 'Image preview size (pixels)')?></td>
-				<td colspan="4"><label><?php _e( 'Max Width', ImStore::domain ) ?>
+				<td colspan="5"><label><?php _e( 'Max Width', ImStore::domain ) ?>
 					<input type="text" name="preview[w]" class="inputsm" value="<?php $this->_v( 'preview', 'w' )?>" /></label>
 					<label><?php _e( 'Max Height', ImStore::domain )?>
 					<input type="text" name="preview[h]" class="inputsm" value="<?php $this->_v( 'preview', 'h' )?>" /></label>
 					<label><?php _e( 'Quality', ImStore::domain )?>
 					<input type="text" name="preview[q]" class="inputsm" value="<?php $this->_v( 'preview', 'q' )?>" />(%)</label></td>
 			</tr>
-			<tr><td scope="row" colspan="6">&nbsp;</td></tr>
+			<tr><td scope="row" colspan="7">&nbsp;</td></tr>
 			<tr>
 				<td colspan="2" scope="row">&nbsp;</td>
-				<td colspan="4">
+				<td colspan="5">
 				<label><input type="radio" name="watermark" value="0" <?php checked( '0', $this->_vr( 'watermark' )) ?> />
 				<?php _e( 'No watermark', ImStore::domain )?></label> &nbsp;
 				<label><input type="radio" name="watermark" value="1" <?php checked( '1', $this->_vr( 'watermark'))?> /> 
@@ -335,7 +330,7 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 			</tr>
 			<tr class="t alternate">
 				<td colspan="2" scope="row"><label for="watermarktext"><?php _e( 'Watermark text', ImStore::domain )?></label></td>
-				<td colspan="4">
+				<td colspan="5">
 				<input type="text" name="watermarktext" id="watermarktext" class="input" value="<?php $this->_v( 'watermarktext')?>"/>
 				<label><?php _e( 'Color', ImStore::domain )?>
 				<input type="text" name="textcolor" class="inputxm" value="<?php $this->_v( 'textcolor' )?>" /> <small>Hex </small></label>
@@ -347,19 +342,19 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 			<tr>
 				<td colspan="2" scope="row">
 				<label for="watermarkurl"><a id="addwatermarkurl"><?php _e( 'Watermark URL', ImStore::domain )?></a></label></td>
-				<td colspan="4">
+				<td colspan="5">
 				<input type="text" name="watermarkurl" id="watermarkurl" class="inputlg" value="<?php $this->_v( 'watermarkurl')?>"/></td>
 			</tr>
-			<tr><td scope="row" colspan="6">&nbsp;</td></tr>
-			<tr class="alternate"><td scope="row" colspan="6"><?php _e( 'Downloadable image sizes', ImStore::domain )?></td></tr>
+			<tr><td scope="row" colspan="7">&nbsp;</td></tr>
+			<tr class="alternate"><td scope="row" colspan="7"><?php _e( 'Downloadable image sizes', ImStore::domain )?></td></tr>
 			<tr class="t">
 				<td scope="row"><?php _e( 'Delete', ImStore::domain )?></td>
 				<td scope="row"><?php _e( 'Image Size', ImStore::domain )?></td>
 				<td scope="row"><?php _e( 'Width', ImStore::domain )?></td>
 				<td scope="row"><?php _e( 'Height', ImStore::domain )?></td>
 				<td scope="row"><?php _e( 'Quality', ImStore::domain )?></td>
-				<td scope="row">
-				<input type="button" id="addimagesize" value="<?php _e( 'Add image size', ImStore::domain )?>" class="button"></td>
+				<td scope="row"><?php _e( 'Unit', ImStore::domain )?></td>
+				<td scope="row"><input type="button" id="addimagesize" value="<?php _e( 'Add image size', ImStore::domain )?>" class="button" /></td>
 			</tr>
 			<?php if( $sizes = get_option('ims_download_sizes') ): for( $x=0; $x<count($sizes); $x++ ): ?>
 			<tr class="t image-size">
@@ -368,12 +363,13 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 				<td><label><input type="text" name="imagesize_<?php echo $x?>[w]" class="inputsm" value="<?php echo $sizes[$x]['w'] ?>" /></label></td>
 				<td><label><input type="text" name="imagesize_<?php echo $x?>[h]" class="inputsm" value="<?php echo $sizes[$x]['h'] ?>" /></label></td>
 				<td><label><input type="text" name="imagesize_<?php echo $x?>[q]" class="inputsm" value="<?php echo $sizes[$x]['q'] ?>" />(%)</label></td>
+				<td><?php _e( 'Pixels', ImStore::domain )?></td>
 				<td>&nbsp;</td>
 			</tr>
 			<?php endfor; endif;?>
 			<tr class="t ims-image-sizes">
 				<td colspan="2" scope="row">&nbsp;</td>
-				<td colspan="4" class="submit">
+				<td colspan="5" class="submit">
 					<input type="submit" name="updateimages" class="button-primary" value="<?php _e( 'Save Changes', ImStore::domain )?>"/>
 				</td>
 			</tr>
@@ -492,7 +488,7 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 			</select></td>
 		</tr>
 		<tr class="alternate">
-			<td scope="row"><label for="gateway">Gateway</label></td>
+			<td scope="row"><label for="gateway"><?php _e( 'Gateway', ImStore::domain )?></label></td>
 			<td scope="row" colspan="3">
 			<select name="gateway" id="gateway">
 				<!--<option value="manual"<?php selected('manual', $this->_vr( 'gateway') )?>><?php _e( 'Manual', ImStore::domain )?></option>
@@ -571,7 +567,7 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 				<select name="taxtype" id="taxtype">
 				<option value="percent"><?php _e( 'Percent', ImStore::domain )?></option>
 				<option value="amount"><?php _e( 'Amount', ImStore::domain )?></option>
-				</select> <small> Set tax to 0 to remove tax calculation.</small></td> 
+				</select> <small><?php _e('Set tax to 0 to remove tax calculation.', ImStore::domain )?></small></td> 
 		</tr>
 		<!--<tr class="alternate">
 			<td scope="row">&nbsp;</td> 
@@ -609,11 +605,24 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 			<td valign="top"><label for="termsconds"><?php _e( 'Terms and Conditions', ImStore::domain )?></label></td>
 			<td colspan="3"><textarea name="termsconds" id="termsconds" rows="6" class="inputlg" ><?php echo stripslashes( $this->_v( 'termsconds' ) )?></textarea></td>
 		</tr>
+		<?php if( $this->opts['gateway'] == 'notification') { ?>
 		<tr>
 			<td valign="top"><label for="shippingmessage"><?php _e( 'Shipping Message', ImStore::domain )?></label></td>
 			<td colspan="3"><textarea name="shippingmessage" id="shippingmessage" rows="6" class="inputlg" ><?php echo stripslashes( $this->_v( 'shippingmessage' ) )?></textarea></td>
 		</tr>
 		<tr class="alternate">
+			<td valign="top"><?php _e( 'Required Fields', ImStore::domain )?></td>
+			<td colspan="3" class="required">
+			<?php 
+			$req = implode( ' ', (array)$this->opts['requiredfields'] ); 
+			foreach( $this->opts['checkoutfields'] as $key => $label ){ 
+				$checked = ( preg_match( "/$key/i", $req ) ) ? ' checked="checked"': ''?>
+				<label><input name="required[<?php echo $key?>]" type="checkbox" value="1" <?php echo $checked ?> /> <?php echo $label ?></label>
+			<?php }?>
+			</td>
+		</tr>
+		<?php } ?>
+		<tr>
 			<td scope="row">&nbsp;</td>
 			<td class="submit">
 				<input type="submit" name="updatecheckout" class="button-primary" value="<?php _e( 'Save Changes', ImStore::domain )?>"/>

@@ -165,12 +165,21 @@ class ImStoreInstaller {
 											 __( '/%customer_email%/', ImStore::domain ),
 										);
 		
+		$ims_ft_opts['requiredfields']	= array( 'user_email', 'address_street', 'address_zip', 'first_name' ); 
+		$ims_ft_opts['checkoutfields'] 	= array(
+										'address_city'	=> __( 'City',  ImStore::domain ),
+										'address_state'	=> __( 'State',  ImStore::domain ),
+										'user_email'	=> __( 'Email',  ImStore::domain ),
+										'ims_phone'		=> __( 'Phone', ImStore::domain ),
+										'address_street'=> __( 'Address',  ImStore::domain ),
+										'address_zip'	=> __( 'Zip Code',  ImStore::domain ),
+										'last_name'		=> __( 'Last Name',  ImStore::domain ),
+										'first_name'	=> __( 'First Name', ImStore::domain ),
+		);
+		
 		//image sizes
 		$ims_dis_img['mini'] 			= array( 'name' => 'mini', 'w' => 70, 'h' => 60, 'q' => 95,'crop' => 1 );
 		$ims_dis_img['preview']			= array( 'name' => 'preview', 'w' => 380, 'h' => 380, 'q' => 70, 'crop' => 0 ) ;
-		$ims_dis_img['thumbnail']		= array( 'name' => 'thumbnail', 'w' => get_option( 'thumbnail_size_w'), 
-											'h' => get_option( 'thumbnail_size_h'), 'q' => 80, 'crop'=> get_option( 'thumbnail_crop')
-										);
 		
 		update_option( 'mini_crop', 1 );
 		update_option( 'mini_size_w', 70 );
@@ -247,12 +256,12 @@ class ImStoreInstaller {
 		
 		// default image sizes
 		$sizes = array( 
-			array( 'name' => '4x6', 'price' => '4.95'),
-			array( 'name' => '8x10', 'price' => '15.90'),
-			array( 'name' => '11x14', 'price' => '25.90'),
-			array( 'name' => '16X20', 'price' => '64.75'),
-			array( 'name' => '20x24', 'price' => '88.30'),
-			array( 'name' => 'Wallet', 'price' => '1.25'),
+			array( 'name' => '4x6', 'price' => '4.95', 'unit' => 'in'),
+			array( 'name' => '8x10', 'price' => '15.90', 'unit' => 'in'),
+			array( 'name' => '11x14', 'price' => '25.90', 'unit' => 'in'),
+			array( 'name' => '16X20', 'price' => '64.75', 'unit' => 'in'),
+			array( 'name' => '20x24', 'price' => '88.30', 'unit' => 'in'),
+			array( 'name' => '2.5x3.5', 'price' => '1.25', 'unit' => 'in'),
 		); update_option( 'ims_sizes', $sizes );	
 		
 		
@@ -263,11 +272,11 @@ class ImStoreInstaller {
 			'post_type' => 'ims_pricelist', 
 			'post_title' => __( 'Default Price List', ImStore::domain ),
 			'sizes'	=> array(
-				array( 'name' => '4x6', 'price' => '4.95'),
-				array( 'name' => '8x10', 'price' => '15.90'),
-				array( 'name' => '11x14', 'price' => '25.90'),
-				array( 'name' => '16X20', 'price' => '64.75'),
-				array( 'name' => '20x24', 'price' => '88.30')
+				array( 'name' => '4x6', 'price' => '4.95', 'unit' => 'in'),
+				array( 'name' => '8x10', 'price' => '15.90', 'unit' => 'in'),
+				array( 'name' => '11x14', 'price' => '25.90', 'unit' => 'in'),
+				array( 'name' => '16X20', 'price' => '64.75', 'unit' => 'in'),
+				array( 'name' => '20x24', 'price' => '88.30', 'unit' => 'in')
 			),
 			'options' => array( 
 				'ims_bw' => '1.00', 
@@ -280,13 +289,25 @@ class ImStoreInstaller {
 		// packages
 		$packages = array(
 			array( 'post_title' => __('Package 1', ImStore::domain ), 'post_type' => 'ims_package', 'post_status' => 'publish',
-			'_ims_price' => '35.00', '_ims_sizes' => array( '8x10' => '1', '5x7' => 1, 'Wallet' => 8 ) ),
+			'_ims_price' => '35.00', '_ims_sizes' => array( 
+				'8x10' => array( 'unit' => 'in', 'count' => 1 ), 
+				'5x7' => array( 'unit' => 'in', 'count' => 1 ), 
+				'2.5x3.5' => array( 'unit' => 'in', 'count' => '8') ) 
+			),
 			array( 'post_title' => __('Package 2', ImStore::domain ), 'post_type' => 'ims_package', 'post_status' => 'publish',
-			'_ims_price' => '47.10', '_ims_sizes' => array( '8x10' => '1', '5x7' => 2, 'Wallet' => 16 ) ),
+			'_ims_price' => '47.10', '_ims_sizes' => array( 
+				'8x10' => array( 'unit' => 'in', 'count' => 1) , 
+				'5x7' => array( 'unit' => 'in', 'count' => 2 ) , 
+				'2.5x3.5' => array( 'unit' => 'in', 'count' => 16 ) ) 
+			),
 			array( 'post_title' => __('Package 3', ImStore::domain ), 'post_type' => 'ims_package', 'post_status' => 'publish', 
-			'_ims_price' => '58.85', '_ims_sizes' => array( '8x10' => '2', '5x7' => 2, 'Wallet' => 16 ) ),
+			'_ims_price' => '58.85', '_ims_sizes' => array( 
+				'8x10' => array( 'unit' => 'in', 'count' => 2 ), 
+				'5x7' => array( 'unit' => 'in', 'count' => 2 ), 
+				'2.5x3.5' => array( 'unit' => 'in', 'count' => 16 ) ) 
+			),
 			array( 'post_title' => __('Wallets', ImStore::domain ), 'post_type' => 'ims_package', 'post_status' => 'publish',
-			'_ims_price' => '15.90', '_ims_sizes' => array( 'Wallet' => 8 ) )
+			'_ims_price' => '15.90', '_ims_sizes' => array( '2.5x3.5' =>  array( 'unit' => 'in', 'count' => 8 ) ) )
 		);
 		
 		

@@ -30,10 +30,12 @@ $colors_options = array(
 	
 	<div class="ims-labels">
 		<span class="title"><?php echo $this->gallery->post_title?></span>
+		<?php if( $this->gallery->post_expire != '0000-00-00 00:00:00' ){ ?>
 		<span class="divider"> | </span>
-		<span class="expires">
-		<?php echo __( "Expires: ", ImStore::domain ) . date_i18n( get_option( 'date_format' ), strtotime( $this->gallery->post_expire ))?>
-		</span>
+		<span class="expires"><?php 
+			echo __( "Expires: ", ImStore::domain ) . date_i18n( get_option( 'date_format' ), strtotime( $this->gallery->post_expire ))
+		?></span>
+		<?php }?>
 	</div>
 	
 	
@@ -75,7 +77,7 @@ $colors_options = array(
 							<?php foreach( $colors as $color => $item ){?>
 							<div class="clear-row">
 								<span class="quantity"><input type="text" name="ims-quantity<?php echo "[{$id}][{$size}][{$color}]"?>" value="<?php echo $item['quantity']?>" class="input" /></span>
-								<span class="size"><?php echo $size?></span>
+								<span class="size"><?php echo $size . ' ' . $item['unit']?></span>
 								<span class="color"><?php echo $colors_options[$color] . $item['color'] ?></span>
 								<span class="price"><?php printf( $format[$loc], number_format( $item['price'], 2 ) )?></span>
 								<span class="subtotal"><?php printf( $format[$loc], number_format( $item['subtotal'], 2 ) )?></span>

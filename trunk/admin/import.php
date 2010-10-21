@@ -66,7 +66,7 @@ $galleries 		= get_ims_galleries( );
 $downloadmax 	= ( $_POST['ims_download_max'] ) ? esc_attr( $_POST['ims_download_max'] ) : '0';
 $date_format	= get_option( 'date_format' );
 $date 			= ( $_POST['date'] ) ? esc_attr( $_POST['date'] ) : date( $date_format, current_time( 'timestamp' ) );
-$post_date 		= ( $_POST['post_name'] ) ? esc_attr( $_POST['post_name'] ) : date( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
+$post_date 		= ( $_POST['post_date'] ) ? esc_attr( $_POST['post_date'] ) : date( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
 
 ?>
 
@@ -130,7 +130,7 @@ $post_date 		= ( $_POST['post_name'] ) ? esc_attr( $_POST['post_name'] ) : date(
 					<tr>
 						<td scope="row">
 						<input class="button-primary fl" type="submit" id="zipupload" name="zipupload" value="<?php _e('Start upload',ImStore::domain)?>"/>
-						<div class="loading">&nbsp; Uploading</div>
+						<div class="loading">&nbsp;<?php _e( 'Uploading', ImStore::domain )?> </div>
 						</td>
 					</tr>
 					<tr>
@@ -164,7 +164,7 @@ $post_date 		= ( $_POST['post_name'] ) ? esc_attr( $_POST['post_name'] ) : date(
 					<td scope="row">&nbsp;</td>
 					<td>
 						<input type="submit" name="importfolder" id="importfolder" value="<?php _e( 'Import folder', ImStore::domain )?>" class="button-primary" />
-						<div class="loading">&nbsp; Scanning</div>
+						<div class="loading">&nbsp; <?php _e( 'Scanning', ImStore::domain )?></div>
 					</td>
 				</tr>
 				<tr><td scope="row" colspan="2">&nbsp;</td></tr>
@@ -192,7 +192,7 @@ $post_date 		= ( $_POST['post_name'] ) ? esc_attr( $_POST['post_name'] ) : date(
 							</ul>
 						</div>
 					</td>
-					<td valign="top">
+					<td valign="top" class="flash-upload">
 						<?php if ( $this->opts['swfupload'] ){?>
 						<input type="button" value="<?php _e( 'Select files', ImStore::domain )?>" class="button selectfiles" />
 						<?php } ?>
@@ -534,6 +534,12 @@ function _ims_create_img_metadata( $p_event, &$p_header ){
 		
 		//resize images
 		$img_sizes = get_option( 'ims_dis_images' );
+		$img_sizes['thumbnail']['name'] = "thumbnail";
+		$img_sizes['thumbnail']['crop'] = '1';
+		$img_sizes['thumbnail']['q'] 	= '95';
+		$img_sizes['thumbnail']['w'] 	= get_option("thumbnail_size_w");
+		$img_sizes['thumbnail']['h'] 	= get_option("thumbnail_size_h");
+			
 		$downloadsizes = get_option( 'ims_download_sizes' );
 		if( is_array( $downloadsizes ) ) $img_sizes += $downloadsizes;
 		
@@ -586,15 +592,15 @@ function _ims_create_img_metadata( $p_event, &$p_header ){
  * @since 0.5.0
  */
 function add_ims_gallery_default( $galleryname, $gallerypath ){
-	global $wpdb;
+	global $wpdb, $ImStore;
 	
-	$opts 		= get_option( 'ims_front_options' );
-	$expire 	= ( $_POST['ims_expire'] ) ? $_POST['ims_expire'] :
-				date( 'Y-m-d', ( current_time( 'timestamp' ) ) + ( $opts['galleryexpire'] * 86400 ) );
+	$opts 		= $ImStore->admin->opts;
+	$expire 	= ( $opts['galleryexpire'] ) ? 
+				  date( 'Y-m-d', ( current_time( 'timestamp' ) ) + ( $opts['galleryexpire'] * 86400 ) ) : '';
 	$password 	= ( $opts['securegalleries'] ) ? wp_generate_password( 8 ) : '';
 	$gallery 	= array( 
 			'post_expire'	=> $expire,
-			'post_status'	=> 'publish',
+			'post_status'	=> 'pending',
 			'post_type' 	=> 'ims_gallery', 
 			'post_title' 	=> $galleryname,
 			'post_password'	=> $password,
@@ -830,10 +836,10 @@ function add_ims_gallery( $galspath, $to_expire, $disablestore ){
 	if( is_wp_error( $cutomerid ) )
 		return $cutomerid;
 	
-	$expire	= date( 'Y-m-d', time( ) + ( get_option( 'gmt_offset' ) * 3600 ) + ( $to_expire * 86400 ) );
+	$expire = ( !empty($_POST['expire']) ) ? $_POST['ims_expire'] : '';
 	$gallery = array( 
 			'post_expire'	=> $expire,
-			'post_status'	=> 'publish',
+			'post_status'	=> 'pending',
 			'post_type' 	=> 'ims_gallery', 
 			'post_date'		=> $_POST['post_date'],
 			'post_title' 	=> $_POST['post_title'],

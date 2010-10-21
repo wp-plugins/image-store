@@ -1,10 +1,10 @@
 === Image Store ===
-Contributors: Hafid R. Trujillo, hax
+Contributors: Hax
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8SJEQXK5NK4ES
-Tags: e-commerce,shop,store,photo,picture,image,galleries,web2.0,imstore,image-store,slideshow,gallery,sale,photographers,shop
+Tags: e-commerce,shop,store,photo,picture,image,galleries,imstore,image-store,slideshow,gallery,sale,photographers,shop,online
 Requires at least: 3.0.0
 Tested up to: 3.0.1
-Stable tag: 1.0.2
+Stable tag: 1.1.0
 
 Image Store (ImStore) is a image gallery and store/shop plugin for WordPress with a slideshow and paypal integration.
 
@@ -16,8 +16,8 @@ plugins to get this accomplished or to go through a lot of settings. :@)
 The plugin fully integrated with the WordPress database the only thing that is created is a post_expire column on the posts table.
 so you will not find extra tables on your database ( Cool!.. at least for me I hate extra tables ).
 
-example http://imstore.xparkmedia.com/image-store/
-laguages http://imstore.xparkmedia.com/languages/
+* Example http://imstore.xparkmedia.com/image-store/
+* Laguages http://imstore.xparkmedia.com/languages/
 
 = Features =
 
@@ -50,7 +50,6 @@ laguages http://imstore.xparkmedia.com/languages/
 
 = To Come =
 * Google checkout integration
-* Add image size units ( in. cm. px.)
 * Sales Dashboard: display monthly highlihts on sales
 * Customer/User sync: allow user keep track of their downloads and galleries.
 
@@ -125,6 +124,20 @@ With the plugin installed navigate to Image Store > settings and click on the do
 
 
 == Changelog ==
+
+= 1.1.0 =
+* Front-end: CSS modifications.
+* Updates: Spanish translation.
+* Admin: CSS modifications.
+* Admin: HTML clean up.
+* Added: Option not to expire galleries.
+* Added: Feature to use gallery on the home page.
+* Added: Feature use color box on wp galleries.
+* Added: Image size units ( in. cm. px.)
+* Added: Settings for the required fields on the checkout page.
+* Added: Feature recreate images after image settings have been changed.
+* Fix: Image cache after browser's cache is cleared.
+* Changed: create new galleries with pending status instead of publish.
 
 = 1.0.2 =
 * Fix: Paypal IPN issues.
@@ -207,7 +220,8 @@ Ronnie Garcia, Benj Arriola, RonnieSan ( http://www.uploadify.com/ )
 
 
 == Upgrade Notice ==
-* Upgrade from previous to 0.5.2 slideshow options will be added or reset setting to update options. 
+* Upgrade from 1.0.2 and previous price lists need to bee updated to use the image unit. 
+* Upgrade from 0.5.2 and previous slideshow options will be added or reset setting to update options. 
 * Upgrade from 0.5.0 to 0.5.0 may change your permalinks. 
 
 

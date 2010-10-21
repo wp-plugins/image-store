@@ -190,8 +190,8 @@ $columns 	= get_column_headers( 'image-store_page_ims-customers' );
 						<?php endif;?>
 					</select>
 					<input type="submit" value="<?php _e( 'Apply' ); ?>" name="doaction" class="button-secondary" />
-					| <a href="<?php echo IMSTORE_ADMIN_URL ?>customer-csv.php" class="button"><?php _e( 'Download CSV' ); ?></a> 
-					<a href="<?php echo $pagenowurl ."&amp;$nonce&amp;newcustomer=1" ?>" class="button"><?php _e( 'New Customer' ); ?></a>
+					| <a href="<?php echo IMSTORE_ADMIN_URL ?>customer-csv.php" class="button"><?php _e( 'Download CSV', ImStore::domain ); ?></a> 
+					<a href="<?php echo $pagenowurl ."&amp;$nonce&amp;newcustomer=1" ?>" class="button"><?php _e( 'New Customer', ImStore::domain ); ?></a>
 					<input type="hidden" value="<?php echo $_GET['page']?>" name="page" />
 				</div>
 				<p class="search-box">

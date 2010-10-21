@@ -24,10 +24,12 @@ $format = array( '', "$sym%s", "$sym %s", "%s$sym", "%s $sym");
 	
 	<div class="ims-labels">
 		<span class="title"><?php echo $this->gallery->post_title?></span>
+		<?php if( $this->gallery->post_expire != '0000-00-00 00:00:00' ){ ?>
 		<span class="divider"> | </span>
-		<span class="expires">
-		<?php echo __( "Expires: ", ImStore::domain ) . date_i18n( get_option( 'date_format' ), strtotime( $this->gallery->post_expire ))?>
-		</span>
+		<span class="expires"><?php 
+			echo __( "Expires: ", ImStore::domain ) . date_i18n( get_option( 'date_format' ), strtotime( $this->gallery->post_expire ))
+		?></span>
+		<?php }?>
 	</div>
 	
 	<div class="ims-innerbox">
@@ -50,13 +52,14 @@ $format = array( '', "$sym%s", "$sym %s", "%s$sym", "%s $sym");
 					if( $size['ID'] ){
 						echo '<td scope="row" colspan="2" class="ims-size"><span class="ims-size-name">' . $size['name'] . ": </span> "; $package_sizes = '';
 						foreach( (array)get_post_meta( $size['ID'], '_ims_sizes', true ) as $package_size => $count ){
-							$package_sizes .= $package_size .'('.$count.'), '; 
+							if( is_array($count) ) $package_sizes .= $package_size .' '. $count['unit'] . '('.$count['count'].'), '; 
+							else $package_sizes .= $package_size .'('.$count.'), '; 
 						}
 						echo rtrim ( $package_sizes, ', ') . ' </td>
 						<td class="blank">&nbsp;</td>
 						<td class="ims-price">' . sprintf( $format[$loc], get_post_meta( $size['ID'], '_ims_price', true ) ) . '</td>';
 					}else{
-						echo '<td scope="row" colspan="2" class="ims-size"><span class="ims-size-name">' . $size['name'] . '</span></td>
+						echo '<td scope="row" colspan="2" class="ims-size"><span class="ims-size-name">' . $size['name'] . ' ' . $size['unit'] . '</span></td>
 							 <td class="blank">&nbsp;</td>
 							 <td class="ims-price">' . sprintf( $format[$loc], $size['price'] ) . '</td>';
 					}
