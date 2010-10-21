@@ -30,7 +30,7 @@ if( !empty( $_GET['doaction'] ) ){
 	}
 }
 
-//update all data
+//delete all images
 if( !empty( $_GET['deleteall'] ) ){
 	check_admin_referer( 'ims_images' );
 	empty_image_trash( $this->opts['deletefiles'] );
@@ -70,6 +70,14 @@ if( isset( $_POST['updategallery'] ) ){
 	$errors = update_gallery_info( $this->opts['disablestore'] );
 }
 
+
+// update gallery info
+if( isset( $_POST['rebuildimgs'] ) ){
+	check_admin_referer( 'ims_update_gallery' );
+	$errors = recreate_gallery_metadata( $this->opts['disablestore'] );
+}
+
+
 $message[1] 	= __( 'Trash emptied.', ImStore::domain );
 $message[2] 	= __( 'Image deleted.', ImStore::domain );
 $message[3] 	= __( 'Image published.', ImStore::domain );
@@ -79,7 +87,7 @@ $message[9] 	= __( 'Gallery information updated.', ImStore::domain );
 $message[6] 	= sprintf( __( '%s images deleted.', ImStore::domain ), $_GET['c'] );
 $message[7] 	= sprintf( __( '%s images published.', ImStore::domain ), $_GET['c'] );
 $message[8] 	= sprintf( __( '%d galleries moved to trash.', ImStore::domain ), $_GET['c'] );
-
+$message[9] 	= __( 'The images were created succesfully.', ImStore::domain );
 
 global $wpdb;
 $gal_id 		= intval( $_GET['id'] );
@@ -101,6 +109,7 @@ $closed = get_user_meta( $user_ID , 'closedpostboxes_toplevel_page_image-store-e
 $closed = implode(',', (array)$closed[0] );
 
 $gallery 		= get_post( $gal_id );
+$expire 		= ( $gallery->post_expire != '0000-00-00 00:00:00') ? date_i18n( $date_format, strtotime( $gallery->post_expire ) ) : '';
 $gallerymeta 	= get_post_custom( $gal_id );
 
 foreach ( $gallerymeta as $key => $value ) 
@@ -114,6 +123,7 @@ $images = get_posts( array(
 	'numberposts' => -1,
 	'post_status' => $status
 ));
+
 
 ?>
  
@@ -151,7 +161,10 @@ $images = get_posts( array(
 		<table class="ims-table" >
 		 	<tr>
 				<td width="18%"><?php _e( 'Folder path', ImStore::domain )?></td>
-				<td width="30%"><?php echo $gallery->_ims_folder_path ?></td>
+				<td width="30%">
+					<?php echo $gallery->_ims_folder_path ?> 
+					<input type="hidden" name="ims_folder_path" value="<?php echo $gallery->_ims_folder_path ?>" />
+				</td>
 				<td width="18%"><?php _e( 'Gallery ID', ImStore::domain )?></td>
 				<td><?php echo $gallery->_ims_gallery_id?></td>
 			</tr>
@@ -175,7 +188,7 @@ $images = get_posts( array(
 				<td valign="top"><label for="post_password"><?php _e( 'Password', ImStore::domain )?></label></td>
 				<td><input type="text" name="post_password" id="post_password" value="<?php echo esc_attr( $gallery->post_password ) ?>" class="inputxl" /></td>
 				<td><label for="expire" class="date-icon"><?php _e( 'Expiration Date', ImStore::domain )?>	</label></td>
-				<td><input type="text" name="expire" id="expire" class="inputmd" value="<?php echo date_i18n( $date_format, strtotime( $gallery->post_expire ) ) ?>" />
+				<td><input type="text" name="expire" id="expire" class="inputmd" value="<?php echo $expire ?>" />
 					<input type="hidden" name="ims_expire" id="ims_expire" value="<?php echo esc_attr( $gallery->post_expire ) ?>"/>
 				</td>
 			</tr>
@@ -217,8 +230,10 @@ $images = get_posts( array(
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
-				<td colspan="3" class="submit">
-					<input type="submit" name="updategallery" value="<?php _e( 'Update information', ImStore::domain)?>" class="button-primary" />
+				<td class="submit"><input type="submit" name="updategallery" value="<?php _e( 'Update information', ImStore::domain)?>" class="button-primary" /></td>
+				<td colspan="2" class="submit">
+					<input type="submit" name="rebuildimgs" id="rebuildimgs" value="<?php _e( 'Recreate images', ImStore::domain)?>" class="button" />
+					<div class="loading">&nbsp; <?php _e( 'Creating', ImStore::domain )?></div>
 				</td>
 			</tr>
 		</table>
@@ -563,16 +578,16 @@ function update_gallery_info( $disablestore ){
 		
 	if( !empty( $errors->errors ) )
 		return $errors;
-	
+		
 	$galleid = $_POST['galid'];
+	$expire = ( !empty( $_POST['expire']) ) ? $_POST['ims_expire'] : '' ;
 	$gallery = array(
 			'ID'			=> $galleid,
+			'post_expire'	=> $gal_expire,
 			'post_date'		=> $_POST['post_date'],
-			'post_expire'	=> $_POST['ims_expire'],
 			'post_title' 	=> $_POST['post_title'],
 			'post_password'	=> $_POST['post_password'],
-	);
-	
+	);	
 	wp_update_post( $gallery );
 	
 	update_post_meta( $galleid, 'ims_visits', $_POST['ims_visits'] );	
@@ -582,8 +597,84 @@ function update_gallery_info( $disablestore ){
 	update_post_meta( $galleid, '_ims_price_list', $_POST['_ims_price_list'] );	
 	update_post_meta( $galleid, 'ims_download_max', $_POST['ims_download_max'] );
 	
-	wp_redirect( $pagenowurl . "&edit=1&id=$galleid&ms=9" );
+	wp_redirect( $pagenowurl . "&edit=1&id=$galleid&ms=4" );
 }
 
 
+/**
+ * Recreate image metadata
+ * 
+ * @param string $filepath
+ * @return void
+ * @since 1.1.0
+ */
+function _create_image_metadata( $filepath, $id ){
+	
+	$filename = sanitize_file_name( basename( $filepath ) );
+	$guid = WP_CONTENT_URL . $filepath;
+	$filetype = wp_check_filetype( $filename );
+	$des_path = dirname( WP_CONTENT_DIR . $filepath );
+	
+	$img_sizes = get_option( 'ims_dis_images' );
+	$img_sizes['thumbnail']['name'] = "thumbnail";
+	$img_sizes['thumbnail']['crop'] = '1';
+	$img_sizes['thumbnail']['q'] 	= '95';
+	$img_sizes['thumbnail']['w'] 	= get_option("thumbnail_size_w");
+	$img_sizes['thumbnail']['h'] 	= get_option("thumbnail_size_h");
+	
+	$downloadsizes = get_option( 'ims_download_sizes' );
+	if( is_array( $downloadsizes ) ) $img_sizes += $downloadsizes;
+	
+	foreach( $img_sizes as $img_size ){
+		$resized = image_resize( WP_CONTENT_DIR . $filepath, $img_size['w'], $img_size['h'], $img_size['crop'], null, $des_path, $img_size['q'] );
+		if ( !is_wp_error( $resized ) && $resized && $info = getimagesize($resized) ) {
+			$imgname = basename( $resized );
+			$data = array(
+				'file' 	=> $imgname,
+				'width' => $info[0],
+				'height'=> $info[1],
+			);
+			
+			$imagesize = getimagesize( WP_CONTENT_DIR . $filepath );
+			$metadata['width'] = $imagesize[0];
+			$metadata['height'] = $imagesize[1];
+			list($uwidth, $uheight) = wp_constrain_dimensions( $metadata['width'], $metadata['height'], 100, 100 );
+			$metadata['hwstring_small'] = "height='$uheight' width='$uwidth'";
+			
+			switch( $imagesize['channels'] ){ 
+				case 1: $metadata['color'] = 'BW'; break;
+				case 3: $metadata['color'] = 'RGB'; break;
+				case 4: $metadata['color'] = 'CMYK'; break;
+				default: $metadata['color'] = __( 'Unknown', ImStore::domain );
+			}
+
+			$metadata['file'] = $filepath;
+			$metadata['sizes'][$img_size['name']] = $data;
+			$metadata['image_meta'] = wp_read_image_metadata( WP_CONTENT_DIR . $filepath );
+		}
+	}
+	wp_update_attachment_metadata( $id, $metadata );
+}
+
+
+function recreate_gallery_metadata(  ){	
+	global $wpdb, $pagenowurl;
+	
+	$galleid = intval( $_GET['id']);
+	$r = $wpdb->get_results( 
+		"SELECT meta_value, post_id FROM $wpdb->postmeta pm
+		LEFT JOIN $wpdb->posts p ON ( pm.post_id = p.ID ) 
+		WHERE meta_key = '_wp_attachment_metadata' AND p.post_parent = $galleid"
+	);
+	
+	foreach( (array)$r as $v ){
+		$meta = unserialize( $v->meta_value );
+		foreach( $meta['sizes'] as $size ){
+			@unlink( WP_CONTENT_DIR . $size['path'] ); 
+		}
+		_create_image_metadata( $meta['file'], $v->post_id );
+	}
+	
+	wp_redirect( $pagenowurl . "&edit=1&id=$galleid&ms=9" );
+}
 ?>

@@ -21,10 +21,12 @@ if( preg_match( '#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'] ) )
 	
 	<div class="ims-labels">
 		<span class="title"><?php echo $this->gallery->post_title?></span>
+		<?php if( $this->gallery->post_expire != '0000-00-00 00:00:00' ){ ?>
 		<span class="divider"> | </span>
-		<span class="expires">
-		<?php echo __( "Expires: ", ImStore::domain ) . date_i18n( get_option( 'date_format' ), strtotime( $this->gallery->post_expire ))?>
-		</span>
+		<span class="expires"><?php 
+			echo __( "Expires: ", ImStore::domain ) . date_i18n( get_option( 'date_format' ), strtotime( $this->gallery->post_expire ))
+		?></span>
+		<?php }?>
 	</div>
 	
 	<div class="ims-message<?php echo $css?>">

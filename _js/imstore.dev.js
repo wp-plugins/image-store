@@ -3,6 +3,7 @@ jQuery(document).ready(function($){
 	//admin url
 	nonce = $('#_wpnonce').val();
 	galid = $('#gallery-id').val();
+	wplbx = $('#wplightbox').val();
 	imsurl = $('#imstore-url').val();
 	
 	//slected label
@@ -181,7 +182,7 @@ jQuery(document).ready(function($){
 		
 	};
 	
-	/*$(".gallery-icon a").colorbox({photo:true, maxWidth:"95%",maxHeight:'90%'});*/
+	if(imstore.lightbox == '1') $(".gallery-icon a").colorbox({photo:true, maxWidth:"95%",maxHeight:'90%'});
 
 /*--------------------------------------------------------------------------*
 	ZOOM GALLERY FUNCTION

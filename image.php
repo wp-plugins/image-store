@@ -47,9 +47,8 @@ class ImStoreImage{
 		else $this->image_dir = WP_CONTENT_DIR . $this->attachment['file'];
 		
 		if( !file_exists ( $this->image_dir ) ) die( ); 
-
 		
-		if( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) && ( strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) <= filemtime($this->image_dir)) ){
+		if( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) && ( strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == filemtime($this->image_dir)) ){
 			header ('HTTP/1.1 304 Not Modified'); 
 			die( );
 		} else $this->display_image( );

@@ -20,8 +20,8 @@
 								 margin-bottom:15px;
 								 clear:both; 
 								}
-.inside-col1					{ width:28%; float:left;}
-.inside-col2					{ width:70%; float:left; margin-right:2%;}
+.inside-col1					{ width:30%; float:left;}
+.inside-col2					{ width:68%; float:left; margin-right:2%;}
 .inside-col1 div.postbox		{ min-width:inherit}
 
 #icon-galleries,
@@ -35,6 +35,7 @@
 tr.filler						{ display:none; text-align:center; line-height:3em; vertical-align:middle; font-size:.9em; color:#999}
 .ims-table						{ width:100%;}
 .ims-table td 					{ padding:5px;}
+.ims-table .bar					{ border:none}			
 .ims-table .t label				{ padding-right:20px;}
 .ims-table td.submit			{ padding-top:15px;}
 .ims-table .default 			{ width:3%;}
@@ -43,12 +44,15 @@ tr.filler						{ display:none; text-align:center; line-height:3em; vertical-alig
 .ims-table .trash 				{ width:3%; font-size:1.4em; font-weight:bold; cursor:pointer}
 .ims-table .trash a 			{ color:#666; text-decoration:none; }
 .ims-table .trash:hover 		{ background:#f00!important}
+.ims-table tr td.required label	{ display:block; width:130px; float:left; padding:2px 20px 6px 0}
+
 .trash:hover a					{ color:#fff;}
 .imstore-table.sort-images tr	{ cursor:move}
+.ims-table #rebuildimgs			{ float:left}
 
 table.store-detail td			{ vertical-align:middle}
 table.price-list,
-table.package-list				{ margin-bottom:5px;}
+table.package-list				{ margin-bottom:5px; border-spacing:0px; border-collapse:collapse}
 table.price-list td,
 table.package-list td			{ border:solid 1px #fff;}
 .price-list tr.label label		{ width:24.5%; float:left; font-size:.9em}
@@ -58,7 +62,8 @@ table.sizes-list td input[type=text]{ width:100%; padding:2px}
 .ims-table .inline-edit-col		{ margin-right:20px;}
 .ims-table td.btop				{ border-top:solid 1px #ddd; padding-top:10px;}
 .ims-table .loading				{ background:url(../_img/loading.gif) no-repeat 0 50%; 
-								 padding:3px 0 3px 20px; 
+								 float:left;
+								 padding:4px 0 4px 30px;
 								 font:italic .9em Georgia, "Times New Roman", Times, serif;
 								 display: none;
 								}
@@ -106,7 +111,7 @@ span.sort-label					{ padding-left:15px;}
 
 form.paypal-donate				{ position:relative;}
 form.paypal-donate * 			{ display:none}
-form.paypal-donate input[type=image] { display:block; position:absolute; left:160px; top:20px}
+form.paypal-donate input[type=image] { display:block; position:absolute; right:100px; top:20px}
 
 /******** WIDGETS **********/
 
@@ -127,7 +132,10 @@ td.move							{ width:3.5%}
 #packages .package-list	td		{ padding:2px 5px} 
 #price-list .package-list td.x { display:none}
 #packages .package-list td.move	{ background:url(../_img/move_icons.png) no-repeat -12px 50%; cursor:move}
-#packages .package-list .size .hidden{ display:block }
+#packages .package-list .size span.hidden{ display:inline }
+#packages .package-list .size td.hidden{ display:table-cell }
+#packages .package-list .size input.hidden{ display:block }
+#packages .package-list .size select,
 #packages .package-list .size .input{ display:none }
 
 
@@ -137,18 +145,21 @@ tr.ui-sortable-helper,
 tr.ui-draggable-dragging		{ width:100%!important; display:table-row!important}
 tr.ui-draggable-dragging .move	{ background:none}
 tr.widget-placeholder			{ display:block; height:15px; margin:4px 0}
+.price-list-box .size select,
 tr.ui-draggable-dragging input,
 .price-list-box .size input[type=text]{ display:none }
-tr.ui-draggable-dragging .hidden,
-.price-list-box .size .hidden	{ display:block }
+tr.ui-draggable-dragging span.hidden,
+.price-list-box .size span.hidden	{ display:inline }
+tr.ui-draggable-dragging td.hidden,
+.price-list-box .size td.hidden	{ display:table-cell }
 
-div.loading						{ float:left}
 #zipupload, #importfolder		{ float:left; margin-right:15px;}
 
 /******** JQUERY FILE UPLOAD **********/
 
 .selectfiles					{ position:relative; top:-4px; font-weight:bold}
-#imagefilesUploader				{ position:relative; left:-110px; top:6px; padding:3px 5px;}
+.flash-upload					{ position:relative; display:block}
+#imagefilesUploader				{ position:absolute; left:0px; top:-2px; padding:3px 5px;}
 .uploadifyQueue .cancel			{ float:left; margin-right:10px; padding:3px; }
 .uploadifyQueueItem				{ background:#f5f5f5; margin-bottom:5px; padding:3px 5px; }
 

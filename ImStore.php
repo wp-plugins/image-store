@@ -4,7 +4,7 @@ Plugin Name: Image Store
 Plugin URI: http://imstore.xparkmedia.com
 Description: Your very own image store within wordpress "ImStore"
 Author: Hafid R. Trujillo Huizar
-Version: 1.0.2
+Version: 1.1.0
 Author URI: http://www.xparkmedia.com
 Requires at least: 3.0.0
 Tested up to: 3.0.1
@@ -42,7 +42,7 @@ class ImStore{
 	 * Make sure that new language(.mo) files have 'ims-' as base name
 	 */
 	const domain	= 'ims';
-	const version	= '1.0.1';
+	const version	= '1.1.0';
 	
 	
 	/**
@@ -92,9 +92,8 @@ class ImStore{
 	 * @return array
 	 * @since 0.5.0 
 	 */
-	function insert_post_data( $data, $postarr ){
-		if( !empty( $postarr['post_expire'] ))
-			$data['post_expire'] = $postarr['post_expire'];
+	function insert_post_data( $data, $postarg ){
+		$data['post_expire'] = $postarg['post_expire'];
 		return $data;
 	}
 	
@@ -199,7 +198,7 @@ class ImStore{
 	 * @return array
 	 * @since 0.5.0 
 	 */
-	function add_rewrite_rules( $wp_rewrite ) {	
+	 function add_rewrite_rules( $wp_rewrite ) {	
 	
 		$wp_rewrite->add_rewrite_tag( '%imspage%', '([^/]+)', 'imspage=');
 		$wp_rewrite->add_rewrite_tag( '%imsgalid%', '([0-9]+)', 'imsgalid=');
@@ -222,7 +221,12 @@ class ImStore{
 			'gal-([0-9]+)/feed/(imstore)/?$' => 
 			'index.php?imsgalid='.$wp_rewrite->preg_index(1).
 			'&feed=' . $wp_rewrite->preg_index(2),
-			'feed/(imstore)/?$' => 'index.php?feed='. $wp_rewrite->preg_index(1)
+			'feed/(imstore)/?$' => 'index.php?feed='. $wp_rewrite->preg_index(1),
+						
+			"([^/]+)/gal-([0-9]+)/?$" => 
+			"index.php&imspage=" . $wp_rewrite->preg_index(1).
+			'&imsgalid=' . $wp_rewrite->preg_index(2),
+			
 			//"(.+?)/([^/]+)/?$" => 
 			//"index.php?pagename=" . $wp_rewrite->preg_index(1).
 			//'&imspage=' . $wp_rewrite->preg_index(2),
@@ -230,8 +234,7 @@ class ImStore{
 		);
 		$wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
 	}
-	
-	
+		
 	/**
 	 * Set galleries to expired
 	 * and delete unprocess orders
@@ -244,6 +247,7 @@ class ImStore{
 		$wpdb->query( 
 			"UPDATE $wpdb->posts SET post_status = 'expire' 
 			WHERE post_expire <= '" . date( 'Y-m-d', current_time( 'timestamp' ) ) . "'
+			AND post_expire != '0000-00-00 00:00:00'
 			AND post_type = 'ims_gallery'"
 		);
 		$wpdb->query( 
@@ -280,29 +284,28 @@ class ImStore{
 			}
 		}
 	}
-	
 
-	/**
+	 
+	 /**
 	 * temporaty upgrade function
 	 * will be remove on nex release
 	 *
 	 * @return void
-	 * @since 0.5.2 
+	 * @since 1.1.0
 	 */
-	 function add_slideshow_options( ){
+	 function add_checkout_options( ){
 		$ims_ft_opts = get_option( 'ims_front_options' );
-		$ims_ft_opts['numThumbs']		= 8;
-		$ims_ft_opts['maxPagesToShow']	= 5;
-		$ims_ft_opts['transitionTime']	= 1000;
-		$ims_ft_opts['slideshowSpeed']	= 3200;
-		$ims_ft_opts['autoStart']		= 'false';
-		$ims_ft_opts['playLinkText']	= __( 'Play', ImStore::domain );
-		$ims_ft_opts['pauseLinkTex']	= __( 'Pause', ImStore::domain );
-		$ims_ft_opts['closeLinkText']	= __( 'Close', ImStore::domain );
-		$ims_ft_opts['prevLinkText']	= __( 'Previous', ImStore::domain );
-		$ims_ft_opts['nextLinkText']	= __( 'Next', ImStore::domain );
-		$ims_ft_opts['nextPageLinkText']= __( 'Next &rsaquo;', ImStore::domain );
-		$ims_ft_opts['prevPageLinkText']= __( '&lsaquo; Prev', ImStore::domain );
+	 	$ims_ft_opts['requiredfields']	= array( 'user_email', 'address_street', 'address_zip', 'first_name' ); 
+		$ims_ft_opts['checkoutfields'] 	= array(
+			'address_city'	=> __( 'City',  ImStore::domain ),
+			'address_state'	=> __( 'State',  ImStore::domain ),
+			'user_email'	=> __( 'Email',  ImStore::domain ),
+			'ims_phone'		=> __( 'Phone', ImStore::domain ),
+			'address_street'=> __( 'Address',  ImStore::domain ),
+			'address_zip'	=> __( 'Zip Code',  ImStore::domain ),
+			'last_name'		=> __( 'Last Name',  ImStore::domain ),
+			'first_name'	=> __( 'First Name', ImStore::domain )
+		);
 		update_option( 'ims_front_options', $ims_ft_opts );
 	 }
 	 

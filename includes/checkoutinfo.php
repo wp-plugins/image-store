@@ -16,19 +16,23 @@ if( preg_match( '#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'] ) )
 
 $sym 	= $this->opts['symbol']; 
 $loc 	= $this->opts['clocal'];
-$format = array( '', "$sym%s", "$sym %s", "%s$sym", "%s $sym"); 
+$format = array( '', "$sym%s", "$sym %s", "%s$sym", "%s $sym");
+$req    = implode( ' ', (array)$this->opts['requiredfields'] ); 
 
 ?>
+
 <div id="ims-mainbox" class="photos">
 
 	<div class="ims-nav-box"><?php $this->store_nav( )?></div>
 	
 	<div class="ims-labels">
 		<span class="title"><?php echo $this->gallery->post_title?></span>
+		<?php if( $this->gallery->post_expire != '0000-00-00 00:00:00' ){ ?>
 		<span class="divider"> | </span>
-		<span class="expires">
-		<?php echo __( "Expires: ", ImStore::domain ) . date_i18n( get_option( 'date_format' ), strtotime( $this->gallery->post_expire ))?>
-		</span>
+		<span class="expires"><?php 
+			echo __( "Expires: ", ImStore::domain ) . date_i18n( get_option( 'date_format' ), strtotime( $this->gallery->post_expire ))
+		?></span>
+		<?php }?>
 	</div>
 	
 	<div class="ims-message<?php echo $css?>">
@@ -40,30 +44,38 @@ $format = array( '', "$sym%s", "$sym %s", "%s$sym", "%s $sym");
 		<fieldset>
 			<legend><?php echo __( "Shipping Information", ImStore::domain ) ?></legend>
 			<div class="ims-p user-info">
-				<label for="first_name"><?php _e( 'Name', ImStore::domain )?><span class="req">*</span></label>
+				<label for="first_name"><?php _e( 'First Name', ImStore::domain ); if( preg_match( "/first_name/i", $req ) ) echo'<span class="req">*</span>'?>
+				</label>
 				<input type="text" name="first_name" id="first_name" value="<?php echo esc_attr( $_POST['first_name'] )?>" class="ims-input" />
 				<span class="ims-break"></span>
-				<label for="last_name"><?php _e( 'Last Name', ImStore::domain )?></label>
+				<label for="last_name"><?php _e( 'Last Name', ImStore::domain ); if( preg_match( "/last_name/i", $req ) ) echo'<span class="req">*</span>'?>
+				</label>
 				<input type="text" name="last_name" id="last_name" value="<?php echo esc_attr( $_POST['last_name'] )?>" class="ims-input"/>
 			</div>
 			<div class="ims-p email-info">
-				<label for="user_email"><?php _e( 'Email', ImStore::domain )?><span class="req">*</span></label>
+				<label for="user_email"><?php _e( 'Email', ImStore::domain ); if( preg_match( "/user_email/i", $req ) ) echo'<span class="req">*</span>' ?>
+				</label>
 				<input type="text" name="user_email" id="user_email" value="<?php echo esc_attr( $_POST['user_email'] )?>" class="ims-input" />
 			</div>
 			<div class="ims-p adress-info">
-				<label for="address_street"><?php _e( 'Address', ImStore::domain )?><span class="req">*</span></label>
+				<label for="address_street"><?php _e( 'Address', ImStore::domain ); if( preg_match( "/address_street/i", $req ) ) echo'<span class="req">*</span>' ?>
+				</label>
 				<input type="text" name="address_street" id="address_street" value="<?php echo esc_attr( $_POST['address_street'] )?>" class="ims-input" />
 				<span class="ims-break"></span>
-				<label for="address_city"><?php _e( 'City', ImStore::domain )?></label>
+				<label for="address_city"><?php _e( 'City', ImStore::domain ); if( preg_match( "/address_city/i", $req ) ) echo'<span class="req">*</span>' ?>
+				</label>
 				<input type="text" name="address_city" id="address_city" value="<?php echo esc_attr( $_POST['address_city'] )?>" class="ims-input" />
 				<span class="ims-break"></span>
-				<label for="address_state"><?php _e( 'State', ImStore::domain )?></label>
+				<label for="address_state"><?php _e( 'State', ImStore::domain ); if( preg_match( "/address_state/i", $req ) ) echo'<span class="req">*</span>' ?>
+				</label>
 				<input type="text" name="address_state" id="address_state" value="<?php echo esc_attr( $_POST['address_state'] )?>" class="ims-input" />
 				<span class="ims-break"></span>
-				<label for="address_zip"><?php _e( 'Zip', ImStore::domain )?><span class="req">*</span></label>
+				<label for="address_zip"><?php _e( 'Zip Code', ImStore::domain ); if( preg_match( "/address_zip/i", $req ) ) echo'<span class="req">*</span>' ?>
+				</label>
 				<input type="text" name="address_zip" id="address_zip" value="<?php echo esc_attr( $_POST['address_zip'] )?>" class="ims-input" />
 				<span class="ims-break"></span>
-				<label for="ims_phone"><?php _e( 'Phone', ImStore::domain )?></label>
+				<label for="ims_phone"><?php _e( 'Phone', ImStore::domain ); if( preg_match( "/ims_phone/i", $req ) ) echo'<span class="req">*</span>' ?>
+				</label>
 				<input type="text" name="ims_phone" id="ims_phone" value="<?php echo esc_attr( $_POST['ims_phone'] )?>" class="ims-input" />
 			</div>
 			<div class="ims-p"><small><span class="req">*</span> <?php _e( "Required fields", ImStore::domain )?></small></div>

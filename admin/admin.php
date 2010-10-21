@@ -25,6 +25,12 @@ class ImStoreAdmin extends ImStore{
 	 */
 	function __construct( ){
 		global $pagenow;
+		
+		$this->units = array(
+			'in' => __( 'in', ImStore::domain ),
+			'cm' => __( 'cm', ImStore::domain ),
+			'px' => __( 'px', ImStore::domain ),
+		);
 
 		//ad a unique Gallery IDentifier to make sure that the actions come from this widget
 		if ( ( 'media-upload.php' == $pagenow || 'async-upload.php' == $pagenow ) && isset( $_GET[ 'imstore' ] ) ){
@@ -80,6 +86,21 @@ class ImStoreAdmin extends ImStore{
 		return $sizes;
 	}
 	
+	
+	/**
+	 * Display unit sizes
+	 *
+	 * @return void
+	 * @since 1.1.0
+	 */
+	function dropdown_units( $name,  $selected ){
+		$output = '<select name="'. $name .'" class="unit">';
+		foreach( $this->units as $unit => $label ){
+			$select = ( $selected == $unit ) ? ' selected="selected"' : '' ;
+			$output .= '<option value="'.$unit.'" '.$select.'>'.$label.'</option>';
+		}
+		echo $output .= '</select>';
+	}
 	
 	/**
 	 * Add url and path to the attachment data for "ims_image" post type
@@ -329,7 +350,7 @@ class ImStoreAdmin extends ImStore{
 	 * @return array
 	 * @since 1.0.0
 	 */
-	function array_merge_recursive_distinct( array &$array1, array &$array2 ){
+	function array_merge_recursive_distinct( &$array1, &$array2 ){
 		$merged = $array1;
 		foreach ( $array2 as $key => &$value ){
 			if ( is_array ( $value ) && isset ( $merged [$key] ) && is_array ( $merged [$key] ) ){
@@ -511,6 +532,7 @@ class ImStoreAdmin extends ImStore{
 			'dateformat'	=> $format,
 			'imsurl'		=> IMSTORE_URL,
 			'imsajax' 		=> IMSTORE_ADMIN_URL . 'ajax.php',
+			'pixels'		=> __( 'Pixels', ImStore::domain ),
 			'flastxt'		=> __( 'Select files.', ImStore::domain ),
 			'exists'		=> __( ' files existed.', ImStore::domain ),
 			'uploaded'		=> __( ' files uploaded. ', ImStore::domain ),
@@ -609,9 +631,9 @@ class ImStoreAdmin extends ImStore{
 		$this->permalinks 	= get_option( 'permalink_structure' );
 		$pagenowurl = admin_url( ) . 'admin.php?page=' . $_GET['page'];
 		
-		//upgrade function 0.5.1 = 0.5.2
-		if( empty($this->opts['numThumbs'] ) )
-			ImStore::add_slideshow_options( );
+		//upgrade function 1.0.2 = 1.1.0
+		if( empty($this->opts['checkoutfields']) )
+			ImStore::add_checkout_options( );
 		
 		// display page
 		switch ( $_GET['page'] ){

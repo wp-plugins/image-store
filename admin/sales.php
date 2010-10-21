@@ -123,7 +123,7 @@ $message[7] 	= sprintf( __( '%d orders moved to trash.', ImStore::domain ), $_GE
 		<div class="tablenav">
 			<div class="alignleft actions">
 				<select name="action">
-					<option value="">Bulk Actions</option>
+					<option value=""><?php _e( 'Bulk Actions', ImStore::domain )?></option>
 					<?php if ( $is_trash ):?>
 					<option value="pending"><?php _e( 'Restore', ImStore::domain )?></option> 
 					<option value="delete"><?php _e( 'Delete Permanently', ImStore::domain )?></option>
@@ -148,7 +148,7 @@ $message[7] 	= sprintf( __( '%d orders moved to trash.', ImStore::domain ), $_GE
 				<?php if ( $is_trash ):?>
 				<input type="submit" name="deleteall" value="<?php _e( 'Empty Trash', ImStore::domain )?>" class="button" /> |
 				<?php endif?>
-				 <a href="<?php echo IMSTORE_ADMIN_URL ?>sales-csv.php" class="button"><?php _e( 'Download CSV' ); ?></a>
+				 <a href="<?php echo IMSTORE_ADMIN_URL ?>sales-csv.php" class="button"><?php _e( 'Download CSV', ImStore::domain ); ?></a>
 			</div>
 			
 			<p class="search-box">

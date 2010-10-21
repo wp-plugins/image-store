@@ -128,6 +128,13 @@ function ajax_ims_flash_image_data( ){
 	
 	//resize images
 	$img_sizes = get_option( 'ims_dis_images' );
+	$img_sizes['thumbnail']['name'] = "thumbnail";
+	$img_sizes['thumbnail']['crop'] = '1';
+	$img_sizes['thumbnail']['q'] 	= '95';
+	$img_sizes['thumbnail']['w'] 	= get_option("thumbnail_size_w");
+	$img_sizes['thumbnail']['h'] 	= get_option("thumbnail_size_h");
+	
+	
 	$downloadsizes = get_option( 'ims_download_sizes' );
 	if( is_array( $downloadsizes ) ) $img_sizes += $downloadsizes;
 	
@@ -302,9 +309,9 @@ function ajax_ims_edit_image_mini( ){
 	if ( !wp_save_image_file( $new_path, $img, $post->post_mime_type, $post_id ) ) 
 		return $return;
 	
-	$img_size['w'] = get_option("mini_size_w");
-	$img_size['h'] = get_option("mini_size_h");
-	$img_size['crop'] = get_option("mini_crop");
+	$img_size['w'] 		= get_option("mini_size_w");
+	$img_size['h']		= get_option("mini_size_h");
+	$img_size['crop'] 	= get_option("mini_crop");
 	
 	//create image
 	$resized 	= image_resize( $new_path, $img_size['w'], $img_size['h'], $img_size['crop'] );

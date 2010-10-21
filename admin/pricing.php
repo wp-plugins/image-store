@@ -145,6 +145,7 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 				</div>
 			</div>
 			
+			<p><small><?php _e( 'Add options by dragging image sizes or packages into the desired list.', ImStore::domain ) ?></small></p>
 			<div class="postbox price-list-box">
 				<div class="handlediv" ><br /></div>
 				<h3 class='hndle'><span><?php _e( 'Price Lists', ImStore::domain ) ?></span></h3>
@@ -161,7 +162,7 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 								<?php else:?>
 								<th class="trash"><a href="#">x</a><input name="listid" type="hidden" class="listid" value="<?php echo $list->ID ?>" /></th>
 								<?php endif; ?>
-								<th colspan="4" class="itemtop inactive"><?php echo $list->post_title ?><a href="#">[+]</a></th>
+								<th colspan="5" class="itemtop inactive"><?php echo $list->post_title ?><a href="#">[+]</a></th>
 							</tr>
 						</thead>
 						<tbody class="content">
@@ -173,9 +174,12 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 								<?php
 								if( $size['ID'] ){
 									echo $size['name'] . ': '; $package_sizes = '';
-									foreach( (array)get_post_meta( $size['ID'], '_ims_sizes', true ) as $package_size => $count )
-										$package_sizes .= $package_size .'('.$count.'), '; 
+									foreach( (array)get_post_meta( $size['ID'], '_ims_sizes', true ) as $package_size => $count ){
+										if( is_array($count) )  $package_sizes .= $package_size . ' ' . $count['unit'] . '('.$count['count'].'), ';
+										else $package_sizes .= $package_size . '('.$count.'), '; 
+									}
 									echo rtrim ( $package_sizes , ', ');
+									
 								}else{ 
 									echo $size['name'];	
 								}
@@ -194,6 +198,7 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 									}
 								?>
 								</td>
+								<td><?php echo $this->units[$size['unit']]?></td>
 								<td>
 									<input type="checkbox" name="sizes[<?php echo $x?>][download]" value="1" <?php checked( '1', $size['download'] )?> title="<?php _e( 'downloadable', ImStore::domain )?>" />
 								</td>
@@ -201,17 +206,17 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 							</tr> 
 						<?php $x++; endforeach; endif ?>
 							<tr class="filler">
-								<td scope="row" colspan="5"><?php _e( 'Add options by dragging image sizes here', ImStore::domain ) ?></td>
+								<td scope="row" colspan="6"><?php _e( 'Add options by dragging image sizes here', ImStore::domain ) ?></td>
 							</tr>
 						</tbody>
 						<tfoot class="content">
 							<tr>
-								<td scope="row" colspan="5"><label><?php _e( 'Name', ImStore::domain ) ?>
+								<td scope="row" colspan="6"><label><?php _e( 'Name', ImStore::domain ) ?>
 									<input name="list_name" type="text" value="<?php echo $list->post_title ?>" class="inputmd" /></label>
 								</td>
 							</tr>
 							<tr class="label">
-								<td colspan="5" scope="row"><label><?php _e( 'BW', ImStore::domain )?>
+								<td colspan="6" scope="row"><label><?php _e( 'BW', ImStore::domain )?>
 									<input type="text" name="_ims_bw" value="<?php echo $meta['ims_bw'] ?>"/></label>							
 									<label><?php _e('Sepia', ImStore::domain )?>
 										<input type="text" name="_ims_sepia" value="<?php echo $meta['ims_sepia'] ?>" /></label>						
@@ -222,7 +227,7 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 								</td>
 								</tr>
 							<tr class="submit">
-								<td scope="row" colspan="5" align="right">
+								<td scope="row" colspan="6" align="right">
 									<!--input use to avoid caching and to update image order-->
 									<input name="sizes[random]" type="hidden" value="<?php echo rand( 0 , 3000 ) ?>"/>
 									<input name="updatelist" type="submit" value="<?php _e( 'Update', ImStore::domain ) ?>" class="button-primary" />
@@ -246,14 +251,19 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 							<tr class="package size alternate">
 								<td class="x" scope="row" title="<?php _e( 'Delete', ImStore::domain )?>">x</td>
 								<td><?php echo $package->post_title ?>:
-								<?php $sizes = ''; foreach( (array)get_post_meta( $package->ID, '_ims_sizes', true ) as $size => $count )
-									 $sizes .= $size .'('.$count.'), '; echo rtrim ( $sizes , ', ');?>
+								<?php $sizes = ''; 
+									foreach( (array)get_post_meta( $package->ID, '_ims_sizes', true ) as $size => $count ){
+										if( is_array($count) )  $sizes .= $size . ' ' . $count['unit'] . '('.$count['count'].'), ';
+										else  $sizes .= $size .'('.$count.'), '; 
+									} echo rtrim( $sizes , ', ');
+								?>
 								</td>
 								<td align="right">
 									<?php printf( $format[$loc], get_post_meta( $package->ID, '_ims_price', true ) )?>
 									<input name="sizes[<?php echo $x?>][ID]" type="hidden" value="<?php echo $package->ID ?>"/>
 									<input name="sizes[<?php echo $x?>][name]" type="hidden" value="<?php echo $package->post_title ?>"/>
 								</td>
+								<td class="hidden">&nbsp;</td>
 								<td class="hidden">
 									<input type="checkbox" name="sizes[<?php echo $x?>][download]" value="1" title="<?php _e( 'downloadable', ImStore::domain )?>" />
 								</td>
@@ -279,24 +289,28 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 					<form method="post" action="<?php echo $pagenowurl . '#price-list'?>" >
 					<?php wp_nonce_field( 'ims_imagesizes' ) ?>
 					<table class="ims-table sizes-list"> 
+						<thead>
+							<tr class="alternate">
+								<td scope="row">&nbsp;</td>
+								<td><?php _e( 'Name', ImStore::domain )?></td>
+								<td><?php _e( 'Price', ImStore::domain )?></td>
+								<td><?php _e( 'Unit', ImStore::domain )?></td>
+								<td class="col-hide">&nbsp;</td>
+								<td>&nbsp;</td>
+							</tr>
+						</thead>
 						<tbody>
-						<tr class="alternate">
-							<td scope="row">&nbsp;</td>
-							<td><?php _e( 'Name', ImStore::domain )?></td>
-							<td><?php _e( 'Price', ImStore::domain )?></td>
-							<td class="col-hide">&nbsp;</td>
-							<td>&nbsp;</td>
-						</tr>
 						<?php foreach( (array)get_option( 'ims_sizes' ) as $size ): $price = $size['price'] ?>
 							<tr class="imgsize size alternate">
 								<td scope="row" class="x" title="<?php _e( 'Delete', ImStore::domain )?>">x</td>
 								<td><span class="hidden"><?php echo $size['name'] ?></span>
-									<input name="sizes[<?php echo $x ?>][name]" type="text" value="<?php echo $size['name'] ?>" />
+									<input type="text" name="sizes[<?php echo $x ?>][name]" value="<?php echo $size['name'] ?>" />
 								</td>
 								<td align="right">
 									<span class="hidden"><?php printf( $format[$loc], $size['price'] ) ?></span>
-									<input name="sizes[<?php echo $x ?>][price]" type="text" value="<?php echo $size['price'] ?>" />
+									<input type="text" name="sizes[<?php echo $x ?>][price]" value="<?php echo $size['price'] ?>" />
 								</td>
+								<td><?php $this->dropdown_units( "sizes[$x][unit]", $size['unit'] )?><span class="hidden"><?php echo $this->units[$size['unit']]?></span></td>
 								<td class="col-hide"><input type="checkbox" name="sizes[<?php echo $x?>][download]" value="1" title="<?php _e( 'downloadable', ImStore::domain )?>" /></td>
 								<td class="move" title="<?php _e( 'Move to list', ImStore::domain )?>">&nbsp;</td>
 							</tr>
@@ -305,17 +319,20 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 						<tfoot>
 							<tr class="copyrow">
 								<td scope="row">&nbsp;</td>
-								<td><input value="<?php echo $x ?>" class="name" type="text" /></td>
+								<td><input type="text" value="<?php echo $x ?>" class="name"/></td>
 								<td><input class="price" type="text" /></td>
+								<td><?php $this->dropdown_units( '', '' )?></td>
 								<td class="col-hide">&nbsp;</td>
 								<td>&nbsp;</td>
 							</tr>
+							<tr>
+								<td colspan="6"><small><?php _e( 'in:inches &bull; cm:centimeters &bull; px:pixels', ImStore::domain )?></small></td>
+							</tr>
 							<tr class="addrow">
-								<td scope="row" colspan="3" align="right">
+								<td scope="row" colspan="4" align="right">
 									<input name="updateimglist" type="submit" value="<?php _e( 'Update sizes', ImStore::domain )?>" class="button-primary" />
 								</td>
-								<td class="col-hide">&nbsp;</td>
-								<td>&nbsp;</td>
+								<td colspan="2">&nbsp;</td>
 							</tr>
 						</tfoot>
 					</table>
@@ -343,6 +360,7 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 				</div>
 			</div>
 			
+			<p><small><?php _e( 'Add options by dragging image sizes into the desired package.', ImStore::domain ) ?></small></p>
 			<div class="postbox">
 				<div class="handlediv" title="Click to toggle"><br /></div>
 				<h3 class='hndle'><span><?php _e( 'Packages', ImStore::domain )?></span></h3> 
@@ -356,7 +374,7 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 									<th class="trash">
 										<a href="#">x</a><input name="packageid" type="hidden" class="packageid" value="<?php echo $package->ID ?>" />
 									</th>
-									<th colspan="3" class="itemtop inactive"><?php echo $package->post_title ?><a href="#">[+]</a></th>
+									<th colspan="4" class="itemtop inactive"><?php echo $package->post_title ?><a href="#">[+]</a></th>
 								</tr>
 							</thead>
 							<tbody class="content">
@@ -365,15 +383,20 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 								<tr class="package size alternate">
 									<td scope="row" class="x">x</td>
 									<td><?php echo $size ?></td>
-									<td align="right">
-										<input name="sizes[<?php echo $x ?>][count]" type="text" value="<?php echo $count ?>" class="inputsm" />
+									<td>
 										<input name="sizes[<?php echo $x ?>][name]" type="hidden" value="<?php echo $size ?>" class="inputsm" />
+										<?php if( is_array( $count ) ){ ?>
+										<input name="sizes[<?php echo $x ?>][count]" type="text" value="<?php echo $count['count'] ?>" class="inputsm" title="<?php _e( 'Quantity', ImStore::domain )?>" />
+										<?php }else{ ?>
+										<input name="sizes[<?php echo $x ?>][count]" type="text" value="<?php echo $count ?>" class="inputsm" title="<?php _e( 'Quantity', ImStore::domain )?>" />
+										<?php }?>
 									</td>
+									<td><?php echo $count['unit'] ?></td>
 									<td class="move" title="<?php _e( 'Sort', ImStore::domain )?>">&nbsp;</td>
 								</tr>
 							<?php $x++; endforeach; endif?>
 								<tr class="filler">
-									<td scope="row" colspan="3"><?php _e( 'Add options by dragging image sizes here', ImStore::domain ) ?></td>
+									<td scope="row" colspan="5"><?php _e( 'Add options by dragging image sizes here', ImStore::domain ) ?></td>
 								</tr>
 							</tbody>
 							<tfoot class="content">
@@ -383,17 +406,18 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 										<label><?php _e( 'Name', ImStore::domain )?>
 										<input name="packagename" type="text" value="<?php echo $package->post_title ?>" class="inputmd" /></label>
 									</td>
-									<td>
+									<td colspan="3">
 										<label><?php _e( 'Price', $ImStore->domain)?>
 										<input type="text" name="packageprice" value="<?php echo $price ?>" class="inputsm" /></label>
 									</td>
 								</tr>
 								<tr class="inforow submit">
-									<td scope="row" colspan="3" align="right">
+									<td scope="row" colspan="4" align="right">
 										<!--input use to avoid caching and to update image order-->
 										<input name="sizes[random]" type="hidden" value="<?php echo rand( 0 , 3000 ) ?>"/>
 										<input name="updatepackage" type="submit" value="<?php _e( 'Update', ImStore::domain ) ?>" class="button-primary" />
 									</td>
+									<td>&nbsp;</td>
 								</tr>
 							</tfoot>
 						</table>
@@ -419,6 +443,7 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 								<td scope="row">&nbsp;</td>
 								<td><?php _e( 'Name', ImStore::domain )?></td>
 								<td><?php _e( 'Price', ImStore::domain )?></td>
+								<td><?php _e( 'Unit', ImStore::domain )?></td>
 								<td>&nbsp;</td>
 							</tr>
 						<?php foreach( (array)get_option( 'ims_sizes' ) as $size ): $price = $size['price'] ?>
@@ -427,10 +452,11 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 								<td><span class="hidden"><?php echo $size['name'] ?></span>
 									<input name="sizes[<?php echo $x ?>][name]" type="text" value="<?php echo $size['name'] ?>" class="input" />
 								</td>
-								<td align="right">
+								<td>
 									<input name="sizes[<?php echo $x ?>][count]" type="text" class="inputsm hidden" />
 									<input name="sizes[<?php echo $x ?>][price]" type="text" value="<?php echo $size['price'] ?>" class="price" />
 								</td>
+								<td><?php $this->dropdown_units( "sizes[$x][unit]", $size['unit'] )?><span class="hidden"><?php echo $this->units[$size['unit']]?></span></td>
 								<td class="move" title="<?php _e( 'Move to list', ImStore::domain )?>">&nbsp;</td>
 							</tr>
 						<?php $x++; endforeach?>
@@ -440,13 +466,17 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 								<td scope="row">&nbsp;</td>
 								<td><input value="<?php echo $x ?>" class="name" type="text" /></td>
 								<td><input class="price" type="text" /></td>
-								<td>&nbsp;</td>
+								<td><?php $this->dropdown_units( '', '' )?></td>
+								<td colspan="2">&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="6"><small><?php _e( 'in:inches &bull; cm:centimeters &bull; px:pixels', ImStore::domain )?></small></td>
 							</tr>
 							<tr class="addrow">
-								<td scope="row" colspan="3" align="right">
+								<td scope="row" colspan="4" align="right">
 									<input name="updateimglist" type="submit" value="<?php _e( 'Update sizes', ImStore::domain )?>" class="button-primary" />
 								</td>
-								<td>&nbsp;</td>
+								<td colspan="2">&nbsp;</td>
 							</tr>
 						</tfoot>
 					</table>
@@ -818,8 +848,10 @@ function update_ims_package( ){
 		return $errors;
 	}
 	
-	foreach( $_POST['sizes'] as $size )
-		$sizes[$size['name']] = $size['count'];
+	foreach( $_POST['sizes'] as $size ){
+		$sizes[$size['name']]['unit'] = $size['unit'];
+		$sizes[$size['name']]['count'] = $size['count'];
+	}
 	
 	$id = intval( $_POST['packageid'] );
 	

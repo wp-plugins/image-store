@@ -60,6 +60,7 @@ jQuery(document).ready(function($){
 		row += '<td><label><input type="text" name="imagesize_'+count+'[w]" class="inputsm" /></label></td>';
 		row += '<td><label><input type="text" name="imagesize_'+count+'[h]" class="inputsm" /></label></td>';
 		row += '<td><label><input type="text" name="imagesize_'+count+'[q]" class="inputsm" />(%)</label></td>';
+		row += '<td>'+ imslocal.pixels +'</td>';
 		row += '<td>&nbsp;</td></tr>';
 		$('.ims-image-sizes').before( row );	
 		return false;
@@ -226,6 +227,7 @@ jQuery(document).ready(function($){
 		row = $(this).parents('.postbox').find(".copyrow").clone().removeClass('copyrow');
 		row.find('.name').attr( 'name','sizes['+counter+'][name]').removeAttr('value');
 		row.find('.price').attr( 'name','sizes['+counter+'][price]');
+		row.find('.unit').attr( 'name','sizes['+counter+'][unit]');
 		$(this).parents('.postbox').find(".addrow").before(row);
 		$(this).parents('.postbox').find(".copyrow .name").val(counter++);
 		return false;
@@ -313,7 +315,7 @@ jQuery(document).ready(function($){
 	};
 	
 	//show uploading icon
-	$('#zipupload, #importfolder ').click(function(){
+	$('#zipupload, #importfolder, #rebuildimgs').click(function(){
 		$(this).parents('td').find('div.loading').show( );	
 	});
 	

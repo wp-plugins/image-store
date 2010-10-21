@@ -200,11 +200,15 @@ $galleries 	= get_ims_galleries( $this->per_page ) ;
 						<?php break;
 						
 						case 'expire':?>
-							<td class="column-<?php echo $key . $class?>" ><?php echo date_i18n( $date_format, strtotime( $gallery->post_expire ) )?></td>
+							<td class="column-<?php echo $key . $class?>" >
+								<?php echo ( $gallery->post_expire != '0000-00-00 00:00:00' ) ? date_i18n( $date_format, strtotime( $gallery->post_expire ) ) : ''?>
+							</td>
 						<?php break;
 						
 						case 'datecrtd': ?>
-							<td class="column-<?php echo $key . $class?>" ><?php echo date_i18n( $date_format, strtotime( $gallery->post_date ) )?></td>
+							<td class="column-<?php echo $key . $class?>" >
+								<?php echo ( $gallery->post_date != '0000-00-00 00:00:00' ) ? date_i18n( $date_format, strtotime( $gallery->post_date ) ) : ''?>
+							</td>
 						<?php break;
 						
 						default:?>

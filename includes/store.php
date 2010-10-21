@@ -40,12 +40,33 @@ class ImStoreFront{
 	 */
 	function __construct( ){
 		$this->opts = get_option( 'ims_front_options' );
+		$this->page_front = get_option( 'page_on_front' );
+
 		add_action( 'wp_head', array( &$this, 'print_ie_styles' ) );
+		add_action( 'pre_get_posts', array( &$this, 'pre_get_posts' ) );
 		add_action( 'wp_enqueue_scripts', array( &$this, 'load_scripts_styles' ) );
 		add_shortcode( 'image-store', array( &$this, 'imstore_shortcode' ) );
+		
 		if( $this->opts['imswidget'] ) include_once ( IMSTORE_ABSPATH . '/admin/widget.php' );
 	}
 	
+	
+	/**
+	 * Populate query to allow the use 
+	 * of the gallery as home page
+	 *
+	 * @return void
+	 * @since 1.1.0
+	 */ 
+	function pre_get_posts( ){ 
+		global $wp_query; 
+		if( $wp_query->query_vars['imsgalid'] && $wp_query->is_home && empty( $wp_query->is_singular ) ){
+			$wp_query->is_page = 1;
+			$wp_query->is_posts_page = 1;
+			$wp_query->query_vars['p'] = $this->page_front;
+			$wp_query->query_vars['page_id'] = $this->page_front;
+		}
+	}
 		
 	/**
 	 * load frontend js/css
@@ -60,13 +81,10 @@ class ImStoreFront{
 		wp_enqueue_script( 'colorbox', IMSTORE_URL .'_js/jquery.galleriffic.js', array( 'jquery' ), '1.3.6 ', true); 
 		wp_enqueue_script( 'galleriffic', IMSTORE_URL .'_js/jquery.colorbox.js', array( 'jquery' ), '1.1.6 ', true); 	
 		wp_enqueue_script( 'imstorejs', IMSTORE_URL .'_js/imstore.js', array( 'jquery', 'colorbox', 'galleriffic' ), '0.5.2', true); 
-		
-		//upgrade function 0.5.1 = 0.5.2
-		if( empty($this->opts['numThumbs'] ) )
-			ImStore::add_slideshow_options( );
 
 		wp_localize_script( 'imstorejs', 'imstore', array(
 			'numThumbs'			=> $this->opts['numThumbs'],
+			'lightbox'			=> $this->opts['wplightbox'],
 			'maxPagesToShow'	=> $this->opts['maxPagesToShow'],
 			'transitionTime'	=> $this->opts['transitionTime'],
 			'slideshowSpeed'	=> $this->opts['slideshowSpeed'],
@@ -113,14 +131,16 @@ class ImStoreFront{
 	 * return void
 	 */
 	function get_permalink( $galid, $page = '' ){
+		$link = '';
 		if( $this->permalinks ){
-			$link = "/". sanitize_title( $this->pages[$page] ) . "/gal-$galid/";
+			$link .= "/". sanitize_title( $this->pages[$page] ) . "/gal-$galid/";
 			if( $this->success ) $link .= 'ms/' . $this->success;
 		}else{
-			$link = '&imspage=' . $page . '&imsgalid=' . $galid ;
+			if( is_front_page( ) ) $link .= '?page_id=' . $this->page_front;
+			$link .= '&imspage=' . $page . '&imsgalid=' . $galid ;
 			if( $this->success ) $link .= '&imsmessage=' . $this->success; 
 		}
-		return  trim( get_permalink( ), '/') . str_replace( '//', '/', $link );
+		return  trim( get_permalink(), '/') . str_replace( '//', '/', $link );
 	}
 	
 	
@@ -250,7 +270,7 @@ class ImStoreFront{
 		
 		$this->pages[1] = __( 'Photos', ImStore::domain );
 		$this->pages[2] = __( 'Slideshow', ImStore::domain );
-		
+				
 		if( !$this->opts['disablestore'] ){
 			$this->pages[3] = __( 'Favorites', ImStore::domain );
 			$this->pages[4] = __( 'Price List', ImStore::domain );
@@ -325,22 +345,16 @@ class ImStoreFront{
 	function validate_user_input( ){
 		
 		$errors = new WP_Error() ;
+		$req    = implode( ' ', (array)$this->opts['requiredfields'] ); 
 		
-		if( empty( $_POST['first_name'] ) )
-			$errors->add( 'empty_first_name', __( 'The first name is required.', ImStore::domain ) );
-	
-		if( empty( $_POST['user_email'] ) )
-			$errors->add( 'empty_last_name', __( 'The email is required.', ImStore::domain ) );
+		foreach(  $this->opts['checkoutfields'] as $key => $label ){
+			if( preg_match( "/$key/i", $req ) && empty( $_POST[$key] ) )
+			$errors->add( "empty_{$key}", sprintf( __( 'The %s is required.', ImStore::domain ), $label ) );
+		}
 		
-		if( empty( $_POST['address_street'] ) )
-			$errors->add( 'empty_address', __( 'The addresss is required.', ImStore::domain ) );
-		
-		if( empty( $_POST['address_zip'] ) )
-			$errors->add( 'empty_zip', __( 'The zip code is required.', ImStore::domain ) );
-			
-		if( !is_email( $_POST['user_email'] ) )
+		if( !empty( $_POST['user_email'] ) && !is_email( $_POST['user_email'] ) )
 			$errors->add( 'empty_last_name', __( 'Wrong email format.', ImStore::domain ) );
-			
+
 		if( !empty( $errors->errors ) )
 			return $errors;
 		
@@ -613,7 +627,7 @@ class ImStoreFront{
 				$title = get_the_title( $image->post_parent );
 				$link = $this->get_permalink( $image->post_parent, 1 );
 			}else{
-				$link = IMSTORE_URL . "image.php?$nonce&amp;img={$image->ID}";
+				$link = IMSTORE_URL . "image.php?$nonce&amp;img={$image->ID}&amp;w=".$this->opts['watermark'];
 				$title = $image->post_title;
 			}
 			
@@ -745,7 +759,7 @@ class ImStoreFront{
 			<input name="add-to-cart" type="submit" value="<?php _e( 'Add to cart', ImStore::domain )?>" class="button" />
 			<input type="hidden" name="ims-to-cart-ids" id="ims-to-cart-ids" />
 			<input type="hidden" name="gallery-id" id="gallery-id" value="<?php echo $this->gallery_id?>" />
-			<input type="hidden" name="imstore-url" id="imstore-url" value="<?php echo IMSTORE_ADMIN_URL?>" />
+			<input type="hidden" name="gallery-id" id="gallery-id" value="<?php echo $this->gallery_id?>" />
 			<input type="hidden" name="_wpnonce" id="_wpnonce" value="<?php echo wp_create_nonce( "ims_ajax_favorites" )?>" />
 		</div>
 	</form>
@@ -767,6 +781,7 @@ class ImStoreFront{
 		
 		if( empty( $_POST['ims-image-size'] ) ){
 			$this->error = __( 'Please, select an image size.', ImStore::domain );
+
 			return;
 		}
 			
@@ -782,6 +797,7 @@ class ImStoreFront{
 				if( $size['name'] == $_POST['ims-image-size'] ){
 					if( $size['ID'] ) $this->cart['images'][$id][$_POST['ims-image-size']][$_POST['_imstore-color']]['price'] = get_post_meta( $size['ID'], '_ims_price', true );
 					else $this->cart['images'][$id][$_POST['ims-image-size']][$_POST['_imstore-color']]['price'] = $size['price']; 
+					$this->cart['images'][$id][$_POST['ims-image-size']][$_POST['_imstore-color']]['unit'] = $size['unit'];
 					$this->cart['images'][$id][$_POST['ims-image-size']][$_POST['_imstore-color']]['download'] = $size['download'];
 					continue;
 				}
