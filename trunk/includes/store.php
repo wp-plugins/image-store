@@ -361,7 +361,7 @@ class ImStoreFront{
 		if( $_POST['mc_currency'] != $this->opts['currency'])
 			return false;
 		
-		if( $_POST['payment_gross'] != $this->cart['total'])
+		if( $_POST['payment_total'] != $this->cart['total'])
 			return false;
 	
 		wp_update_post( array( 
@@ -728,15 +728,18 @@ class ImStoreFront{
 		
 		<div class="ims-field">
 			<label for="ims-image-size"><?php _e( 'Size', ImStore::domain )?> </label>
-			<?php if( $sizes = $this->sizes ){?>
+			<?php if( $sizes = $this->sizes ){
+				unset( $sizes['random'] ); ?>
 			<select name="ims-image-size" id="ims-image-size" class="select">
 				<option value=""><?php _e( 'Image size', ImStore::domain )?></option>
 				<?php foreach( $sizes as $size ){
 					echo '<option value="';
 					if( $size['ID'] ){
 						echo $size['name'] . '">' . $size['name'] .': '; $package_sizes = '';
-						foreach( (array)get_post_meta( $size['ID'], '_ims_sizes', true ) as $package_size => $count )
-							$package_sizes .= $package_size .'('.$count.'), '; 
+						foreach( (array)get_post_meta( $size['ID'], '_ims_sizes', true ) as $package_size => $count ){
+							if( is_array($count) ) $package_sizes .= $package_size .' '. $count['unit'] . '('.$count['count'].'), '; 
+							else $package_sizes .= $package_size .'('.$count.'), '; 
+						}
 						echo rtrim ( $package_sizes, ', ') . '</option>';
 					}else{ 
 						echo $size['name'] . '">' . $size['name'] . ' </option>';	

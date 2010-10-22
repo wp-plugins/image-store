@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: e-commerce,shop,store,photo,picture,image,galleries,imstore,image-store,slideshow,gallery,sale,photographers,shop,online
 Requires at least: 3.0.0
 Tested up to: 3.0.1
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 
 Image Store (ImStore) is a image gallery and store/shop plugin for WordPress with a slideshow and paypal integration.
 
@@ -124,6 +124,13 @@ With the plugin installed navigate to Image Store > settings and click on the do
 
 
 == Changelog ==
+
+= 1.1.1 =
+* Fix: Sales CSV downlaod permissions.
+* Fix: Total price format when using email notification only.
+* Fix: Serialize data showing on the image-size-dropdown menu when adding images to car.
+* Admin: CSS modifications.
+* Added: Image title on sale reports.
 
 = 1.1.0 =
 * Front-end: CSS modifications.

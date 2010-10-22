@@ -48,6 +48,7 @@ $colors_options = array(
 							<span class="color"><?php _e( 'Color', ImStore::domain )?></span>
 							<span class="price"><?php _e( 'Unit Price', ImStore::domain )?></span>
 							<span class="subtotal"><?php _e( 'Subtotal', ImStore::domain )?></span>
+							<span class="title"><?php _e( 'Title', ImStore::domain )?></span>
 							<span class="imageid"><?php _e( 'Image ID', ImStore::domain )?></span>
 						</th>
 					</tr>
@@ -68,6 +69,7 @@ $colors_options = array(
 								<span class="color"><?php echo $colors_options[$color] . $item['color'] ?></span>
 								<span class="price"><?php printf( $format[$loc], number_format( $item['price'], 2 ) )?></span>
 								<span class="subtotal"><?php printf( $format[$loc], number_format( $item['subtotal'], 2 ) )?></span>
+								<span class="title"><?php echo get_the_title($id)?></span>
 								<span class="imageid"><?php echo sprintf( "%05d", $id )?></span>
 							</div>
 							<?php $i++; }?>
