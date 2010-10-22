@@ -15,7 +15,7 @@ if ( !is_user_logged_in() )
 	die();
 
 //check that a user is logged in
-if ( !current_user_can( 'ims_manage_customers' ) )
+if ( !current_user_can( 'ims_read_sales' ) )
 	die( );
 	
 

@@ -82,12 +82,13 @@ tr td.column-imageid			{ width:9%;}*/
 
 table.store-detail .clear-row { clear:both}
 table.store-detail span{ display:block; float:left }
-table.store-detail .size{ width:20%;}
-table.store-detail .price{ width:15%;}
-table.store-detail .subtotal{ width:20%;}
+table.store-detail .size{ width:14%;}
+table.store-detail .price{ width:14%;}
+table.store-detail .subtotal{ width:15%;}
 table.store-detail .color{ width:20%}
-table.store-detail .imageid{ width:8%}
-table.store-detail .quantity{ width:12%}
+table.store-detail .imageid{ width:8%; text-align:right}
+table.store-detail .quantity{ width:10%}
+table.store-detail .title{ width:18%; word-wrap:break-word; word-break:break-all}
 
 
 /******** FORMS **********/
