@@ -307,10 +307,10 @@ jQuery(document).ready(function($){
 	//redirect after files uploaded
 	function ims_upload_complete( event, data ){
 		setTimeout(function( ){
-			$( '<div class="updated fade" id="message"><p>' + 
-				uploaded + imslocal.uploaded + 
-				exists	+ imslocal.exists + 
-				'</p></div>').insertBefore('.add-menu-item-tabs');
+			message = '<div class="updated fade" id="message"><p>' + uploaded + imslocal.uploaded;
+			if( exists > 0 ) message += exists + imslocal.exists;
+			message += '</p></div>';
+			$(message).insertBefore('.add-menu-item-tabs');
 		}, 2000 );
 	};
 	

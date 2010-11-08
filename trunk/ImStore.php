@@ -4,7 +4,7 @@ Plugin Name: Image Store
 Plugin URI: http://imstore.xparkmedia.com
 Description: Your very own image store within wordpress "ImStore"
 Author: Hafid R. Trujillo Huizar
-Version: 1.1.1
+Version: 1.2.0
 Author URI: http://www.xparkmedia.com
 Requires at least: 3.0.0
 Tested up to: 3.0.1
@@ -42,7 +42,7 @@ class ImStore{
 	 * Make sure that new language(.mo) files have 'ims-' as base name
 	 */
 	const domain	= 'ims';
-	const version	= '1.1.1';
+	const version	= '1.2.0';
 	
 	
 	/**
@@ -69,6 +69,11 @@ class ImStore{
 		add_action( 'imstore_expire', array( &$this, 'expire_galleries' ) );
 		add_action( 'generate_rewrite_rules', array( &$this, 'add_rewrite_rules' ), 10, 1 );
 		$this->load_dependencies( );
+				
+		//upgrade function 1.1.1 = 1.2.0
+		$customer = get_role( 'customer' );
+		if( !$customer->has_cap( 'ims_read_galleries' ) ) 
+			$customer->add_cap( 'ims_read_galleries' );
 		
 	}
 	
@@ -190,6 +195,27 @@ class ImStore{
 		return $vars;
 	}
 	
+
+	/**
+	 * fast in_array function
+	 *
+	 * @parm string $elem
+	 * @parm array $array
+	 * @return  bool
+	 * @since 1.2.0
+	 */
+	function fast_in_array( $elem, $array ){ 
+	   $bot = 0; 
+	   $top = sizeof($array) -1; 
+	   while( $top >= $bot ){ 
+		  $p = floor(($top + $bot) / 2); 
+		  if ( $array[$p] < $elem) $bot = $p + 1; 
+		  elseif ( $array[$p] > $elem ) $top = $p - 1; 
+		  else return true; 
+	   } 
+	   return false; 
+	} 
+	
 	
 	/**
 	 * Rewrites for custom page managers
@@ -287,7 +313,7 @@ class ImStore{
 
 	 
 	 /**
-	 * temporaty upgrade function
+	 * Temporaty upgrade function
 	 * will be remove on nex release
 	 *
 	 * @return void

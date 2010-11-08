@@ -57,7 +57,7 @@ class ImStoreInstaller {
 		$ims_caps 	= array ( 
 			'ims_add_galleries',
 			'ims_read_sales',
-			'ims_import_images',
+			//'ims_import_images',
 			'ims_manage_galleries',
 			'ims_change_pricing',
 			'ims_change_settings',
@@ -71,7 +71,7 @@ class ImStoreInstaller {
 		foreach( $ims_caps as $imscap ) $role->add_cap( $imscap );
 		
 		$customer = get_role( 'customer' );
-		if( empty( $customer ) ) add_role( 'customer', 'Customer', array( 'read' => 1 ) );
+		if( empty( $customer ) ) add_role( 'customer', 'Customer', array( 'read' => 1, 'ims_read_galleries' => 1 ) );
 		
 		//create secure page
 		$page_secure = get_option( 'ims_page_secure' );

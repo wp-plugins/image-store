@@ -29,6 +29,10 @@
 #icon-sales						{ background:url(../_img/icons.png) no-repeat 50% 50% }
 #icon-pricing					{ background:url(../_img/icons.png) no-repeat 0 50% }
 
+.permissions					{ width:60%}
+.permissions label				{ display:block; padding:0 0 20px 10px; float:left; width:15em;}
+.flash-upload object, 
+.flash-upload embed				{ width:130px; height:34px}
 
 /******** TABLES **********/
 
@@ -67,12 +71,12 @@ table.sizes-list td input[type=text]{ width:100%; padding:2px}
 								 font:italic .9em Georgia, "Times New Roman", Times, serif;
 								 display: none;
 								}
-
-.column-order					{ width:7%}
-.column-thumb					{ width:90px}
-td.column-thumb					{ padding:10px 0; text-align:center}
+								
 .column-thetitle				{ width:35%}
+td.column-thumb					{ padding:10px 0; text-align:center}
 .column-imageid					{ width:9%; text-align:center}
+.column-thumb					{ width:90px}
+.column-order					{ width:7%}
 .column-ordernum				{ width:16%}
 
 /*.column-imauthor				{ width:9%}
@@ -111,8 +115,9 @@ span.sort-label					{ padding-left:15px;}
 .imstore input[disabled]		{ background-color:#eee}
 
 form.paypal-donate				{ position:relative;}
-form.paypal-donate * 			{ display:none}
-form.paypal-donate input[type=image] { display:block; position:absolute; right:100px; top:20px}
+form.paypal-donate .paypalinfo	{ position:absolute; width:195px; right:0; top:30px; font-size:.8em; line-height:120%}
+form.paypal-donate .paypalinfo a { display:block; float:left; width:100px}
+form.paypal-donate .paypalinfo input[type=image] { float:left; margin-right:5px; vertical-align:middle}
 
 /******** WIDGETS **********/
 

@@ -198,7 +198,10 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 									}
 								?>
 								</td>
-								<td><?php echo $this->units[$size['unit']]?></td>
+								<td>
+									<?php echo $this->units[$size['unit']]?>
+									<input type="hidden" name="sizes[<?php echo $x?>][unit]" value="<?php echo $this->units[$size['unit']]?>" />
+								</td>
 								<td>
 									<input type="checkbox" name="sizes[<?php echo $x?>][download]" value="1" <?php checked( '1', $size['download'] )?> title="<?php _e( 'downloadable', ImStore::domain )?>" />
 								</td>
@@ -391,7 +394,10 @@ $message[10] = sprintf( __( '%d promotions deleted.', ImStore::domain ), $_GET['
 										<input name="sizes[<?php echo $x ?>][count]" type="text" value="<?php echo $count ?>" class="inputsm" title="<?php _e( 'Quantity', ImStore::domain )?>" />
 										<?php }?>
 									</td>
-									<td><?php echo $count['unit'] ?></td>
+									<td>
+										<?php echo $count['unit'] ?>
+										<input type="hidden" name="sizes[<?php echo $x?>][unit]" value="<?php echo $count['unit'] ?>" />
+									</td>
 									<td class="move" title="<?php _e( 'Sort', ImStore::domain )?>">&nbsp;</td>
 								</tr>
 							<?php $x++; endforeach; endif?>

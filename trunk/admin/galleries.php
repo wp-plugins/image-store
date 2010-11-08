@@ -45,7 +45,6 @@ if( !empty( $_GET['doaction'] ) ){
 	}
 }
 
-
 //link actions
 if( !empty( $_GET['action'] ) && !empty( $_GET['id'] ) ){
 	check_admin_referer( 'ims_galleries_link' );
@@ -58,7 +57,7 @@ if( !empty( $_GET['action'] ) && !empty( $_GET['id'] ) ){
 	}
 }
 
-global $wpdb; 
+global $wpdb, $status_labels; 
 $message[1] 	= __( 'Trash emptied', ImStore::domain );
 $message[2] 	= __( 'Gallery deleted.', ImStore::domain );
 $message[3] 	= __( 'Gallery status updated.', ImStore::domain );
@@ -74,8 +73,14 @@ $nonce 			= '&_wpnonce=' . wp_create_nonce( 'ims_galleries_link' );
 $is_trash		= ( isset( $_GET['status'] ) ) && ( $_GET['status'] == 'trash' );
 $hidden 		= implode( '|', get_hidden_columns( 'toplevel_page_' . IMSTORE_FOLDER ) ) ;
 $columns 		= get_column_headers( 'toplevel_page_' . IMSTORE_FOLDER );
-$galleries 	= get_ims_galleries( $this->per_page ) ;
+$galleries 		= get_ims_galleries( $this->per_page ) ;
 
+$status_labels = array(
+	'trash' 	=> __( 'Trash', ImStore::domain ),
+	'publish' 	=> __( 'Published', ImStore::domain ),
+	'pending' 	=> __( 'Pending', ImStore::domain ),
+	'expire' 	=> __( 'Expired', ImStore::domain ),
+);
 ?>
 
  
@@ -208,6 +213,8 @@ $galleries 	= get_ims_galleries( $this->per_page ) ;
 						case 'datecrtd': ?>
 							<td class="column-<?php echo $key . $class?>" >
 								<?php echo ( $gallery->post_date != '0000-00-00 00:00:00' ) ? date_i18n( $date_format, strtotime( $gallery->post_date ) ) : ''?>
+								<?php echo ( empty($_GET['status'])) ? "<br />". $status_labels[$gallery->post_status]  : '' ?>
+
 							</td>
 						<?php break;
 						
@@ -269,13 +276,16 @@ function get_ims_galleries( $perpage ){
 	
 	foreach( $r as $post ){
 		$custom_fields = get_post_custom( $post->ID );
-		foreach ( $custom_fields as $key => $value )
-			$post->$key = $value[0];
+		foreach ( $custom_fields as $key => $value ){
+			if( is_serialized( $value[0] ) ) 
+				$post->$key = unserialize( $value[0] );
+			else 
+				$post->$key = $value[0];
+		}
 		$galleries[] = $post;
 	}
 	
 	return $galleries;
-	
 }
 
 
@@ -286,7 +296,7 @@ function get_ims_galleries( $perpage ){
  * return unit
  */
 function ims_gallery_count_links( ){
-	global $wpdb,$pagenowurl; 
+	global $wpdb,$pagenowurl, $status_labels; 
 	
 	$r = $wpdb->get_results(
 		"SELECT post_status AS status, count(post_status) AS count 
@@ -297,19 +307,12 @@ function ims_gallery_count_links( ){
 	
 	if( empty($r) )
 		return $r;
-	
-	$labels = array(
-		'trash' 	=> __( 'Trash', ImStore::domain ),
-		'publish' 	=> __( 'Published', ImStore::domain ),
-		'pending' 	=> __( 'Pending', ImStore::domain ),
-		'expire' 	=> __( 'Expired', ImStore::domain ),
-	);
-	
+
 	foreach( $r as $obj ){
 		$count 	 = ( $obj->status == $_GET['status'] ) ? $obj->count : 0 ;
 		$current = ( $obj->status == $_GET['status'] ) ? ' class="current"' : '';
 
-		$links[] = '<li><a href="' . $pagenowurl . '&amp;status=' . $obj->status . '"' . $current . '>' . $labels[$obj->status] . ' <span class="count">(' . $obj->count . ')</span></a></li>';
+		$links[] = '<li><a href="' . $pagenowurl . '&amp;status=' . $obj->status . '"' . $current . '>' . $status_labels [$obj->status] . ' <span class="count">(' . $obj->count . ')</span></a></li>';
 		if( $obj->status != 'trash')
 			$all += $obj->count ;
 	}

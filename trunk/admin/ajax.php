@@ -142,34 +142,37 @@ function ajax_ims_flash_image_data( ){
 		$resized = image_resize( $abspath, $img_size['w'], $img_size['h'], $img_size['crop'], null, $des_path, $img_size['q'] );
 		if ( !is_wp_error( $resized ) && $resized && $info = @getimagesize($resized) ) {
 			$imgname = basename( $resized );
-			$data = array(
-				'file' 	=> $imgname,
-				'width' => $info[0],
-				'height'=> $info[1],
-			);
-			
-			//copy file to be use when plugin is uninstall
-			@copy( $abspath, $des_path . '/' . $filename );
-				
-			//create metadata
-			$imagesize = getimagesize( $abspath );
-			$metadata['width'] = $imagesize[0];
-			$metadata['height'] = $imagesize[1];
-			list($uwidth, $uheight) = wp_constrain_dimensions( $metadata['width'], $metadata['height'], 100, 100 );
-			$metadata['hwstring_small'] = "height='$uheight' width='$uwidth'";
-			
-			switch( $imagesize['channels'] ){ 
-				case 1: $metadata['color'] = 'BW'; break;
-				case 3: $metadata['color'] = 'RGB'; break;
-				case 4: $metadata['color'] = 'CMYK'; break;
-				default: $metadata['color'] = __( 'Unknown', ImStore::domain );
-			}
-			
-			$metadata['file'] = $relative;
-			$metadata['sizes'][$img_size['name']] = $data;
-			$metadata['image_meta'] = wp_read_image_metadata( $abspath );
+		}else{
+			$info = getimagesize( $abspath );
+			$imgname = basename( $abspath );
 		}
 		
+		$data = array(
+			'file' 	=> $imgname,
+			'width' => $info[0],
+			'height'=> $info[1],
+		);
+		
+		//copy file to be use when plugin is uninstall
+		@copy( $abspath, $des_path . '/' . $filename );
+			
+		//create metadata
+		$imagesize = getimagesize( $abspath );
+		$metadata['width'] = $imagesize[0];
+		$metadata['height'] = $imagesize[1];
+		list($uwidth, $uheight) = wp_constrain_dimensions( $metadata['width'], $metadata['height'], 100, 100 );
+		$metadata['hwstring_small'] = "height='$uheight' width='$uwidth'";
+		
+		switch( $imagesize['channels'] ){ 
+			case 1: $metadata['color'] = 'BW'; break;
+			case 3: $metadata['color'] = 'RGB'; break;
+			case 4: $metadata['color'] = 'CMYK'; break;
+			default: $metadata['color'] = __( 'Unknown', ImStore::domain );
+		}
+		
+		$metadata['file'] = $relative;
+		$metadata['sizes'][$img_size['name']] = $data;
+		$metadata['image_meta'] = wp_read_image_metadata( $abspath );
 	}
 	
 	//update image count

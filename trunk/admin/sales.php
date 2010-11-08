@@ -74,11 +74,11 @@ $message[7] 	= sprintf( __( '%d orders moved to trash.', ImStore::domain ), $_GE
 	<?php if( !empty($_GET['ms']) ){ ?>
 	<div class="updated fade" id="message"><p><?php echo $message[$_GET['ms']] ?></p></div><?php }?>
 
-	<!--<div id="dashboard-widgets" class="metabox-holder">
+	<div id="dashboard-widgets" class="metabox-holder">
 	<?php if( !empty($_GET['ms']) ){ ?>
 		<div class="updated fade" id="message"><p><?php echo $message[$_GET['ms']] ?></p></div><?php }?>
 	
-	<div id="dashboard_right_now" class="postbox">
+	<!--<div id="dashboard_right_now" class="postbox">
 		<div class="handlediv" ><br /></div>
 		<h3 class='hndle'><span><?php _e( 'Current Month Overview' , ImStore::domain ) ?></span></h3> 
 		<div class="inside">
@@ -106,8 +106,8 @@ $message[7] 	= sprintf( __( '%d orders moved to trash.', ImStore::domain ), $_GE
 				</table>
 			</div>
 		</div>
-	</div>
 	</div>-->
+	</div>
 	
 	<!-- MANAGE ORDERS -->
 	

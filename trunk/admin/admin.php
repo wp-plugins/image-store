@@ -31,8 +31,13 @@ class ImStoreAdmin extends ImStore{
 			'cm' => __( 'cm', ImStore::domain ),
 			'px' => __( 'px', ImStore::domain ),
 		);
+		
+		$this->status = array( 
+			"active" =>  __( 'Active', ImStore::domain ),
+			"inactive" =>  __( 'Inactive', ImStore::domain )
+		);
 
-		//ad a unique Gallery IDentifier to make sure that the actions come from this widget
+		//ad a unique Gallery IDentifier to make sure that the actions come from this plugin
 		if ( ( 'media-upload.php' == $pagenow || 'async-upload.php' == $pagenow ) && isset( $_GET[ 'imstore' ] ) ){
 			add_filter( 'media_send_to_editor', array( &$this, 'media_send_to_editor'), 1, 3 );
 			add_filter( 'media_upload_form_url', array( &$this, 'media_upload_form_url' ), 1, 1 ); 
@@ -42,16 +47,20 @@ class ImStoreAdmin extends ImStore{
 		add_filter( 'get_attached_file', array( &$this, 'return_ims_attached_file' ), 15, 2 );
 		add_filter( 'load_image_to_edit_path', array( &$this, 'load_ims_image_path' ), 15, 2 ); 
 		add_filter( 'wp_update_attachment_metadata', array( &$this, 'update_attachment_metadata' ), 15, 2 );
-		
+				
 		$this->opts = (array)get_option( 'ims_front_options' );
 		if( $this->opts['imswidget'] ) include_once ( dirname (__FILE__) . '/widget.php' );		
 		
 		//speed up ajax we don't need this
 		if( defined('DOING_AJAX') ) return;
-
+		
 		add_action( 'admin_menu', array( &$this, 'add_menu'), 10 );	
-		add_action( 'set_current_user', array( &$this, 'apply_user_caps') );	
-		add_filter( 'editable_roles', array( &$this, 'remove_role_display'), 10, 1 );
+		add_action( 'set_current_user', array( &$this, 'apply_user_caps' ) );	
+		add_action( 'user_register', array( &$this, 'wp_register_customer' ), 15, 1 );
+		add_action( 'manage_users_columns', array( &$this, 'add_status_column' ), 10, 1 );
+		add_filter( 'manage_users_custom_column', array( &$this, 'add_status_val' ), 15, 3 );
+		
+		//add_filter( 'editable_roles', array( &$this, 'remove_role_display'), 10, 1 );
 		
 		// Add the script and style files only on plugin pages
 		if( $_GET['page'] == ( 'ims-import' || 'ims-customers' || 'ims-sales' || 'ims-pricing' ||
@@ -62,9 +71,55 @@ class ImStoreAdmin extends ImStore{
 			add_action( 'admin_print_scripts', array( &$this, 'load_admin_ims_scripts' ) );
 			add_filter( 'current_screen', array( &$this, 'change_current_screen_name' ), 10, 1 );
 			
-			if( $_GET['page'] == 'ims-customers' || $_GET['page'] == 'ims-sales' || $_GET['page'] == IMSTORE_FOLDER )
+			if( $_GET['page'] == 'user-galleries' || $_GET['page'] == 'ims-sales' 
+			|| $_GET['page'] == 'ims-customers' || $_GET['page'] == IMSTORE_FOLDER )
 				add_filter( 'screen_settings', array( &$this, 'screen_settings' ), 15, 2 ); 
 		}
+	}
+	
+	
+	/**
+	 * Add stuts column to users screen
+	 *
+	 * @param null $null
+	 * @param array $column_name
+	 * @param unit $user_id
+	 * @return string
+	 * @since 1.2.0
+	 */
+	function add_status_val( $null, $column_name, $user_id ){
+		if( $column_name == 'user-status' ){ 
+			$status =  get_user_meta( $user_id, 'ims_status', true );
+			return $this->status[$status];
+		}
+	}
+	
+	
+	/**
+	 * Add stuts column to users screen
+	 *
+	 * @param array $columns
+	 * @return array
+	 * @since 1.2.0
+	 */
+	function add_status_column( $columns ){
+		if( current_user_can( 'administrator' ) ) 
+			$columns['user-status'] = __( 'Status', ImStore::domain );
+		return $columns;
+	}
+
+
+	/**
+	 * update user data when user data is 
+	 * updated using wp edit user screen
+	 *
+	 * @param unit $user_id
+	 * @return void
+	 * @since 1.2.0
+	 */ 
+	function wp_register_customer( $user_id ){ 
+		if( $_POST['role'] == 'customer' )
+			update_user_meta( $user_id, 'ims_status', 'active' );
 	}
 	
 	
@@ -167,7 +222,6 @@ class ImStoreAdmin extends ImStore{
 	 */	
 	function load_ims_image_path( $filepath, $post_id ){
 		global $wpdb;
-		
 		if( 'ims_image' == $wpdb->get_var( $wpdb->prepare( "SELECT post_type FROM $wpdb->posts WHERE ID = %s", $post_id ) ) ){
 			$imagedata = get_post_meta( $post_id, '_wp_attachment_metadata' ); 
 			$filepath = str_replace( "\\", "/", WP_CONTENT_DIR . $imagedata[0]['file'] );
@@ -204,13 +258,11 @@ class ImStoreAdmin extends ImStore{
 	 * @since 0.5.0 
 	 */
 	function media_send_to_editor( $html, $id, $attachment ){
-		
-		$imagurl = str_ireplace( get_option('home'), '', $attachment['url'] );
-		
+		//$imagurl = str_ireplace( get_option('home'), '', $attachment['url'] );
 		?><script type="text/javascript">
 			/* <![CDATA[ */
 			var win = window.dialogArguments || opener || parent || top;
-			win.add_watermark_url( '<?php echo addslashes( $imagurl ); ?>' );
+			win.add_watermark_url( '<?php echo addslashes( $attachment['url'] ); ?>' );
 			/* ]]> */
 		</script><?php
 		return $html;
@@ -238,7 +290,6 @@ class ImStoreAdmin extends ImStore{
 	 */
 	function change_media_upload_src( $src ){
 		global $post_type;
-		
 		if( $post_type == 'ims_gallery' )
 			return str_replace( 'media-upload.php?', 'media-upload.php?imstore=1&', $src );
 		else return $src;
@@ -325,8 +376,7 @@ class ImStoreAdmin extends ImStore{
 		
 		return $makepass;
 	}
-	
-	
+
 	/**
 	 * Remove empty entries form array recursively
 	 *
@@ -534,8 +584,8 @@ class ImStoreAdmin extends ImStore{
 			'imsajax' 		=> IMSTORE_ADMIN_URL . 'ajax.php',
 			'pixels'		=> __( 'Pixels', ImStore::domain ),
 			'flastxt'		=> __( 'Select files.', ImStore::domain ),
-			'exists'		=> __( ' files existed.', ImStore::domain ),
-			'uploaded'		=> __( ' files uploaded. ', ImStore::domain ),
+			'exists'		=> __( ' file(s) existed.', ImStore::domain ),
+			'uploaded'		=> __( ' file(s) uploaded. ', ImStore::domain ),
 			'selectgal' 	=> __( 'Please, select a gallery!', ImStore::domain ),
 			'deletelist' 	=> __( 'Are you sure that you want to delete this list?', ImStore::domain ),
 			'deletepackage' => __( 'Are you sure that you want to delete package?', ImStore::domain ),
@@ -563,6 +613,9 @@ class ImStoreAdmin extends ImStore{
 				$option = 'image-store_page_ims-sales';
 				$per_page_label = __( 'Orders', ImStore::domain );
 				break;
+			case "user-galleries":
+				$option = 'ims_user_galleries_per_page';
+				$per_page_label = __( 'Orders', ImStore::domain );
 			default :
 				$option = 'ims_galleries_per_page';
 				$per_page_label = __( 'Galleries', ImStore::domain );
@@ -593,28 +646,31 @@ class ImStoreAdmin extends ImStore{
 	function add_menu( ) { 
 
 		add_object_page( __( 'Image Store', ImStore::domain ), __( 'Image Store', ImStore::domain ), 
-					'ims_manage_galleries', IMSTORE_FOLDER, array(&$this, 'show_menu'), IMSTORE_URL .'_img/imstore.png' );
+			'ims_manage_galleries', IMSTORE_FOLDER, array(&$this, 'show_menu'), IMSTORE_URL .'_img/imstore.png' );
 		
 		add_submenu_page( IMSTORE_FOLDER, __('Galleries', ImStore::domain ), __( 'Galleries', ImStore::domain ), 
-					'ims_manage_galleries', IMSTORE_FOLDER , array (&$this, 'show_menu'));	
+			'ims_manage_galleries', IMSTORE_FOLDER , array (&$this, 'show_menu'));	
 				
 		add_submenu_page( IMSTORE_FOLDER, __( 'Add New', ImStore::domain ), __( 'Add New', ImStore::domain ), 
-					'ims_import_images', 'ims-import', array ( &$this, 'show_menu' ));
+			'ims_add_galleries', 'ims-import', array ( &$this, 'show_menu' ));
 		
 		//if store is enable
 		if( !$this->opts['disablestore'] ){
 			add_submenu_page( IMSTORE_FOLDER, __( 'Sales', ImStore::domain ), __( 'Sales', ImStore::domain ), 
-						'ims_read_sales', 'ims-sales', array ( &$this, 'show_menu' ));
+				'ims_read_sales', 'ims-sales', array ( &$this, 'show_menu' ));
 			
 			add_submenu_page( IMSTORE_FOLDER, __( 'Pricing', ImStore::domain ), __( 'Pricing', ImStore::domain ), 
-						'ims_change_pricing', 'ims-pricing', array ( &$this, 'show_menu' ));
+				'ims_change_pricing', 'ims-pricing', array ( &$this, 'show_menu' ));
 		}
 		
 		add_submenu_page( IMSTORE_FOLDER, __( 'Customers', ImStore::domain ), __( 'Customers', ImStore::domain ), 
-					'ims_manage_customers', 'ims-customers', array ( &$this, 'show_menu' ));
+			'ims_manage_customers', 'ims-customers', array ( &$this, 'show_menu' ));
 		
 		add_submenu_page( IMSTORE_FOLDER, __( 'Settings', ImStore::domain ), __( 'Settings', ImStore::domain ), 
-					'ims_change_settings', 'ims-settings', array ( &$this, 'show_menu' ));
+			'ims_change_settings', 'ims-settings', array ( &$this, 'show_menu' ));
+		
+		add_users_page( __( 'Image Store', ImStore::domain ), __( 'Galleries', ImStore::domain ), 
+			'ims_read_galleries', 'user-galleries', array ( &$this, 'show_menu' ));
 	
 	}
 	
@@ -653,6 +709,9 @@ class ImStoreAdmin extends ImStore{
 			case "ims-settings":
 				include_once ( dirname (__FILE__) . '/settings.php' );
 				break;
+			case "user-galleries":
+				include_once ( dirname (__FILE__) . '/galleries-read.php' );
+				break;	
 			default :
 				if( $_GET['edit'] == 1 ) include_once ( dirname (__FILE__) . '/gallery-edit.php' );
 				else include_once ( dirname (__FILE__) . '/galleries.php' );

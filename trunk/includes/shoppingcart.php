@@ -49,7 +49,7 @@ $colors_options = array(
 	
 	<?php if( empty( $this->cart['images'] ) ) {?>
 	
-		<div class="ims-message error"><?php _e( 'Your shopping car is empty!!', ImStore::domain )?></div>
+		<div class="ims-message error"><?php _e( 'Your shopping cart is empty!!', ImStore::domain )?></div>
 	
 	<?php }else{?>
 			<form action="" method="post">
@@ -106,7 +106,11 @@ $colors_options = array(
 					<tr>
 						<td scope="row"colspan="4">&nbsp;</td>
 						<td><?php _e( 'Promotional code',ImStore::domain )?></td>
-						<td class="total promo-code" colspan="2"><input name="promocode" type="text" value="<?php echo $this->cart['promo']['code']?>" /></td>
+						<td class="total promo-code" colspan="2">
+							<input name="promocode" type="text" value="<?php echo $this->cart['promo']['code']?>" />
+							<span class="ims-break"></span>
+							<small><?php _e( 'Update cart to apply promotional code.',ImStore::domain )?></small>
+						</td>
 					</tr>
 					<tr>
 						<td scope="row" colspan="4">&nbsp;</td>

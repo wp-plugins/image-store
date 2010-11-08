@@ -31,6 +31,7 @@ ul.ims-gallery li input[type=checkbox]{ position:absolute;}
 .ims-innerbox .thank-you-message{ font-size:.9em}
 .ims-innerbox .ims-terms-condtitions{ font-size:.7em; color:#999}
 #ims-pricelist{ display:none}
+td.promo-code .ims-break{ clear:both; display:block}
 
 /*Slideshow*/
 .ims-slideshow-box { font-size:.9em}

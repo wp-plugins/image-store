@@ -17,7 +17,6 @@ if( preg_match( '#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'] ) )
 if( !current_user_can( 'ims_manage_galleries' ) ) 
 	die( );
 
-
 //bulk actions
 if( !empty( $_GET['doaction'] ) ){
 	check_admin_referer( 'ims_images' );
@@ -70,13 +69,11 @@ if( isset( $_POST['updategallery'] ) ){
 	$errors = update_gallery_info( $this->opts['disablestore'] );
 }
 
-
 // update gallery info
 if( isset( $_POST['rebuildimgs'] ) ){
 	check_admin_referer( 'ims_update_gallery' );
 	$errors = recreate_gallery_metadata( $this->opts['disablestore'] );
 }
-
 
 $message[1] 	= __( 'Trash emptied.', ImStore::domain );
 $message[2] 	= __( 'Image deleted.', ImStore::domain );
@@ -89,39 +86,39 @@ $message[7] 	= sprintf( __( '%s images published.', ImStore::domain ), $_GET['c'
 $message[8] 	= sprintf( __( '%d galleries moved to trash.', ImStore::domain ), $_GET['c'] );
 $message[9] 	= __( 'The images were created succesfully.', ImStore::domain );
 
-global $wpdb;
+global $wpdb, $user_ID;
+
 $gal_id 		= intval( $_GET['id'] );
-$date_format 	= get_option( 'date_format' );
 $date_format 	= get_option( 'date_format' );
 $pageid			= get_option( 'ims_page_secure' );
 $status 		= ( $_GET['status'] ) ? $_GET['status'] : 'publish';
 $is_trash 		= ( isset( $_GET['status'] ) ) && ( $_GET['status'] == 'trash' );
 $columns 		= get_column_headers( 'toplevel_page_' . IMSTORE_FOLDER . '-edit' );
-$hidden			= implode( '|', get_hidden_columns( 'toplevel_page_' . IMSTORE_FOLDER . '-edit' ) ) ;
+$hidden			= implode( '|', (array)get_hidden_columns( 'toplevel_page_' . IMSTORE_FOLDER . '-edit' ) ) ;
 $nonce 			= '&_wpnonce=' . wp_create_nonce( 'ims_image_link' );
 $imgnonce 		= '&_wpnonce=' . wp_create_nonce( "ims_edit_image" ) . "&TB_iframe=true&height=570";
-
 $order 			= ( $_sort = get_post_meta( $gal_id, '_ims_order', true ) ) ? $_sort : $this->opts['imgsortdirect'];
 $sortby 		= ( $_sortby = get_post_meta( $gal_id, '_ims_sortby', true ) ) ? $_sortby : $this->opts['imgsortorder'];
-
-global $user_ID;
-$closed = get_user_meta( $user_ID , 'closedpostboxes_toplevel_page_image-store-edit' ) ;
-$closed = implode(',', (array)$closed[0] );
+$closed 		= get_user_meta( $user_ID, 'closedpostboxes_toplevel_page_image-store-edit' );
+$closed 		= implode(',', (array)$closed[0] );
 
 $gallery 		= get_post( $gal_id );
-$expire 		= ( $gallery->post_expire != '0000-00-00 00:00:00') ? date_i18n( $date_format, strtotime( $gallery->post_expire ) ) : '';
 $gallerymeta 	= get_post_custom( $gal_id );
+$expire 		= ( $gallery->post_expire != '0000-00-00 00:00:00') ? date_i18n( $date_format, strtotime( $gallery->post_expire ) ) : '';
 
-foreach ( $gallerymeta as $key => $value ) 
-	$gallery->$key = $value[0];
+foreach ( $gallerymeta as $key => $value ){
+	if( is_serialized( $value[0] ) )
+		$gallery->$key = unserialize( $value[0] );
+	else $gallery->$key = $value[0];
+} 
 
 $images = get_posts( array( 
-	'post_parent' => $gal_id, 
-	'post_type' => 'ims_image', 
-	'orderby' => trim($sortby),
-	'order' => trim($order),
-	'numberposts' => -1,
-	'post_status' => $status
+	'post_parent' 	=> $gal_id, 
+	'post_type' 	=> 'ims_image', 
+	'orderby' 		=> trim($sortby),
+	'order' 		=> trim($order),
+	'numberposts' 	=> -1,
+	'post_status' 	=> $status
 ));
 
 
@@ -147,7 +144,6 @@ $images = get_posts( array(
 	<div class="updated fade" id="message"><p><?php echo $message[$_GET['ms']] ?></p></div><?php }?>
 	
 	<!-- GALLERY INFO-->
-	
 	<div id="gallery-info" class="postbox<?php if( preg_match( "/(gallery-info)/i", $closed ) ) echo ' closed' ?>">
 	<div class="handlediv" title="Click to toggle"><br></div>
 	<h3 class="hndle"><span><?php _e( 'Gallery Information', ImStore::domain )?></span></h3>
@@ -160,16 +156,16 @@ $images = get_posts( array(
 		?>
 		<table class="ims-table" >
 		 	<tr>
-				<td width="18%"><?php _e( 'Folder path', ImStore::domain )?></td>
+				<td scope="row" width="18%"><?php _e( 'Folder path', ImStore::domain )?></td>
 				<td width="30%">
 					<?php echo $gallery->_ims_folder_path ?> 
 					<input type="hidden" name="ims_folder_path" value="<?php echo $gallery->_ims_folder_path ?>" />
 				</td>
-				<td width="18%"><?php _e( 'Gallery ID', ImStore::domain )?></td>
-				<td><?php echo $gallery->_ims_gallery_id?></td>
+				<td width="18%"><label for="_ims_gallery_id"><?php _e( 'Gallery ID', ImStore::domain ) ?></label></td>
+				<td><input type="text" name="_ims_gallery_id" id="_ims_gallery_id" class="inputmd" value="<?php echo $gallery->_ims_gallery_id ?>" /></td>
 			</tr>
 			<tr>
-				<td width="18%">
+				<td scope="row" width="18%">
 					<label for="post_title"><?php _e( 'Gallery Name', ImStore::domain )?>
 					<small>(<?php _e( 'required', ImStore::domain )?>)</small></label>
 				</td>
@@ -185,7 +181,7 @@ $images = get_posts( array(
 				</td>
 			</tr>
 			<tr>
-				<td valign="top"><label for="post_password"><?php _e( 'Password', ImStore::domain )?></label></td>
+				<td scope="row" valign="top"><label for="post_password"><?php _e( 'Password', ImStore::domain )?></label></td>
 				<td><input type="text" name="post_password" id="post_password" value="<?php echo esc_attr( $gallery->post_password ) ?>" class="inputxl" /></td>
 				<td><label for="expire" class="date-icon"><?php _e( 'Expiration Date', ImStore::domain )?>	</label></td>
 				<td><input type="text" name="expire" id="expire" class="inputmd" value="<?php echo $expire ?>" />
@@ -194,40 +190,62 @@ $images = get_posts( array(
 			</tr>
 			<?php if( !$this->opts['disablestore'] ){ ?>
 			<tr>
-				<td><label for="ims_tracking"><?php _e( 'Tracking Number', ImStore::domain )?></label></td>
+				<td scope="row"><label for="ims_tracking"><?php _e( 'Tracking Number', ImStore::domain )?></label></td>
 				<td><input type="text" name="ims_tracking" id="ims_tracking" value="<?php echo esc_attr( $gallery->ims_tracking )?>" class="inputxl" /></td>
 				<td><label for="_ims_price_list"><?php _e( 'Price list', ImStore::domain)?>
 					<small>(<?php _e( 'required', ImStore::domain )?>)</small></label>
-				</td>
+					</td>
 				<td><?php $lists = $this->get_ims_pricelists( );?>
 					<select name="_ims_price_list" id="_ims_price_list" >
 						<option value=""><?php _e( 'Select a list &#8212;', ImStore::domain )?></option>
 						<?php foreach( $lists as $list ):?>
 						<option value="<?php echo $list->ID?>" <?php selected( $list->ID, $gallery->_ims_price_list )?>><?php echo $list->post_title ?></option>
 						<?php endforeach?>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<!--<td valign="top"><label for="ims_downloads"><?php _e( 'Downloads', ImStore::domain )?></label></td>
-				<td><input type="text" name="ims_downloads" id="ims_downloads" value="<?php echo $gallery->ims_downloads ?>" class="inputsm"/></td>
-				<td valign="top"><label for="ims_download_max"><?php _e( 'Downloads allowed', ImStore::domain )?></label></td>
-				<td><input type="text" name="ims_download_max" id="ims_download_max" value="<?php echo $gallery->ims_download_max ?>" class="inputsm"/></td>-->
+						</select>
+					</td>
 			</tr>
 			<?php } ?>
 			<tr>
-				<td><label for="ims_visits"><?php _e( 'Visits', ImStore::domain )?></label></td>
+				<td scope="row"><label for="ims_visits"><?php _e( 'Visits', ImStore::domain )?></label></td>
 				<td><input type="text" name="ims_visits" id="ims_visits" value="<?php echo $gallery->ims_visits ?>" class="inputmd"/></td>
-				<td><label for="_ims_customer"><?php _e( 'Customer', ImStore::domain )?></label></td>
-				<td><?php $customers = $this->get_ims_active_customers( ) ?>
-					<select name="_ims_customer" id="_ims_customer">
-						<option value=""><?php _e( 'Select customer &#8212;', ImStore::domain )?></option>
-						<?php foreach( $customers as $customer ):?>
-						<option value="<?php echo $customer->ID?>" <?php selected( $customer->ID, $gallery->_ims_customer )?>><?php echo $customer->user_login?></option>
-						<?php endforeach?> 
-						</select>
+				<td><label for="customers"><?php _e( 'Customers', ImStore::domain )?></label></td>
+				<td rowspan="2" class="inline-editor" valign="top">
+					<?php $customers = $this->get_ims_active_customers( ) ?>
+					<div class="inline-edit-col">
+						<ul class="cat-checklist category-checklist">
+							<?php  
+							if( is_array( $gallery->_ims_customer ) ){
+								foreach( $customers as $customer ){
+									$checked = ( ImStore::fast_in_array( $customer->ID, $gallery->_ims_customer ) ) ? ' checked="checked"' : '';
+									echo '<li><label>
+									<input type="checkbox" name="customers[]" value="'. $customer->ID . '"'. $checked .' /> '. 
+									$customer->user_login .'</label></li>';
+								}
+							}else{
+								foreach( $customers as $customer ){
+									$checked = ( $customer->ID == $gallery->_ims_customer ) ? ' checked="checked"' : '';
+									echo '<li><label>
+									<input type="checkbox" name="customers[]" value="'. $customer->ID . '"'. $checked .' /> '. 
+									$customer->user_login .'</label></li>';
+								}
+							}
+							?>
+ 
+						</ul>
+					</div>
 				</td>
 			</tr>
+			<tr>
+				<td valign="top"><label for="status"><?php _e( 'Status', ImStore::domain )?></label></td>
+				<td valign="top">
+				<select name="status" id="status">
+					<option value="publish"<?php selected( $gallery->post_status, 'publish')?>><?php _e( 'Publish', ImStore::domain )?></option>
+					<option value="pending"<?php selected( $gallery->post_status, 'pending')?>><?php _e( 'Pending', ImStore::domain )?></option>
+					<option value="trash"<?php selected( $gallery->post_status, 'trash')?>><?php _e( 'Move to Trash', ImStore::domain )?></option>
+				</select>
+				</td>
+				<td>&nbsp;</td>
+				</tr>
 			<tr>
 				<td>&nbsp;</td>
 				<td class="submit"><input type="submit" name="updategallery" value="<?php _e( 'Update information', ImStore::domain)?>" class="button-primary" /></td>
@@ -326,15 +344,15 @@ $images = get_posts( array(
 						<?php echo __('Format: ', ImStore::domain ) . str_replace( 'image/', '', $image->post_mime_type )?><br />
 						<?php echo __('Color: ', ImStore::domain ) . $imagemeta[0]['color'] ?><br />
 						<div class="row-actions" id="media-head-<?php echo $id?>">
-							<?php if ( $is_trash ):?>
+						<?php if ( $is_trash ):?>
 							<a href="<?php echo $pagenowurl . "&edit=1&id=$gal_id&action=delete&img=$id{$nonce}"?>">Delete</a> | 
 							<a href="<?php echo $pagenowurl . "&edit=1&id=$gal_id&action=publish&img=$id{$nonce}"?>">Restore</a>
-							<?php else: ?>
-       <?php $inonce = wp_create_nonce( "image_editor-$id" );?>
+						<?php else: ?>
+							<?php $inonce = wp_create_nonce( "image_editor-$id" );?>
 							<a href="<?php echo IMSTORE_ADMIN_URL . "image-edit.php?editimage=$id$imgnonce" ?>" class="thickbox">Edit</a> |
-       <a href="<?php echo $pagenowurl . "&edit=1&id=$gal_id&action=trash&img=$id{$nonce}"?>">Trash</a>
-       <img src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) )?>" class="imgedit-wait-spin" alt="loading"/>
-							<?php endif?>
+							<a href="<?php echo $pagenowurl . "&edit=1&id=$gal_id&action=trash&img=$id{$nonce}"?>">Trash</a>
+							<img src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) )?>" class="imgedit-wait-spin" alt="loading"/>
+						<?php endif?>
 						</div>
 					</td>
 					<?php break;
@@ -350,6 +368,12 @@ $images = get_posts( array(
 					case 'imauthor':?>
 					<td class="column-<?php echo $key . $class?>" >
 						<?php echo $wpdb->get_var( "SELECT display_name FROM $wpdb->users WHERE ID = $image->post_author" ) ?>
+					</td>
+					<?php break;
+					
+					case 'uploaddate':?>
+					<td class="column-<?php echo $key . $class?>" >
+						<?php echo ( $image->post_date != '0000-00-00 00:00:00' ) ? date_i18n( $date_format, strtotime( $image->post_date ) ) : ''?>
 					</td>
 					<?php break;
 					
@@ -583,21 +607,27 @@ function update_gallery_info( $disablestore ){
 	$expire = ( !empty( $_POST['expire']) ) ? $_POST['ims_expire'] : '' ;
 	$gallery = array(
 			'ID'			=> $galleid,
-			'post_expire'	=> $gal_expire,
+			'post_expire'	=> $expire,
+			'post_status'	=> $_POST['status'],
 			'post_date'		=> $_POST['post_date'],
 			'post_title' 	=> $_POST['post_title'],
 			'post_password'	=> $_POST['post_password'],
 	);	
-	wp_update_post( $gallery );
+	//wp_update_post( $gallery );
+	$wpdb->update( $wpdb->posts, $gallery, array( 'ID' => $galleid ), array( '%d', '%s', '%s', '%s', '%s', '%s' ) );
 	
 	update_post_meta( $galleid, 'ims_visits', $_POST['ims_visits'] );	
+	update_post_meta( $galleid, '_ims_customer', $_POST['customers'] );	
 	update_post_meta( $galleid, 'ims_tracking', $_POST['ims_tracking'] );
 	update_post_meta( $galleid, 'ims_downloads', $_POST['ims_downloads'] );	
-	update_post_meta( $galleid, '_ims_customer', $_POST['_ims_customer'] );	
 	update_post_meta( $galleid, '_ims_price_list', $_POST['_ims_price_list'] );	
 	update_post_meta( $galleid, 'ims_download_max', $_POST['ims_download_max'] );
 	
-	wp_redirect( $pagenowurl . "&edit=1&id=$galleid&ms=4" );
+	if(!empty( $_POST['_ims_gallery_id'] )) 
+		update_post_meta( $galleid, '_ims_gallery_id', $_POST['_ims_gallery_id'] );
+	
+	if( $_POST['status'] == 'trash' ) wp_redirect( $pagenowurl );
+	else wp_redirect( $pagenowurl . "&edit=1&id=$galleid&ms=4" );
 }
 
 

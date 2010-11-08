@@ -49,7 +49,7 @@ class ImStoreFront{
 		
 		if( $this->opts['imswidget'] ) include_once ( IMSTORE_ABSPATH . '/admin/widget.php' );
 	}
-	
+
 	
 	/**
 	 * Populate query to allow the use 
@@ -245,8 +245,11 @@ class ImStoreFront{
 					echo '<div class="ims-message error">'. $output .'</div>';
 				} 
 			}
+			
 			//not login
-			if( !current_user_can( 'ims_manage_galleries' ) && empty( $_COOKIE['ims_cookie_' . COOKIEHASH] ) ){
+			if( empty( $_COOKIE['ims_cookie_' . COOKIEHASH] ) && 
+				!current_user_can('ims_manage_galleries') && 
+				!current_user_can( 'ims_read_galleries' ) ){
 				$this->get_login_form( );
 			}else{
 				$this->is_secure = 1;
@@ -523,7 +526,7 @@ class ImStoreFront{
 				AND post_status = 'publish'
 				AND post_password = '' )
 			GROUP BY p.post_parent
-			ORDER BY menu_order, p.post_date DESC "
+			ORDER BY p.menu_order ASC, p.post_date DESC "
 		);
 		
 		if( empty( $posts ) ){
@@ -699,7 +702,7 @@ class ImStoreFront{
 				<spam class="linebreak"></spam>
 				<label for="' . $pwdlabel . '">' . __( "Password:", ImStore::domain ) . '</label> <input name="' . $pwdlabel . '" id="' . $pwdlabel . '" type="password" />
 				<spam class="linebreak"></spam>
-				<input type="submit" name="login-imstore" value="' . esc_attr( __( "Submit", ImStore::domain ) ) . '" />
+				<input type="submit" name="login-imstore" value="' . esc_attr( __( "Log In", ImStore::domain ) ) . '" />
 				<input type="hidden" name="_wpnonce" value="'.$nonce.'" />
 			</div>
 		</form>
@@ -761,7 +764,7 @@ class ImStoreFront{
 		<div class="ims-field ims-submit">
 			<input name="add-to-cart" type="submit" value="<?php _e( 'Add to cart', ImStore::domain )?>" class="button" />
 			<input type="hidden" name="ims-to-cart-ids" id="ims-to-cart-ids" />
-			<input type="hidden" name="gallery-id" id="gallery-id" value="<?php echo $this->gallery_id?>" />
+			<input type="hidden" name="imstore-url" id="imstore-url" value="<?php echo IMSTORE_ADMIN_URL?>" />
 			<input type="hidden" name="gallery-id" id="gallery-id" value="<?php echo $this->gallery_id?>" />
 			<input type="hidden" name="_wpnonce" id="_wpnonce" value="<?php echo wp_create_nonce( "ims_ajax_favorites" )?>" />
 		</div>

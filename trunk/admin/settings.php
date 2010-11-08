@@ -16,6 +16,9 @@ if( preg_match( '#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'] ) )
 if( !current_user_can( 'ims_change_settings' ) ) 
 	die( );
 
+//Upgrade function 1.1.1 = 1.2.0
+if( $this->useropts['caplist'][2] == 'ims_import_images' )
+	unset( $this->useropts['caplist'][2] );
 
 //save gallery settings 
 if ( !empty( $_POST['updategalleries'] ) ) { 
@@ -175,7 +178,8 @@ if( !empty( $_POST['updateuser'] ) ) {
 	wp_redirect( $pagenowurl . '&ms=2&userid=' . $_GET['userid'].'#caps_settings' );	
 }
 
-$this->opts += get_option( 'ims_dis_images' );
+$ims_sizes = get_option( 'ims_dis_images' );
+if(is_array($ims_sizes)) $this->opts += $ims_sizes;
 
 $message[1] = 		__( "Cache cleared.", ImStore::domain );
 $message[2] = 		__( 'The user was updated.', ImStore::domain );
@@ -187,10 +191,13 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 <div class="wrap imstore">
 	
 	<form action="https://www.paypal.com/cgi-bin/webscr" method="post" class="paypal-donate">
+		<div class="paypalinfo">
+		<img src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" alt="donate">
 		<input type="hidden" name="cmd" value="_s-xclick">
 		<input type="hidden" name="hosted_button_id" value="D64HFDXBBMXEG">
-		<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-		<img border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" alt="donate">
+		<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_SM.gif" name="submit" alt="PayPal - The safer, easier way to pay online!">
+		<a href="http://imstore.xparkmedia.com/" title="image store wp plugin"><?php _e("or help promote the imstore site.", ImStore::domain )?></a>
+		</div>
 	</form>
 
 	
@@ -634,6 +641,9 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 	</div>
 	
 	<?php } ?>
+	
+	<?php if( current_user_can( "ims_change_permissions" ) ){?>
+	
 	<!-- Set User Permissions -->
 	
 	<div id="caps_settings" class="ims-box">
@@ -652,7 +662,8 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 		<input type="submit" name="updateuser" class="button-primary" value="<?php _e( 'Save User', ImStore::domain )?>"/>
 	</form>
 	</div>
-
+	
+	<?php } ?>
 
 	<!-- Remove Plugin Data -->
 
