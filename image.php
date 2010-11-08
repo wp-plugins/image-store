@@ -120,7 +120,7 @@ class ImStoreImage{
 			//image watermark
 			}elseif( $opts['watermark'] == 2 ){
 				
-				$wmpath		= ABSPATH . str_ireplace( get_bloginfo('url'), '', $opts["watermarkurl"] );
+				$wmpath		= WP_CONTENT_DIR . str_ireplace( WP_CONTENT_URL, '', $opts["watermarkurl"] );
 				$wmtype 	= wp_check_filetype( basename( $opts["watermarkurl"] ) );
 				
 				if( file_exists( $wmpath ) ){
@@ -141,7 +141,7 @@ class ImStoreImage{
 					$wmratio 	= $this->image_ratio( $wminfo[0], $wminfo[1], max($info[0], $info[1] ) );
 					
 					$x = ( $info[0] - $wmratio['w'] )/2; 
-					$y = ( $info[1] - $wmratio['h'] )/1.48;
+					$y = ( $info[1] - $wmratio['h'] )/1.7;
 					
 					$wmnew = imagecreatetruecolor( $wmratio['w'], $wmratio['h'] );
 					
@@ -230,8 +230,8 @@ class ImStoreImage{
 	function image_ratio( $w, $h, $immax ) {
 		$max	= max( $w, $h );
 		$r		= $max > $immax ? ( $immax / $max) : 1;
-		$i['w']	= ceil( $w * $r * .4 );
-		$i['h']	= ceil( $h * $r * .4 );
+		$i['w']	= ceil( $w * $r * .6 );
+		$i['h']	= ceil( $h * $r * .6 );
 		return $i;
 	}
 

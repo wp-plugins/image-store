@@ -365,9 +365,7 @@ function ims_customers_count_links( ){
 			)"
 		);
 	}
-	
 	return $count;
-	
 }
 
 
@@ -418,7 +416,7 @@ function create_ims_customer( ){
 	if( is_wp_error( $user_id ) && !isset( $_POST['update_customer'] ) )
 		return $user_id;
 
-	$meta_keys = array ( 'ims_zip', 'ims_city', 'ims_phone', 'ims_state', 'ims_status', 'ims_address', 'ims_enewsletter');
+	$meta_keys = array ( 'ims_zip', 'ims_city', 'ims_phone', 'ims_state', 'ims_address', 'ims_enewsletter');
 	foreach( $meta_keys as $key ){
 		if( !empty( $_POST[$key] ) )
 		update_user_meta( $user_id, $key, $_POST[$key] );

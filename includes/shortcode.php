@@ -25,6 +25,7 @@ class ImStoreShortCode{
 	/**
 	 * Core function display gallery
 	 *
+	 * @param array $atts
 	 * @return void
 	 * @since 0.5.0 
 	 */
@@ -110,6 +111,7 @@ class ImStoreShortCode{
 	/**
 	 * Display galleries
 	 *
+	 * @param array $atts
 	 * @return array
 	 * @since 0.5.3 
 	 */
@@ -142,6 +144,7 @@ class ImStoreShortCode{
 	/**
 	 * Display slideshow
 	 *
+	 * @param array $atts
 	 * @return array
 	 * @since 0.5.3 
 	 */

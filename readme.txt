@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: e-commerce,shop,store,photo,picture,image,galleries,imstore,image-store,slideshow,gallery,sale,photographers,shop,online
 Requires at least: 3.0.0
 Tested up to: 3.0.1
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 
 Image Store (ImStore) is a image gallery and store/shop plugin for WordPress with a slideshow and paypal integration.
 
@@ -18,6 +18,7 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 
 * Example http://imstore.xparkmedia.com/image-store/
 * Laguages http://imstore.xparkmedia.com/languages/
+* Shortcode guide http://imstore.xparkmedia.com/usage/
 
 = Features =
 
@@ -47,12 +48,8 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * Customer menu: Keep track of your galleries and customers
 * Pugin uninstall: Remove all entries added by the plugin 
 
-
 = To Come =
 * Google checkout integration
-* Sales Dashboard: display monthly highlihts on sales
-* Customer/User sync: allow user keep track of their downloads and galleries.
-
 
 == Installation ==
 
@@ -82,53 +79,30 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * DON'T provide download option for print size images use this option only for pixel sizes. 
 
 
-= Shortcode Option =
-**v0.5.3 and older**
-
-`[ims-gallery] // will display recent images added from all galleries.`
-`[ims-gallery id="0" slideshow="0" caption="1" orderby="0" order="0" number="false"]`
-
-= Options =
-* $id:
-	- gallery id.
-* $slideshow:
-	- (1|true) display gallery as slideshow
-	- (0|false) display imaes only
-* $caption:
-	- (1|true) show caption
-	- (0|false) do not display caption
-* $orderby:
-	- (0|false) use gallery default option set on setting or gallery sort.
-	- (date) sort by image upload date.
-	- (title) sort by image title.
-	- (custom) sort by custom order.
-	- (caption) sort by caption.
-* $order:
-	- (0|false) use gallery default option set on setting or gallery sort.
-	- (ASC) ascending order 
-	- (DESC) descending order 
-* $number:
-	- (false) show all the images on gallery or 10 if no gallery id is provided.
-	- (any number) how many images to show.
-
-
 == Frequently Asked Questions ==
 
-* How do I change the thumbnail side on the fromend for the photo page?
-Before installing the plugin set the "Thumbnail size" setting under Wordpress admin > settings > media to the decired size.
-After the plugin was installed set the "Thumbnail size" and reset the Image store settings to their defaults Imstore 
-under Image Store > Settings > Reset
-
-* How can I make donation to continue the plugin development?
-With the plugin installed navigate to Image Store > settings and click on the donate button.
+* http://imstore.xparkmedia.com/troubleshooting/
 
 
 == Changelog ==
 
+= 1.2.0 =
+* Added: User gallery screen.
+* Added: Option for admin to edit gallery id.
+* Added: Status label on gallery list and edit screen.
+* Added: Allow to move core files to sub directory.
+* Added: feature to allow user keep track of their galleries.
+* Fixed: Image creation date.
+* Fixed: Add images to favorite not working.
+* Fixed: Price list not seving image size unit.
+* Fixed: Issue of not been able to uplaod small images.
+* Changed: Flash image upload notification.
+* Changed: Gallery permissions.
+
 = 1.1.1 =
-* Fix: Sales CSV downlaod permissions.
-* Fix: Total price format when using email notification only.
-* Fix: Serialize data showing on the image-size-dropdown menu when adding images to car.
+* Fixed: Sales CSV download permissions.
+* Fixed: Total price format when using email notification only.
+* Fixed: Serialize data showing on the image-size-dropdown menu when adding images to car.
 * Admin: CSS modifications.
 * Added: Image title on sale reports.
 
@@ -143,49 +117,49 @@ With the plugin installed navigate to Image Store > settings and click on the do
 * Added: Image size units ( in. cm. px.)
 * Added: Settings for the required fields on the checkout page.
 * Added: Feature recreate images after image settings have been changed.
-* Fix: Image cache after browser's cache is cleared.
+* Fixed: Image cache after browser's cache is cleared.
 * Changed: create new galleries with pending status instead of publish.
 
 = 1.0.2 =
-* Fix: Paypal IPN issues.
-* Fix: Disable image rss.
-* Fix: Incorrect paypal cart currency type.
-* Fix: "mini" image size showing instead of preview.
+* Fixed: Paypal IPN issues.
+* Fixed: Disable image rss.
+* Fixed: Incorrect paypal cart currency type.
+* Fixed: "mini" image size showing instead of preview.
 * Added: Orders by email notification only (disable paypal).
 
 = 1.0.1 =
-* Fix: Translation issues.
+* Fixed: Translation issues.
 
 = 1.0.0 =
 * Improved dynamic image cache.
-* Fix: misspells.
-* Fix: save gallery settings.
-* Fix: double slash on permalinks.
+* Fixed: misspells.
+* Fixed: save gallery settings.
+* Fixed: double slash on permalinks.
 * Removed "add to favorites" link from unsecure galleries.
 * Added: Spanish translation
-* Fix: WP thumbnail preview conflict.
-* Fix: file not being deleted from server when image was deleted.
+* Fixed: WP thumbnail preview conflict.
+* Fixed: file not being deleted from server when image was deleted.
 
 = 0.5.5 =
 * Added: drag and drop image sort (admin).
 * Security fix: image url.
-* Fix: Image edit didn't create new image when thumb only was selected.
-* Fix: php error on dynamic css file for IE colorbox support.
+* Fixed: Image edit didn't create new image when thumb only was selected.
+* Fixed: php error on dynamic css file for IE colorbox support.
 
 
 = 0.5.4 =
-* Fix: Flash image upload
-* Fix: Preview size settings not saving when updated.
-* Fix: Add new menu "Save into" not displaying galleries for selection.
+* Fixed: Flash image upload
+* Fixed: Preview size settings not saving when updated.
+* Fixed: Add new menu "Save into" not displaying galleries for selection.
 
 
 = 0.5.3 =
 * Added: widget.
 * Added: image rss.
 * Added: gallery shortcode.
-* Fix: permalink confict.
-* Fix: js error with new slideshow options.
-* Fix: admind displaying wrong expiration date.
+* Fixed: permalink confict.
+* Fixed: js error with new slideshow options.
+* Fixed: admind displaying wrong expiration date.
 * Removed: columns setting, not needed controled by css.
 
 
@@ -194,10 +168,10 @@ With the plugin installed navigate to Image Store > settings and click on the do
 * CSS modifications.
 * Added: Slideshow options
 * Added: colorbox gallery feature.
-* Fix: js errors on IE.
-* Fix: watermark text location.
-* Fix: expire gallery query/cron
-* Fix: CSS AlphaImageLoader image url for (color box)IE.
+* Fixed: js errors on IE.
+* Fixed: watermark text location.
+* Fixed: expire gallery query/cron
+* Fixed: CSS AlphaImageLoader image url for (color box)IE.
 * Text change: Inside USA to Local.
 * Relocated colorbox styles and images.
 
@@ -206,8 +180,8 @@ With the plugin installed navigate to Image Store > settings and click on the do
 * HTML clean up
 * CSS modifications.
 * Add image cache( htaccess ).
-* Fix: permalinks admin/frontend.
-* Fix: images displaying on the frontend with trash status.
+* Fixed: permalinks admin/frontend.
+* Fixed: images displaying on the frontend with trash status.
 * Remove: login link from unsecure galleries.
 * Increase RAM memory for swfupload to process big images.
 
@@ -233,13 +207,4 @@ Ronnie Garcia, Benj Arriola, RonnieSan ( http://www.uploadify.com/ )
 
 
 == Screenshots ==
-
-1. Screenshot Menu
-2. Screenshot New Gallery
-3. Screenshot Pricing
-4. Screenshot Sales / Screen Options
-5. Screenshot Settings
-6. Screenshot Galley Options
-7. Screenshot Slideshow
-8. Screenshot Pricelist
-9. Screenshot Shopping Cart
+* http://imstore.xparkmedia.com/image-store/

@@ -47,7 +47,7 @@ class ImStoreFeeds{
 	function get_feed_url( ){
 		$var = get_query_var( 'imsgalid' );
 		if( $var && $this->permalinks ) $galid = '/gal-' . $var;
-		elseif( $var && !$this->permalinks ) $galid = '&amp;imsgalid=' . $var;
+		elseif( $var && !$this->permalinks ) $galid = '&imsgalid=' . $var;
 		else $galid = '';
 		
 		if( $this->permalinks ) return get_bloginfo( 'url' ) . "{$galid}/feed/imstore/";

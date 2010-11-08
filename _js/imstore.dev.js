@@ -58,7 +58,7 @@ jQuery(document).ready(function($){
 	// remove from favorites
 	$('.remove-from-favorite a').click(function(){
 		imgids = $(".ims-innerbox input:checked").map(function(){ return $(this).val(); }).get().join(',');
-		$(".ims-innerbox input:checked").each(function(){ $(this).parents('dt').remove(); }); 
+		$(".ims-innerbox input:checked").each(function(){ $(this).parents('dt,li').remove(); }); 
 		$.get( imsurl+'/ajax.php', { _wpnonce:nonce, galid:galid, action:"remove-favorites", imgids:imgids }, 
 		function(data){
 			response = data.split('|');

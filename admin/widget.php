@@ -16,7 +16,7 @@ class ImStoreWidget extends WP_Widget {
 	 * @since 0.5.3
 	 */
 	function ImStoreWidget( ) {
-		$widget_ops = array( 'classname' => 'ims-widget', 'description' => __( "Image Store Widget" , $this->domain ) );
+		$widget_ops = array( 'classname' => 'ims-widget', 'description' => __( "Display images from unsecure galleries" , $this->domain ) );
 		$this->WP_Widget( 'ims-widget', __( 'Image Store', $this->domain ), $widget_ops );
 	}
 	
@@ -167,7 +167,7 @@ class ImStoreWidget extends WP_Widget {
 		$nonce 		= '_wpnonce=' . wp_create_nonce( 'ims_secure_img' );
 		
 		$output = "<{$itemtag} class='ims-gallery'>";
-		foreach ( $images as $image ){
+		foreach( (array)$images as $image ){
 
 			$output .= "<{$icontag}>";
 			$output .= '<img src="' . IMSTORE_URL . "image.php?$nonce&amp;img={$image->ID}&amp;mini=1" . '" class="ims-widget-img" alt="' . $image->post_title .'" />';			$output .= "</{$icontag}>";
