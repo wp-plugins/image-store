@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: e-commerce,shop,store,photo,picture,image,galleries,imstore,image-store,slideshow,gallery,sale,photographers,shop,online
 Requires at least: 3.0.0
 Tested up to: 3.0.1
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 
 Image Store (ImStore) is a image gallery and store/shop plugin for WordPress with a slideshow and paypal integration.
 
@@ -85,6 +85,10 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 
 
 == Changelog ==
+
+= 1.2.2 =
+* Fixed: new installation and capabilities problem.
+* Fixed: settings reset after plugin update.
 
 = 1.2.1 =
 * Fixed: installation problem.
@@ -211,4 +215,4 @@ Ronnie Garcia, Benj Arriola, RonnieSan ( http://www.uploadify.com/ )
 
 == Screenshots ==
 
-http://imstore.xparkmedia.com/image-store/
+http://imstore.xparkmedia.com/

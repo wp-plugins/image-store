@@ -29,7 +29,7 @@ class ImStoreInstaller {
 	function __construct( ){
 		
 		$version = get_option( 'imstore_version' );
-		if ( ImStore::version >= $version ) return;
+		if ( ImStore::version >= $version && !empty($version) ) return;
 		
 		self::imstore_default_options( );
 		
