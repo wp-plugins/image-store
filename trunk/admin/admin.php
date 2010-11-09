@@ -305,11 +305,9 @@ class ImStoreAdmin extends ImStore{
 	function apply_user_caps( ){
 		global $current_user;
 
-		
 		$customer = get_role( 'customer' );
-		if( !$customer->has_cap( 'ims_read_galleries' ) ) 
+		if( is_object($customer) && !$customer->capabilities['ims_read_galleries'] )
 			$customer->add_cap( 'ims_read_galleries' );
-		
 		
 		if( $current_user->has_cap( 'administrator' ) )
 			return;
