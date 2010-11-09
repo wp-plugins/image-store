@@ -91,7 +91,7 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * Fixed: settings reset after plugin update.
 
 = 1.2.1 =
-* Fixed: installation problem.
+* Unstable
 
 = 1.2.0 =
 * Added: User gallery screen.
