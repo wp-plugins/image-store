@@ -757,8 +757,8 @@ class ImStoreFront{
 			<label for="_imstore-color"><?php _e( 'Color', ImStore::domain )?> </label>
 			<select name="_imstore-color" id="_imstore-color" class="select">
 				<option value="color"><?php _e( 'Full Color', ImStore::domain )?></option>
-				<option value="ims_bw"><?php _e( 'Sepia', ImStore::domain )?> + <?php echo $this->listmeta['ims_bw']?></option>
-				<option value="ims_sepia"><?php _e( 'Black &amp; White', ImStore::domain )?> + <?php echo $this->listmeta['ims_sepia']?></option>
+				<option value="ims_sepia"><?php _e( 'Sepia', ImStore::domain )?> + <?php echo $this->listmeta['ims_bw']?></option>
+				<option value="ims_bw"><?php _e( 'Black &amp; White', ImStore::domain )?> + <?php echo $this->listmeta['ims_sepia']?></option>
 			</select>
 		</div>
 		<div class="ims-field ims-submit">
