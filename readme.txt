@@ -85,6 +85,10 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 
 
 == Changelog ==
+= 1.2.4 =
+* Fixed: Typos.
+* Fixed: Flash upload not working.
+* Changed: Gallery status display.
 
 = 1.2.3 =
 * Fixed: shopping cart showing wrong color selection.
