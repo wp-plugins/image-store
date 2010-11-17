@@ -424,8 +424,8 @@ class ImStoreAdmin extends ImStore{
 	 * @since 0.5.0 
 	 */
 	function load_admin_ims_styles( ) {
-		wp_enqueue_style( 'adminstyles', IMSTORE_URL .'_css/admin.css', false, '0.5.0', 'all' );
-		wp_enqueue_style( 'datepicker', IMSTORE_URL .'_css/jquery-ui-datepicker.css', false, '0.5.0', 'all' );
+		wp_enqueue_style( 'adminstyles', IMSTORE_URL .'_css/admin.css', false, ImStore::version, 'all' );
+		wp_enqueue_style( 'datepicker', IMSTORE_URL .'_css/jquery-ui-datepicker.css', false, ImStore::version, 'all' );
 		
 		if( $_GET['page'] == 'ims-sales' ) wp_enqueue_style( 'dashboard' );
 		if( $_GET['page'] == ( 'ims-settings' || IMSTORE_FOLDER ) ) wp_enqueue_style( 'thickbox' );

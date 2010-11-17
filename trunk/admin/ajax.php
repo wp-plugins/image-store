@@ -76,7 +76,7 @@ function ajax_imstore_package_delete( ){
 function ajax_ims_swfupload_path( ){
 	global $wpdb;
 	
-	if( !current_user_can( "ims_import_images" ) )
+	if( !current_user_can( "ims_add_galleries" ) )
 		return;
 	
 	check_ajax_referer( "ims_ajax" );
@@ -97,7 +97,7 @@ function ajax_ims_swfupload_path( ){
 function ajax_ims_flash_image_data( ){
 	global $wpdb;
 	
-	if( !current_user_can( 'ims_import_images' ) )
+	if( !current_user_can( 'ims_add_galleries' ) )
 		return false;
 	
 	$galleid 	=  $_GET['galleryid'];

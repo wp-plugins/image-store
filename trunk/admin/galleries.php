@@ -170,7 +170,7 @@ $status_labels = array(
 							<strong><?php 
 							if( !$is_trash ) echo '<a href="' . $pagenowurl . "&amp;edit=1&amp;id=$id".'">'. $gallery->post_title .'</a>';
 							else echo $gallery->post_title ;
-							?></strong>
+							?><?php echo (empty($_GET['status']) && $gallery->post_status != 'publish') ? " &mdash;" . $status_labels[$gallery->post_status]  : '' ?></strong>
 							<div class="row-actions">
 								<?php if ( $is_trash ):?>
 								<a href="<?php echo $pagenowurl . "&amp;action=delete&amp;id=$id{$nonce}"?>"><?php _e( "Delete", ImStore::domain )?></a> | 
@@ -213,8 +213,6 @@ $status_labels = array(
 						case 'datecrtd': ?>
 							<td class="column-<?php echo $key . $class?>" >
 								<?php echo ( $gallery->post_date != '0000-00-00 00:00:00' ) ? date_i18n( $date_format, strtotime( $gallery->post_date ) ) : ''?>
-								<?php echo ( empty($_GET['status'])) ? "<br />". $status_labels[$gallery->post_status]  : '' ?>
-
 							</td>
 						<?php break;
 						

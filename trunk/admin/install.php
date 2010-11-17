@@ -113,7 +113,7 @@ class ImStoreInstaller {
 		$ims_ft_opts['transitionTime']	= 1000;
 		$ims_ft_opts['slideshowSpeed']	= 3200;
 		$ims_ft_opts['autoStart']		= 'false';
-		$ims_ft_opts['playLinkText']	= __( 'Pay', ImStore::domain );
+		$ims_ft_opts['playLinkText']	= __( 'Play', ImStore::domain );
 		$ims_ft_opts['nextLinkText']	= __( 'Next', ImStore::domain );
 		$ims_ft_opts['pauseLinkTex']	= __( 'Pause', ImStore::domain );
 		$ims_ft_opts['closeLinkText']	= __( 'Close', ImStore::domain );
