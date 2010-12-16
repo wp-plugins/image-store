@@ -25,7 +25,7 @@ $format = array( '', "$sym%s", "$sym %s", "%s$sym", "%s $sym");
 	<div class="ims-labels">
 		<span class="title"><?php echo $this->gallery->post_title?></span>
 		<?php if( $this->gallery->post_expire != '0000-00-00 00:00:00' ){ ?>
-		<span class="divider"> | </span>
+		<span class="ims-divider"> | </span>
 		<span class="expires"><?php 
 			echo __( "Expires: ", ImStore::domain ) . date_i18n( get_option( 'date_format' ), strtotime( $this->gallery->post_expire ))
 		?></span>

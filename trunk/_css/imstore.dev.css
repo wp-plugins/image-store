@@ -12,7 +12,7 @@
 #imstore-nav { padding:0; margin:0; list-style:none; font-size:.8em; }
 #imstore-nav li { list-style:none; float:left; padding:5px 8px }
 .ims-labels { padding:12px 8px 5px; color:#888; font-size:.8em; border-top: solid 1px #e7e7e7}
-.ims-labels .title { color:#666; font-weight:bold }
+.ims-labels .ims-title { color:#666; font-weight:bold }
 .ims-tools-nav { position:absolute; right:5px; top:48px; padding:0; margin:0; list-style:none; font-size:.725em; }
 .ims-tools-nav li { list-style:none; float:left; padding:5px}
 .ims-message.success { padding:5px 8px; background-color:#f8ffed; border:solid 1px #8ead4c; margin-bottom:10px;}

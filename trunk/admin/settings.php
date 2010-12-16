@@ -512,7 +512,7 @@ $message[4] = 		__( 'The settings were updated.', ImStore::domain );
 			<td colspan="3"><input type="text" name="paymentname" id="paymentname" class="inputlg" value="<?php $this->_v( 'paymentname' )?>" /></td>
 		</tr>
 -->		<tr>
-			<td scope="row"> <label for="paypalname"><?php _e( 'PayPal API username', ImStore::domain )?></label></td>
+			<td scope="row"> <label for="paypalname"><?php _e( 'PayPal Account email', ImStore::domain )?></label></td>
 			<td><input type="text" name="paypalname" value="<?php $this->_v( 'paypalname' )?>" id="paypalname" class="inputxl" /></td>
 			<td width="20%"><label for="paypalpass"><?php _e( 'PayPal API password', ImStore::domain )?></label> </td>
 			<td><input type="text" name="paypalpass" class="inputxl" 		value="<?php $this->_v( 'paypalpass' )?>" id="livepass" /></td>

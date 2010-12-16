@@ -31,7 +31,7 @@ $colors_options = array(
 	<div class="ims-labels">
 		<span class="title"><?php echo $this->gallery->post_title?></span>
 		<?php if( $this->gallery->post_expire != '0000-00-00 00:00:00' ){ ?>
-		<span class="divider"> | </span>
+		<span class="ims-divider"> | </span>
 		<span class="expires"><?php 
 			echo __( "Expires: ", ImStore::domain ) . date_i18n( get_option( 'date_format' ), strtotime( $this->gallery->post_expire ))
 		?></span>
@@ -159,20 +159,21 @@ $colors_options = array(
 			
 			<input type="hidden" name="ims-total" value="<?php echo $this->cart['total'] ?>" />
 
-			<input type="hidden" name="rm" value="2" />
-			<input type="hidden" name="upload" value="1"/>
-			<input type="hidden" name="cmd" value="_cart"/>
-			<input type="hidden" name="lc" value="<?php echo $this->opts['currency'] ?>" />
-			<input type="hidden" name="page_style" value="<?php bloginfo( 'name' )?>"/>
-			<input type="hidden" name="custom" value="<?php echo $this->cart_cookie ?>"/>
-			<input type="hidden" name="return" value="<?php echo $this->get_permalink( $this->gallery_id, 8 )?>"/>
-			<input type="hidden" name="notify_url" value="<?php echo $this->get_permalink( $this->gallery_id, 6 )?>"/>
-			<input type="hidden" name="cancel_return" value="<?php echo $this->get_permalink( $this->gallery_id, 7 )?>"/>
-			<input type="hidden" name="business" value="<?php echo $this->opts['paypalname']?>" />
-			<input type="hidden" name="currency_code" value="<?php echo $this->opts['currency']?>" />
-			<input type="hidden" name="_wpnonce" id="_wpnonce" value="<?php echo wp_create_nonce( "ims_submit_order" )?>" />					
-			<input type="hidden" name="cbt" value="<?php printf( __( 'Return to %s', ImStore::domain ), get_bloginfo( 'name' ) )?>" />
-			<input type="hidden" name="discount_amount_cart" value="<?php printf( __( 'Return to %s', ImStore::domain ), get_bloginfo( 'name' ) )?>" />
+				<input type="hidden" name="ims-total" value="<?php echo $this->cart['total']?>" />
+				<input type="hidden" name="rm" value="2" />
+				<input type="hidden" name="upload" value="1"/>
+				<input type="hidden" name="cmd" value="_cart"/>
+				<input type="hidden" name="page_style" value="<?php bloginfo('name')?>"/>
+				<input type="hidden" name="custom" value="<?php echo $this->cart_cookie?>"/>
+				<input type="hidden" name="lc" value="<?php echo get_bloginfo('language')?>" />
+				<input type="hidden" name="business" value="<?php echo $this->opts['paypalname']?>" />
+				<input type="hidden" name="currency_code" value="<?php echo $this->opts['currency']?>" />
+				<input type="hidden" name="return" value="<?php echo $this->get_permalink($this->gallery_id,8)?>"/>
+				<input type="hidden" name="notify_url" value="<?php echo $this->get_permalink($this->gallery_id,6)?>"/>
+				<input type="hidden" name="cancel_return" value="<?php echo $this->get_permalink($this->gallery_id,7)?>"/>
+				<input type="hidden" name="_wpnonce" id="_wpnonce" value="<?php echo wp_create_nonce("ims_submit_order")?>" />					
+				<input type="hidden" name="cbt" value="<?php printf(__('Return to %s',ImStore::domain),get_bloginfo('name'))?>" />
+				<input type="hidden" name="discount_amount_cart" value="<?php echo $this->cart['promo']['discount']?>" />
 		</form>
 	<?php }?>
 	</div>
