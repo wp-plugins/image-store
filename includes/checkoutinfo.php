@@ -21,14 +21,14 @@ $req    = implode( ' ', (array)$this->opts['requiredfields'] );
 
 ?>
 
-<div id="ims-mainbox" class="photos">
+<div id="ims-mainbox" class="ims-photos">
 
 	<div class="ims-nav-box"><?php $this->store_nav( )?></div>
 	
 	<div class="ims-labels">
-		<span class="title"><?php echo $this->gallery->post_title?></span>
+		<span class="ims-title"><?php echo $this->gallery->post_title?></span>
 		<?php if( $this->gallery->post_expire != '0000-00-00 00:00:00' ){ ?>
-		<span class="divider"> | </span>
+		<span class="ims-divider"> | </span>
 		<span class="expires"><?php 
 			echo __( "Expires: ", ImStore::domain ) . date_i18n( get_option( 'date_format' ), strtotime( $this->gallery->post_expire ))
 		?></span>
