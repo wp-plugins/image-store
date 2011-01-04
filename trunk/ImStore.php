@@ -1,344 +1,321 @@
 <?php 
 /*
-Plugin Name: Image Store
-Plugin URI: http://imstore.xparkmedia.com
-Description: Your very own image store within wordpress "ImStore"
-Author: Hafid R. Trujillo Huizar
-Version: 1.2.5
-Author URI: http://www.xparkmedia.com
-Requires at least: 3.0.0
-Tested up to: 3.0.1
+Plugin Name:Image Store
+Plugin URI:http://imstore.xparkmedia.com
+Description:Your very own image store within wordpress "ImStore"
+Author:Hafid R.Trujillo Huizar
+Version:2.0
+Author URI:http://www.xparkmedia.com
+Requires at least:3.0.0
+Tested up to:3.0.2
 
 Copyright 2010-2011 by Hafid Trujillo http://www.xparkmedia.com
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
+the Free Software Foundation; either version 2 of the License,or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+along with this program; if not,write to the Free Software
+Foundation,Inc.,51 Franklin St,Fifth Floor,Boston,MA 02110-1301 USA
 */ 
 
 
 // Stop direct access of the file
-if( preg_match( '#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'] ) ) 
-	die( );
+if(preg_match('#'.basename(__FILE__).'#',$_SERVER['PHP_SELF'])) 
+	die();
 	
-if ( !class_exists( 'ImStore' ) ) {
+if(!class_exists('ImStore')){
 
 class ImStore{
 	
 	/**
-	 * Variables
-	 *
-	 * @param $domain plugin Gallery IDentifier
-	 * Make sure that new language(.mo) files have 'ims-' as base name
-	 */
+	*Variables
+	*
+	*@param $domain plugin Gallery IDentifier
+	*Make sure that new language(.mo) files have 'ims-' as base name
+	*/
 	const domain	= 'ims';
-	const version	= '1.2.5';
-	
+	const version	= '2.0';
 	
 	/**
-	 * Constructor
-	 *
-	 * @return void
-	 * @since 0.5.0 
-	 */
-	function __construct( ){
+	*Constructor
+	*
+	*@return void
+	*@since 0.5.0 
+	*/
+	function __construct(){
 		
-		$this->load_text_domain( );
-		$this->define_constant( );
+		$this->load_text_domain();
+		$this->define_constant();
+		$this->load_dependencies();
 		
-		// register options
-		register_activation_hook( IMSTORE_FILE_NAME, array( &$this, 'activate' ) );
-		register_deactivation_hook( IMSTORE_FILE_NAME, array( &$this, 'deactivate' ) );
+		// register hooks
+		register_activation_hook(IMSTORE_FILE_NAME,array(&$this,'activate'));
+		register_deactivation_hook(IMSTORE_FILE_NAME,array(&$this,'deactivate'));
 		
-		//create imstore custom pages
-		add_filter( 'query_vars', array( &$this, 'add_var_for_rewrites' ), 10, 1 );
-		add_filter( 'wp_insert_post_data', array( &$this, 'insert_post_data' ), 12, 2 );
-		
-		add_action( 'init', array( &$this, 'ims_int_actions' ), 12 );
-		add_action( 'wp_logout', array( &$this, 'logout_ims_user' ), 10 );
-		add_action( 'imstore_expire', array( &$this, 'expire_galleries' ) );
-		add_action( 'generate_rewrite_rules', array( &$this, 'add_rewrite_rules' ), 10, 1 );
-		$this->load_dependencies( );
-				
-		//upgrade function 1.1.1 = 1.2.0
-
+		add_action('init',array(&$this,'int_actions'),40);
+		add_action('wp_logout',array(&$this,'logout_ims_user'),10);
+		add_action('imstore_expire',array(&$this,'expire_galleries'));
+		add_filter('wp_insert_post_data',array(&$this,'insert_post_data'),20,2);
+		add_action('generate_rewrite_rules',array(&$this,'add_rewrite_rules'),10,1);
 	}
 	
-	
 	/**
-	 * logout user 
-	 *
-	 * @return void
-	 * @since 0.5.0 
-	 */
-	function logout_ims_user( ){
-		setcookie( 'ims_cookie_' . COOKIEHASH, ' ', time( ) - 31536000, COOKIEPATH, COOKIE_DOMAIN );
-		setcookie( 'ims_orderid_' . COOKIEHASH, ' ', time( ) - 31536000, COOKIEPATH, COOKIE_DOMAIN );
+	*Define contant variables
+	*
+	*@return void
+	*@since 0.5.0 
+	*/
+	function define_constant(){
+		ob_start(); //fix redirection problems
+		define('IMSTORE_FILE_NAME',plugin_basename(__FILE__));
+		define('IMSTORE_FOLDER',plugin_basename(dirname(__FILE__)));
+		define('IMSTORE_ABSPATH',str_replace("\\","/",dirname(__FILE__)));
+		define('IMSTORE_URL',WP_PLUGIN_URL."/".IMSTORE_FOLDER."/");
+		define('IMSTORE_ADMIN_URL',IMSTORE_URL.'admin/');
+		if(!defined('WP_SITEURL')) define('WP_SITEURL',get_bloginfo('url'));
+		if(!defined('WP_EDIT_URL')) define('WP_EDIT_URL',admin_url()."/post.php?post=");
+		if(!defined('WP_CONTENT_URL')) define('WP_CONTENT_URL',WP_SITEURL.'/wp-content');
+		if(!defined('WP_TEMPLATE_DIR')) define('WP_TEMPLATE_DIR',get_template_directory());
 	}
-	
-	
+			
 	/**
-	 * Allow wp_insert_post to ad expiration date 
-	 * on the custom "post_expire "column
-	 *
-	 * @return array
-	 * @since 0.5.0 
-	 */
-	function insert_post_data( $data, $postarg ){
-		$data['post_expire'] = $postarg['post_expire'];
+	*Register localization/language file
+	*
+	*@return void
+	*@since 0.5.0 
+	*/
+	function load_text_domain(){
+		if(function_exists('load_plugin_textdomain')){
+			$plugin_dir = basename(dirname(__FILE__)).'/langs';
+			load_plugin_textdomain(ImStore::domain,WP_CONTENT_DIR.'/plugins/'.$plugin_dir,$plugin_dir);
+		}
+	}
+		
+	/**
+	*Allow wp_insert_post to ad expiration date 
+	*on the custom "post_expire "column
+	*
+	*@param array $data
+	*@param array $postarg
+	*@return array
+	*@since 0.5.0 
+	*/
+	function insert_post_data($data,$args){
+		if($data['post_type'] == 'ims_gallery'){
+			$data['post_expire'] = ($_POST['_ims_expire'] != '0000-00-00 00:00:00' && !empty($_POST['imsexpire'])) 
+			? $_POST['_ims_expire']:'';
+			$data['post_content'] = '[ims-gallery-content]';
+		}
+		if($data['post_type'] == 'ims_promo') $data['post_expire'] = $_POST['expiration_date'];
 		return $data;
 	}
 	
-	
 	/**
-	 * Register localization/language file
-	 *
-	 * @return void
-	 * @since 0.5.0 
-	 */
-	function load_text_domain( ) {
-		if ( function_exists( 'load_plugin_textdomain' ) ){
-			$plugin_dir = basename( dirname( __FILE__ ) ) . '/langs';
-			load_plugin_textdomain( ImStore::domain, WP_CONTENT_DIR. '/plugins/' . $plugin_dir, $plugin_dir );
-		}
+	*logout user 
+	*
+	*@return void
+	*@since 0.5.0 
+	*/
+	function logout_ims_user(){
+		setcookie('ims_galid_'.COOKIEHASH,' ',time() - 31536000,COOKIEPATH,COOKIE_DOMAIN);
+		setcookie('wp-postpass_'.COOKIEHASH,' ',time() - 31536000,COOKIEPATH,COOKIE_DOMAIN);
 	}
 	
-	
 	/**
-	 * Define contant variables
-	 *
-	 * @return void
-	 * @since 0.5.0 
-	 */
-	function define_constant( ) {
-		ob_start( ); //fix redirection problems
-		define( 'IMSTORE_FILE_NAME', plugin_basename(__FILE__) );
-		define( 'IMSTORE_FOLDER', plugin_basename( dirname(__FILE__) ) );
-		define( 'IMSTORE_ABSPATH', str_replace( "\\", "/", WP_PLUGIN_DIR . '/' . plugin_basename( dirname(__FILE__) ) . '/' ) );
-		define( 'IMSTORE_URL', WP_PLUGIN_URL . '/' . plugin_basename( dirname(__FILE__) ) . '/' );
-		define( 'IMSTORE_ADMIN_URL', IMSTORE_URL . 'admin/' );
-		if(!defined( 'WP_CONTENT_URL' )) 
-			define( 'WP_CONTENT_URL', get_bloginfo( 'url' ) . '/wp-content' );
+	*Deactivate 
+	*
+	*@return void
+	*@since 0.5.0 
+	*/
+	function deactivate(){
+		 wp_clear_scheduled_hook('imstore_expire');
 	}
 	
-	
 	/**
-	 * Deactivate 
-	 *
-	 * @return void
-	 * @since 0.5.0 
-	 */
-	function deactivate( ) {
-		 wp_clear_scheduled_hook( 'imstore_expire' );
+	*Activite and save default options
+	*Activite the expire cron 
+	*
+	*@return void
+	*@since 0.5.0 
+	*/
+	function activate(){
+		wp_schedule_event(strtotime("tomorrow 1 hours"),'twicedaily','imstore_expire');
+		include_once(dirname(__FILE__).'/admin/install.php');
 	}
 	
-		
 	/**
-	 * Activite and save default options
-	 * Activite the expire cron 
-	 *
-	 * @return void
-	 * @since 0.5.0 
-	 */
-	function activate( ) {
-		wp_schedule_event( strtotime( "tomorrow 1 hours" ) , 'twicedaily', 'imstore_expire' );
-		include_once ( dirname (__FILE__) . '/admin/install.php' );
-	}
-	
-	
-	/**
-	 * Initial actions
-	 *
-	 * @return void
-	 * @since 0.5.0 
-	 */
-	function ims_int_actions( ){
-		global $wp_rewrite;
-		$wp_rewrite->flush_rules( );
-		add_feed( 'imstore', array( &$this, 'create_feed' ) );
-	}
-	
-	
-	/**
-	 * create image feeds
-	 *
-	 * @return void
-	 * @since 0.5.3 
-	 */
-	function create_feed( ){
-		require_once ( dirname (__FILE__) . '/includes/image-rss.php' );
-	}
-	
-	
-	/**
-	 * Add rewrite vars
-	 *
-	 * @param array $vars
-	 * @return array
-	 * @since 0.5.0 
-	 */
-	function add_var_for_rewrites( $vars ){
-		array_push( $vars, 'imsgalid', 'imspage', 'imsmessage', 'imslogout' );
-		return $vars;
-	}
-	
-
-	/**
-	 * fast in_array function
-	 *
-	 * @parm string $elem
-	 * @parm array $array
-	 * @return  bool
-	 * @since 1.2.0
-	 */
-	function fast_in_array( $elem, $array ){ 
-	   $bot = 0; 
-	   $top = sizeof($array) -1; 
-	   while( $top >= $bot ){ 
-		  $p = floor(($top + $bot) / 2); 
-		  if ( $array[$p] < $elem) $bot = $p + 1; 
-		  elseif ( $array[$p] > $elem ) $top = $p - 1; 
-		  else return true; 
-	   } 
-	   return false; 
+	*Fast in_array function
+	*
+	*@parm string $elem
+	*@parm array $array
+	*@return bool
+	*@since 1.2.0
+	*/
+	function fast_in_array($elem,$array){ 
+		foreach($array as $val){
+			if($val==$elem) return true; 
+		} return false; 
 	} 
 	
+	/**
+	 *Create image feeds
+	 *
+	 *@return void
+	 *@since 0.5.3 
+	 */
+	function create_feed(){
+		require_once(dirname(__FILE__).'/includes/image-rss.php');
+	}
 	
 	/**
-	 * Rewrites for custom page managers
-	 *
-	 * @param array $wp_rewrite
-	 * @return array
-	 * @since 0.5.0 
-	 */
-	 function add_rewrite_rules( $wp_rewrite ) {	
-	
-		$wp_rewrite->add_rewrite_tag( '%imspage%', '([^/]+)', 'imspage=');
-		$wp_rewrite->add_rewrite_tag( '%imsgalid%', '([0-9]+)', 'imsgalid=');
-		$wp_rewrite->add_rewrite_tag( '%imslogout%', '([^/]+)', 'imslogout=');
-		$wp_rewrite->add_rewrite_tag( '%imsmessage%', '([0-9]+)', 'imsmessage=');
-		
+	*Rewrites for custom page managers
+	*
+	*@param array $wp_rewrite
+	*@return array
+	*@since 0.5.0 
+	*/
+	 function add_rewrite_rules($wp_rewrite){	
+		$wp_rewrite->add_rewrite_tag('%imspage%','([^/]+)','imspage=');
+		$wp_rewrite->add_rewrite_tag('%paypalipn%','([^/]+)','paypalipn=');
+		$wp_rewrite->add_rewrite_tag('%imslogout%','([^/]+)','imslogout=');
+		$wp_rewrite->add_rewrite_tag('%imsmessage%','([0-9]+)','imsmessage=');
 		$new_rules = array(
-			"(.+?)/([^/]+)/gal-([0-9]+)/ms/?([0-9]+)/?$" => 
-			"index.php?pagename=" . $wp_rewrite->preg_index(1).
-			'&imspage=' . $wp_rewrite->preg_index(2).
-			'&imsgalid=' . $wp_rewrite->preg_index(3).
-			'&imsmessage=' . $wp_rewrite->preg_index(4),
-			"(.+?)/([^/]+)/gal-([0-9]+)/?$" => 
-			"index.php?pagename=" . $wp_rewrite->preg_index(1).
-			'&imspage=' . $wp_rewrite->preg_index(2).
-			'&imsgalid=' . $wp_rewrite->preg_index(3),
-			"(.+?)/logout/?([^/]+)?$" => 
-			"index.php?pagename=" . $wp_rewrite->preg_index(1).
-			'&imslogout=' . $wp_rewrite->preg_index(2),
-			'gal-([0-9]+)/feed/(imstore)/?$' => 
-			'index.php?imsgalid='.$wp_rewrite->preg_index(1).
-			'&feed=' . $wp_rewrite->preg_index(2),
-			'feed/(imstore)/?$' => 'index.php?feed='. $wp_rewrite->preg_index(1),
-						
-			"([^/]+)/gal-([0-9]+)/?$" => 
-			"index.php&imspage=" . $wp_rewrite->preg_index(1).
-			'&imsgalid=' . $wp_rewrite->preg_index(2),
-			
-			//"(.+?)/([^/]+)/?$" => 
-			//"index.php?pagename=" . $wp_rewrite->preg_index(1).
-			//'&imspage=' . $wp_rewrite->preg_index(2),
-
+			"galleries/imspaypalipn/?([0-9]+)/?$" =>
+			"index.php&paypalipn=".$wp_rewrite->preg_index(1),
+			"galleries/([^/]+)/logout/?([^/]+)?$" => 
+			"index.php&imsgalid=".$wp_rewrite->preg_index(1).
+			'&imslogout='.$wp_rewrite->preg_index(2),
+			"galleries/([^/]+)/([^/]+)/ms/?([0-9]+)/?$" => 
+			"index.php&imsgalid=".$wp_rewrite->preg_index(1).
+			'&imspage='.$wp_rewrite->preg_index(2).
+			'&imsmessage='.$wp_rewrite->preg_index(3),
+			"galleries/([^/]+)/([^/]+)/?$" => 
+			"index.php&imsgalid=".$wp_rewrite->preg_index(1).
+			'&imspage='.$wp_rewrite->preg_index(2),
 		);
 		$wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
+		return $wp_rewrite;
 	}
-		
+	 
 	/**
-	 * Set galleries to expired
-	 * and delete unprocess orders
-	 *
-	 * @return void
-	 * @since 0.5.0 
-	 */
-	function expire_galleries( ){
+	*Initial actions
+	*
+	*@return void
+	*@since 0.5.0 
+	*/
+	function int_actions(){
+		add_feed('imstore',array(&$this,'create_feed'));
+		register_post_type('ims_gallery',array(
+			'labels' => array(
+				'name' 			=> _x('Galleries','post type general name',ImStore::domain),
+				'singular_name' => _x('Gallery','post type singular name',ImStore::domain),
+				'add_new' 		=> _x('Add New','Gallery',ImStore::domain),
+				'add_new_item'	=> __('Add New Gallery',ImStore::domain),
+				'edit_item' 	=> __('Edit Gallery',ImStore::domain),
+				'new_item' 		=> __('New Gallery',ImStore::domain),
+				'view_item' 	=> __('View Gallery',ImStore::domain),
+				'search_items' 	=> __('Search galleries',ImStore::domain),
+				'not_found' 	=> __('No galleries found',ImStore::domain),
+				'not_found_in_trash' => __('No galleries found in Trash',ImStore::domain),
+			),
+			'public' 			=> true,
+			'show_ui' 			=> true,
+			'menu_position' 	=> 33,
+			'publicly_queryable'=> true,
+			'exclude_from_search'=> true,
+			'hierarchical' 		=> false,
+			'revisions'			=> false,
+			'capability_type' 	=> 'post',
+			'query_var'			=> 'imsgalid',
+			'menu_icon' 		=> IMSTORE_URL.'_img/imstore.png',
+			'capabilities'		=> array('ims_read_galleries'),
+			'rewrite' 			=> array('slug' => __('galleries',ImStore::domain),'with_front' => false),
+			'supports' 			=> array('title','comments','author')
+		));
+
+		register_taxonomy('ims_album',array('ims_gallery'),array(
+			'labels' => array(
+				'name' 			=> __('Albums',ImStore::domain),
+  				'singular_name' => __('Album',ImStore::domain),
+			),
+			'show_ui' 		=> true,
+			'query_var' 	=> true,
+			'hierarchical' 	=> true,
+			'rewrite' 		=> array('slug' =>__('albums',ImStore::domain)),
+		));
+		
+		$statuses = array(
+			'expire' 	=> __('Expired',ImStore::domain),
+			'active' 	=> __('Active',ImStore::domain),
+			'inative'	=> __('Inative',ImStore::domain),
+		);
+		
+		foreach($statuses as $status => $label){
+			register_post_status($status,array(
+				'protected' 	=> true,
+				'label' 		=> $status,
+				'label_count' 	=> _n_noop("{$label} <span class='count'>(%s)</span>","{$label} <span class='count'>(%s)</span>")
+			));
+		}
+		flush_rewrite_rules();
+		$this->permalinks = get_option('permalink_structure');
+	}
+
+	/**
+	*Set galleries to expired
+	*and delete unprocess orders
+	*
+	*@return void
+	*@since 0.5.0 
+	*/
+	function expire_galleries(){
 		global $wpdb;
-		$wpdb->query( 
+		$wpdb->query(
 			"UPDATE $wpdb->posts SET post_status = 'expire' 
-			WHERE post_expire <= '" . date( 'Y-m-d', current_time( 'timestamp' ) ) . "'
+			WHERE post_expire <= '".date('Y-m-d',current_time('timestamp'))."'
 			AND post_expire != '0000-00-00 00:00:00'
 			AND post_type = 'ims_gallery'"
 		);
-		$wpdb->query( 
+		$wpdb->query(
 			"DELETE p,pm FROM $wpdb->posts p 
-			LEFT JOIN $wpdb->postmeta pm ON ( p.ID = pm.post_id ) 
-			WHERE post_expire <='" . date( 'Y-m-d', current_time( 'timestamp' ) ) . "'
+			LEFT JOIN $wpdb->postmeta pm ON(p.ID = pm.post_id) 
+			WHERE post_expire <='".date('Y-m-d',current_time('timestamp'))."'
 			AND post_type = 'ims_order' AND post_status = 'draft'"
 		);
-		$wpdb->query( "OPTIMIZE TABLE $wpdb->terms, $wpdb->postmeta, $wpdb->posts, $wpdb->term_relationships, $wpdb->term_taxonomy" );
+		$wpdb->query("OPTIMIZE TABLE $wpdb->terms,$wpdb->postmeta,$wpdb->posts,$wpdb->term_relationships,$wpdb->term_taxonomy");
 	}
-	
 	
 	/**
-	 * Load what is needed where is needed
-	 *
-	 * @return void
-	 * @since 0.5.0 
-	 */
-	function load_dependencies( ){
-		if ( is_admin( ) && !class_exists( 'ImStoreAdmin' ) ) {
-			if ( !class_exists( 'ImStoreAdmin' ) ) {
-				require_once ( dirname ( __FILE__ ) . '/admin/admin.php' );
-				$this->admin = new ImStoreAdmin( );
-			}else{
-				echo '<div class="updated fade" id="message"><p>' . __( "There is a conflict with other plugin", ImStore::domain ).'</p></div>';
-			}
-		}else{
-			if ( !class_exists( 'ImStoreFront' ) ) {
-				require_once ( dirname (__FILE__) . '/includes/store.php' );
-				require_once ( dirname (__FILE__) . '/includes/shortcode.php' );
-				require_once ( dirname (__FILE__) . '/includes/image-rss.php' );
-			}else{
-				$this->dis_error( '<p>' . __( "There is a conflict with other plugin", ImStore::domain ) . '</p>' ) ;
-			}
+	*Load what is needed where is needed
+	*
+	*@return void
+	*@since 0.5.0 
+	*/
+	function load_dependencies(){
+		if(is_admin() && !class_exists('ImStoreAdmin')){
+			require_once(dirname(__FILE__).'/admin/admin.php');
+		}elseif(!class_exists('ImStoreFront')){
+			require_once(dirname(__FILE__).'/includes/store.php');
+			require_once(dirname(__FILE__).'/includes/image-rss.php');
+			require_once(dirname(__FILE__).'/includes/shortcode.php');
 		}
+		if($this->admin->opts['imswidget'] || $this->store->opts['imswidget']) 
+			include_once(dirname(__FILE__).'/admin/widget.php');		
 	}
-
-	 
-	 /**
-	 * Temporaty upgrade function
-	 * will be remove on nex release
-	 *
-	 * @return void
-	 * @since 1.1.0
-	 */
-	 function add_checkout_options( ){
-		$ims_ft_opts = get_option( 'ims_front_options' );
-	 	$ims_ft_opts['requiredfields']	= array( 'user_email', 'address_street', 'address_zip', 'first_name' ); 
-		$ims_ft_opts['checkoutfields'] 	= array(
-			'address_city'	=> __( 'City',  ImStore::domain ),
-			'address_state'	=> __( 'State',  ImStore::domain ),
-			'user_email'	=> __( 'Email',  ImStore::domain ),
-			'ims_phone'		=> __( 'Phone', ImStore::domain ),
-			'address_street'=> __( 'Address',  ImStore::domain ),
-			'address_zip'	=> __( 'Zip Code',  ImStore::domain ),
-			'last_name'		=> __( 'Last Name',  ImStore::domain ),
-			'first_name'	=> __( 'First Name', ImStore::domain )
-		);
-		update_option( 'ims_front_options', $ims_ft_opts );
-	 }
-	 
 
 }
 
-
-// Do that thing that you do!!!
+// Do that thing you do!!!
 global $ImStore;
-$ImStore = new ImStore( );
+$ImStore = new ImStore();
 	
 }
 ?>

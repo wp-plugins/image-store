@@ -1,114 +1,161 @@
 <?php 
-
 /**
- * Ajax events for admin area
- * 
- * @package Image Store
- * @author Hafid Trujillo
- * @copyright 20010-2011
- * @since 0.5.0
+ *Ajax events for admin area
+ *
+ *@package Image Store
+ *@author Hafid Trujillo
+ *@copyright 20010-2011
+ *@since 0.5.0
 */
 
 //dont cache file
-header( 'Expires: 0');
-header( 'Pragma: no-cache' );
-header( 'Cache-control: private');
-header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' );
-header( 'Cache-control: no-cache, no-store, must-revalidate, max-age=0');
-
+header('Expires:0');
+header('Pragma:no-cache');
+header('Cache-control:private');
+header('Last-Modified:'.gmdate('D,d M Y H:i:s').' GMT');
+header('Cache-control:no-cache,no-store,must-revalidate,max-age=0');
 
 //define constants
-define( 'DOING_AJAX', true );
-define( 'WP_ADMIN', true );
+define('DOING_AJAX',true);
+define('WP_ADMIN',true);
 
 //load wp
 require_once '../../../../wp-load.php';
 
 //make sure that the request came from the same domain	
-if ( stripos( $_SERVER['HTTP_REFERER'], get_bloginfo('siteurl')) === false ) 
-	die( );
+if(stripos($_SERVER['HTTP_REFERER'],get_bloginfo('siteurl')) === false) 
+	die();
 
 
 /**
- * Move price list to trash
- * 
- * @return void
- * @since 0.5.0
- */
-function ajax_imstore_pricelist_delete( ){
-	
-	if( !current_user_can( "ims_change_pricing" ) )
-		return;
-		
-	check_ajax_referer( "ims_ajax" );
-	
-	wp_delete_post( intval( $_GET['listid'] ), true );
-	
-	die( );
+ *Move price list to trash
+ *
+ *@return void
+ *@since 0.5.0
+*/
+function ajax_imstore_pricelist_delete(){
+	if(!current_user_can("ims_change_pricing"))return;
+	check_ajax_referer("ims_ajax");
+	wp_delete_post(intval($_GET['listid']),true);
+	die();
 }
 
-
 /**
- * Move price list to trash
- * 
- * @return void
- * @since 0.5.0
- */
-function ajax_imstore_package_delete( ){
+ *Delete post
+ *
+ *@return void
+ *@since 2.0.0
+*/
+function ajax_imstore_delete_post(){
+	if(!current_user_can("ims_change_pricing"))return;
+	check_ajax_referer("ims_ajax");
 	
-	if( !current_user_can( "ims_change_pricing" ) )
-		return;
-		
-	check_ajax_referer( "ims_ajax" );
-	
-	wp_delete_post( intval( $_GET['packageid'] ), true );
-	
-	die( );
+	$metadata = get_post_meta((int)$_GET['postid'],'_wp_attachment_metadata');
+	if($metadata[0]['sizes'] && !empty($_GET['deletefile'])){
+		foreach($metadata[0]['sizes'] as $size)
+			@unlink(WP_CONTENT_DIR.$folder.'/'.$size['file']);
+		@unlink(WP_CONTENT_DIR.$metadata[0]['file']);
+		@unlink(WP_CONTENT_DIR.str_replace('_resized/','',$metadata[0]['file']));
+	}
+	wp_delete_post((int)$_GET['postid'],true);
+	die();
 }
 
-
 /**
- * display event path
- * 
- * @return void
- * @since 0.5.0
- */
-function ajax_ims_swfupload_path( ){
-	global $wpdb;
-	
-	if( !current_user_can( "ims_add_galleries" ) )
-		return;
-	
-	check_ajax_referer( "ims_ajax" );
-	
-	echo '../wp-content' . get_post_meta( $_GET['galleryid'], '_ims_folder_path' , true );
-	
-	die( );	
+ *Update post
+ *
+ *@return void
+ *@since 2.0.0
+*/
+function ajax_imstore_update_post(){
+	if(!current_user_can("ims_manage_galleries")) return;
+	check_ajax_referer("ims_ajax");
+	$post = array(
+		'ID' => $_GET['imgtid'],
+		'menu_order' => $_GET['order'],
+		'post_title' => $_GET['imgtitle'],
+		'post_excerpt' => $_GET['caption'],
+	);
+	wp_update_post( $post );
+	die();
 }
 
-
-
 /**
- * add image to database
- * 
- * @return void
- * @since 0.5.0
- */
-function ajax_ims_flash_image_data( ){
-	global $wpdb;
+ *add image to database
+ *
+ *@return void
+ *@since 0.5.0
+*/
+function ajax_ims_flash_image_data(){
+	global $wpdb,$current_user;
 	
-	if( !current_user_can( 'ims_add_galleries' ) )
+	if(!current_user_can('ims_add_galleries'))
 		return false;
 	
-	$galleid 	=  $_GET['galleryid'];
-	$filename 	= sanitize_file_name($_GET['imagename'] );
+	@ini_set('memory_limit','256M');
+	@ini_set('max_execution_time',1000);
+	
+	$galleid 	= $_GET['galleryid'];
+	$filename 	= sanitize_file_name($_GET['imagename']);
 	$abspath 	= $_GET['filepath'];
-	$filetype 	= wp_check_filetype( $filename );
-	$des_path 	= dirname( $abspath ) . '/_resized' ;
-	$relative 	= str_replace( str_replace( '\\' , '/', WP_CONTENT_DIR ), '', str_replace( '\\' , '/', $des_path . '/' . $filename ));
-	$guid 		= WP_CONTENT_URL . $relative;
-	if( !file_exists( $des_path ) ) @mkdir( $des_path, 0775 );
+	$filetype 	= wp_check_filetype($filename);
+	$despath 	= dirname($abspath).'/_resized';
+	$relative 	= str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',str_replace('\\','/',$despath.'/'.$filename));
+	$guid 		= WP_CONTENT_URL.$relative;
+	if(!file_exists($despath)) @mkdir($despath,0775);
 
+	//if image exist dont't load it
+	if($wpdb->get_var($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE 1=1 AND guid = %s",$guid))) return;
+	include_once(ABSPATH.'wp-admin/includes/image.php');
+	
+	//resize images
+	$img_sizes = get_option('ims_dis_images');
+	$img_sizes['thumbnail']['name'] = "thumbnail";
+	$img_sizes['thumbnail']['crop'] = '1';
+	$img_sizes['thumbnail']['q'] 	= '95';
+	$img_sizes['thumbnail']['w'] 	= get_option("thumbnail_size_w");
+	$img_sizes['thumbnail']['h'] 	= get_option("thumbnail_size_h");
+	
+	$downloadsizes = get_option('ims_download_sizes');
+	if(is_array($downloadsizes)) $img_sizes += $downloadsizes;
+	
+	foreach($img_sizes as $img_size){
+		$resized = image_resize($abspath,$img_size['w'],$img_size['h'],$img_size['crop'],null,$despath,$img_size['q']);
+		if(!is_wp_error($resized) && $resized && $info = @getimagesize($resized)){
+			$imgname = basename($resized);
+		}else{
+			$info 		= getimagesize($abspath);
+			$imgname 	= basename($abspath);
+		}
+		
+		@copy($abspath,"$despath/$filename");
+
+		$metadata['file'] 	= $relative;
+		$metadata['width'] 	= $info[0];
+		$metadata['height'] = $info[1];
+		$metadata['path'] 	= "$despath/$filename";
+		$metadata['url'] 	= $guid;
+		
+		list($uwidth,$uheight) = wp_constrain_dimensions($metadata['width'],$metadata['height'],100,100);
+		$metadata['hwstring_small'] = "height='$uheight' width='$uwidth'";
+		
+		switch($info['channels']){ 
+			case 1:$metadata['color'] = 'BW'; break;
+			case 3:$metadata['color'] = 'RGB'; break;
+			case 4:$metadata['color'] = 'CMYK'; break;
+			default:$metadata['color'] = __('Unknown',ImStore::domain);
+		}
+		$data = array(
+			'file'	=>$imgname,
+			'width'	=>$info[0],
+			'height'=>$info[1],
+			'url'	=> dirname($guid)."/$imgname",
+			'path'	=> dirname($abspath)."/$imgname",
+		);
+		$metadata['sizes'][$img_size['name']] = $data;
+		$metadata['image_meta'] = wp_read_image_metadata($abspath);
+	}
+	
 	$attachment = array(
 		'guid' => $guid,
 		'post_title' => $filename,
@@ -118,240 +165,161 @@ function ajax_ims_flash_image_data( ){
 		'post_parent' => $galleid,
 	);
 	
-	//if image exist dont't load it
-	if ( $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE 1=1 AND guid = %s", $guid ) ) ) return;
+	$attach_id = wp_insert_post($attachment);
 	
-	$attach_id = wp_insert_post( $attachment );
-	if( empty( $attach_id ) ) return;
+	if(empty($attach_id)) return;
+	wp_update_attachment_metadata($attach_id,$metadata);
 	
-	include_once( ABSPATH . 'wp-admin/includes/image.php');
-	
-	//resize images
-	$img_sizes = get_option( 'ims_dis_images' );
-	$img_sizes['thumbnail']['name'] = "thumbnail";
-	$img_sizes['thumbnail']['crop'] = '1';
-	$img_sizes['thumbnail']['q'] 	= '95';
-	$img_sizes['thumbnail']['w'] 	= get_option("thumbnail_size_w");
-	$img_sizes['thumbnail']['h'] 	= get_option("thumbnail_size_h");
-	
-	
-	$downloadsizes = get_option( 'ims_download_sizes' );
-	if( is_array( $downloadsizes ) ) $img_sizes += $downloadsizes;
-	
-	foreach( $img_sizes as $img_size ){
-		$resized = image_resize( $abspath, $img_size['w'], $img_size['h'], $img_size['crop'], null, $des_path, $img_size['q'] );
-		if ( !is_wp_error( $resized ) && $resized && $info = @getimagesize($resized) ) {
-			$imgname = basename( $resized );
-		}else{
-			$info = getimagesize( $abspath );
-			$imgname = basename( $abspath );
+	$hidden 	= implode('|',(array)get_user_option('manageims_gallerycolumnshidden'));
+	$imgnonce 	= '&_wpnonce='.wp_create_nonce("ims_edit_image")."&TB_iframe=true&height=570";
+	$columns 	= array(
+					'cb' => '<input type="checkbox">',
+					'imthumb' => __('Thumbnail',ImStore::domain),'immetadata' => __('Metadata',ImStore::domain),
+					'imtitle' => __('Title/Caption',ImStore::domain),'imdate' => __('Date',ImStore::domain),
+					'imauthor'=> __('Author',ImStore::domain),'imorder'	=> __('Order',ImStore::domain),
+					'imageid' => __('ID',ImStore::domain),
+				);
+	$row = '<tr id="item-'.$attach_id.'" class="iedit">';
+	foreach($columns as $key => $column){
+		if($hidden) $class = (preg_match("/($hidden)/i",$key))?' hidden':'';
+		switch($key){
+			case 'cb':
+				$row .= '<th class="column-'.$key.' check-column"><input type="checkbox" name="galleries[]" value='.$attach_id.'" /></th>';
+				break;
+			case 'imthumb':
+				$row .= '<td class="column-'.$key.$class.'">';
+				$row .= '<a href="'.$attachment['guid'].'" class="thickbox" rel="gallery">';
+				$row .= '<img src="'.dirname($attachment['guid']).'/'.$metadata['sizes']['mini']['file'].'" /></a>';
+				$row .= '</td>';
+				break;
+			case 'immetadata':
+				$row .= '<td class="column-'.$key.$class.'">';
+				$row .= __('Format:',ImStore::domain).str_replace('image/','',$filetype['type']).'<br />';
+				$row .= $metadata['width'].' x '.$metadata['height'].__(' pixels',ImStore::domain).'<br />';
+				$row .= __('Color:',ImStore::domain).$metadata['color'].'<br />';
+				$row .= '<div class="row-actions" id="media-head-'.$attach_id.'">';
+				$row .= '<a href="'.IMSTORE_ADMIN_URL.'image-edit.php?editimage='.$attach_id.$imgnonce.'" class="thickbox">'.__('Edit',ImStore::domain).'</a> |';
+				$row .= '<a href="#img=$id">'.__('Trash',ImStore::domain).'</a>';
+				$row .= '</div>';
+				$row .= '</td>';
+				break;
+			case 'imtitle':
+				$row .= '<td class="column-'.$key.$class.'">';
+				$row .= '<input type="text" name="img_title['.$attach_id.']" value="'.$filename.'" class="inputxl"/>';
+				$row .= '<textarea name="post_excerpt['.$attach_id.']" rows="3" class="inputxl"></textarea>';
+				$row .= '</td>';
+				break;
+			case 'imauthor':
+				$row .= '<td class="column-'.$key.$class.'">'.$current_user->display_name.'</td>';
+				break;
+			case 'imdate':
+				//$row .= '<td class="column-'.$key.$class.'">'.date_i18n(get_option('date_format'),strtotime($image->post_date)).'</td>';
+				break;
+			case 'imorder':
+				$row .= '<td class="column-'.$key.$class.'">';
+				$row .= '<input type="text" name="menu_order['.$attach_id.']" class="inputxl" />';
+				$row .= '</td>';
+				break;
+			case 'imageid':
+				$row .= '<td class="column-'.$key.$class.'">'.sprintf("%05d",$attach_id).'</td>';
+				break;
+			default:
+				$row .= '<td class="column-'.$key.$class.'">&nbsp;</td>';
 		}
-		
-		$data = array(
-			'file' 	=> $imgname,
-			'width' => $info[0],
-			'height'=> $info[1],
-		);
-		
-		//copy file to be use when plugin is uninstall
-		@copy( $abspath, $des_path . '/' . $filename );
-			
-		//create metadata
-		$imagesize = getimagesize( $abspath );
-		$metadata['width'] = $imagesize[0];
-		$metadata['height'] = $imagesize[1];
-		list($uwidth, $uheight) = wp_constrain_dimensions( $metadata['width'], $metadata['height'], 100, 100 );
-		$metadata['hwstring_small'] = "height='$uheight' width='$uwidth'";
-		
-		switch( $imagesize['channels'] ){ 
-			case 1: $metadata['color'] = 'BW'; break;
-			case 3: $metadata['color'] = 'RGB'; break;
-			case 4: $metadata['color'] = 'CMYK'; break;
-			default: $metadata['color'] = __( 'Unknown', ImStore::domain );
-		}
-		
-		$metadata['file'] = $relative;
-		$metadata['sizes'][$img_size['name']] = $data;
-		$metadata['image_meta'] = wp_read_image_metadata( $abspath );
 	}
-	
-	//update image count
-	$count = intval( get_post_meta( $galleid, '_ims_image_count', true ) ) + 1;
-	update_post_meta( $galleid, '_ims_image_count', $count );
-	
-	wp_update_attachment_metadata( $attach_id, $metadata );
-	
+	echo $row .= '</tr>';
 }
 
 /**
- * Add images to favorites
- * 
- * @return void
- * @since 0.5.0
+ *Change the image status
+ *
+ *@return void
+ *@since 2.0.0
+*/
+function ajax_imstore_edit_image_status(){
+	if(!current_user_can("ims_manage_galleries"))return;
+	check_ajax_referer("ims_ajax");
+	wp_update_post(array("ID" => trim($_GET['imgid']),'post_status' => $_GET['status']));
+	die();
+}
+
+/**
+*Add images to favorites
+*
+*@return void
+*@since 0.5.0
+*/
+function ajax_ims_add_images_to_favorites(){
+	check_ajax_referer("ims_ajax_favorites");
+	global $user_ID; $id = intval($_GET['galid']);
+	if(empty($_GET['imgids']) || empty($id)){
+		echo __('Please,select an image',ImStore::domain).'|ims-error'; return;
+	}elseif(is_user_logged_in()){
+		$new 	= explode(',',$_GET['imgids']);
+		$join 	= trim(get_user_meta($user_ID,'_ims_favorites',true).",". $_GET['imgids'],','); 
+		$ids	= implode(',',array_unique(explode(',',$join)));
+		update_user_meta($user_ID,'_ims_favorites',$ids);
+	}else{ 
+		$new 	= explode(',',$_GET['imgids']);
+		$join 	= trim($_COOKIE['ims_favorites_'.COOKIEHASH].",". $_GET['imgids'],',');
+		$ids	= implode(',',array_unique(explode(',',$join)));
+		setcookie('ims_favorites_'.COOKIEHASH,$ids,0,COOKIEPATH);
+	}
+	if(count($new) < 2) echo __('Image added to favorites',ImStore::domain).'|ims-success';
+	else echo sprintf(__('%d images added to favorites',ImStore::domain),count($new)).'|ims-success';
+} 
+
+/**
+ *Remove images from favorites
+ *
+ *@return void
+ *@since 0.5.0
  */
-function ajax_ims_add_images_to_favorites( ){
-	
-	$id = intval( $_GET['galid'] );
-	check_ajax_referer( "ims_ajax_favorites" );
-	
-	if( empty( $_GET['imgids'] ) || empty( $id ) ){
-		echo __( 'Please, select an image', ImStore::domain ) . '|error';
+function ajax_ims_remove_images_from_favorites(){
+	check_ajax_referer("ims_ajax_favorites");
+	global $user_ID; $id = intval($_GET['galid']);
+	if(empty($_GET['imgids']) || empty($id)){
+		echo __('Please,select an image',ImStore::domain).'|ims-error'; return;
+	}elseif(is_user_logged_in()){
+		$new 	= explode(',',$_GET['imgids']);
+		$join 	= array_flip(explode(',',trim(get_user_meta($user_ID,'_ims_favorites',true),',')));
+		foreach($new as $remove) unset($join[$remove]);
+		$ids	= implode(',',array_flip($join));
+		update_user_meta($user_ID,'_ims_favorites',$ids);
 	}else{
-		$old = get_post_meta( $id, '_ims_favorites', true );
-		if( is_array( $old ) ){
-			$new = explode( ',', $_GET['imgids'] );
-			$ids = array_merge( $old, $new );
-			$ids = array_unique( $ids );
-		}else{
-			$new = explode( ',', $_GET['imgids'] );
-			$ids = $new;
-		}
-		update_post_meta( $id, '_ims_favorites', $ids );
-		if( count( $new ) < 2 ) echo __( 'Image added to favorites', ImStore::domain ) . '|success';
-		else echo sprintf( __( '%d images added to favorites', ImStore::domain ), count( $new ) ) . '|success';
+		$new 	= explode(',',$_GET['imgids']);
+		$join 	= array_flip(explode(',',trim($_COOKIE['ims_favorites_'.COOKIEHASH],',')));
+		foreach($new as $remove) unset($join[$remove]);
+		$ids	= implode(',',array_flip($join));
+		setcookie('ims_favorites_'.COOKIEHASH,$ids,0,COOKIEPATH);
 	}
-	
+	if(count($new) < 2) echo __('Image removed from favorites',ImStore::domain).'|ims-success';
+	else echo sprintf(__('%d images removed from favorites',ImStore::domain),count($new)).'|ims-success';
 }
 
 
-/**
- * Remove images from favorites
- * 
- * @return void
- * @since 0.5.0
- */
-function ajax_ims_remove_images_from_favorites( ){
+if($_GET['action'] == 'flashimagedata')
+	 ajax_ims_flash_image_data();
+	 
+if($_GET['action'] == 'deletelist')
+	ajax_imstore_pricelist_delete();
 	
-	$id = intval( $_GET['galid'] );
-	check_ajax_referer( "ims_ajax_favorites" );
+if($_GET['action'] == 'deleteimage')
+	ajax_imstore_delete_post();
+	 
+if($_GET['action'] == 'upadateimage')
+	ajax_imstore_update_post();
 	
-	if( empty( $_GET['imgids'] ) || empty( $id ) ){
-		echo __( 'Please, select an image', ImStore::domain ) . '|error';
-	}else{
-		$new = explode( ',', $_GET['imgids'] );
-		$old = get_post_meta( $id, '_ims_favorites', true );
-		$old = array_flip( $old );
-		foreach( $new as $remove ) unset( $old[$remove] );
-		$ids = array_flip( $old );
-		
-		update_post_meta( $id, '_ims_favorites', $ids );
-		if( count( $new ) < 2 ) echo __( 'Image removed from favorites', ImStore::domain ) . '|success';
-		else echo sprintf( __( '%d images removed from favorites', ImStore::domain ), count( $new ) ) . '|success';
-	}
+if($_GET['action'] == 'deletepackage')
+	ajax_imstore_delete_post();
 	
-}
+if($_GET['action'] == 'editimstatus')
+	ajax_imstore_edit_image_status();
 
-
-
-/**
- * modify image size mini when thumbnail 
- * is modify by the image edit win
- * 
- * @return void
- * @since 0.5.5
- */
-function ajax_ims_edit_image_mini( ){
-	
-	$post_id = intval( $_GET['imgid'] );
-	check_ajax_referer( "image_editor-{$post_id}");
-	include_once( ABSPATH . 'wp-admin/includes/image-edit.php' );
-
-	$post = get_post( $post_id );
-	@ini_set('memory_limit', '256M');
-	$img = load_image_to_edit( $post_id, $post->post_mime_type );
-
-	if ( !is_resource($img) ) {
-		$return->error = esc_js( __('Unable to create new image.') );
-		return $return;
-	}
-
-	$fwidth = !empty($_REQUEST['fwidth']) ? intval($_REQUEST['fwidth']) : 0;
-	$fheight = !empty($_REQUEST['fheight']) ? intval($_REQUEST['fheight']) : 0;
-	$target = !empty($_REQUEST['target']) ? preg_replace('/[^a-z0-9_-]+/i', '', $_REQUEST['target']) : '';
-	$scale = !empty($_REQUEST['do']) && 'scale' == $_REQUEST['do'];
-
-	if ( $scale && $fwidth > 0 && $fheight > 0 ) {
-		$sX = imagesx($img);
-		$sY = imagesy($img);
-
-		// check if it has roughly the same w / h ratio
-		$diff = round($sX / $sY, 2) - round($fwidth / $fheight, 2);
-		if ( -0.1 < $diff && $diff < 0.1 ) {
-			// scale the full size image
-			$dst = wp_imagecreatetruecolor($fwidth, $fheight);
-			if ( imagecopyresampled( $dst, $img, 0, 0, 0, 0, $fwidth, $fheight, $sX, $sY ) ) {
-				imagedestroy($img);
-				$img = $dst;
-				$scaled = true;
-			}
-		}
-
-	} elseif ( !empty($_REQUEST['history']) ) {
-		$changes = json_decode( stripslashes($_REQUEST['history']) );
-		if ( $changes )
-			$img = image_edit_apply_changes($img, $changes);
-	} else {
-		return $return;
-	}
-	
-	// generate new filename
-	$path = get_attached_file($post_id);
-	$path_parts = pathinfo52( $path );
-	$filename = $path_parts['filename'];
-	$suffix = time() . rand(100, 999);
-	
-	while( true ) {
-		$filename = preg_replace( '/-e([0-9]+)$/', '', $filename );
-		$filename .= "-e{$suffix}";
-		$new_filename = "{$filename}.{$path_parts['extension']}";
-		$new_path = "{$path_parts['dirname']}/$new_filename";
-		if ( file_exists($new_path) ) $suffix++;
-		else break;
-	}
-	
-	if ( !wp_save_image_file( $new_path, $img, $post->post_mime_type, $post_id ) ) 
-		return $return;
-	
-	$img_size['w'] 		= get_option("mini_size_w");
-	$img_size['h']		= get_option("mini_size_h");
-	$img_size['crop'] 	= get_option("mini_crop");
-	
-	//create image
-	$resized 	= image_resize( $new_path, $img_size['w'], $img_size['h'], $img_size['crop'] );
-	$info 		= getimagesize( $resized );
-	$metadata 	= array( 'file' => basename( $resized ), 'width' => $info[0], 'height' => $info[1] );
-		
-	if ( $resized ){
-		$meta = wp_get_attachment_metadata($post_id);
-		$meta['sizes']['mini'] = $metadata;
-		wp_update_attachment_metadata( $post_id, $meta );
-	}
-	
-	@unlink($new_path );
-	@imagedestroy($img);
-}
-
-
-
-if( $_GET['action'] == 'deletelist' )
-	ajax_imstore_pricelist_delete( );
-
-if( $_GET['action'] == 'deletepackage' )
-	ajax_imstore_package_delete( );
-	
-if( $_GET['action'] == 'swuploadfolder' )
-	ajax_ims_swfupload_path( );
-	
-if( $_GET['action'] == 'flashimagedata' )
-	 ajax_ims_flash_image_data( );
-
-if( $_GET['action'] == 'favorites' )
-	 ajax_ims_add_images_to_favorites( );
-
-if( $_GET['action'] == 'remove-favorites' )
-	 ajax_ims_remove_images_from_favorites( );
-
-if( $_GET['action'] == 'edit-mini-image' )
-	 ajax_ims_edit_image_mini( );
+if($_GET['action'] == 'favorites')
+	 ajax_ims_add_images_to_favorites();
+	 
+if($_GET['action'] == 'remove-favorites')
+	 ajax_ims_remove_images_from_favorites();
 
 ?>
