@@ -12,16 +12,16 @@
 
 
 //define constants
-define( 'WP_ADMIN', true );
-define( 'DOING_AJAX', true );
+define('WP_ADMIN',true);
+define('DOING_AJAX',true);
 
 //load wp
 require_once '../../../../wp-load.php';
 
 //make sure that the request came from the same domain	
 
-if( !wp_verify_nonce( $_REQUEST["_wpnonce"], "ims_download_img" ) )
-	die( );
+if(!wp_verify_nonce($_REQUEST["_wpnonce"],"ims_download_img"))
+	die();
 	
 class ImStoreDownloadImage{
 	
@@ -32,18 +32,19 @@ class ImStoreDownloadImage{
 	 * @return void
 	 * @since 0.5.0 
 	 */
-	function __construct( ){
+	function __construct(){
 		
-		if( empty( $_REQUEST['img'] ) ) die();
-		$this->attachment = get_post_meta( $_REQUEST['img'], '_wp_attachment_metadata', true );
+		if(empty($_REQUEST['img'])) die();
+		$this->attachment = get_post_meta($_REQUEST['img'],'_wp_attachment_metadata',true);
 		
-		if( $this->attachment['sizes'][$_GET['sz']]['url'] ) 
-			$this->image_dir = str_ireplace( WP_CONTENT_URL, WP_CONTENT_DIR, $this->attachment['sizes']['preview']['url'] );
+		if($this->attachment['sizes'][$_GET['sz']]['url']) 
+			$this->image_dir = str_ireplace(WP_CONTENT_URL,WP_CONTENT_DIR,$this->attachment['sizes'][$_GET['sz']]['url']);
+		elseif($this->attachment['sizes']['preview']['url']) 
+			$this->image_dir = str_ireplace(WP_CONTENT_URL,WP_CONTENT_DIR,$this->attachment['sizes']['preview']['url']);
 		else $this->image_dir = WP_CONTENT_DIR . $this->attachment['file'];
 
-		if( !file_exists ( $this->image_dir ) ) die( ); 
-		
-		$this->display_image( );
+		if(!file_exists($this->image_dir)) die(); 
+		$this->display_image();
 		
 	}
 	
@@ -54,72 +55,72 @@ class ImStoreDownloadImage{
 	 * @return void
 	 * @since 0.5.0 
 	 */
-	function display_image( ){
+	function display_image(){
 		global $wpdb;
 		
-		$realname	= basename( $this->image_dir );
-		$filetype 	= wp_check_filetype( $realname );
-		$filename 	= $wpdb->get_var( "SELECT post_title FROM $wpdb->posts WHERE ID = " . $_REQUEST['img'] ) ; 
-		$filename	= ( $filename ) ? $filename : $realname;
+		$realname	= basename($this->image_dir);
+		$filetype 	= wp_check_filetype($realname);
+		$filename 	= $wpdb->get_var("SELECT post_title FROM $wpdb->posts WHERE ID = " . $_REQUEST['img']) ; 
+		$filename	= ($filename)?$filename:$realname;
 		
-		header( 'Expires: 0' );
-		header( 'Pragma: no-cache' );
-		header( 'Cache-control: private' );
-		header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' );
-		header( 'Cache-Control: no-cache, must-revalidate, max-age=0' );
-		header( 'Content-Description: File Transfer' );
-		header( "Content-Transfer-Encoding: binary" );
-		header( 'Content-Type: ' . $filetype['type'] );
-		header( 'Content-Disposition: attachment; filename=' . $filename );
+		header('Expires: 0');
+		header('Pragma: no-cache');
+		header('Cache-control: private');
+		header('Last-Modified: ' . gmdate('D,d M Y H:i:s') . ' GMT');
+		header('Cache-Control: no-cache,must-revalidate,max-age=0');
+		header('Content-Description: File Transfer');
+		header("Content-Transfer-Encoding: binary");
+		header('Content-Type: ' . $filetype['type']);
+		header('Content-Disposition: attachment; filename=' . $filename);
 
 		
-		switch( $filetype['ext'] ){
+		switch($filetype['ext']){
 			case "jpg":
 			case "jpeg":
-				$image = imagecreatefromjpeg( $this->image_dir );
+				$image = imagecreatefromjpeg($this->image_dir);
 				break;
 			case "gif":
-				$image = imagecreatefromgif( $this->image_dir );
+				$image = imagecreatefromgif($this->image_dir);
 				break;
 			case "png":
-				$image = imagecreatefrompng( $this->image_dir );
+				$image = imagecreatefrompng($this->image_dir);
 				break;
 		}
 		
 		//gray scale
-		if( $_REQUEST['c'] == 'ims_bw' ){
-			imagefilter( $image, IMG_FILTER_GRAYSCALE);
-			imagefilter( $image, IMG_FILTER_BRIGHTNESS, +10 );
+		if($_REQUEST['c'] == 'ims_bw'){
+			imagefilter($image,IMG_FILTER_GRAYSCALE);
+			imagefilter($image,IMG_FILTER_BRIGHTNESS,+10);
 		}
 		
 		//sepia
-		if( $_REQUEST['c'] == 'ims_sepia' ){
-			imagefilter( $image, IMG_FILTER_GRAYSCALE); 
-			imagefilter( $image, IMG_FILTER_BRIGHTNESS, -10);
-			imagefilter( $image, IMG_FILTER_COLORIZE, 35, 25, 10);
+		if($_REQUEST['c'] == 'ims_sepia'){
+			imagefilter($image,IMG_FILTER_GRAYSCALE); 
+			imagefilter($image,IMG_FILTER_BRIGHTNESS,-10);
+			imagefilter($image,IMG_FILTER_COLORIZE,35,25,10);
 		}
 		
 		//create new image
-		switch( $filetype['ext'] ) {
+		switch($filetype['ext']) {
 			case "jpg":
 			case "jpeg":
-				imagejpeg( $image );
+				imagejpeg($image);
 				break;
 			case "gif":
-				imagegif( $image );
+				imagegif($image);
 				break;
 			case "png":
-				imagepng( $image );
+				imagepng($image);
 				break;
 		}
 		
-		imagedestroy ( $image );
-		die( );
+		imagedestroy($image);
+		die();
 	}
 
 
 }
 
 //do that thing you do 
-$ImStoreImage = new ImStoreDownloadImage( );
+$ImStoreImage = new ImStoreDownloadImage();
 ?>

@@ -44,10 +44,10 @@
 
 /********TABLES**********/
 
-.column-imthumb			{ width:85px}
+.column-imthumb			{ width:90px}
 .column-imorder			{ width:9%}
 .column-state			{ width:9%}
-.column-immetadata 		{ width:23%}
+.column-immetadata 		{ width:18%}
 .column-imauthor		{ width:10%}
 .column-ordernum		{ width:16%}
 .column-immetadata 		{ line-height:150%}
@@ -74,8 +74,7 @@ table.ims-table td 		{ padding:5px}
 .ims-table tr.filler	{ display:none; text-align:center; line-height:3em; vertical-align:middle; font-size:.9em; color:#999}
 .inside td.type-text span{ display:none}
 .ims-table tr.totrash	{ background-color:#F7BFBF}
-.ims-table tr.restore,
-.ims-table tr.doupdate	{ background-color:#edf7df}
+.ims-table tr.restore	{ background-color:#DEF0C6}
 .inside input[disabled],
 .inside input:disabled,
 .inside textarea[disabled],

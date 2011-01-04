@@ -1,20 +1,21 @@
 === Image Store ===
 Contributors: Hax
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8SJEQXK5NK4ES
-Tags: e-commerce,shop,store,photo,picture,image,galleries,imstore,image-store,slideshow,gallery,sale,photographers,shop,online
+Tags: e-commerce,shop,store,photo,picture,image,galleries,imstore,image-store,secure,translate,translatable,
+slideshow,gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages
 Requires at least: 3.0.0
-Tested up to: 3.0.1
-Stable tag: 1.2.5
+Tested up to: 3.0.4
+Stable tag: 2.0.0
 
-Image Store (ImStore) is a image gallery and store/shop plugin for WordPress with a slideshow and paypal integration.
+Image Store(ImStore) is a image gallery and store/shop plugin for WordPress with a slideshow option.
 
 == Description ==
-Image Store (ImStore) is a image gallery and store plugin for WordPress with a slideshow and paypal integration. This 
+Image Store(ImStore) is a image gallery and store plugin for WordPress with a slideshow and paypal integration. This 
 plugin was created because I saw the need of the worpress community to have a images store that didn't required the installation of multiple
 plugins to get this accomplished or to go through a lot of settings. :@)
 
 The plugin fully integrated with the WordPress database the only thing that is created is a post_expire column on the posts table.
-so you will not find extra tables on your database ( Cool!.. at least for me I hate extra tables ).
+so you will not find extra tables on your database(Cool!.. at least for me I hate extra tables).
 
 * Example http://imstore.xparkmedia.com/image-store/
 * Laguages http://imstore.xparkmedia.com/languages/
@@ -22,43 +23,43 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 
 = Features =
 
-* Paypal Cart integration
-* Payment notification
-* WP edit image integration
-* Image RSS
-* Promotions
-* Gallery widget
-* Galley shortcode
-* Gallery expiration
-* Sort images feature
-* CSV sales download
-* CSV customer download
-* Customer Mailpress integration.
-* Sales menu: To keep track of you sales
-* Image upload: Via a zip-file ( no zip-mod required )
-* Dynamic generation of sepia and black & white images
-* Watermark function: You can add a watermark image or text 
-* Image download: Allow user to download image after purchase
-* Disable Store: Use it just like a gallery manager and not a store
-* Folder import: add galleries by just uploading image through FTP
-* Public Galleries: display your photos so that anybody can buy them
-* Hidden image url: so that users don't know where your images are store
-* Secure Galleries: Secure clients photos so that only they can see them
-* User Permissions: Give access to users to specific sections of the plugin
-* Customer menu: Keep track of your galleries and customers
-* Pugin uninstall: Remove all entries added by the plugin 
-
-= To Come =
+* Payment notification.
+* Paypal Cart integration.
 * Google checkout integration
+* WP edit image integration.
+* Image RSS.
+* Promotions.
+* Gallery widget.
+* Galley shortcode.
+* Gallery expiration.
+* Sort images feature.
+* CSV sales download.
+* CSV customer download.
+* Customer Mailpress integration.
+* Sales menu: To keep track of you sales.
+* Image upload: Via a zip-file(no zip-mod required).
+* Dynamic generation of sepia and black & white images.
+* Taxomony(albums): Group Galleries using custom taxonomy.
+* Price lists: Create only list and apply across galleries.
+* Gallery Comments: allow user to add comments to galleries.
+* Watermark function: You can add a watermark image or text. 
+* Image download: Allow user to download image after purchase.
+* Disable Store: Use it just like a gallery manager and not a store.
+* Folder import: add galleries by just uploading image through FTP.
+* Public Galleries: display your photos so that anybody can buy them.
+* Secure Galleries: Secure clients photos so that only they can see them.
+* User Permissions: Give access to users to specific sections of the plugin.
+* Customer menu: Keep track of your galleries and customers.
+* Pugin uninstall: Remove all entries added by the plugin.
 
 == Installation ==
 
 * Download the latest version of the plugin to your computer.
-* With an FTP program, access your site's server.
+* With an FTP program,access your site's server.
 * Upload the plugin folder to the /wp-content/plugins folder.
-* In the WordPress administration panels, click on plugins from the menu on the left side.
+* In the WordPress administration panels,click on plugins from the menu on the left side.
 * You should see the "Image Store" plugin listed.
-* To turn the plugin on, click "activate" on the bottom of the plugin name.
+* To turn the plugin on,click "activate" on the bottom of the plugin name.
 * You should have now a new menu item called "Image Store".
 
 = Tested on =
@@ -78,18 +79,35 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * Before installing the plugin set "Thumbnail size" setting to the decired size Wordpress admin > settings > media.
 * DON'T provide download option for print size images use this option only for pixel sizes. 
 
-
 == Frequently Asked Questions ==
 
 * http://imstore.xparkmedia.com/troubleshooting/
+* http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+
+= 2.0.0 =
+* Code Cleanup
+* Improved performace.
+* Added: Google Checkout.
+* Added: Gallery Comments.
+* Added: Gallery name to sales reports.
+* Added: Option to remove color options.
+* Added: Option to remove "photos" or "slideshow" link.
+* Added: Integration with custom post types and toxomony.
+* Changed: Gallery logout.
+* Changed: Gallery preview.
+* Changed: Gallery management.
+* Changed: Permalink structure.
+* Changed: Paypal IPN Listener url.
+* Changed: Add/edit gallery interface.
+* Changed: preset all class/styles with "ims_" in the frontend.
+
 = 1.2.5 =
 * Fixed: Paypal issues.
 * Fixed: Propotional discount not been sent to paypal.
 * Front-end: CSS modifications.
 
-== Changelog ==
 = 1.2.4 =
 * Fixed: Typos.
 * Fixed: Flash upload not working.
@@ -133,7 +151,7 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * Added: Option not to expire galleries.
 * Added: Feature to use gallery on the home page.
 * Added: Feature use color box on wp galleries.
-* Added: Image size units ( in. cm. px.)
+* Added: Image size units(in. cm. px.)
 * Added: Settings for the required fields on the checkout page.
 * Added: Feature recreate images after image settings have been changed.
 * Fixed: Image cache after browser's cache is cleared.
@@ -144,7 +162,7 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * Fixed: Disable image rss.
 * Fixed: Incorrect paypal cart currency type.
 * Fixed: "mini" image size showing instead of preview.
-* Added: Orders by email notification only (disable paypal).
+* Added: Orders by email notification only(disable paypal).
 
 = 1.0.1 =
 * Fixed: Translation issues.
@@ -160,17 +178,15 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * Fixed: file not being deleted from server when image was deleted.
 
 = 0.5.5 =
-* Added: drag and drop image sort (admin).
+* Added: drag and drop image sort(admin).
 * Security fix: image url.
 * Fixed: Image edit didn't create new image when thumb only was selected.
 * Fixed: php error on dynamic css file for IE colorbox support.
-
 
 = 0.5.4 =
 * Fixed: Flash image upload
 * Fixed: Preview size settings not saving when updated.
 * Fixed: Add new menu "Save into" not displaying galleries for selection.
-
 
 = 0.5.3 =
 * Added: widget.
@@ -179,8 +195,7 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * Fixed: permalink confict.
 * Fixed: js error with new slideshow options.
 * Fixed: admind displaying wrong expiration date.
-* Removed: columns setting, not needed controled by css.
-
+* Removed: columns setting,not needed controled by css.
 
 = 0.5.2 =
 * CSS compression.
@@ -190,15 +205,14 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 * Fixed: js errors on IE.
 * Fixed: watermark text location.
 * Fixed: expire gallery query/cron
-* Fixed: CSS AlphaImageLoader image url for (color box)IE.
+* Fixed: CSS AlphaImageLoader image url for(color box)IE.
 * Text change: Inside USA to Local.
 * Relocated colorbox styles and images.
-
 
 = 0.5.1 =
 * HTML clean up
 * CSS modifications.
-* Add image cache( htaccess ).
+* Add image cache(htaccess).
 * Fixed: permalinks admin/frontend.
 * Fixed: images displaying on the frontend with trash status.
 * Remove: login link from unsecure galleries.
@@ -210,21 +224,29 @@ so you will not find extra tables on your database ( Cool!.. at least for me I h
 == CREDITS ==
 
 = Galleriffic =
-Trent Foley ( http://www.twospy.com/galleriffic/ )
+Trent Foley(http://www.twospy.com/galleriffic/)
 
 = Colorbox =
-Jack Moore, Alex Gregory ( http://colorpowered.com/colorbox/ )
+Jack Moore,Alex Gregory(http://colorpowered.com/colorbox/)
 
 = Uploadfy =
-Ronnie Garcia, Benj Arriola, RonnieSan ( http://www.uploadify.com/ )
+Ronnie Garcia,Benj Arriola,RonnieSan(http://www.uploadify.com/)
 
 
 == Upgrade Notice ==
+* Upgrade from 2.0.0 will change your permalinks. 
 * Upgrade from 1.0.2 and previous price lists need to bee updated to use the image unit. 
 * Upgrade from 0.5.2 and previous slideshow options will be added or reset setting to update options. 
 * Upgrade from 0.5.0 to 0.5.0 may change your permalinks. 
 
-
 == Screenshots ==
 
-http://imstore.xparkmedia.com
+1. Screenshot Menu
+2. Screenshot New Gallery
+3. Screenshot Pricing
+4. Screenshot Sales / Screen Options
+5. Screenshot Settings
+6. Screenshot Galley Options
+7. Screenshot Slideshow
+8. Screenshot Pricelist
+9. Screenshot Shopping Cart
