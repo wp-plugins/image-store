@@ -160,6 +160,7 @@ $type[3] 	= __('Free Shipping',ImStore::domain);
 						<td>
 							<input type="checkbox" name="sizes[<?php echo $x?>][download]" value="1" <?php checked('1',$size['download'])?> title="<?php _e('downloadable',ImStore::domain)?>" />
 						</td>
+						<td class="move" title="<?php _e('Sort',ImStore::domain)?>">&nbsp;</td>
 					</tr>
 				<?php $x++; }}?>
 					<tr class="filler"><td scope="row" colspan="6"><?php _e('Add options by dragging image sizes here',ImStore::domain)?></td></tr>
@@ -182,10 +183,11 @@ $type[3] 	= __('Free Shipping',ImStore::domain);
 						</td>
 					</tr>
 					<tr class="submit">
-						<td scope="row" colspan="6" align="right">
+						<td scope="row" colspan="5" align="right">
 							<input type="hidden" name="sizes[random]" value="<?php echo rand(0,3000)?>"/>
 							<input type="submit" name="updatelist" value="<?php _e('Update',ImStore::domain)?>" class="button-primary" />
 						</td>
+						<td>&nbsp;</td>
 					</tr>
 				</tfoot>
 			</table>

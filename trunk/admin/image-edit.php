@@ -100,15 +100,15 @@ jQuery(document).ready(function($){
 	
 	var target = 'all';
 	
-	$("input[value='Cancel']").live('click',function(){ setTimeout("parent.tb_remove()",500); });
+	$(".imgedit-submit input:.button").live('click',function(){ setTimeout("parent.tb_remove()",500); }); // cancel
 	
-	$("input[value='Restore image']").live('click',function(){ 
+	$(".imgedit-settings input.button-primary").live('click',function(){  // restore
 		setTimeout("parent.tb_remove()",2000); 
 		if(!parent.location.search(/post-new.php/i)) 	
 			setTimeout("parent.location.reload()",2000); 
 	});
 	
-	$("input[value='Save']").live('click',function(){ 
+	$(".imgedit-submit input.imgedit-submit-btn").live('click',function(){  //save
 		if(jQuery(this).attr('disabled') != 'disabled'){
 			if(target == 'thumbnail'){
 				var postid = <?php echo $id?>; 

@@ -23,8 +23,8 @@ jQuery(document).ready(function($){
 		$(".ims-gallery .ims-colorbox").colorbox({
 			current:'',
 			photo:true,
-			maxWidth:"95%",
-			maxHeight:'93%',
+			maxWidth:"98%",
+			maxHeight:'98%',
 			speed: imstore.slideshowSpeed,
 			next: imstore.nextLinkText,
 			close: imstore.closeLinkText,

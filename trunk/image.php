@@ -36,8 +36,9 @@ class ImStoreImage{
 	function __construct(){
 		
 		if(empty($_REQUEST['img'])) die();
-		$this->attachment = get_post_meta($_REQUEST['img'],'_wp_attachment_metadata',true);
 		
+		global $ImStore; 
+		$this->attachment = get_post_meta($ImStore->store->decrypt_id($_REQUEST['img']),'_wp_attachment_metadata',true);
 		if($_REQUEST['mini'] == 1) 
 			$this->image_dir = str_ireplace(WP_CONTENT_URL,WP_CONTENT_DIR,$this->attachment['sizes']['mini']['url']);
 		elseif($_REQUEST['thumb'] == 1) 

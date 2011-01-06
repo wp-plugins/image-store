@@ -550,6 +550,20 @@ class ImStoreAdmin{
 	}
 	
 	/**
+	*Dencrypt image ID for downlaods
+	*
+	*@return void
+	*@since 2.0.1
+	*/
+	function decrypt_id($string) {
+   		$parts 	= base64_decode(urldecode($string));
+		$hex 	= substr($parts,6);
+		$int 	= hexdec($hex);
+		$part1  = substr($parts,0,6);
+		return (substr(sha1("imstore".$int.SECURE_AUTH_KEY),0,6) === $part1) ? $int : false;
+    }
+	
+	/**
 	 *Delete image folder
 	 *
 	 *@param unit $postid
@@ -607,7 +621,7 @@ class ImStoreAdmin{
 	*/
 	function add_auto_password($messages){
 		global $post,$pagenow;
-		if($this->opts['securegalleries'] && $pagenow == 'post-new.php') 
+		if($this->opts['securegalleries'] && $pagenow == 'post-new.php' && $post->post_type == "ims_gallery" ) 
 			$post->post_password = wp_generate_password(8);
 		return $messages;
 	}

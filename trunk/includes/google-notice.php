@@ -71,7 +71,7 @@ class ImStoreGoogleNotice {
 		$to 		= $this->opts['notifyemail'];
 		$subject 	= $this->opts['notifysubj'];
 		$message 	= preg_replace($this->opts['tags'],$this->subtitutions,$this->opts['notifymssg']);
-		$headers 	= "From: Image Store <imstore@".$_SERVER['HTTP_HOST'].">\r\n";
+		$headers 	= 'From: "Image Store" <imstore@'.$_SERVER['HTTP_HOST'].">\r\n";
 		
 		wp_mail($to,$subject,$message,$headers);
 		

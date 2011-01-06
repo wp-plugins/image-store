@@ -22,10 +22,11 @@ if(preg_match('#'.basename(__FILE__).'#',$_SERVER['PHP_SELF']))
 			$nonce = '_wpnonce='.wp_create_nonce('ims_secure_img');
 			foreach($this->attachments as $image){
 				$title = $image->post_title;
+				$enc = $this->encrypt_id($image->ID);	
 				$w = $image->meta_value['sizes']['mini']['width'];
 				$h = $image->meta_value['sizes']['mini']['height'];
-				$imagetag = '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$image->ID}&amp;mini=1".'" width="'.$w.'" height="'.$h.'" alt="'. $title.'" />'; 
-				echo '<li class="ims-thumb"><a class="thumb" href="'.IMSTORE_URL."image.php?$nonce&amp;img={$image->ID}".'" rel="nofollow">'.$imagetag.'</a>
+				$imagetag = '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;mini=1".'" width="'.$w.'" height="'.$h.'" alt="'. $title.'" />'; 
+				echo '<li class="ims-thumb"><a class="thumb" href="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}".'" rel="nofollow">'.$imagetag.'</a>
 				<span class="caption">'.$image->post_excerpt.'</span></li>';
 			}
 		}?>

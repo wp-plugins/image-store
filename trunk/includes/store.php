@@ -140,8 +140,9 @@ class ImStoreFront{
 			}
 			if(empty($_COOKIE['wp-postpass_'.COOKIEHASH]) 
 			|| empty($_COOKIE['ims_galid_'.COOKIEHASH]))
-			$this->get_login_form();
-			else wp_redirect(get_permalink($_COOKIE['ims_galid_'.COOKIEHASH]));			
+				$this->get_login_form();
+			elseif(isset($_COOKIE['wp-postpass_'.COOKIEHASH])) 
+				wp_redirect(get_permalink($_COOKIE['ims_galid_'.COOKIEHASH]));			
 		}elseif($atts['album']){
 			$this->get_galleries($atts['album']); 
 			$this->display_galleries();
@@ -169,6 +170,32 @@ class ImStoreFront{
 		}
 	}
 	
+	/**
+	*Encrypt image ID for downlaods
+	*
+	*@return void
+	*@since 2.0.1
+	*/
+	function encrypt_id($int) {
+    	$HashedChecksum = substr(sha1("imstore".$int.SECURE_AUTH_KEY),0,6);
+    	$hex = dechex($int);
+    	return urlencode(base64_encode($HashedChecksum.$hex));
+    }
+	
+	/**
+	*Dencrypt image ID for downlaods
+	*
+	*@return void
+	*@since 2.0.1
+	*/
+	function decrypt_id($string) {
+   		$parts 	= base64_decode(urldecode($string));
+		$hex 	= substr($parts,6);
+		$int 	= hexdec($hex);
+		$part1  = substr($parts,0,6);
+		return (substr(sha1("imstore".$int.SECURE_AUTH_KEY),0,6) === $part1) ? $int : false;
+    }
+
 	/**
 	 *Outputs html selected attribute.
 	 *
@@ -479,13 +506,14 @@ class ImStoreFront{
 				$title 		= $image->post_title;
 				$tagatts	= ' class="ims-colorbox" rel="gallery" ';
 				$caption	= ($this->is_galleries)?$title:$image->post_excerpt ;
-				$link 		= IMSTORE_URL."image.php?$nonce&amp;img={$image->ID}&amp;w=".$this->opts['watermark'];
+				$link 		= IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;w=".$this->opts['watermark'];
 			}
-			$imagetag = '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$image->ID}&amp;thumb=1".'" alt="'.$title.'" />'; 
+			$enc = $this->encrypt_id($image->ID);	
+			$imagetag = '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;thumb=1".'" alt="'.$title.'" />'; 
 			
 			$output .= "<{$icontag}>";
 			if(!$this->opts['disablestore'] &&($this->query_id || $this->is_secure)) 
-				$output .= '<input name="imgs[]" type="checkbox" value="'.$image->ID.'" />';
+				$output .= '<input name="imgs[]" type="checkbox" value="'.$enc.'" />';
 			
 			$output .= '<a href="'.$link.'"'.$tagatts.'title="'.esc_attr($caption).'">'.$imagetag.'</a>';
 			if($this->is_galleries){
@@ -693,6 +721,7 @@ class ImStoreFront{
 		$color	= (empty($_POST['_imstore-color']))?'color':$_POST['_imstore-color'];
 		
 		foreach($images as $id){
+			$id = $this->decrypt_id($id);
 			foreach($this->sizes as $size){
 				if($size['name'] != $_POST['ims-image-size']) continue;
 				if($size['ID']) $this->cart['images'][$id][$_POST['ims-image-size']][$color]['price'] = get_post_meta($size['ID'],'_ims_price',true);
@@ -761,6 +790,7 @@ class ImStoreFront{
 		if(is_array($_POST['ims-remove'])){
 			foreach($_POST['ims-remove'] as $delete){
 				$values = explode('|',$delete);
+				$values[0] = $this->decrypt_id($values[0]);
 				unset($this->cart['images'][$values[0]][$values[1]][$values[2]]);
 				if(empty($this->cart['images'][$values[0]][$values[1]]))
 					unset($this->cart['images'][$values[0]][$values[1]]);
@@ -925,7 +955,7 @@ class ImStoreFront{
 		$to 		= $this->opts['notifyemail'];
 		$subject 	= $this->opts['notifysubj'];
 		$message 	= preg_replace($this->opts['tags'],$this->subtitutions,$this->opts['notifymssg']);
-		$headers 	= "From: Image Store <imstore@".$_SERVER['HTTP_HOST'].">\r\n";
+		$headers 	= 'From: "Image Store" <imstore@'.$_SERVER['HTTP_HOST'].">\r\n";
 		wp_mail($to,$subject,$message,$headers);
 		
 		$this->imspage = 6;
