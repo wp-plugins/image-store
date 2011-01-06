@@ -129,14 +129,16 @@ class ImStoreWidget extends WP_Widget {
 	 * @since 0.5.3 
 	 */
 	function display_images($images){ 
+		global $ImStore; 
 		$itemtag 	= 'ul';
 		$icontag 	= 'li';
 		$captiontag = 'div';
 		$nonce 		= '_wpnonce='.wp_create_nonce('ims_secure_img');
 		$output = "<{$itemtag} class='ims-gallery'>";
 		foreach((array)$images as $image){
+			$enc = $ImStore->store->encrypt_id($image->ID);	
 			$output .= "<{$icontag}>";
-			$output .= '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$image->ID}&amp;mini=1".'" class="ims-widget-img" alt="'.$image->post_title .'" />';			$output .= "</{$icontag}>";
+			$output .= '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;mini=1".'" class="ims-widget-img" alt="'.$image->post_title .'" />';			$output .= "</{$icontag}>";
 		}
 		echo $output .= "</{$itemtag}>";
 	}
