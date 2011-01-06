@@ -57,17 +57,20 @@ $colors_options = array(
 				alt="<?php echo $image['sizes']['mini']['file']?>"/></td>
 				<td colspan="6" class="subrows">
 				<?php foreach($sizes as $size => $colors){?>
-					<?php foreach($colors as $color => $item){?>
+					<?php 
+					foreach($colors as $color => $item){
+						$enc = $this->encrypt_id($id);	
+					?>
 					<div class="clear-row">
 						<span class="ims-quantity">
-						<input type="text" name="ims-quantity<?php echo "[{$id}][{$size}][{$color}]"?>" 
+						<input type="text" name="ims-quantity<?php echo "[{$enc}][{$size}][{$color}]"?>" 
 						value="<?php echo $item['quantity']?>" class="input" /></span>
 						<span class="ims-size"><?php echo $size.' '.$item['unit']?></span>
 						<span class="ims-color"><?php echo $colors_options[$color].$item['color'] ?></span>
 						<span class="ims-price"><?php printf($format[$loc],number_format($item['price'],2))?></span>
 						<span class="ims-subtotal"><?php printf($format[$loc],number_format($item['subtotal'],2))?></span>
 						<span class="ims-delete"><input name="ims-remove[]" type="checkbox" 
-						value="<?php echo "{$id}|{$size}|{$color}"?>" /></span>
+						value="<?php echo "{$enc}|{$size}|{$color}"?>" /></span>
 						
 						<?php if($this->opts['gateway'] == 'googlesand' || $this->opts['gateway'] == 'googleprod'){?>
 						<input type="hidden" name="item_name_<?php echo $i?>" value="<?php echo get_the_title($id)?>" />
@@ -75,20 +78,21 @@ $colors_options = array(
 						value="<?php echo "$size ".trim($colors_options[$color]," + ")?>" />
 						<input type="hidden" name="item_quantity_<?php echo $i?>" value="<?php echo $item['quantity']?>" />
 						<input type="hidden" name="item_currency_<?php echo $i?>" value="<?php echo $this->opts['currency']?>" />
-						<input type="hidden" name="item_merchant_id_<?php echo $i?>" value="<?php echo sprintf("%05d",$id)?>" />
+						<input type="hidden" name="item_merchant_id_<?php echo $i?>" value="<?php echo $enc?>" />
 						<input type="hidden" name="item_price_<?php echo $i?>"  value="<?php echo $item['price'] + $item['color'];?>"/>
 						
 						<?php if($item['download']) 
 						$downlinks .=  "&lt;p&gt;&lt;a href='".
-						IMSTORE_ADMIN_URL."download.php?_wpnonce=$nonce&amp;img=$id&amp;sz=$size&amp;c=$color' &gt;".
-						get_the_title($id)."&lt;/a&gt;: ".trim($colors_options[$color]," + ")."&lt;/p&gt;";?>
+						IMSTORE_ADMIN_URL."download.php?_wpnonce=$nonce&amp;img=$enc&amp;sz=$size&amp;c=$color' &gt;".
+						get_the_title($id)."&lt;/a&gt;: ".trim($colors_options[$color]," + ")."&lt;/p&gt;";
+						?>
 
-						<?php }else{?>
+						<?php }else{ ?>
 						<input type="hidden" name="on0_<?php echo $i?>" value="<?php echo $size ?>"/>
 						<input type="hidden" name="os0_<?php echo $i?>" value="<?php echo trim($colors_options[$color]," + ")?>"/>
 						<input type="hidden" name="quantity_<?php echo $i?>" value="<?php echo $item['quantity']?>"/>
 						<input type="hidden" name="item_name_<?php echo $i ?>" value="<?php echo get_the_title($id)?>"/>
-						<input type="hidden" name="item_number_<?php echo $i ?>" value="<?php echo sprintf("%05d",$id)?>"/>
+						<input type="hidden" name="item_number_<?php echo $i ?>" value="<?php echo $enc?>"/>
 						<input type="hidden" name="amount_<?php echo $i?>" value="<?php echo $item['price'] + $item['color'];?>"/>
 						<?php }?>
 						

@@ -35,13 +35,13 @@ class ImStoreDownloadImage{
 	function __construct(){
 		
 		if(empty($_REQUEST['img'])) die();
-		$this->attachment = get_post_meta($_REQUEST['img'],'_wp_attachment_metadata',true);
 		
+		global $ImStore; 
+		$this->attachment = get_post_meta($ImStore->store->decrypt_id($_REQUEST['img']),'_wp_attachment_metadata',true);
 		if($this->attachment['sizes'][$_GET['sz']]['url']) 
 			$this->image_dir = str_ireplace(WP_CONTENT_URL,WP_CONTENT_DIR,$this->attachment['sizes'][$_GET['sz']]['url']);
 		elseif($this->attachment['sizes']['preview']['url']) 
 			$this->image_dir = str_ireplace(WP_CONTENT_URL,WP_CONTENT_DIR,$this->attachment['sizes']['preview']['url']);
-		else $this->image_dir = WP_CONTENT_DIR . $this->attachment['file'];
 
 		if(!file_exists($this->image_dir)) die(); 
 		$this->display_image();
@@ -56,7 +56,7 @@ class ImStoreDownloadImage{
 	 * @since 0.5.0 
 	 */
 	function display_image(){
-		global $wpdb;
+		global $wpdb; 
 		
 		$realname	= basename($this->image_dir);
 		$filetype 	= wp_check_filetype($realname);

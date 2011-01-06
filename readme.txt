@@ -1,25 +1,23 @@
 === Image Store ===
 Contributors: Hax
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8SJEQXK5NK4ES
-Tags: e-commerce,shop,store,photo,picture,image,galleries,imstore,image-store,secure,translate,translatable,
-slideshow,gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages
+Tags: e-commerce,shop,store,photo,picture,image,galleries,imstore,image-store,secure,translate,translatable,watermark,
+slideshow,gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints
 Requires at least: 3.0.0
 Tested up to: 3.0.4
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 
-Image Store(ImStore) is a image gallery and store/shop plugin for WordPress with a slideshow option.
+Image Store (ImStore) is an image gallery and store plugin for WordPress wit Paypal and Google Checkout integration.
 
 == Description ==
-Image Store(ImStore) is a image gallery and store plugin for WordPress with a slideshow and paypal integration. This 
-plugin was created because I saw the need of the worpress community to have a images store that didn't required the installation of multiple
-plugins to get this accomplished or to go through a lot of settings. :@)
+This plugin was created because there was a need in the WorPress community to have an images store that did not required the installation of multiple plugins. Enjoy!! and please support the plugin. :@) 
 
-The plugin fully integrated with the WordPress database the only thing that is created is a post_expire column on the posts table.
+The plugin fully integrated with the WordPress database it only creates a post_expire column on the posts table.
 so you will not find extra tables on your database(Cool!.. at least for me I hate extra tables).
 
-* Example http://imstore.xparkmedia.com/image-store/
-* Laguages http://imstore.xparkmedia.com/languages/
-* Shortcode guide http://imstore.xparkmedia.com/usage/
+* Example http://imstore.xparkmedia.com/image-store
+* Laguages http://imstore.xparkmedia.com/languages
+* Shortcode guide http://imstore.xparkmedia.com/usage
 
 = Features =
 
@@ -81,10 +79,18 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 
 == Frequently Asked Questions ==
 
-* http://imstore.xparkmedia.com/troubleshooting/
+* http://imstore.xparkmedia.com/blog
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+= 2.0.1 =
+* Added: Extra image security.
+* Fixed: Price list sort missing.
+* Fixed: Auto password generation on all post.
+* Fixed: Translation redirect problem.
+* Fixed: Translation permalink problem.
+* Fixed: Mini thumbnail not been genarated after image edition.
+* Changed: Custom post type (ims_gallery) capabilities.
 
 = 2.0.0 =
 * Code Cleanup
