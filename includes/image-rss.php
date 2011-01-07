@@ -98,6 +98,7 @@ class ImStoreFeeds{
 	*@since 0.5.3 
 	*/
 	 function display_rss(){
+		global $ImStore; 
 	 	header('Content-Type:'.feed_content_type('rss-http').'; charset='.$this->charset,true);
 		echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'" standalone="yes"?>';?>
 		<rss version="2.0"
@@ -118,13 +119,13 @@ class ImStoreFeeds{
 			<language><?php echo get_option('rss_language');?></language>
 			<sy:updatePeriod><?php echo apply_filters('rss_update_period','hourly');?></sy:updatePeriod>
 			<sy:updateFrequency><?php echo apply_filters('rss_update_frequency','1');?></sy:updateFrequency>
-			<?php foreach($this->attachments as $image){?>
+			<?php foreach($this->attachments as $image){ $encr = $ImStore->store->encrypt_id($image->ID)?>
 			<?php $filetype = wp_check_filetype(basename($image->post_title));?>
 			<item>
 				<title><![CDATA[<?php echo $image->post_title?>]]></title>
-				<link><?php echo IMSTORE_URL."image.php?img={$image->ID}";?></link>
-				<media:thumbnail url="<?php echo IMSTORE_URL."image.php?img={$image->ID}&amp;thumb=1";?>"/>
-				<media:content type="<?php echo $filetype['type']?>" url="<?php echo IMSTORE_URL."image.php?img={$image->ID}";?>"/>
+				<link><?php echo IMSTORE_URL."image.php?img={$encr}";?></link>
+				<media:thumbnail url="<?php echo IMSTORE_URL."image.php?img={$encr}&amp;thumb=1";?>"/>
+				<media:content type="<?php echo $filetype['type']?>" url="<?php echo IMSTORE_URL."image.php?img={$encr}";?>"/>
 			</item>
 			<?php }?>
 		</channel>
