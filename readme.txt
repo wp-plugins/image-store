@@ -83,7 +83,9 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+
 = 2.0.1 =
+* Fixed: gallery feed 404.
 * Added: Extra image security.
 * Fixed: Price list sort missing.
 * Fixed: Auto password generation on all post.
