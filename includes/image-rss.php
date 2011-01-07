@@ -41,7 +41,7 @@ class ImStoreFeeds{
 	*/
 	function get_feed_url(){
 		global $ImStore;
-		if($ImStore->permalinks) $link = get_permalink()."feed/imstore";
+		if($ImStore->permalinks) $link = get_permalink()."/feed/imstore";
 		else $link = get_permalink()."&feed=imstore";
 		return $link;
 	}
