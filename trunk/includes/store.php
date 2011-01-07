@@ -498,6 +498,7 @@ class ImStoreFront{
 		
 		$output = "<{$itemtag} class='ims-gallery'>";
 		foreach($this->attachments as $image){
+			$enc = $this->encrypt_id($image->ID);	
 			if($image->post_parent){
 				$title = $caption = get_the_title($image->post_parent);
 				$link 		= get_permalink($image->post_parent);
@@ -508,7 +509,6 @@ class ImStoreFront{
 				$caption	= ($this->is_galleries)?$title:$image->post_excerpt ;
 				$link 		= IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;w=".$this->opts['watermark'];
 			}
-			$enc = $this->encrypt_id($image->ID);	
 			$imagetag = '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;thumb=1".'" alt="'.$title.'" />'; 
 			
 			$output .= "<{$icontag}>";
