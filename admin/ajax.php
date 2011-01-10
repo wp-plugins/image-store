@@ -119,6 +119,25 @@ function ajax_ims_flash_image_data(){
 	$downloadsizes = get_option('ims_download_sizes');
 	if(is_array($downloadsizes)) $img_sizes += $downloadsizes;
 	
+	@copy($abspath,"$despath/$filename");
+	$orininfo = @getimagesize($abspath);
+	
+	$metadata['file'] 	= $relative;
+	$metadata['width'] 	= $orininfo[0];
+	$metadata['height'] = $orininfo[1];
+	$metadata['url'] 	= $guid;
+	$metadata['path'] 	= "$despath/$filename";
+	
+	list($uwidth,$uheight) = wp_constrain_dimensions($metadata['width'],$metadata['height'],100,100);
+	$metadata['hwstring_small'] = "height='$uheight' width='$uwidth'";
+	
+	switch($orininfo['channels']){ 
+		case 1:$metadata['color'] = 'BW'; break;
+		case 3:$metadata['color'] = 'RGB'; break;
+		case 4:$metadata['color'] = 'CMYK'; break;
+		default:$metadata['color'] = __('Unknown',ImStore::domain);
+	}
+	
 	foreach($img_sizes as $img_size){
 		$resized = image_resize($abspath,$img_size['w'],$img_size['h'],$img_size['crop'],null,$despath,$img_size['q']);
 		if(!is_wp_error($resized) && $resized && $info = @getimagesize($resized)){
@@ -128,23 +147,6 @@ function ajax_ims_flash_image_data(){
 			$imgname 	= basename($abspath);
 		}
 		
-		@copy($abspath,"$despath/$filename");
-
-		$metadata['file'] 	= $relative;
-		$metadata['width'] 	= $info[0];
-		$metadata['height'] = $info[1];
-		$metadata['path'] 	= "$despath/$filename";
-		$metadata['url'] 	= $guid;
-		
-		list($uwidth,$uheight) = wp_constrain_dimensions($metadata['width'],$metadata['height'],100,100);
-		$metadata['hwstring_small'] = "height='$uheight' width='$uwidth'";
-		
-		switch($info['channels']){ 
-			case 1:$metadata['color'] = 'BW'; break;
-			case 3:$metadata['color'] = 'RGB'; break;
-			case 4:$metadata['color'] = 'CMYK'; break;
-			default:$metadata['color'] = __('Unknown',ImStore::domain);
-		}
 		$data = array(
 			'file'	=>$imgname,
 			'width'	=>$info[0],
@@ -153,9 +155,9 @@ function ajax_ims_flash_image_data(){
 			'path'	=> dirname($abspath)."/$imgname",
 		);
 		$metadata['sizes'][$img_size['name']] = $data;
-		$metadata['image_meta'] = wp_read_image_metadata($abspath);
-	}
-	
+		$metadata['image_meta'] = wp_read_image_metadata($abspath);		
+	}	
+
 	$attachment = array(
 		'guid' => $guid,
 		'post_title' => $filename,
