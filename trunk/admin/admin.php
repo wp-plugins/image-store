@@ -211,7 +211,26 @@ class ImStoreAdmin{
 				if(!file_exists($despath)) @mkdir($despath,0775,true);
 				if($scan) @rename("$galpath/".$file['filename'],$filepath);
 				if(!$scan) file_put_contents($filepath,$file['content']); @chmod($filepath,0777);
-
+				
+				@copy($filepath,"$despath/$filename"); 
+				$orininfo = @getimagesize($filepath);
+				
+				$metadata['file'] 	= $relative;
+				$metadata['width'] 	= $orininfo[0];
+				$metadata['height'] = $orininfo[1];
+				$metadata['url'] 	= $guid;
+				$metadata['path'] 	= "$despath/$filename";
+				
+				list($uwidth,$uheight) = wp_constrain_dimensions($metadata['width'],$metadata['height'],100,100);
+				$metadata['hwstring_small'] = "height='$uheight' width='$uwidth'";
+				
+				switch($orininfo['channels']){ 
+					case 1:$metadata['color'] = 'BW'; break;
+					case 3:$metadata['color'] = 'RGB'; break;
+					case 4:$metadata['color'] = 'CMYK'; break;
+					default:$metadata['color'] = __('Unknown',ImStore::domain);
+				}
+				
 				foreach($img_sizes as $size){
 					$resized = image_resize($filepath,$size['w'],$size['h'],$size['crop'],NULL,$despath,$size['q']);
 					if(!is_wp_error($resized) && $resized && $info = getimagesize($resized)){
@@ -220,25 +239,6 @@ class ImStoreAdmin{
 						$info 		= getimagesize($filepath);
 						$imgname 	= basename($filepath);
 					}
-					
-					@copy($filepath,"$despath/$filename"); 
-					
-					$metadata['file'] 	= $relative;
-					$metadata['width'] 	= $info[0];
-					$metadata['height'] = $info[1];
-					$metadata['path'] 	= "$despath/$filename";
-					$metadata['url'] 	= $guid;
-					
-					list($uwidth,$uheight) = wp_constrain_dimensions($metadata['width'],$metadata['height'],100,100);
-					$metadata['hwstring_small'] = "height='$uheight' width='$uwidth'";
-					
-					switch($info['channels']){ 
-						case 1:$metadata['color'] = 'BW'; break;
-						case 3:$metadata['color'] = 'RGB'; break;
-						case 4:$metadata['color'] = 'CMYK'; break;
-						default:$metadata['color'] = __('Unknown',ImStore::domain);
-					}
-					
 					$data = array(
 						'file'	=>$imgname,
 						'width'	=>$info[0],

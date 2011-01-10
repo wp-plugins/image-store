@@ -1,11 +1,11 @@
 === Image Store ===
 Contributors: Hax
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8SJEQXK5NK4ES
-Tags: e-commerce,shop,store,photo,picture,image,galleries,imstore,image-store,secure,translate,translatable,watermark,
+Tags: e-commerce,shop,photo store,picture,image,galleries,imstore,image-store,secure,translate,translatable,watermark,
 slideshow,gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints
 Requires at least: 3.0.0
 Tested up to: 3.0.4
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 
 Image Store (ImStore) is an image gallery and store plugin for WordPress wit Paypal and Google Checkout integration.
 
@@ -83,6 +83,10 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+= 2.0.2 =
+* Fixed: Download image error.
+* Fixed: Wrong metadata information backend.
+* Fixed: Not been able to change preview image size.
 
 = 2.0.1 =
 * Fixed: gallery feed 404.

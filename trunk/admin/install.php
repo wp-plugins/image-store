@@ -186,7 +186,7 @@ class ImStoreInstaller{
 		);
 		
 		$ims_dis_img['mini'] 			= array('name' => 'mini','w' => 70,'h' => 60,'q' => 95,'crop' => 1);
-		$ims_dis_img['preview']			= array('name' => 'preview','w' => 380,'h' => 380,'q' => 70,'crop' => 0);
+		$ims_dis_img['preview']			= array('name' => 'preview','w' => 380,'h' => 380,'q' => 80,'crop' => 0);
 		
 		$ims_user_opts['caplist']		= $ims_caps;
 		$ims_user_opts['swfupload']		= '1';

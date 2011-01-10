@@ -90,12 +90,16 @@ if(!empty($_POST['updateimages'])){
 	update_option('preview_size_w',$_POST['preview']['w']);
 	update_option('preview_size_h',$_POST['preview']['h']);
 	
+	$imgsizes = get_option('ims_dis_images');
+	$imgsizes['preview'] = array('name' => 'preview','w' => $_POST['preview']['w'],'h' => $_POST['preview']['h'],'q' => 80,'crop' => 0);
+	
 	unset($_POST['preview']);
 	
-	update_option('ims_sizes',$sizes);
+	update_option('ims_sizes',$sizes); 
+	update_option('ims_dis_images',$imgsizes);
 	update_option('ims_download_sizes',$downloads);
 	update_option('ims_front_options',wp_parse_args($_POST,$this->opts));
-	//wp_redirect($pagenowurl.'&ms=3#image-settings');	
+	wp_redirect($pagenowurl.'&ms=4#image-settings');	
 }
 
 ?>

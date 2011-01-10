@@ -36,10 +36,11 @@ $labels = array(
 
 <?php if($_POST['payment_gross'] == number_format($cart['total'],2)){	
 	foreach($cart['images'] as $id => $sizes){
+		$enc = $this->encrypt_id($id);	
 		foreach($sizes as $size => $colors){
 			foreach($colors as $color => $item){
 				if($item['download'])
-				 $downlinks[] = '<a href="'.IMSTORE_ADMIN_URL."download.php?$nonce&amp;img=$id&amp;sz=$size&amp;c=$color". '" class="ims-download">'. get_the_title($id)." ". $labels[$color]." </a>";
+				 $downlinks[] = '<a href="'.IMSTORE_ADMIN_URL."download.php?$nonce&amp;img=".$enc."&amp;sz=$size&amp;c=$color". '" class="ims-download">'. get_the_title($id)." ". $labels[$color]." </a>";
 			}
 		}
 	}
