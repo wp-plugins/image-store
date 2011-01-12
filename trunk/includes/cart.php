@@ -63,7 +63,7 @@ $colors_options = array(
 					?>
 					<div class="clear-row">
 						<span class="ims-quantity">
-						<input type="text" name="ims-quantity<?php echo "[{$enc}][{$size}][{$color}]"?>" 
+						<input type="text" name="ims-quantity<?php echo "[$id][{$size}][{$color}]"?>" 
 						value="<?php echo $item['quantity']?>" class="input" /></span>
 						<span class="ims-size"><?php echo $size.' '.$item['unit']?></span>
 						<span class="ims-color"><?php echo $colors_options[$color].$item['color'] ?></span>
