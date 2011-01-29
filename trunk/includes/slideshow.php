@@ -26,7 +26,7 @@ if(preg_match('#'.basename(__FILE__).'#',$_SERVER['PHP_SELF']))
 				$w = $image->meta_value['sizes']['mini']['width'];
 				$h = $image->meta_value['sizes']['mini']['height'];
 				$imagetag = '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;mini=1".'" width="'.$w.'" height="'.$h.'" alt="'. $title.'" />'; 
-				echo '<li class="ims-thumb"><a class="thumb" href="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}".'" rel="nofollow">'.$imagetag.'</a>
+				echo '<li class="ims-thumb"><a class="thumb" href="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}".'" title="'.esc_attr($image->post_title).'" rel="nofollow">'.$imagetag.'</a>
 				<span class="caption">'.$image->post_excerpt.'</span></li>';
 			}
 		}?>

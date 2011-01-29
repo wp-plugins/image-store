@@ -25,9 +25,11 @@ class ImStoreFront{
 		add_action('get_header',array(&$this,'ims_init'));
 		add_action('wp_head',array(&$this,'print_ie_styles'));
 		add_action('pre_get_posts',array(&$this,'pre_get_posts'));
-		add_filter('pre_get_posts',array(&$this,'dis_custom_types'),30,1);
-		add_filter('query_vars',array(&$this,'add_var_for_rewrites'),10,1);
-		add_filter('template_include',array(&$this,'taxonomy_template'),50,1);
+		add_filter('pre_get_posts',array(&$this,'dis_custom_types'),1,30);
+		add_filter('query_vars',array(&$this,'add_var_for_rewrites'),1,10);
+		add_filter('protected_title_format',array(&$this,'remove_protected'));
+		add_filter('template_include',array(&$this,'taxonomy_template'),1,50);
+		add_filter('single_template',array(&$this,'change_gallery_template'),1,50);
 		add_action('wp_enqueue_scripts',array(&$this,'load_scripts_styles'));
 		add_shortcode('image-store',array(&$this,'imstore_shortcode'));
 		add_shortcode('ims-gallery-content',array(&$this,'ims_gallery_shortcode'));
@@ -160,14 +162,42 @@ class ImStoreFront{
 	 *@since 1.1.0
 	 */ 
 	function pre_get_posts(){ 
-		global $wp_query; 
-		if($wp_query->query_vars['imsgalid'] && 
+		global $wp_query; //print_r($wp_query);
+		if($wp_query->query_vars['ims_gallery'] && 
 		$wp_query->is_home && empty($wp_query->is_singular)){
 			$wp_query->is_page = 1;
 			$wp_query->is_posts_page = 1;
 			$wp_query->query_vars['p'] = $this->page_front;
 			$wp_query->query_vars['page_id'] = $this->page_front;
 		}
+	}
+		
+	/**
+	 *Remove "protected" from gallery title
+	 *
+	 *@param $title string
+	 *@return string
+	 *@since 2.0.4
+	 */ 
+	function remove_protected($title){
+		global $post;
+		if($post->post_type == 'ims_gallery') 
+			return $post->post_title;
+		return $title;
+	}
+		
+	/**
+	 *Change single gallery template
+	 *
+	 *@param $template string
+	 *@return string
+	 *@since 2.0.4
+	 */
+	function change_gallery_template($template){
+		global $post;
+		if($post->post_type == 'ims_gallery' && $this->opts['gallery_template'] )
+			return get_template_directory() . "/".$this->opts['gallery_template'];
+		return $template;
 	}
 	
 	/**
@@ -321,7 +351,7 @@ class ImStoreFront{
 		$this->gallery_id	= $post->ID;
 		$this->sizes 		= $this->get_price_list();
 		$this->message		= $messages[get_query_var('imsmessage')];
-		$this->query_id 	= ($id = get_query_var('imsgalid'))?$id:get_query_var('p');
+		$this->query_id 	= ($id = get_query_var('ims_gallery'))?$id:get_query_var('p');
 		$this->listmeta 	= get_post_meta($this->pricelist_id,'_ims_list_opts',true);
 		$this->order		= ($sort = get_post_meta($this->gallery_id,'_ims_order',true))?$sort:$this->opts['imgsortdirect'];
 		$this->sortby 		= ($sortby = get_post_meta($this->gallery_id,'_ims_sortby',true))?$sortby:$this->opts['imgsortorder'];
@@ -494,7 +524,7 @@ class ImStoreFront{
 		$icontag 	= 'li';
 		$captiontag = 'div';
 		$columns 	= intval($this->opts['displaycolmns']);
-		//$nonce 		= '_wpnonce='.wp_create_nonce('ims_secure_img');
+		//$nonce 	= '_wpnonce='.wp_create_nonce('ims_secure_img');
 		
 		$output = "<{$itemtag} class='ims-gallery'>";
 		foreach($this->attachments as $image){
@@ -509,13 +539,13 @@ class ImStoreFront{
 				$caption	= ($this->is_galleries)?$title:$image->post_excerpt ;
 				$link 		= IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;w=".$this->opts['watermark'];
 			}
-			$imagetag = '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;thumb=1".'" alt="'.$title.'" />'; 
+			$imagetag = '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;thumb=1".'" title="'.esc_attr($title).'" alt="'.esc_attr($title).'" />'; 
 			
 			$output .= "<{$icontag}>";
 			if(!$this->opts['disablestore'] &&($this->query_id || $this->is_secure)) 
 				$output .= '<input name="imgs[]" type="checkbox" value="'.$enc.'" />';
 			
-			$output .= '<a href="'.$link.'"'.$tagatts.'title="'.esc_attr($caption).'">'.$imagetag.'</a>';
+			$output .= '<a href="'.$link.'"'.$tagatts.' title="'.esc_attr($title).'" name="'.esc_attr($caption).'">'.$imagetag.'</a>';
 			if($this->is_galleries){
 				$output .= "
 					<{$captiontag} class='gallery-caption'>

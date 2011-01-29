@@ -321,7 +321,7 @@ function create_ims_customer(){
 		
 	$user_name = sanitize_user($_POST['first_name'].' '. $_POST['last_name']);
 	if(username_exists($user_name) && !isset($_POST['update_customer'])) 
-		$errors->add('customer_exists',__('That customer already exists.'));
+		$errors->add('customer_exists',__('That customer already exists.',ImStore::domain));
 		
 	if(!empty($errors->errors))
 		return $errors;

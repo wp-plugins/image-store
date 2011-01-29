@@ -4,7 +4,7 @@ Plugin Name: Image Store
 Plugin URI: http://imstore.xparkmedia.com
 Description: Your very own image store within wordpress "ImStore"
 Author: Hafid R.Trujillo Huizar
-Version: 2.0.3
+Version: 2.0.4
 Author URI:http://www.xparkmedia.com
 Requires at least: 3.0.0
 Tested up to: 3.0.2
@@ -42,7 +42,7 @@ class ImStore{
 	*Make sure that new language(.mo) files have 'ims-' as base name
 	*/
 	const domain	= 'ims';
-	const version	= '2.0.3';
+	const version	= '2.0.4';
 	
 	/**
 	*Constructor
@@ -187,21 +187,23 @@ class ImStore{
 		$wp_rewrite->add_rewrite_tag('%paypalipn%','([^/]+)','paypalipn=');
 		$wp_rewrite->add_rewrite_tag('%imslogout%','([^/]+)','imslogout=');
 		$wp_rewrite->add_rewrite_tag('%imsmessage%','([0-9]+)','imsmessage=');
+		
 		$new_rules = array(
 			__('galleries',ImStore::domain)."/imspaypalipn/?([0-9]+)/?$" =>
 			"index.php&paypalipn=".$wp_rewrite->preg_index(1),
 			__('galleries',ImStore::domain)."/([^/]+)/logout/?([^/]+)?$" => 
-			"index.php&imsgalid=".$wp_rewrite->preg_index(1).
+			"index.php&ims_gallery=".$wp_rewrite->preg_index(1).
 			'&imslogout='.$wp_rewrite->preg_index(2),
 			__('galleries',ImStore::domain)."/([^/]+)/([^/]+)/ms/?([0-9]+)/?$" => 
-			"index.php&imsgalid=".$wp_rewrite->preg_index(1).
+			"index.php&ims_gallery=".$wp_rewrite->preg_index(1).
 			'&imspage='.$wp_rewrite->preg_index(2).
 			'&imsmessage='.$wp_rewrite->preg_index(3),
 			__('galleries',ImStore::domain)."/([^/]+)/([^/]+)/?$" => 
-			"index.php&imsgalid=".$wp_rewrite->preg_index(1).
+			"index.php&ims_gallery=".$wp_rewrite->preg_index(1).
 			'&imspage='.$wp_rewrite->preg_index(2),
 		);
-		$wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
+		$wp_rewrite->rules = $new_rules + $wp_rewrite->rules; //print_r($wp_rewrite);
+		$wp_rewrite->extra_rules_top =  $new_rules + $wp_rewrite->extra_rules_top;
 		return $wp_rewrite;
 	}
 	 
@@ -233,11 +235,9 @@ class ImStore{
 			'exclude_from_search'=> true,
 			'hierarchical' 		=> false,
 			'revisions'			=> false,
-			'query_var'			=> 'imsgalid',
 			'capability_type' 	=> 'page',
-			'capabilities'		=> array('ims_add_galleries'),
+			'query_var'			=> 'ims_gallery',
 			'menu_icon' 		=> IMSTORE_URL.'_img/imstore.png',
-			'capabilities'		=> array('ims_read_galleries'),
 			'rewrite' 			=> array('slug' => __('galleries',ImStore::domain),'with_front' => false),
 			'supports' 			=> array('title','comments','author')
 		));

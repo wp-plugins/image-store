@@ -28,7 +28,10 @@ jQuery(document).ready(function($){
 			speed: imstore.slideshowSpeed,
 			next: imstore.nextLinkText,
 			close: imstore.closeLinkText,
-			previous: imstore.prevLinkText
+			previous: imstore.prevLinkText,
+			title: function(){
+				return ($(this).attr('name') == '') ? ' ' : $(this).attr('name');
+			}
 		})
 	};
 	

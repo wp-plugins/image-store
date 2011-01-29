@@ -28,6 +28,18 @@ class ImStoreShortCode{
 	}
 	
 	/**
+	*Encrypt image ID for downlaods
+	*
+	*@return void
+	*@since 2.0.4
+	*/
+	function encrypt_id($int) {
+    	$HashedChecksum = substr(sha1("imstore".$int.SECURE_AUTH_KEY),0,6);
+    	$hex = dechex($int);
+    	return urlencode(base64_encode($HashedChecksum.$hex));
+    }
+	
+	/**
 	 * Core function display gallery
 	 *
 	 * @param array $atts
@@ -118,8 +130,8 @@ class ImStoreShortCode{
 		$output = "<{$itemtag} class='ims-gallery'>";
 		foreach($this->attachments as $image){
 
-			$link 		= IMSTORE_URL."image.php?$nonce&amp;img={$image->ID}";
-			$title_att 	= ($caption)?'title="'.$image->post_excerpt.'"':' ' ;
+			$link 		= IMSTORE_URL."image.php?$nonce&amp;img=".$this->encrypt_id($image->ID);
+			$title_att 	= ($caption)?'title="'.esc_attr($image->post_title).'" name="'.esc_attr($image->post_excerpt).'"':' ' ;
 			$tagatts 	= ($lightbox)?' class="ims-colorbox" rel="gallery" ':' class="ims-image" rel="image" ';
 			$imagetag 	= '<img src="'.$image->meta_value['sizes']['thumbnail']['url'].'" alt="'.$image->post_title.'" />'; 
 			
@@ -152,7 +164,7 @@ class ImStoreShortCode{
 				$w = $image->meta_value['sizes']['mini']['width'];
 				$h = $image->meta_value['sizes']['mini']['height'];
 				$imagetag = '<img src="'.$image->meta_value['sizes']['mini']['url'].'" width="'.$w.'" height="'.$h.'" alt="'. $title.'" />'; 
-				$output .= '<li class="ims-thumb"><a class="thumb" href="'.IMSTORE_URL."image.php?$nonce&amp;img={$image->ID}".'" rel="nofollow">'.$imagetag.'</a>';
+				$output .= '<li class="ims-thumb"><a class="thumb" href="'.IMSTORE_URL."image.php?$nonce&amp;img=".$this->encrypt_id($image->ID).'" title="'.esc_attr($image->post_title).'" rel="nofollow">'.$imagetag.'</a>';
 				if($caption) $output .= '<span class="caption">'.$image->post_excerpt.'</span>';
 				$output .= '</li>';
 			}
@@ -167,12 +179,16 @@ class ImStoreShortCode{
 						<div id="ims-slideshow" class="ims-slideshow" ></div>
 					</div></div>';
 		$output .= '<div class="ims-slideshow-tools-box">
-					<form action="" method="post" class="ims-slideshow-tools">
-					<div class="image-color">
-						<label><input type="checkbox" name="ims-color" id="ims-color-bw" value="bandw" /> '.__('Black &amp; White',ImStore::domain). ' </label>
-						<label><input type="checkbox" name="ims-color" id="ims-color-sepia" value="sepia" /> '.__('Sepia',ImStore::domain). ' </label>
-					</div>
-						<div id="ims-player" class="ims-player">
+					<form action="" method="post" class="ims-slideshow-tools">';
+		if(!$this->opts['disablebw'] || !$this->opts['disablesepia']){
+			$output .=	'<div class="image-color">';
+			if(!$this->opts['disablebw'])
+				$output .=	'<label><input type="checkbox" name="ims-color" id="ims-color-bw" value="bandw" /> '.__('Black &amp; White',ImStore::domain). ' </label>';
+			if(!$this->opts['disablesepia'])		
+				$output .=	'<label><input type="checkbox" name="ims-color" id="ims-color-sepia" value="sepia" /> '.__('Sepia',ImStore::domain). ' </label>';
+			$output .= '</div>';
+		}
+		$output .=	'<div id="ims-player" class="ims-player">
 							<a href="#" class="bk" rel="nofollow" role="button">'.__('Back',ImStore::domain).' </a> 
 							<a href="#" class="py" rel="nofollow" role="button">'.__('Play',ImStore::domain).' </a> 
 							<a href="#" class="nx" rel="nofollow" role="button">'.__('Next',ImStore::domain).' </a>

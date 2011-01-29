@@ -195,6 +195,12 @@ if(!empty($_POST['updateimages'])){
 				<small><?php _e('Hide slideshow link from store navigation.',ImStore::domain)?></small></td>
 		</tr>
 		
+		<tr>
+			<td scope="row"><label for="hideslideshow"><?php _e('Single Gallery Template',ImStore::domain)?></label></td>
+			<td><select name="gallery_template"><option value=""><?php _e('Default Template',ImStore::domain); ?></option>
+			<?php page_template_dropdown($this->_vr('gallery_template'))?></select></td>
+		</tr>
+		
 		<tr class="alternate">
 			<td scope="row"><label for="galleryexpire"><?php _e('Galleries expire after ',ImStore::domain)?></label></td>
 			<td><input type="text" name="galleryexpire" id="galleryexpire" class="inputxm" value="<?php $this->_v('galleryexpire')?>"/>
