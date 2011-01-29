@@ -83,7 +83,7 @@ class ImStoreFeeds{
 				SELECT ID FROM $wpdb->posts
 				WHERE post_name = '%s'
 			) ORDER BY post_date DESC LIMIT ".get_option('posts_per_rss')
-		,get_query_var('imsgalid')));
+		,get_query_var('ims_gallery')));
 		if(empty($this->attachments)) return;
 		foreach($this->attachments as $post){
 			$post->meta_value = unserialize($post->meta_value);

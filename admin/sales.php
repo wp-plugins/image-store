@@ -58,7 +58,7 @@ $format 	= array('',"$this->sym%s","$this->sym %s","%s$this->sym","%s $this->sym
 		<?php if($is_trash):?>
 		<input type="submit" name="deleteall" value="<?php _e('Empty Trash',ImStore::domain)?>" class="button" /> |
 		<?php endif?>
-		<a href="<?php echo IMSTORE_ADMIN_URL?>csv-sales.php" class="button"><?php _e('Download CSV',ImStore::domain);?></a>
+		<a href="<?php echo IMSTORE_ADMIN_URL?>sales-csv.php" class="button"><?php _e('Download CSV',ImStore::domain);?></a>
 	</div>
 	<p class="search-box">
 		<input type="text" id="media-search-input" name="s" value="<?php echo esc_attr($_GET['s'])?>" />

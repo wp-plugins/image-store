@@ -228,8 +228,8 @@ class ImStoreImage{
 	function image_ratio($w,$h,$immax){
 		$max	= max($w,$h);
 		$r		= $max > $immax?($immax / $max):1;
-		$i['w']	= ceil($w*$r*.6);
-		$i['h']	= ceil($h*$r*.6);
+		$i['w']	= ceil($w*$r*.7);
+		$i['h']	= ceil($h*$r*.7);
 		return $i;
 	}
 
