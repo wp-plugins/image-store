@@ -156,15 +156,16 @@ function ajax_ims_flash_image_data(){
 		);
 		$metadata['sizes'][$img_size['name']] = $data;
 		$metadata['image_meta'] = wp_read_image_metadata($abspath);		
-	}	
-
+	}
+	$title = ($metadata['image_meta']['title']) ? $metadata['image_meta']['title'] : $filename;
 	$attachment = array(
 		'guid' => $guid,
-		'post_title' => $filename,
-		'post_type' => 'ims_image',
-		'post_mime_type'=> $filetype['type'],
-		'post_status' => 'publish',
+		'post_title' => $title,
 		'post_parent' => $galleid,
+		'post_type' => 'ims_image',
+		'post_status' => 'publish',
+		'post_mime_type'=> $filetype['type'],
+		'post_excerpt' => $metadata['image_meta']['caption'],
 	);
 	
 	$attach_id = wp_insert_post($attachment);
@@ -200,15 +201,16 @@ function ajax_ims_flash_image_data(){
 				$row .= $metadata['width'].' x '.$metadata['height'].__(' pixels',ImStore::domain).'<br />';
 				$row .= __('Color:',ImStore::domain).$metadata['color'].'<br />';
 				$row .= '<div class="row-actions" id="media-head-'.$attach_id.'">';
-				$row .= '<a href="'.IMSTORE_ADMIN_URL.'image-edit.php?editimage='.$attach_id.$imgnonce.'" class="thickbox">'.__('Edit',ImStore::domain).'</a> |';
-				$row .= '<a href="#img=$id">'.__('Trash',ImStore::domain).'</a>';
+				$row .= '<a href="'.IMSTORE_ADMIN_URL.'image-edit.php?editimage='.$attach_id.$imgnonce.'" class="thickbox">'.__('Edit',ImStore::domain).'</a> | ';
+				$row .= '<a href="#'.$attach_id.'" rel="update" class="imsupdate">'.__('Update',ImStore::domain).'</a> | ';
+				$row .= '<a href="#'.$attach_id.'" rel="trash" class="imstrash">'.__('Trash',ImStore::domain).'</a>';
 				$row .= '</div>';
 				$row .= '</td>';
 				break;
 			case 'imtitle':
 				$row .= '<td class="column-'.$key.$class.'">';
-				$row .= '<input type="text" name="img_title['.$attach_id.']" value="'.$filename.'" class="inputxl"/>';
-				$row .= '<textarea name="post_excerpt['.$attach_id.']" rows="3" class="inputxl"></textarea>';
+				$row .= '<input type="text" name="img_title['.$attach_id.']" value="'.$title.'" class="inputxl"/>';
+				$row .= '<textarea name="post_excerpt['.$attach_id.']" rows="3" class="inputxl">'.$metadata['image_meta']['caption'].'</textarea>';
 				$row .= '</td>';
 				break;
 			case 'imauthor':

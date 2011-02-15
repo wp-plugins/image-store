@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Image Store 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-29 00:22-0800\n"
-"PO-Revision-Date: 2011-01-29 11:20-0800\n"
+"POT-Creation-Date: 2011-02-14 22:21-0800\n"
+"PO-Revision-Date: 2011-02-14 22:21-0800\n"
 "Last-Translator: hax <none>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,102 +20,102 @@ msgstr ""
 #: Documents\04_WebDesign\_subversion\trunk/ImStore.php:194
 #: Documents\04_WebDesign\_subversion\trunk/ImStore.php:197
 #: Documents\04_WebDesign\_subversion\trunk/ImStore.php:201
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:241
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:242
 msgid "galleries"
 msgstr "galerias"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:220
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:221
 msgctxt "post type general name"
 msgid "Galleries"
 msgstr "Galerías"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:221
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:222
 msgctxt "post type singular name"
 msgid "Gallery"
 msgstr "Galería"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:222
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:223
 msgctxt "Gallery"
 msgid "Add New"
 msgstr "Nueva"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:223
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:224
 msgid "Add New Gallery"
 msgstr "Galería Nueva"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:224
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:225
 msgid "Edit Gallery"
 msgstr "Editar galería"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:225
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:226
 msgid "New Gallery"
 msgstr "Nueva Galería"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:226
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:227
 msgid "View Gallery"
 msgstr "Ver Galería"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:227
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:228
 msgid "Search galleries"
 msgstr "Buscar Galerías "
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:228
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:229
 msgid "No galleries found"
 msgstr "No se encontró ninguna gallería"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:229
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:230
 msgid "No galleries found in Trash"
 msgstr "No se encontró ninguna gallería en la papelera"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:247
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:248
 msgid "Albums"
 msgstr "Álbumes"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:248
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:249
 msgid "Album"
 msgstr "Àlbum"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:253
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:409
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:254
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:411
 msgid "albums"
 msgstr "albumes"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:257
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:258
 msgid "Expired"
 msgstr "Vencido"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:258
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:640
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:259
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:642
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:148
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:178
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:273
@@ -124,7 +124,7 @@ msgstr "Activo"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:259
+#: Documents\04_WebDesign\_subversion\trunk/ImStore.php:260
 msgid "Inative"
 msgstr "Inactivos "
 
@@ -155,68 +155,68 @@ msgstr "Desconocido"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:300
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:884
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:302
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:888
 msgid "Sales"
 msgstr "Ventas"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:302
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:304
 msgid "Pricing"
 msgstr "Precios"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:304
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:872
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:911
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:306
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:876
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:916
 msgid "Customers"
 msgstr "Clientes"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:307
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:309
 msgid "Settings"
 msgstr "Configuración"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:309
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:311
 msgid "Image Store"
 msgstr "Image Store"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:309
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:842
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:311
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:844
 msgid "Galleries"
 msgstr "Galerías"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:408
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:410
 #, php-format
 msgid "To view albums go to: %s/%s/%s"
 msgstr "Para ver los álbumes visita: %s/%s/%s"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:409
 #: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:411
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:413
 msgid "term-slug"
 msgstr "termino-slug"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:410
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:412
 #, php-format
 msgid "To view albums go to: %s/?taxonomy=ims_album&term=%s"
 msgstr "To view albums go to: %s/?taxonomy=ims_album&term=%s"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:640
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:642
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:151
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:181
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:273
@@ -225,73 +225,74 @@ msgstr "Inactivos"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:707
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:716
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:835
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:709
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:718
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:837
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales-details.php:39
 msgid "Gallery"
 msgstr "Galería"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:707
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:716
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:836
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1023
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:709
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:718
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:838
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1031
 msgid "Gallery ID"
 msgstr "Número de galería"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:708
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:718
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1041
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:710
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:720
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1049
 msgid "Visits"
 msgstr "Visitas"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:708
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:717
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:710
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:719
 msgid "Tracking"
 msgstr "Seguimiento"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:709
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:717
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:727
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:839
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:880
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:914
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:711
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:719
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:729
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:841
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:855
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:884
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:919
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales-csv.php:61
 msgid "Images"
 msgstr "Imágenes"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:709
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:849
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:181
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:711
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:851
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:182
 msgid "Author"
 msgstr "Autor"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:710
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:718
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:838
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:857
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:712
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:720
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:840
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:861
 msgid "Expires"
 msgstr "Expira"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:710
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:719
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:725
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:878
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:180
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:712
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:721
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:727
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:882
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:181
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales-csv.php:56
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales-details.php:71
 msgid "Date"
@@ -299,8 +300,8 @@ msgstr "Fecha"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:725
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:878
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:727
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:882
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales-csv.php:55
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales-details.php:80
 msgid "Order number"
@@ -308,49 +309,49 @@ msgstr "Número de pedido"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:726
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:879
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:728
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:883
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:80
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales-csv.php:57
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:541
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:549
 msgid "Amount"
 msgstr "Cantidad"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:726
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:879
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:728
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:883
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales-details.php:89
 msgid "Customer"
 msgstr "Cliente"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:727
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:880
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:729
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:884
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales-csv.php:62
 msgid "Payment status"
 msgstr "Estado del pago"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:728
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:881
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:730
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:885
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales-csv.php:63
 msgid "Order Status"
 msgstr "Estado del pedido"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:734
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:736
 msgid "Username"
 msgstr "Usuario"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:735
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:865
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1121
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:737
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:869
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1129
 #: Documents\04_WebDesign\_subversion\trunk/admin/customer-csv.php:46
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:91
 #: Documents\04_WebDesign\_subversion\trunk/admin/install.php:185
@@ -359,9 +360,9 @@ msgstr "Nombre"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:735
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:866
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1125
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:737
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:870
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1133
 #: Documents\04_WebDesign\_subversion\trunk/admin/customer-csv.php:47
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:93
 #: Documents\04_WebDesign\_subversion\trunk/admin/install.php:184
@@ -370,15 +371,15 @@ msgstr "Apellido"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:736
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:738
 #: Documents\04_WebDesign\_subversion\trunk/admin/customer-csv.php:48
 msgid "E-mail"
 msgstr "E-mail"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:736
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:867
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:738
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:871
 #: Documents\04_WebDesign\_subversion\trunk/admin/customer-csv.php:50
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:99
 #: Documents\04_WebDesign\_subversion\trunk/admin/install.php:178
@@ -388,9 +389,9 @@ msgstr "Ciudad"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:737
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:867
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1137
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:739
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:871
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1145
 #: Documents\04_WebDesign\_subversion\trunk/admin/customer-csv.php:53
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:107
 #: Documents\04_WebDesign\_subversion\trunk/admin/install.php:181
@@ -399,121 +400,121 @@ msgstr "Teléfono"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:737
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:739
 msgid "Status"
 msgstr "Estatus"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:808
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:204
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:34
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:101
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:810
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:206
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:42
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:109
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales.php:185
 msgid "Trash"
 msgstr "Basura"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:809
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:811
 msgid "Remove"
 msgstr "Remover"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:810
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:296
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:812
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:304
 msgid "Pixels"
 msgstr "Píxeles"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:811
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:35
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:813
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:43
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales.php:189
 msgid "Published"
 msgstr "Publicado"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:812
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:814
 msgid "File Exist."
 msgstr " archivo existente."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:813
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:815
 msgid "Select files."
 msgstr "Seleccionar archivos."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:814
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:816
 msgid "Please,select a gallery!"
 msgstr "íPor favor, selecciona una galería! "
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:816
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:818
 msgid "Are you sure that you want to delete this list?"
 msgstr "¿Realmente deseas eliminar esta lista?"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:817
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:819
 msgid "Are you sure that you want to delete this package?"
 msgstr "¿Realmente deseas eliminar este paquete? "
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:818
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:820
 msgid "Are you sure that you want to delete this entry?"
 msgstr "¿Realmente deseas eliminar este tamaño?"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:837
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:839
 msgid "Password"
 msgstr "Contraseña"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:847
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:179
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:849
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:180
 msgid "Thumbnail"
 msgstr "Miniatura"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:847
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:179
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:849
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:180
 msgid "Metadata"
 msgstr "Metadatos"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:848
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:180
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:850
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:181
 msgid "Title/Caption"
 msgstr "Título / Pie de foto"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:849
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:181
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:851
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:182
 msgid "Order"
 msgstr "Orden"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:850
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:182
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:852
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:183
 msgid "ID"
 msgstr "ID"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:856
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:860
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:97
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:170
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:248
@@ -526,47 +527,47 @@ msgstr "nombre"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:856
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:860
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:484
 msgid "Code"
 msgstr "Código"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:857
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:861
 msgid "Starts"
 msgstr "Comienza"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:858
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:862
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:468
 msgid "Type"
 msgstr "Tipo"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:858
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:862
 msgid "Discount/Items"
 msgstr "Descuento / Artículos"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:861
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:865
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:87
 msgid "Promotions"
 msgstr "Promociones"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:866
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:870
 msgid "E-Mail"
 msgstr "E-Mail"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:868
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1129
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:872
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1137
 #: Documents\04_WebDesign\_subversion\trunk/admin/customer-csv.php:51
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:103
 #: Documents\04_WebDesign\_subversion\trunk/admin/install.php:179
@@ -576,195 +577,195 @@ msgstr "Estado"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:868
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:872
 msgid "eNewsletter"
 msgstr "Boletín Electrónico"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:892
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:897
 msgid "Show per page"
 msgstr "Mostrar por página"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:912
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:917
 msgid "Gallery Information"
 msgstr "Información de la galería."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:913
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:918
 msgid "Import Images"
 msgstr "Imporatar imágenes"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:916
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:921
 msgid "Sepia + "
 msgstr "Sepia +"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:917
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:922
 msgid "Full Color"
 msgstr "Color"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:918
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:923
 msgid "B &amp; W + "
 msgstr "B &amp; N + "
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1018
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1026
 msgid "Folder path"
 msgstr "Directorio de la carpeta"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1028
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1036
 msgid "Tracking Number"
 msgstr "Número de seguimiento"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1030
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1038
 msgid "Price List"
 msgstr "Lista de precios"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1043
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1051
 msgid "Expiration Date"
 msgstr "Fecha de vencimiento"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1050
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1058
 msgid "Sort Order"
 msgstr "Ordenar imágenes"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1053
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1060
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1061
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1068
 msgid "Default"
 msgstr "Predeterminado"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1054
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:212
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1062
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:220
 msgid "Custom order"
 msgstr "Orden manual"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1055
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:214
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1063
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:222
 msgid "Caption"
 msgstr "Pie de foto"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1056
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:216
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1064
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:224
 msgid "Image title"
 msgstr "Título de la imagen"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1057
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:218
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1065
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:226
 msgid "Image date"
 msgstr "Fecha de la imagen"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1061
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:223
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1069
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:231
 msgid "Ascending"
 msgstr "Ascendente"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1062
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:225
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1070
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:233
 msgid "Descending"
 msgstr "Descendente"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1082
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1090
 msgid "Upload Images"
 msgstr "Subir Imágenes"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1083
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1091
 msgid "Upload zip file"
 msgstr "Carga archivo ZIP."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1084
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1092
 msgid "Scan folder"
 msgstr "Escanear carpeta"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1087
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1095
 msgid "Upload images"
 msgstr "Cargar imágenes"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1091
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1099
 msgid "Zip file"
 msgstr "Archivo Zip"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1092
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1100
 msgid "Or enter zip file URL"
 msgstr "O introducir el enlace del zip"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1094
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1102
 #, php-format
 msgid "Import a zip file with images from a url. Your server's maximum file size upload is <strong>%sB</strong>. Publish or update gallery to upload images."
 msgstr "Importar un archivo ZIP  con  imágenes utilizando un enlace. El tamaño máximo del archive determinado por su servidor es de  <strong>% sB </ strong>. Publicar o actualizar la galería de fotos para subir las imágenes."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1097
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1105
 msgid "Import From Server Path"
 msgstr "Importar usando un directorio en el servidor."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1101
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1109
 msgid "Scan"
 msgstr "Escanear"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1102
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1110
 msgid "Path relative to the wp-content folder."
 msgstr "Directorio relativo a la carpeta wp-content"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1118
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1126
 msgid "Address Information"
 msgstr "Dirección."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1133
+#: Documents\04_WebDesign\_subversion\trunk/admin/admin.php:1141
 #: Documents\04_WebDesign\_subversion\trunk/admin/customer-csv.php:52
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:105
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales-csv.php:67
@@ -773,63 +774,74 @@ msgstr "código postal"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:199
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:91
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:200
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:99
 msgid "Format:"
 msgstr "Formato:"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:200
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:92
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:201
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:100
 msgid " pixels"
 msgstr " píxeles"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:201
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:93
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:202
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:101
 msgid "Color:"
 msgstr "Color:"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:203
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:204
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:176
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:99
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:107
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:565
 msgid "Edit"
 msgstr "Editar"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:258
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:286
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:205
+#: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:129
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:108
+#: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:188
+#: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:369
+#: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:526
+msgid "Update"
+msgstr "Actualizar"
+
+#: C:\Documents
+#: and Settings\HP_Administrator\My
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:260
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:288
 msgid "Please,select an image"
 msgstr "Por favor, seleccione una imagen "
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:272
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:274
 msgid "Image added to favorites"
 msgstr "Imagen añadida a los favoritos"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:273
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:275
 #, php-format
 msgid "%d images added to favorites"
 msgstr "%d imagenes añadidas a los favoritos"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:302
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:304
 msgid "Image removed from favorites"
 msgstr " imagene añadida a los favoritos"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:303
+#: Documents\04_WebDesign\_subversion\trunk/admin/ajax.php:305
 #, php-format
 msgid "%d images removed from favorites"
 msgstr "%d imagenes eliminadas de los favoritos."
@@ -884,16 +896,6 @@ msgstr "Agregar nuevo cliente"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:129
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:100
-#: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:188
-#: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:369
-#: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:526
-msgid "Update"
-msgstr "Actualizar"
-
-#: C:\Documents
-#: and Settings\HP_Administrator\My
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:146
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:542
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales.php:38
@@ -904,20 +906,20 @@ msgstr "Acciones multiples"
 #: and Settings\HP_Administrator\My
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:149
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:179
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:96
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:104
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:130
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:208
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:258
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:543
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:566
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:281
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:289
 msgid "Delete"
 msgstr "Eliminar"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
 #: Documents\04_WebDesign\_subversion\trunk/admin/customers.php:154
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:59
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:67
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:545
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales.php:49
 msgid "Apply"
@@ -1004,64 +1006,64 @@ msgstr "Buscar Galerías"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:39
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:47
 msgid "Upload failed."
 msgstr "No se pudo cargar el archivo."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:40
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:48
 msgid "Not a valid URL path"
 msgstr "No es una dirección válida"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:41
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:49
 msgid "This is not a zip file."
 msgstr "Esto no es un archivo zip."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:42
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:50
 msgid "Please enter a folder path."
 msgstr "Por favor, introduzca el directorio de la carpeta."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:43
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:51
 msgid "There was an error extracting the images."
 msgstr "Hubo un error al extraer las imágenes."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:44
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:52
 msgid "The folder doesn&#8217;t exist,please check your folder path."
 msgstr "La carpeta no existe, por favor, comprueba el directorio."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:51
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:59
 msgid "Actions"
 msgstr "Acciones multiples"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:53
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:97
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:61
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:105
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales.php:40
 msgid "Restore"
 msgstr "Restaurar"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:54
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:62
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales.php:41
 msgid "Delete Permanently"
 msgstr "Eliminar permanentemente"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:56
+#: Documents\04_WebDesign\_subversion\trunk/admin/gallery.php:64
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales.php:46
 msgid "Move to Trash"
 msgstr "Mandar al bote de basura"
@@ -1268,7 +1270,7 @@ msgstr "Carteras"
 #: C:\Documents
 #: and Settings\HP_Administrator\My
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:79
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:540
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:548
 msgid "Percent"
 msgstr "Por ciento"
 
@@ -1381,7 +1383,7 @@ msgstr "Tamaños"
 #: and Settings\HP_Administrator\My
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:240
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:386
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:287
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:295
 msgid "Add image size"
 msgstr "Añadir tamaño"
 
@@ -1397,7 +1399,7 @@ msgstr "Precio"
 #: and Settings\HP_Administrator\My
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:250
 #: Documents\04_WebDesign\_subversion\trunk/admin/pricing.php:397
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:286
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:294
 msgid "Unit"
 msgstr "Unidad"
 
@@ -1570,7 +1572,7 @@ msgstr "Por favor, seleccione la promoción que desea eliminar."
 #: and Settings\HP_Administrator\My
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales-csv.php:58
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales-details.php:111
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:537
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:545
 msgid "Tax"
 msgstr "Impuestos"
 
@@ -1601,7 +1603,7 @@ msgstr "Tamaño"
 #: C:\Documents
 #: and Settings\HP_Administrator\My
 #: Documents\04_WebDesign\_subversion\trunk/admin/sales-details.php:34
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:265
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:273
 msgid "Color"
 msgstr "Color"
 
@@ -1728,744 +1730,756 @@ msgstr "Todas"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:108
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:109
 msgid "Gallery Settings"
 msgstr "Galerías"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:109
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:110
 msgid "Image Settings"
 msgstr "Imagenes"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:110
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:111
 msgid "Slideshow Settings"
 msgstr "Presentación"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:112
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:113
 msgid "Payment options"
 msgstr "Opciones de pago"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:113
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:114
 msgid "Checkout"
 msgstr "Pago"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:115
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:116
 msgid "User permissions"
 msgstr "Permisos de usuarios"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:117
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:118
 msgid "Reset"
 msgstr "Restablecer"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:126
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:127
 msgid "Gallery folder path"
 msgstr "Directorio de la carpeta"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:129
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:130
 msgid "Default folder path for all the galleries images"
 msgstr "Directorio de la carpeta para todas las galerías."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:133
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:134
 msgid "Delete image files"
 msgstr "Eliminar archivos"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:135
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:136
 msgid "Delete files from server,when deleting a gallery/images"
 msgstr "Eliminar archivos del servidor, al eliminar una galería / imagen"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:138
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:139
 msgid "Secure galleries"
 msgstr "Asegurar galerías"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:140
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:141
 msgid "Secure all new galleries with a password by default."
 msgstr "Asegure todas las nuevas galerías con una contraseña  predeterminadamente."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:143
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:144
 msgid "Media RSS feed"
 msgstr "Media RSS"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:145
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:146
 msgid "Add RSS feed the blog header for unsecured galleries.Useful for CoolIris/PicLens"
 msgstr "Añadir RSS en la cabezera del blog de gallerias sin asegurar. Útil para el uso de CoolIris / PicLens."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:149
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:150
 msgid "Use CSS"
 msgstr "Usar CSS"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:151
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:152
 msgid "Use the Image Store stylesheet?"
 msgstr "Utilice la hoja de estilo de \"Image Store\"?"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:155
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:156
 msgid "Widget"
 msgstr "Widget"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:157
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:158
 msgid "Enable the use of the Image Store Widget"
 msgstr "Habilitar el uso de los widgets de \"Image Store\""
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:161
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:162
 msgid "Colorbox"
 msgstr "Colorbox"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:163
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:164
 msgid "Use the default ligthbox feature"
 msgstr "Utilizar la función de ligthbox por defecto"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:166
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:167
 msgid "Ligthbox for WP galleries"
 msgstr "Ligthbox parar galerías WP"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:168
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:169
 msgid "Use lightbox on WordPress Galleries."
 msgstr "Activa la opción de lightbox para las galerías de WordPress."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:171
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:172
 msgid "Disable store features"
 msgstr "Deshabilitar la tienda"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:173
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:174
 msgid "Use as a gallery manager only,not a store."
 msgstr "Utiliza como administrador de galerías, no como una tienda."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:176
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:177
 msgid "Disable B and W"
 msgstr "Desactivar blanco y negro"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:178
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:179
 msgid "Disable black and white color option."
 msgstr "Deshabilitar la opción de color \"blanco y negro\"."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:181
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:182
 msgid "Disable Sepia "
 msgstr "Deshabilitar  Sepia."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:183
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:184
 msgid "Disable sepia color option."
 msgstr "Deshabilitar la opción de color \"Sepia\"."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:188
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:189
 msgid "Hide \"photo\" link"
 msgstr "Ocultar enlace \"Fotos\""
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:190
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:191
 msgid "Hide photo link from store navigation."
 msgstr "Ocultar el enlace fotos de navegación de la tienda."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:193
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:194
 msgid "Hide \"slideshow\" link"
 msgstr "Ocultar enlace \"Presentación\""
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:195
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:196
 msgid "Hide slideshow link from store navigation."
 msgstr "Ocultar el enlace presentación de navegación de la tienda."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:199
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:200
+msgid "Searchable Galleries"
+msgstr "Búsqueda de Galerías"
+
+#: C:\Documents
+#: and Settings\HP_Administrator\My
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:202
+msgid "Allow galleries to show in search results."
+msgstr "Permitir que galerías aparescan  en los resultados de búsqueda."
+
+#: C:\Documents
+#: and Settings\HP_Administrator\My
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:206
 msgid "Single Gallery Template"
 msgstr "Plantilla para galerías"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:200
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:207
 msgid "Default Template"
 msgstr "Plantilla predeterminada"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:205
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:212
 msgid "Galleries expire after "
 msgstr "Galerías expiran después de"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:207
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:214
 msgid "days"
 msgstr "días"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:210
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:218
 msgid "Sort images"
 msgstr "Ordenar imágenes"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:221
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:229
 msgid "Sort direction"
 msgstr "Dirección de orden"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:229
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:303
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:361
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:522
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:573
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:237
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:311
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:369
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:530
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:581
 msgid "Save"
 msgstr "Salvar"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:243
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:251
 msgid "Image preview size(pixels)"
 msgstr "Tamaño de la imagen de vista previa (píxeles)"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:244
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:252
 msgid "Max Width"
 msgstr "Anchura máxima"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:246
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:254
 msgid "Max Height"
 msgstr "Altura máxima"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:255
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:263
 msgid "No watermark"
 msgstr "Sin marca de agua"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:257
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:265
 msgid "Use text as watermark"
 msgstr "Usar texto "
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:259
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:267
 msgid "Use image as watermark"
 msgstr "Usar imagen "
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:262
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:270
 msgid "Watermark text"
 msgstr "Texto de la marca de agua"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:267
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:275
 msgid "Font size"
 msgstr "Tamaño de la fuente"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:269
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:277
 msgid "Transparency"
 msgstr "Transparencia"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:274
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:282
 msgid "Watermark URL"
 msgstr "Ruta de la marca de agua"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:279
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:287
 msgid "Downloadable image sizes"
 msgstr "Tamaños para descarga"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:282
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:290
 msgid "Image Size"
 msgstr "Tamaño"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:283
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:291
 msgid "Width"
 msgstr "Ancho"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:284
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:292
 msgid "Height"
 msgstr "Altura"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:285
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:293
 msgid "Quality"
 msgstr "Calidad"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:318
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:326
 msgid "Number of thumbnails to show"
 msgstr "Número de imágenes  miniatura "
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:320
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:328
 msgid "Maximun number of pages"
 msgstr "Máximo número de páginas"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:324
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:332
 msgid "Transition time"
 msgstr "Tiempo de transición"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:327
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:332
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:335
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:340
 msgid "1000 = 1 second"
 msgstr "1000 = 1 segundo"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:329
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:337
 msgid "Slideshow speed"
 msgstr "Velocidad de la presentación"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:336
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:344
 msgid "Play link text"
 msgstr "Texto  iniciar"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:338
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:346
 msgid "Pause link text"
 msgstr "Texto  pausa"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:342
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:350
 msgid "Next link text"
 msgstr "Texto  siguiente"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:344
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:352
 msgid "Previous link text"
 msgstr "Texto  anterior"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:348
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:356
 msgid "Next page link text"
 msgstr "Texto siguiente página"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:350
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:358
 msgid "Previous page link text"
 msgstr "Texto  página anterior"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:354
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:362
 msgid "Close link text"
 msgstr "Texto  cerrar"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:356
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:364
 msgid "Auto start?"
 msgstr "¿Inicio automático?"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:378
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:386
 msgid "Currency Symbol"
 msgstr "Símbolo de moneda"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:382
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:390
 msgid "Currency Symbol Location"
 msgstr "Ubicación del símbolo"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:385
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:393
 msgid "&#036;100"
 msgstr "&#036;100"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:387
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:395
 msgid "&#036; 100"
 msgstr "&#036; 100"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:389
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:397
 msgid "100&#036;"
 msgstr "100&#036;"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:391
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:399
 msgid "100 &#036;"
 msgstr "100 &#036;"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:395
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:403
 msgid " Default Currency:"
 msgstr "Moneda:"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:399
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:407
 msgid "Australian Dollar"
 msgstr "Dólar Australiano"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:402
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:410
 msgid "Canadian Dollar"
 msgstr "Dólar Canadiense"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:405
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:413
 msgid "Czech Koruna"
 msgstr "Corona checa"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:408
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:416
 msgid "Danish Krone"
 msgstr "Corona Danesa"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:411
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:419
 msgid "Euro"
 msgstr "Euro"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:414
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:422
 msgid "Hong Kong Dollar"
 msgstr "Dólar de Hong Kong"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:417
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:425
 msgid "Hungarian Forint"
 msgstr "Florín húngaro"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:420
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:428
 msgid "Israeli New Sheqel"
 msgstr "Nuevo Shekel israelí"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:423
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:431
 msgid "Japanese Yen"
 msgstr "Yen Japonés"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:426
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:434
 msgid "Mexican Peso"
 msgstr "Peso mexicano"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:429
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:437
 msgid "Norwegian Krone"
 msgstr "Corona noruega"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:432
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:440
 msgid "New Zealand Dollar"
 msgstr "Dólar de Nueva Zelanda"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:435
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:443
 msgid "Polish Zloty"
 msgstr "Zloty polaco"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:438
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:446
 msgid "Pound Sterling"
 msgstr "Libra esterlina"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:441
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:449
 msgid "Singapore Dollar"
 msgstr "Dólar de Singapur"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:444
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:452
 msgid "Swedish Krona"
 msgstr "Corona sueca"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:447
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:455
 msgid "Swiss Franc"
 msgstr "Franco Suizo"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:450
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:458
 msgid "U.S.Dollar"
 msgstr "Dólar "
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:455
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:463
 msgid "Gateway"
 msgstr "Tipo de pago"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:458
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:466
 msgid "Email notification only"
 msgstr "Sólo notificación por email"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:459
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:467
 msgid "Paypal Cart Sanbox"
 msgstr "Paypal Cart Sanbox"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:460
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:468
 msgid "Paypal Cart Production"
 msgstr "Paypal Cart Producción"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:461
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:469
 msgid "Google Checkout Sandbox"
 msgstr "Google Checkout Sandbox"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:462
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:470
 msgid "Google Checkout Production"
 msgstr "Google Checkout Producción"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:467
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:475
 msgid "Country Code"
 msgstr "Codigo del País"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:471
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:479
 msgid "Google merchant ID"
 msgstr "Identificación de comerciante "
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:476
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:484
 msgid "Merchant key"
 msgstr "Clave de comerciante "
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:484
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:492
 msgid "PayPal account email"
 msgstr "Cuenta de email de PayPal"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:489
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:497
 msgid "PayPal API signature"
 msgstr "Firma PayPal API"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:494
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:502
 msgid "PayPal API password"
 msgstr "Contraseña PayPal API"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:501
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:509
 msgid "Shipping Message"
 msgstr "Mensaje página de envío"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:505
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:513
 msgid "Required Fields"
 msgstr "Requeridos"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:542
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:550
 msgid "Set tax to 0 to remove tax calculation."
 msgstr "Usa 0 para eliminar el cálculo del impuesto."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:545
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:553
 msgid "Order Notification email(s)"
 msgstr "Email(s) de la  notificación de pedidos."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:549
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:557
 msgid "Order Notification subject"
 msgstr "Título  notificación de pedidos"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:553
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:561
 msgid "Order Notification message"
 msgstr "Mensaje notificación pedidos"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:555
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:563
 msgid "Tags:"
 msgstr "Etiquetas "
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:560
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:568
 msgid "Purchase Receipt"
 msgstr "Recibo de compra"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:563
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:571
 msgid "Thank you message and receipt information"
 msgstr "Gracias mensaje e información del recibo."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:567
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:575
 msgid "Terms and Conditions"
 msgstr "Términos y Condiciones"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:599
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:607
 msgid "Save User"
 msgstr "Salvar usuario"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:612
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:620
 msgid "Reset All Settings to defaults"
 msgstr "Restaurar configuraciones"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:618
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:626
 msgid "UNINSTALL IMAGE STORE WARNING"
 msgstr "ADVERTENSIA DE DESINSTALACIÓN DE IMAGE STORE"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:619
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:627
 msgid "Once uninstalled,this cannot be undone.<strong> You should backup your database </strong> and image files before doing this,Just in case!!."
 msgstr "Una vez desinstalado, no se puede la informacion no se puede recuperar. <strong> por seguridad as una copia de la base de datos </ strong> archivos he imágenes antes de desinstalar, por si acaso!."
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:620
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:628
 msgid "If you are not sure what are your doing,please don't do anything"
 msgstr "Si no sabes lo que estas haciendo, por favor, no hagas nada "
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:621
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:629
 msgid "Uninstall Image Store"
 msgstr "Desinstalar Image Store"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:648
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:656
 msgid "Select User"
 msgstr "Seleccionar usuario"
 
 #: C:\Documents
 #: and Settings\HP_Administrator\My
-#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:658
+#: Documents\04_WebDesign\_subversion\trunk/admin/settings.php:666
 msgid "No users to manage"
 msgstr "No hay usuarios para administar"
 

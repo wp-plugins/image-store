@@ -23,7 +23,15 @@ if(!empty($_POST['update'])){
 	foreach(array('deletefiles','securegalleries','imswidget','mediarss','disablestore','stylesheet','colorbox',
 	'wplightbox','disablesepia','disablebw','autoStart','hidephoto','hideslideshow') as $box)
 		if(empty($_POST[$box]) && isset($_POST['galleriespath'])) $_POST[$box] = '';
+	
+	
+	if(isset($_POST['gateway'])){
+		unset($this->opts['requiredfields']);
+		foreach($this->opts['checkoutfields'] as $key => $label)
+			if(!empty($_POST['required'][$key])) $this->opts['requiredfields'][] = $key;
+	}
 
+	update_option('ims_searchable', $_POST['ims_searchable']);
 	update_option('ims_front_options',wp_parse_args($_POST,$this->opts));
 	wp_redirect($pagenowurl.'&ms=4');	
 }
@@ -194,6 +202,12 @@ if(!empty($_POST['updateimages'])){
 			<td><input type="checkbox" name="hideslideshow" id="hideslideshow" value="1" <?php checked('1',$this->_vr('hideslideshow'))?> />
 				<small><?php _e('Hide slideshow link from store navigation.',ImStore::domain)?></small></td>
 		</tr>
+			
+		<tr class="alternate">
+			<td scope="row"><label for="ims_searchable"><?php _e('Searchable Galleries',ImStore::domain)?></label></td>
+			<td><input type="checkbox" name="ims_searchable" id="ims_searchable" value="1" <?php checked('1',get_option('ims_searchable'))?> />
+				<small><?php _e('Allow galleries to show in search results.',ImStore::domain)?></small></td>
+		</tr>
 		
 		<tr>
 			<td scope="row"><label for="hideslideshow"><?php _e('Single Gallery Template',ImStore::domain)?></label></td>
@@ -206,6 +220,7 @@ if(!empty($_POST['updateimages'])){
 			<td><input type="text" name="galleryexpire" id="galleryexpire" class="inputxm" value="<?php $this->_v('galleryexpire')?>"/>
 				(<?php _e('days')?>)</td>
 		</tr>
+	
 		<tr>
 			<td valign="top"><?php _e('Sort images',ImStore::domain)?></td>
 			<td><label><input name="imgsortorder" type="radio" value="menu_order" <?php checked('menu_order',$this->_vr('imgsortorder'))?> />
