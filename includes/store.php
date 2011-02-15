@@ -54,18 +54,23 @@ class ImStoreFront{
 			$this->upate_cart();	
 		
 		//checkout email notification only get user info	
-		if(!empty($_POST['enotification'])) 
+		if(!empty($_POST['enotification'])){
 			$this->imspage = 7; 
+			unset($this->success);
+			unset($this->message);
+		}
 			
 		//submit notification order
 		if(!empty($_POST['enoticecheckout'])){
-			$this->imspage = 7; 
+			$this->imspage = 7;
+			unset($this->success);
+			unset($this->message);
 			check_admin_referer('ims_submit_order');
 			$this->validate_user_input();
 		}
 		
 		//redirect photo disable
-		if($this->opts['hidephoto']) 
+		if($this->opts['hidephoto'] && $this->imspage == 1) 
 			$this->imspage = 2;
 			
 		global $post;
@@ -461,7 +466,7 @@ class ImStoreFront{
 	function store_nav(){
 		global $post;
 		$nav = '<ul id="imstore-nav" class="imstore-nav" >'. "\n";
-		foreach($this->pages as $key => $page){
+		foreach( (array)$this->pages as $key => $page){
 			if($key == 6 || $key == 7) continue;
 			if($key == 1 && $this->opts['hidephoto']) continue;
 			if($key == 2 && $this->opts['hideslideshow']) continue;
@@ -804,6 +809,7 @@ class ImStoreFront{
 			}
 		}else update_post_meta($_COOKIE['ims_orderid_'.COOKIEHASH],'_ims_order_data',$this->cart);
 		$this->success = '1';
+		unset($_POST['add-to-cart']);
 		wp_redirect($this->get_permalink($this->imspage)); 
 	}
 	
@@ -867,6 +873,7 @@ class ImStoreFront{
 		}
 		$this->success = '2';
 		update_post_meta($_COOKIE['ims_orderid_'.COOKIEHASH],'_ims_order_data',$this->cart);
+		unset($_POST['applychanges']);
 		wp_redirect($this->get_permalink($this->imspage)); 
 	}
 	
@@ -973,14 +980,14 @@ class ImStoreFront{
 		if(!empty($this->error)) return;
 		if($_POST['payment_total'] != $this->cart['total']) return false;
 		if($_POST['mc_currency'] != $this->opts['currency']) return false;
-	
+		
 		wp_update_post(array(
 			'post_expire' => '0',
+			'ID' => $_POST['custom'],
 			'post_status' => 'pending',
-			'post_date' => current_time('timestamp'),
-			'ID' => $_COOKIE['ims_orderid_'.COOKIEHASH],
+			'post_date' => current_time('timestamp') 
 		));
-		update_post_meta($_COOKIE['ims_orderid_'.COOKIEHASH],'_response_data',$_POST);
+		update_post_meta($_POST['custom'],'_response_data',$_POST);
 			
 		$to 		= $this->opts['notifyemail'];
 		$subject 	= $this->opts['notifysubj'];

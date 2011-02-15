@@ -83,6 +83,17 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+= 2.0.5 =
+* Fixed: Screen options labels.
+* Fixed: Add to cart redirection.
+* Fixed: Required checkout fields.
+* Fixed: Dynamic image update/upload.
+* Fixed: Email notification email and sale report.
+* Fixed: Page navigation issue with hidden photo link.
+* Added: Image page navigation.
+* Added: Make galleries searchable.
+* Added: Import metadata from image.
+
 = 2.0.4 =
 * Fixed: Shortcode issues.
 * Added: Italian Translation.

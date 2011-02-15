@@ -4,7 +4,7 @@ Plugin Name: Image Store
 Plugin URI: http://imstore.xparkmedia.com
 Description: Your very own image store within wordpress "ImStore"
 Author: Hafid R.Trujillo Huizar
-Version: 2.0.4
+Version: 2.0.5
 Author URI:http://www.xparkmedia.com
 Requires at least: 3.0.0
 Tested up to: 3.0.2
@@ -42,7 +42,7 @@ class ImStore{
 	*Make sure that new language(.mo) files have 'ims-' as base name
 	*/
 	const domain	= 'ims';
-	const version	= '2.0.4';
+	const version	= '2.0.5';
 	
 	/**
 	*Constructor
@@ -215,6 +215,7 @@ class ImStore{
 	*/
 	function int_actions(){
 		add_feed('imstore',array(&$this,'create_feed'));
+		$searchable = (get_option('ims_searchable'))? false : true;
 		register_post_type('ims_gallery',array(
 			'labels' => array(
 				'name' 			=> _x('Galleries','post type general name',ImStore::domain),
@@ -232,7 +233,7 @@ class ImStore{
 			'show_ui' 			=> true,
 			'menu_position' 	=> 33,
 			'publicly_queryable'=> true,
-			'exclude_from_search'=> true,
+			'exclude_from_search'=> $searchable,
 			'hierarchical' 		=> false,
 			'revisions'			=> false,
 			'capability_type' 	=> 'page',

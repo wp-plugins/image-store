@@ -12,6 +12,13 @@
 // Stop direct access of the file
 if(preg_match('#'.basename(__FILE__).'#',$_SERVER['PHP_SELF'])) 
 	die();
+	
+$pagenowurl .= "?post=".$_REQUEST['post']."&action=".$_REQUEST['action'];
+if(!empty($_POST['screen_options'])){
+	global $user_ID;
+	update_user_meta($user_ID,$_POST['screen_options']['option'],$_POST['screen_options']['value']);
+	wp_redirect( $pagenowurl );	
+};
 
 //print_r($this->opts);
 global $status_labels; 
@@ -24,9 +31,10 @@ $order 			= (empty($this->meta['_ims_order'][0]))?$this->opts['imgsortdirect']:$
 $images = query_posts(array(
 	'order'	=> $order,
 	'orderby' => $orderby,
-	'posts_per_page' => -1,
+	'paged' => $_REQUEST['p'],
 	'post_type' => 'ims_image',
 	'post_status' => $_GET['status'],
+	'posts_per_page' => $this->per_page,
 	'post_parent' =>(int)$_GET['post'],
 ));
 
@@ -132,6 +140,8 @@ if(isset($_GET['error']))
 	<?php endforeach;?>
 	</tbody>
 </table>
+<?php global $wp_query ?>
+<div class="tablenav"><?php $this->imstore_paging($this->per_page,$wp_query->found_posts)?></div>
 
 <?php 
 

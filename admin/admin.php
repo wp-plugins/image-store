@@ -249,14 +249,16 @@ class ImStoreAdmin{
 					$metadata['sizes'][$size['name']] = $data;
 					$metadata['image_meta'] = wp_read_image_metadata($filepath);
 				}
-
+				
+				$title = ($metadata['image_meta']['title']) ? $metadata['image_meta']['title'] : $filename;
 				$attachment = array(
 					'guid' => $guid,
 					'post_parent' => $ID,
-					'post_title' => $filename,
+					'post_title' => $title,
 					'post_type' => 'ims_image',
-					'post_mime_type'=> $filetype['type'],
 					'post_status' => 'publish',
+					'post_mime_type'=> $filetype['type'],
+					'post_excerpt' => $metadata['image_meta']['caption'],
 				);
 				
 				$attach_id = wp_insert_post($attachment);
@@ -793,7 +795,7 @@ class ImStoreAdmin{
 			wp_enqueue_script('jquery-ui-draggable');
 			wp_enqueue_script('uploadify',IMSTORE_URL.'_js/jquery.uploadify.js',array('jquery','swfobject'),'2.2.0');
 			wp_enqueue_script('datepicker',IMSTORE_URL.'_js/jquery-ui-datepicker.js',array('jquery'),ImStore::version);
-			wp_enqueue_script('ims-admin',IMSTORE_URL.'_js/admin.js',array('jquery','postbox','datepicker','uploadify'),ImStore::version);
+			wp_enqueue_script('ims-admin',IMSTORE_URL.'_js/admin.js',array('jquery','postbox','datepicker','uploadify'),ImStore::version,true);
 			
 			$jquery = array('dd','D','d','DD','*','*','*','o','*','MM','mm','M','m','*','*','*','yy','y');
 			$php 	= array('/d/','/D/','/j/','/l/','/N/','/S/','/w/','/z/','/W/','/F/','/m/','/M/','/n/','/t/','/L/','/o/','/Y/','/y/');
@@ -849,7 +851,9 @@ class ImStoreAdmin{
 					'imauthor' => __('Author',ImStore::domain),'imorder'=> __('Order',ImStore::domain),
 					'imageid' => __('ID',ImStore::domain),
 				));
-				return;
+				$option = 'ims_gallery_per_page';
+				$per_page_label = __('Images',ImStore::domain);
+				break;//return;
 			case 'ims_gallery_page_ims-pricing':
 				register_column_headers('ims_gallery_page_ims-pricing',array(
 					'cb' 		=> '<input type="checkbox">',
@@ -884,6 +888,7 @@ class ImStoreAdmin{
 				$per_page_label = __('Sales',ImStore::domain);
 				break;
 			default:
+				return;
 		}
 		$this->per_page = (int) get_user_option($option);
 		if(empty($this->per_page) || $this->per_page < 1) $this->per_page = 20;
@@ -964,34 +969,37 @@ class ImStoreAdmin{
 		$from	= (($page - 1) *$perpage) + 1;
 		$last	= ceil($all / $perpage);
 		
+		if(isset($_REQUEST['s'])) $pagenowurl .= "&amp;s=$s";
+		if(isset($_REQUEST['status'])) $pagenowurl .= "&amp;status=$status";
+		
 		if($all > $perpage){
 			echo '<div class="tablenav-pages">';
 			echo '<span class="displaying-num">'." Displaying $from &#8211; $to of $all".'</span>';
 			//prev
 			if(($p = $page-1) >= 1) 
-				echo '<a href="'."$pagenowurl$url&amp;status=$status&amp;p=$p&amp;s=$s".'" class="next page-numbers">&laquo;</a>';
+				echo '<a href="'."$pagenowurl&amp;p=$p".'" class="next page-numbers">&laquo;</a>';
 			//first
-			if($page != 1) echo '<a href="'."$pagenowurl$url&amp;status=$status&amp;p=1&amp;s=$s".'" class="next page-numbers">1</a>';
+			if($page != 1) echo '<a href="'."$pagenowurl&amp;p=1".'" class="next page-numbers">1</a>';
 			if($page > 4) echo '<span class="page-numbers dots">...</span>';
 			
 			for($i = $page-2; $i < $page; $i++){
 				if($i < $page && $i >1)
-					echo '<a href="'."$pagenowurl$url&amp;status=$status&amp;p=$i&amp;s=$s".'" class="next page-numbers">'.$i.'</a>';
+					echo '<a href="'."$pagenowurl&amp;p=$i".'" class="next page-numbers">'.$i.'</a>';
 			}
 			//current
 			echo '<span class="current page-numbers">'.$page.'</span>';
 			
 			for($i = $page+1; $i <($page + 3); $i++){
 				if($i < $last)
-					echo '<a href="'."$pagenowurl$url&amp;status=$status&amp;p=$i&amp;s=$s".'" class="next page-numbers">'.$i.'</a>';
+					echo '<a href="'."$pagenowurl&amp;p=$i".'" class="next page-numbers">'.$i.'</a>';
 			}
 			if($i < $last)echo '<span class="page-numbers dots">...</span>';
 			//last
 			if($page != $last)
-				echo '<a href="'."$pagenowurl$url&amp;status=$status&amp;p=$last&amp;s=$s".'" class="next page-numbers">'.$last.'</a>';
+				echo '<a href="'."$pagenowurl&amp;p=$last".'" class="next page-numbers">'.$last.'</a>';
 			//next
 			if(($p = $page + 1) <= $last)
-				echo '<a href="'."$pagenowurl$url&amp;status=$status&amp;p=$p&amp;s=$s".'" class="next page-numbers">&raquo;</a>';
+				echo '<a href="'."$pagenowurl&amp;p=$p".'" class="next page-numbers">&raquo;</a>';
 			echo '</div>';
 		}
 	}

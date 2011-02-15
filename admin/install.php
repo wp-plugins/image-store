@@ -102,7 +102,7 @@ class ImStoreInstaller{
 		
 		//store options to unistall plugin
 		update_option('imstore_version',ImStore::version);
-		update_option('ims_options',array('ims_front_options','ims_back_options','ims_page_secure',
+		update_option('ims_options',array('ims_front_options','ims_back_options','ims_page_secure', 'ims_searchable',
 			'ims_pricelist','ims_options','ims_page_galleries','ims_sizes','ims_download_sizes','ims_dis_images'));
 
 	}
@@ -314,13 +314,13 @@ class ImStoreInstaller{
 		delete_option('imstore_version');
 		
 		//delete image sizes
-		delete_option('mini_crop',1);
-		delete_option('mini_size_w',70);
-		delete_option('mini_size_h',70);
+		delete_option('mini_crop');
+		delete_option('mini_size_w');
+		delete_option('mini_size_h');
 		
-		delete_option('preview_crop',1);
-		delete_option('preview_size_w',70);
-		delete_option('preview_size_h',70);
+		delete_option('preview_crop');
+		delete_option('preview_size_w');
+		delete_option('preview_size_h');
 		
 		//remove all options
 		$ims_ops = get_option('ims_options');

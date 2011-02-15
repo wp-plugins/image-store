@@ -344,4 +344,8 @@ jQuery(document).ready(function($){
 	$("#starts").datepicker({ altField:'#start_date',altFormat:'yy-m-d',dateFormat:imslocal.dateformat });
 	$("#expires").datepicker({ altField:'#expiration_date',altFormat:'yy-m-d',dateFormat:imslocal.dateformat });
 	
+		
+	$('.post-php .tablenav-pages a').unbind('click');
+	$('.post-php .tablenav-pages a').click(function(){ return true });
+	
 });
