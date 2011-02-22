@@ -106,6 +106,7 @@ class ImStorePaypalIPN {
 		$headers 	= 'From: "Image Store" <imstore@'.$_SERVER['HTTP_HOST'].">\r\n";
 		
 		wp_mail($to,$subject,$message,$headers);
+		setcookie('ims_orderid_'.COOKIEHASH,' ',time() - 31536000,COOKIEPATH,COOKIE_DOMAIN);
 		
 		/*foreach($_POST as $i => $v)
 			$postdata .= $i.'='.$v."\n";

@@ -312,10 +312,16 @@ class ImStoreFront{
 	function ims_init(){
 		global $wpdb,$post;
 		
+		//remove procced cart cookie
+		$cart = get_post($_COOKIE['ims_orderid_'.COOKIEHASH]);
+		
+		if($cart->post_status == "pending") 
+			setcookie('ims_orderid_'.COOKIEHASH,' ',time() - 31536000,COOKIEPATH,COOKIE_DOMAIN);
+		
 		$this->gateway = array(
 			'paypalprod' => 'https://www.paypal.com/cgi-bin/webscr',
 			'paypalsand' => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
-			'googleprod' => 'https://google.com/checkout/api/checkout/v2/checkoutForm/Merchant/'.$this->opts['googleid'],
+			'googleprod' => 'https://checkout.google.com/api/checkout/v2/checkoutForm/Merchant/'.$this->opts['googleid'],
 			'googlesand' => 'https://sandbox.google.com/checkout/api/checkout/v2/checkoutForm/Merchant/'.$this->opts['googleid'],
 		);
 		

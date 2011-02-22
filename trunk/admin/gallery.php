@@ -95,7 +95,7 @@ if(isset($_GET['error']))
 			</td>
 			<?php break;
 			case 'immetadata':?>
-			<td class="column-<?php echo "$key $class"?>">
+			<td class="column-<?php echo "$key $class"?>"> <?php ?>
 				<?php echo __('Format:',ImStore::domain).str_replace('image/','',$image->post_mime_type)?><br />
 				<?php echo $meta[0]['width'].' x '.$meta[0]['height'].__(' pixels',ImStore::domain)?><br />
 				<?php echo __('Color:',ImStore::domain).$meta[0]['color']?><br />
@@ -164,7 +164,7 @@ function ims_gallery_count_links($status_labels){
 		$count 	 = ($obj->status == $_GET['status'])?$obj->count:0;
 		$current = ($obj->status == $_GET['status'])?' class="current"':'';
 		if($obj->status == 'publish' && empty($_GET['status'])) $current = ' class="current"';
-		$links[] = '<li class="status'.$obj->status.'"><a href="'.$pagenowurl.'?status='.$obj->status.'&amp;post='.$post.'&amp;action=edit"'.$current.'>'.$status_labels[$obj->status].' <span class="count">(<em>'.$obj->count.'</em>)</span></a></li>';
+		$links[] = '<li class="status'.$obj->status.'"><a href="'.$pagenowurl.'&amp;status='.$obj->status.'"'.$current.'>'.$status_labels[$obj->status].' <span class="count">(<em>'.$obj->count.'</em>)</span></a></li>';
 		if($obj->status != 'trash') $all += $obj->count;
 	}
 	echo implode(' | ',$links);

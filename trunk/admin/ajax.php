@@ -210,7 +210,7 @@ function ajax_ims_flash_image_data(){
 			case 'imtitle':
 				$row .= '<td class="column-'.$key.$class.'">';
 				$row .= '<input type="text" name="img_title['.$attach_id.']" value="'.$title.'" class="inputxl"/>';
-				$row .= '<textarea name="post_excerpt['.$attach_id.']" rows="3" class="inputxl">'.$metadata['image_meta']['caption'].'</textarea>';
+				$row .= '<textarea name="img_excerpt['.$attach_id.']" rows="3" class="inputxl">'.$metadata['image_meta']['caption'].'</textarea>';
 				$row .= '</td>';
 				break;
 			case 'imauthor':

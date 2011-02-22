@@ -77,8 +77,8 @@ class ImStoreShortCode{
 		$this->sortby 	= ($sort[$orderby])?$sort[$orderby]:$this->opts['imgsortorder'];
 		$this->get_galleries();
 		
-		if($slideshow) $this->display_slideshow($atts) ;
-		else $this->display_galleries($atts);
+		if($slideshow) return $this->display_slideshow($atts) ;
+		else return $this->display_galleries($atts);
 	}
 	
 	/**
@@ -139,7 +139,7 @@ class ImStoreShortCode{
 			$output .= '<a href="'.$link.'"'. $tagatts.$title_att .' >'.$imagetag.'</a>';
 			$output .= "</{$icontag}>";
 		}
-		echo $output .= "</{$itemtag}>";
+		return $output .= "</{$itemtag}>";
 	}
 	
 	/**
