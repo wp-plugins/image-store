@@ -105,13 +105,13 @@ class ImStoreDownloadImage{
 		switch($filetype['ext']) {
 			case "jpg":
 			case "jpeg":
-				imagejpeg($image);
+				imagejpeg($image,NULL,100);
 				break;
 			case "gif":
 				imagegif($image);
 				break;
 			case "png":
-				imagepng($image);
+				imagepng($image,imagepng,9);
 				break;
 		}
 		

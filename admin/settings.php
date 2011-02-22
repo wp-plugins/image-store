@@ -93,13 +93,15 @@ if(!empty($_POST['updateimages'])){
 	$preview['preview']['crop'] = 0;
 	$preview['preview']['name'] = 'preview';
 	$preview['preview'] += $_POST['preview'];
+	$quality = ($_POST['preview']['q']>100) ? 100 : $_POST['preview']['q'];
 	
 	update_option('preview_crop',0);
+	update_option('preview_size_q',$quality);
 	update_option('preview_size_w',$_POST['preview']['w']);
 	update_option('preview_size_h',$_POST['preview']['h']);
 	
 	$imgsizes = get_option('ims_dis_images');
-	$imgsizes['preview'] = array('name' => 'preview','w' => $_POST['preview']['w'],'h' => $_POST['preview']['h'],'q' => 80,'crop' => 0);
+	$imgsizes['preview'] = array('name' => 'preview','w' => $_POST['preview']['w'],'h' => $_POST['preview']['h'],'q' => $quality,'crop' => 0);
 	
 	unset($_POST['preview']);
 	
@@ -260,7 +262,9 @@ if(!empty($_POST['updateimages'])){
 					<input type="text" name="preview[w]" class="inputsm" value="<?php echo get_option('preview_size_w')?>" /></label>
 					<label><?php _e('Max Height',ImStore::domain)?>
 					<input type="text" name="preview[h]" class="inputsm" value="<?php echo get_option('preview_size_h')?>" /></label>
-				</td>
+					<label><?php _e('Quality',ImStore::domain)?>
+					<input type="text" name="preview[q]" class="inputsm" value="<?php echo get_option('preview_size_q')?>" /></label>
+					(1-100) </td>
 			</tr>
 			<tr><td scope="row" colspan="7">&nbsp;</td></tr>
 			<tr>
@@ -629,7 +633,7 @@ if(!empty($_POST['updateimages'])){
 		</tr>
 		<tr><td scope="row">&nbsp;</td></tr>
 		<tr>
-			<td scope="row" class="error">
+			<td scope="row" class="form-invalid error">
 			<p><strong><?php _e('UNINSTALL IMAGE STORE WARNING',ImStore::domain)?>:</strong> </p>
 			<?php _e('Once uninstalled,this cannot be undone.<strong> You should backup your database </strong> and image files before doing this,Just in case!!.',ImStore::domain)?>
 			<?php _e("If you are not sure what are your doing,please don't do anything",ImStore::domain)?> !!!!

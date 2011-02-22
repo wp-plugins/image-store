@@ -176,17 +176,20 @@ class ImStoreImage{
 			imagefilter($image,IMG_FILTER_COLORIZE,35,25,10);
 		}
 		
+		$quality = ($q=get_option('preview_size_q')) ? $q : 85;
+		
 		//create new image
 		switch($filetype['ext']){
 			case "jpg":
 			case "jpeg":
-				imagejpeg($image);
+				imagejpeg($image,NULL,$quality);
 				break;
 			case "gif":
 				imagegif($image);
 				break;
 			case "png":
-				imagepng($image);
+				$quality = (ceil($quality/10)>9) ? 9 : ceil($quality/10);
+				imagepng($image,NULL,$quality);
 				break;
 		}
 		@imagedestroy($image);

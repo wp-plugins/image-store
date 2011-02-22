@@ -103,7 +103,7 @@ class ImStoreInstaller{
 		//store options to unistall plugin
 		update_option('imstore_version',ImStore::version);
 		update_option('ims_options',array('ims_front_options','ims_back_options','ims_page_secure', 'ims_searchable',
-			'ims_pricelist','ims_options','ims_page_galleries','ims_sizes','ims_download_sizes','ims_dis_images'));
+			'ims_pricelist','ims_options','ims_page_galleries','ims_sizes','ims_download_sizes','ims_dis_images','ims_user_options'));
 
 	}
 	
@@ -317,10 +317,12 @@ class ImStoreInstaller{
 		delete_option('mini_crop');
 		delete_option('mini_size_w');
 		delete_option('mini_size_h');
+		delete_option('mini_size_q');
 		
 		delete_option('preview_crop');
 		delete_option('preview_size_w');
 		delete_option('preview_size_h');
+		delete_option('preview_size_q');
 		
 		//remove all options
 		$ims_ops = get_option('ims_options');
@@ -352,7 +354,7 @@ class ImStoreInstaller{
 		$wpdb->query(
 			"DELETE FROM $wpdb->usermeta WHERE meta_key 
 			 IN('ims_user_caps','ims_customers_per_page','ims_galleries_per_page','ims_address',
-				 'ims_city','ims_phone','ims_state','ims_zip','_ims_favorites'
+				 'ims_city','ims_phone','ims_state','ims_zip','_ims_favorites',
 			)" 
 		);
 
