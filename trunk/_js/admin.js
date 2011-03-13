@@ -111,17 +111,19 @@ jQuery(document).ready(function($){
 		}
 	});
 	
+	var i = parseInt($('input.sort_count').val());
 	$("table.sort-images tbody").sortable({
 		axis:'y',
 		cursor:'move',
 		helper:'clone',
 		placeholder:'widget-placeholder',
 		update:function(){ 
-			$(this).find('tr').each(function(i){
-				$(this).find('.column-imorder input').val(i+1);
+			$(this).find('tr').each(function(){
+				$(this).find('.column-imorder input').val(i++);
 				if((i%2) != 0) $(this).removeClass('alternate').addClass('alternate');
 				else $(this).removeClass('alternate');
 			});
+			i = parseInt($('input.sort_count').val())
 		} 
 	});
 	

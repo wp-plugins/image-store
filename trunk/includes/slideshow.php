@@ -43,7 +43,7 @@ if(preg_match('#'.basename(__FILE__).'#',$_SERVER['PHP_SELF']))
 	
 	<div class="ims-slideshow-tools-box">
 	<div class="zoom">&nbsp;</div>
-		<form action="" method="post" class="ims-slideshow-tools">
+		<form method="post" class="ims-slideshow-tools">
 			<?php if(!$this->opts['disablestore']){ ?>
 			<div class="add-images-to-cart-single"><a href="#"><?php _e('Add to cart',ImStore::domain)?></a></div>
 			<div class="add-to-favorite-single"><a href="#"><?php _e('Add to favorites',ImStore::domain)?></a></div>

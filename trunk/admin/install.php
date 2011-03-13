@@ -54,6 +54,10 @@ class ImStoreInstaller{
 			'ims_add_galleries','ims_read_sales','ims_manage_galleries','ims_change_pricing',
 			'ims_change_settings','ims_manage_customers','ims_change_permissions',
 		);
+				
+		$ims_user_opts['swfupload']		= '1';
+		$ims_user_opts['caplist']		= $ims_caps;
+		update_option('ims_user_options',$ims_user_opts);
 		
 		//assign caps to adminstrato if not,to the editor
 		$role = get_role('administrator');
@@ -188,9 +192,6 @@ class ImStoreInstaller{
 		$ims_dis_img['mini'] 			= array('name' => 'mini','w' => 70,'h' => 60,'q' => 95,'crop' => 1);
 		$ims_dis_img['preview']			= array('name' => 'preview','w' => 380,'h' => 380,'q' => 80,'crop' => 0);
 		
-		$ims_user_opts['caplist']		= $ims_caps;
-		$ims_user_opts['swfupload']		= '1';
-		
 		update_option('mini_crop',1);
 		update_option('mini_size_w',70);
 		update_option('mini_size_h',60);
@@ -201,7 +202,7 @@ class ImStoreInstaller{
 		
 		update_option('ims_dis_images',$ims_dis_img);
 		update_option('ims_front_options',$ims_ft_opts);
-		update_option('ims_user_options',$ims_user_opts);
+
 		
 		//optomize wp tables
 		$wpdb->query("OPTIMIZE TABLE $wpdb->options,$wpdb->postmeta,$wpdb->posts,$wpdb->users,$wpdb->usermeta");

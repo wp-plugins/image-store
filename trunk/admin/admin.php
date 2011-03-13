@@ -775,7 +775,7 @@ class ImStoreAdmin{
 			|| $_GET['page'] == 'ims-pricing' || $_GET['page'] == 'ims-sales' || $_GET['page'] == 'ims-customers'){
 			wp_enqueue_style('thickbox');
 			wp_enqueue_style('adminstyles',IMSTORE_URL.'_css/admin.css',false,ImStore::version,'all');
-			wp_enqueue_style('datepicker',IMSTORE_URL.'_css/jquery-ui-datepicker.css',false,ImStore::version,'all');
+			wp_enqueue_style('datepicker',IMSTORE_URL.'_css/jquery-datepicker.css',false,ImStore::version,'all');
 		}
 	}
 	

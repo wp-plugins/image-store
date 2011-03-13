@@ -131,7 +131,7 @@ class ImStoreShortCode{
 		foreach($this->attachments as $image){
 
 			$link 		= IMSTORE_URL."image.php?$nonce&amp;img=".$this->encrypt_id($image->ID);
-			$title_att 	= ($caption)?'title="'.esc_attr($image->post_title).'" name="'.esc_attr($image->post_excerpt).'"':' ' ;
+			$title_att 	= ($caption)? 'title="'.esc_attr($image->post_title).'" name="'.esc_attr($image->post_excerpt).'"':' ' ;
 			$tagatts 	= ($lightbox)?' class="ims-colorbox" rel="gallery" ':' class="ims-image" rel="image" ';
 			$imagetag 	= '<img src="'.$image->meta_value['sizes']['thumbnail']['url'].'" alt="'.$image->post_title.'" />'; 
 			
@@ -179,7 +179,7 @@ class ImStoreShortCode{
 						<div id="ims-slideshow" class="ims-slideshow" ></div>
 					</div></div>';
 		$output .= '<div class="ims-slideshow-tools-box">
-					<form action="" method="post" class="ims-slideshow-tools">';
+					<form method="post" class="ims-slideshow-tools">';
 		if(!$this->opts['disablebw'] || !$this->opts['disablesepia']){
 			$output .=	'<div class="image-color">';
 			if(!$this->opts['disablebw'])
