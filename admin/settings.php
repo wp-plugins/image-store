@@ -30,8 +30,10 @@ if(!empty($_POST['update'])){
 		foreach($this->opts['checkoutfields'] as $key => $label)
 			if(!empty($_POST['required'][$key])) $this->opts['requiredfields'][] = $key;
 	}
-
-	update_option('ims_searchable', $_POST['ims_searchable']);
+	
+	if($_POST['galleriespath'])
+		update_option('ims_searchable', $_POST['ims_searchable']);
+	
 	update_option('ims_front_options',wp_parse_args($_POST,$this->opts));
 	wp_redirect($pagenowurl.'&ms=4');	
 }

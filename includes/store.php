@@ -30,11 +30,15 @@ class ImStoreFront{
 		add_filter('protected_title_format',array(&$this,'remove_protected'));
 		add_filter('template_include',array(&$this,'taxonomy_template'),1,50);
 		add_filter('single_template',array(&$this,'change_gallery_template'),1,50);
+		
+		add_filter('posts_where',array(&$this,'search_image_info'),2,50);
+		
 		add_action('wp_enqueue_scripts',array(&$this,'load_scripts_styles'));
 		add_shortcode('image-store',array(&$this,'imstore_shortcode'));
 		add_shortcode('ims-gallery-content',array(&$this,'ims_gallery_shortcode'));
 	}
 
+	
 	/**
 	 *Display gallery 
 	 *
@@ -340,7 +344,7 @@ class ImStoreFront{
 			$_POST['payment_gross'],$_POST['payment_status'],
 			$wpdb->get_var("SELECT post_title FROM $wpdb->posts WHERE ID = '".$_POST['custom']."' "),
 			$_POST['mc_shipping1'],$data['tracking'],$data['gallery_id'],$_POST['txn_id'],
-			$_POST['last_name'],$_POST['first_name'],$_POST['payer_email'],
+			$_POST['last_name'],$_POST['first_name'],$_POST['user_email'],
 		);
 		$messages = array(
 			'1' => __('Successfully added to cart',ImStore::domain),
@@ -450,11 +454,11 @@ class ImStoreFront{
 
 		$output = '<form action="'.get_permalink($post->ID).'" method="post">
 		<p class="message login">'.__("To view your images please enter your login information below:").'</p>
-			<div class="ims-fields"
-				<label for="'.$glabel.'">'.__("Gallery ID:",ImStore::domain).'</label> <input name="'.$glabel.'" id="'.$glabel.'"" />
-				<spam class="linebreak"></spam>
+			<div class="ims-fields">
+				<label for="'.$glabel.'">'.__("Gallery ID:",ImStore::domain).'</label> <input name="'.$glabel.'" id="'.$glabel.'" />
+				<span class="linebreak"></span>
 				<label for="'.$plabel.'">'.__("Password:",ImStore::domain).'</label> <input name="'.$plabel.'" id="'.$plabel.'" type="password" />
-				<spam class="linebreak"></spam>
+				<span class="linebreak"></span>
 				<input type="submit" name="login-imstore" value="'.esc_attr(__("Log In",ImStore::domain)).'" />
 				<input type="hidden" name="_wpnonce" value="'.$nonce.'" />
 			</div>
@@ -517,9 +521,9 @@ class ImStoreFront{
 			$link .= "/". sanitize_title($this->pages[$page]);
 			if($this->success) $link .= '/ms/'.$this->success;
 		}else{
-			$link = '&imspage='.$page;
+			$link = '&amp;imspage='.$page;
 			if(is_front_page()) $link .= '?page_id='.$this->page_front;
-			if($this->success) $link .= '&imsmessage='.$this->success; 
+			if($this->success) $link .= '&amp;imsmessage='.$this->success; 
 		} return trim(get_permalink(),'/').str_replace('//','/',$link);
 	}
 	
@@ -550,13 +554,14 @@ class ImStoreFront{
 				$caption	= ($this->is_galleries)?$title:$image->post_excerpt ;
 				$link 		= IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;w=".$this->opts['watermark'];
 			}
-			$imagetag = '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;thumb=1".'" title="'.esc_attr($title).'" alt="'.esc_attr($title).'" />'; 
+			
+			$imagetag = '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;thumb=1".'" title="'.esc_attr($caption).'" alt="'.esc_attr($title).'" />'; 
 			
 			$output .= "<{$icontag}>";
 			if(!$this->opts['disablestore'] &&($this->query_id || $this->is_secure)) 
 				$output .= '<input name="imgs[]" type="checkbox" value="'.$enc.'" />';
 			
-			$output .= '<a href="'.$link.'"'.$tagatts.' title="'.esc_attr($title).'" name="'.esc_attr($caption).'">'.$imagetag.'</a>';
+			$output .= '<a href="'.$link.'"'.$tagatts.' title="'.esc_attr($title).'">'.$imagetag.'</a>';
 			if($this->is_galleries){
 				$output .= "
 					<{$captiontag} class='gallery-caption'>
@@ -572,6 +577,35 @@ class ImStoreFront{
 			setcookie('ims_gal_'.$this->gallery_id.'_'.COOKIEHASH,true,0,COOKIEPATH);
 		}
 	}
+	
+	/**
+	 *Search image title and caption 
+	 *
+	 *@param $where string
+	 *@param $query object
+	 *@return string
+	 *@since 2.0.7
+	 */ 
+	function search_image_info($where,$query){
+		$q = $query->query_vars;
+		if(empty($q['s']))  return $where;
+		
+		global $wpdb; $n = !empty($q['exact']) ? '' : '%';
+		
+		foreach( (array) $q['search_terms'] as $term ) {
+			$term = esc_sql( like_escape( $term ) );
+			$search .= "{$searchand}(($wpdb->posts.post_title LIKE '{$n}{$term}{$n}') OR ($wpdb->posts.post_content LIKE '{$n}{$term}{$n}') 
+				OR ($wpdb->posts.post_excerpt LIKE '{$n}{$term}{$n}') OR ($wpdb->posts.post_excerpt LIKE '{$n}{$term}{$n}'))";
+				$searchand = ' AND ';
+		}
+		
+		$term = esc_sql( like_escape( $q['s'] ) );
+		if ( empty($q['sentence']) && count($q['search_terms']) > 1 && $q['search_terms'][0] != $q['s'] )
+			$search .= " OR ($wpdb->posts.post_title LIKE '{$n}{$term}{$n}') OR ($wpdb->posts.post_content LIKE '{$n}{$term}{$n}')";
+		
+		return " $where OR ( ID IN ( SELECT DISTINCT post_parent FROM $wpdb->posts WHERE 1=1 AND $search AND $wpdb->posts.post_status = 'publish' AND post_type IN ('ims_gallery')))";
+	}
+	
 	
 	/**
 	*Get gallery price list
@@ -687,7 +721,7 @@ class ImStoreFront{
 	*@since 0.5.0 
 	*/
 	function display_list_form(){?>
-		<form id="ims-pricelist" action="" method="post">
+		<form id="ims-pricelist" method="post">
 		<div class="ims-image-count"><?php _e('Selected',ImStore::domain)?></div>
 		<div class="ims-instructions"><?php _e('These preferences will be apply to all the selected images',ImStore::domain)?></div>
 		<div class="ims-add-error"><?php _e('There are no images selected',ImStore::domain)?></div>

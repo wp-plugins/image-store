@@ -20,7 +20,7 @@ $req  = implode(' ',(array)$this->opts['requiredfields']);
 
 ?>
 
-<form action="" method="post" class="shipping-info">
+<form method="post" class="shipping-info">
 		<fieldset>
 			<legend><?php echo __("Shipping Information",ImStore::domain) ?></legend>
 			<div class="ims-p user-info">

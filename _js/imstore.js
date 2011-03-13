@@ -30,7 +30,7 @@ jQuery(document).ready(function($){
 			close: imstore.closeLinkText,
 			previous: imstore.prevLinkText,
 			title: function(){
-				return ($(this).attr('name') == '') ? ' ' : $(this).attr('name');
+				return ($(this).find('img').attr('title') == '') ? ' ' : $(this).find('img').attr('title');
 			}
 		})
 	};

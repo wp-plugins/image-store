@@ -23,6 +23,7 @@ if(!empty($_POST['screen_options'])){
 //print_r($this->opts);
 global $status_labels; 
 $columns 		= get_column_headers('ims_gallery');
+$page			= (empty($_GET['p']))?1:(int)$_GET['p'];
 $imgnonce 		= '&_wpnonce='.wp_create_nonce("ims_edit_image")."&TB_iframe=true&height=570";
 $is_trash		= (isset($_GET['status'])) &&($_GET['status'] == 'trash');
 $orderby 		= (empty($this->meta['_ims_sortby'][0]))?$this->opts['imgsortorder']:$this->meta['_ims_sortby'][0];
@@ -141,6 +142,7 @@ if(isset($_GET['error']))
 	</tbody>
 </table>
 <?php global $wp_query ?>
+<input type="hidden" name="sort_count" value="<?php echo ((($this->per_page*$page)-$this->per_page)+1)?>" class="sort_count" />
 <div class="tablenav"><?php $this->imstore_paging($this->per_page,$wp_query->found_posts)?></div>
 
 <?php 

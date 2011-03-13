@@ -24,7 +24,7 @@ $colors_options = array(
 );
 ?>
 
-<form action="" method="post" >
+<form method="post" >
 	
 	<?php if(empty($this->cart['images'])){?>
 	
@@ -35,8 +35,8 @@ $colors_options = array(
 	<table class="ims-table">
 		<thead>
 			<tr>
-				<th scope="col" class="preview">&nbsp;</th>
-				<th scope="col" colspan="6" class="subrows">
+				<th class="preview">&nbsp;</th>
+				<th colspan="6" class="subrows">
 					<span class="ims-quantity"><?php _e('Quantity',ImStore::domain)?></span>
 					<span class="ims-size"><?php _e('Size',ImStore::domain)?></span>
 					<span class="ims-color"><?php _e('Color',ImStore::domain)?></span>
@@ -50,7 +50,7 @@ $colors_options = array(
 		<?php $i=1; foreach($this->cart['images'] as $id => $sizes){?>
 			<?php $image = get_post_meta($id,'_wp_attachment_metadata',true)?>
 			<tr>
-				<td scope="row" class="preview">
+				<td class="preview">
 				<img src="<?php echo $image['sizes']['mini']['url']?>" 
 				width="<?php echo $image['sizes']['mini']['width']?>" 
 				height="<?php echo $image['sizes']['mini']['height']?>" 
@@ -105,7 +105,7 @@ $colors_options = array(
 		</tbody>
 		<tfoot>
 			<tr>
-				<td scope="row">&nbsp;</td>
+				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
@@ -113,7 +113,7 @@ $colors_options = array(
 				<td class="total" colspan="2"><?php printf($format[$loc],number_format($this->cart['subtotal'],2))?></td>
 			</tr>
 			<tr>
-				<td scope="row"colspan="4">&nbsp;</td>
+				<td colspan="4">&nbsp;</td>
 				<td><?php _e('Promotional code',ImStore::domain)?></td>
 				<td class="total promo-code" colspan="2">
 					<input name="promocode" type="text" value="<?php echo $this->cart['promo']['code']?>" />
@@ -122,7 +122,7 @@ $colors_options = array(
 				</td>
 			</tr>
 			<tr>
-				<td scope="row" colspan="4">&nbsp;</td>
+				<td colspan="4">&nbsp;</td>
 				<td><?php _e('Shipping',ImStore::domain)?></td>
 				<td colspan="2" class="shipping">
 					<?php $meta = get_post_meta($this->pricelist_id,'_ims_list_opts',true);?>
@@ -136,14 +136,14 @@ $colors_options = array(
 			</tr>
 			<?php if($this->cart['discounted']){ ?>
 			<tr>
-				<td scope="row" colspan="4">&nbsp;</td>
+				<td colspan="4">&nbsp;</td>
 				<td><?php _e('Discount',ImStore::domain)?></td>
 				<td colspan="2" class="discount"><?php printf('- ' .$format[$loc],number_format($this->cart['promo']['discount'],2)) ?></td>
 			</tr>
 			<?php } ?>
 			<?php if($this->cart['tax']){ ?>
 			<tr>
-				<td scope="row" colspan="4">&nbsp;</td>
+				<td colspan="4">&nbsp;</td>
 				<td><?php _e('Tax',ImStore::domain)?></td>
 				<td colspan="2" class="tax">
 					<?php printf('+ '.$format[$loc],number_format($this->cart['tax'],2)) ?>
@@ -152,12 +152,12 @@ $colors_options = array(
 			</tr>
 			<?php } ?>
 			<tr>
-				<td scope="row" colspan="4">&nbsp;</td>
+				<td colspan="4">&nbsp;</td>
 				<td><?php _e('Total',ImStore::domain)?></td>
 				<td colspan="2" class="total"><?php printf($format[$loc],number_format($this->cart['total'],2)) ?></td>
 			</tr>
 			<tr>
-				<td scope="row" colspan="4">&nbsp;</td>
+				<td colspan="4">&nbsp;</td>
 				<td colspan="3">
 					<input name="applychanges" type="submit" value="<?php _e('Update Cart',ImStore::domain)?>" class="secondary" />
 					<input name="<?php echo($this->opts['gateway'] == 'notification')?'enotification':'checkout' ?>" 
