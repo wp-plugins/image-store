@@ -12,10 +12,6 @@
 // Stop direct access of the file
 if(preg_match('#'.basename(__FILE__).'#',$_SERVER['PHP_SELF'])) 
 	die();
-
-$sym	= $this->opts['symbol']; 
-$loc 	= $this->opts['clocal'];
-$format = array('',"$sym%s","$sym %s","%s$sym","%s $sym"); 
 ?>
 
 <table class="ims-table">
@@ -41,11 +37,11 @@ $format = array('',"$sym%s","$sym %s","%s$sym","%s $sym");
 						}
 						echo rtrim($package_sizes,',').' </td>
 						<td class="blank">&nbsp;</td>
-						<td class="ims-price">'.sprintf($format[$loc],get_post_meta($size['ID'],'_ims_price',true)).'</td>';
+						<td class="ims-price">'.sprintf($this->format[$this->opts['clocal']],get_post_meta($size['ID'],'_ims_price',true)).'</td>';
 					}else{
 						echo '<td colspan="2" class="ims-size"><span class="ims-size-name">'.$size['name'].' '.$size['unit'].'</span></td>
 							 <td class="blank">&nbsp;</td>
-							 <td class="ims-price">'.sprintf($format[$loc],$size['price']).'</td>';
+							 <td class="ims-price">'.sprintf($this->format[$this->opts['clocal']],$size['price']).'</td>';
 					}
 					$download = ($size['download'])?__('Included',ImStore::domain):'';
 					echo '<td class="ims-download">'.$download.'</td>';
@@ -65,17 +61,17 @@ $format = array('',"$sym%s","$sym %s","%s$sym","%s $sym");
 			</tr>
 			<tr>
 				<td><?php _e('Local',ImStore::domain)?></td>
-				<td><?php printf($format[$loc],$meta['ims_ship_local']);?></td>
+				<td><?php printf($this->format[$this->opts['clocal']],$meta['ims_ship_local']);?></td>
 				<td class="subhead">&nbsp;</td>
 				<td><?php if(!$this->opts['disablesepia']) _e('Sepia',ImStore::domain)?>&nbsp;</td>
-				<td><?php if(!$this->opts['disablesepia']) printf($format[$loc],$meta['ims_sepia'])?>&nbsp;</td>
+				<td><?php if(!$this->opts['disablesepia']) printf($this->format[$this->opts['clocal']],$meta['ims_sepia'])?>&nbsp;</td>
 			</tr>
 			<tr>
 				<td class="ims-price"><?php _e('International',ImStore::domain)?></td>
-				<td><?php printf($format[$loc],$meta['ims_ship_inter'])?></td>
+				<td><?php printf($this->format[$this->opts['clocal']],$meta['ims_ship_inter'])?></td>
 				<td class="subhead">&nbsp;</td>
 				<td class="ims-size"><?php if(!$this->opts['disablebw']) _e('Black & White',ImStore::domain)?>&nbsp;</td>
-				<td><?php if(!$this->opts['disablebw']) printf($format[$loc],$meta['ims_bw'])?>&nbsp;</td>
+				<td><?php if(!$this->opts['disablebw']) printf($this->format[$this->opts['clocal']],$meta['ims_bw'])?>&nbsp;</td>
 			</tr>
 		</tfoot>
 	</table>

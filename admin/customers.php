@@ -110,11 +110,11 @@ $link = ($_GET['newcustomer']) ?'&newcustomer=1':'&edit='.$_GET['edit'];
 				<tr class="alternate">
 					<td scope="row"><label for="user_email"><?php _e('Email',ImStore::domain)?></label></td>
 					<td><input type="text" name="user_email" id="user_email" value="<?php echo esc_attr($_POST['user_email'])?>" class="inputxl" /></td>
-					<td><?php if(class_exists('MailPress')&&$_GET['edit']):?>
+					<td><?php if(class_exists('MailPress')&&$_GET['x']):?>
 						<label for="_MailPress_sync_wordpress_user"><?php _e('Added to eNewsletter',ImStore::domain)?></label>
 						<?php endif?>
 					</td>
-					<td><?php if(class_exists('MailPress')&&$_GET['edit']):?>
+					<td><?php if(class_exists('MailPress')&&$_GET['x']):?>
 						<input type="checkbox" name="_MailPress_sync_wordpress_user" id="_MailPress_sync_wordpress_user" disabled="disabled" value="1" <?php checked($_GET['edit'],$_POST['_MailPress_sync_wordpress_user'])?> />
 						<?php endif?>
 					</td>

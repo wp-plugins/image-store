@@ -12,11 +12,8 @@
 // Stop direct access of the file
 if(preg_match('#'.basename(__FILE__).'#',$_SERVER['PHP_SELF'])) 
 	die();
-	
-$sym	= $this->opts['symbol']; 
-$loc 	= $this->opts['clocal'];
+
 $nonce 	= wp_create_nonce("ims_download_img");
-$format = array('',"$sym%s","$sym %s","%s$sym","%s $sym"); 
 $colors_options = array(
 	'ims_sepia' => __('Sepia + ',ImStore::domain),	
 	'color' 	=> __('Full Color',ImStore::domain),	
@@ -25,11 +22,9 @@ $colors_options = array(
 ?>
 
 <form method="post" >
-	
+
 	<?php if(empty($this->cart['images'])){?>
-	
 	<div class="ims-message ims-error"><?php _e('Your shopping cart is empty!!',ImStore::domain)?></div>
-	
 	<?php }else{?>
 	
 	<table class="ims-table">
@@ -67,8 +62,8 @@ $colors_options = array(
 						value="<?php echo $item['quantity']?>" class="input" /></span>
 						<span class="ims-size"><?php echo $size.' '.$item['unit']?></span>
 						<span class="ims-color"><?php echo $colors_options[$color].$item['color'] ?></span>
-						<span class="ims-price"><?php printf($format[$loc],number_format($item['price'],2))?></span>
-						<span class="ims-subtotal"><?php printf($format[$loc],number_format($item['subtotal'],2))?></span>
+						<span class="ims-price"><?php printf($this->format[$this->opts['clocal']],number_format($item['price'],2))?></span>
+						<span class="ims-subtotal"><?php printf($this->format[$this->opts['clocal']],number_format($item['subtotal'],2))?></span>
 						<span class="ims-delete"><input name="ims-remove[]" type="checkbox" 
 						value="<?php echo "{$enc}|{$size}|{$color}"?>" /></span>
 						
@@ -110,26 +105,26 @@ $colors_options = array(
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td><?php _e('Item subtotal',ImStore::domain)?></td>
-				<td class="total" colspan="2"><?php printf($format[$loc],number_format($this->cart['subtotal'],2))?></td>
+				<td class="total" colspan="2"><?php printf($this->format[$this->opts['clocal']],number_format($this->cart['subtotal'],2))?></td>
 			</tr>
 			<tr>
 				<td colspan="4">&nbsp;</td>
-				<td><?php _e('Promotional code',ImStore::domain)?></td>
+				<td><label for="ims-promo-code"><?php _e('Promotional code',ImStore::domain)?></label></td>
 				<td class="total promo-code" colspan="2">
-					<input name="promocode" type="text" value="<?php echo $this->cart['promo']['code']?>" />
+					<input name="promocode" id="ims-promo-code" type="text" value="<?php echo $this->cart['promo']['code']?>" />
 					<span class="ims-break"></span>
 					<small><?php _e('Update cart to apply promotional code.',ImStore::domain)?></small>
 				</td>
 			</tr>
 			<tr>
 				<td colspan="4">&nbsp;</td>
-				<td><?php _e('Shipping',ImStore::domain)?></td>
+				<td><label for="shipping_1"><?php _e('Shipping',ImStore::domain)?></label></td>
 				<td colspan="2" class="shipping">
 					<?php $meta = get_post_meta($this->pricelist_id,'_ims_list_opts',true);?>
 					<?php if($this->cart['shippingcost']){ ?>
 					<select name="shipping_1" id="shipping_1" class="shipping-opt">
-						<option value="<?php echo $meta['ims_ship_local']?>"<?php $this->selected($meta['ims_ship_local'],$this->cart['shipping'])?>><?php echo __('Local + ',ImStore::domain).sprintf($format[$loc],$meta['ims_ship_local'])?></option>
-						<option value="<?php echo $meta['ims_ship_inter']?>"<?php $this->selected($meta['ims_ship_inter'],$this->cart['shipping'])?>><?php echo __('International + ',ImStore::domain).sprintf($format[$loc],$meta['ims_ship_inter'])?></option>
+						<option value="<?php echo $meta['ims_ship_local']?>"<?php $this->selected($meta['ims_ship_local'],$this->cart['shipping'])?>><?php echo __('Local + ',ImStore::domain).sprintf($this->format[$this->opts['clocal']],$meta['ims_ship_local'])?></option>
+						<option value="<?php echo $meta['ims_ship_inter']?>"<?php $this->selected($meta['ims_ship_inter'],$this->cart['shipping'])?>><?php echo __('International + ',ImStore::domain).sprintf($this->format[$this->opts['clocal']],$meta['ims_ship_inter'])?></option>
 					</select>
 					<?php } ?>
 				</td>
@@ -138,7 +133,7 @@ $colors_options = array(
 			<tr>
 				<td colspan="4">&nbsp;</td>
 				<td><?php _e('Discount',ImStore::domain)?></td>
-				<td colspan="2" class="discount"><?php printf('- ' .$format[$loc],number_format($this->cart['promo']['discount'],2)) ?></td>
+				<td colspan="2" class="discount"><?php printf('- ' .$this->format[$this->opts['clocal']],number_format($this->cart['promo']['discount'],2)) ?></td>
 			</tr>
 			<?php } ?>
 			<?php if($this->cart['tax']){ ?>
@@ -146,7 +141,7 @@ $colors_options = array(
 				<td colspan="4">&nbsp;</td>
 				<td><?php _e('Tax',ImStore::domain)?></td>
 				<td colspan="2" class="tax">
-					<?php printf('+ '.$format[$loc],number_format($this->cart['tax'],2)) ?>
+					<?php printf('+ '.$this->format[$this->opts['clocal']],number_format($this->cart['tax'],2)) ?>
 					<input type="hidden" name="tax_cart" value="<?php echo number_format($this->cart['tax'],2) ?>"/>
 				</td>
 			</tr>
@@ -154,8 +149,16 @@ $colors_options = array(
 			<tr>
 				<td colspan="4">&nbsp;</td>
 				<td><?php _e('Total',ImStore::domain)?></td>
-				<td colspan="2" class="total"><?php printf($format[$loc],number_format($this->cart['total'],2)) ?></td>
+				<td colspan="2" class="total"><?php printf($this->format[$this->opts['clocal']],number_format($this->cart['total'],2)) ?></td>
 			</tr>
+			<?php if($this->opts['gateway'] != 'notification'){?>
+			<tr>
+				<td colspan="4">&nbsp;</td>
+				<td colspan="3"><label><?php _e('Additional Instructions',ImStore::domain)?>
+					<br /><textarea name="instructions" class="ims-instructions"><?php echo strip_tags($this->cart['instructions'])?></textarea>
+				</label></td>
+			</tr>
+			<?php }?>
 			<tr>
 				<td colspan="4">&nbsp;</td>
 				<td colspan="3">
@@ -210,7 +213,7 @@ $colors_options = array(
 		<input type="hidden" name="upload" value="1" />
 		<input type="hidden" name="cmd" value="_cart" />
 		<input type="hidden" name="page_style" value="<?php bloginfo('name')?>" />
-		<input type="hidden" name="notify_url" value="<?php echo WP_SITEURL?>" />
+		<input type="hidden" name="notify_url" value="<?php echo WP_SITE_URL?>" />
 		<input type="hidden" name="lc" value="<?php echo get_bloginfo('language')?>" />
 		<input type="hidden" name="return" value="<?php echo $this->get_permalink(6)?>" />
 		<input type="hidden" name="ims-total" value="<?php echo $this->cart['total']?>" />

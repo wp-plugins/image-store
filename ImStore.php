@@ -4,7 +4,7 @@ Plugin Name: Image Store
 Plugin URI: http://imstore.xparkmedia.com
 Description: Your very own image store within wordpress "ImStore"
 Author: Hafid R. Trujillo Huizar
-Version: 2.0.7
+Version: 2.0.8
 Author URI:http://www.xparkmedia.com
 Requires at least: 3.0.0
 Tested up to: 3.1.0
@@ -42,7 +42,7 @@ class ImStore{
 	*Make sure that new language(.mo) files have 'ims-' as base name
 	*/
 	const domain	= 'ims';
-	const version	= '2.0.7';
+	const version	= '2.0.8';
 	
 	/**
 	*Constructor
@@ -51,22 +51,33 @@ class ImStore{
 	*@since 0.5.0 
 	*/
 	function __construct(){
+		global $wp_version;
 		
 		$this->load_text_domain();
 		$this->define_constant();
 		$this->load_dependencies();
 		
+		$this->pages[1] = __('Photos',ImStore::domain);
+		$this->pages[2] = __('Slideshow',ImStore::domain);
+		$this->pages[3] = __('Price List',ImStore::domain);
+		$this->pages[4] = __('Favorites',ImStore::domain);
+		$this->pages[5] = __('Shopping Cart',ImStore::domain);
+		$this->pages[6] = __('Receipt',ImStore::domain);
+		$this->pages[7] = __('Shipping',ImStore::domain);
+		
 		// register hooks
+		//if($wp_version >= 3.1) register_update_hook(IMSTORE_FILE_NAME,array(&$this,'update'));
 		register_activation_hook(IMSTORE_FILE_NAME,array(&$this,'activate'));
 		register_deactivation_hook(IMSTORE_FILE_NAME,array(&$this,'deactivate'));
 		
 		add_action('init',array(&$this,'int_actions'),40);
 		add_action('wp_logout',array(&$this,'logout_ims_user'),10);
 		add_action('imstore_expire',array(&$this,'expire_galleries'));
+		add_filter('post_type_link',array(&$this,'gallery_permalink'),10,3);
 		add_filter('wp_insert_post_data',array(&$this,'insert_post_data'),20,2);
 		add_action('generate_rewrite_rules',array(&$this,'add_rewrite_rules'),10,1);
 	}
-	
+
 	/**
 	*Define contant variables
 	*
@@ -80,9 +91,9 @@ class ImStore{
 		define('IMSTORE_ABSPATH',str_replace("\\","/",dirname(__FILE__)));
 		define('IMSTORE_URL',WP_PLUGIN_URL."/".IMSTORE_FOLDER."/");
 		define('IMSTORE_ADMIN_URL',IMSTORE_URL.'admin/');
-		if(!defined('WP_SITEURL')) define('WP_SITEURL',get_bloginfo('url'));
+		if(!defined('WP_SITE_URL')) define('WP_SITE_URL',get_bloginfo('url'));
 		if(!defined('WP_EDIT_URL')) define('WP_EDIT_URL',admin_url()."/post.php?post=");
-		if(!defined('WP_CONTENT_URL')) define('WP_CONTENT_URL',WP_SITEURL.'/wp-content');
+		if(!defined('WP_CONTENT_URL')) define('WP_CONTENT_URL',WP_SITE_URL.'/wp-content');
 		if(!defined('WP_TEMPLATE_DIR')) define('WP_TEMPLATE_DIR',get_template_directory());
 	}
 			
@@ -152,6 +163,16 @@ class ImStore{
 	}
 	
 	/**
+	*Run plugin updates
+	*
+	*@return void
+	*@since 2.0.8 
+	*/
+	function update(){
+		include_once(dirname(__FILE__).'/admin/install.php');
+	}
+	
+	/**
 	*Fast in_array function
 	*
 	*@parm string $elem
@@ -182,31 +203,57 @@ class ImStore{
 	*@return array
 	*@since 0.5.0 
 	*/
-	 function add_rewrite_rules($wp_rewrite){	
-		$wp_rewrite->add_rewrite_tag('%imspage%','([^/]+)','imspage=');
+	 function add_rewrite_rules($wp_rewrite){
+		 
+		$wp_rewrite->add_rewrite_tag("%gallery%",'([^/]+)',"ims_gallery=");
 		$wp_rewrite->add_rewrite_tag('%paypalipn%','([^/]+)','paypalipn=');
 		$wp_rewrite->add_rewrite_tag('%imslogout%','([^/]+)','imslogout=');
 		$wp_rewrite->add_rewrite_tag('%imsmessage%','([0-9]+)','imsmessage=');
-		
+		$wp_rewrite->add_permastruct('ims_gallery',__('galleries',ImStore::domain).'/%ims_gallery%/%imspage%',false);
+	
 		$new_rules = array(
 			__('galleries',ImStore::domain)."/imspaypalipn/?([0-9]+)/?$" =>
 			"index.php&paypalipn=".$wp_rewrite->preg_index(1),
 			__('galleries',ImStore::domain)."/([^/]+)/logout/?([^/]+)?$" => 
 			"index.php&ims_gallery=".$wp_rewrite->preg_index(1).
 			'&imslogout='.$wp_rewrite->preg_index(2),
-			__('galleries',ImStore::domain)."/([^/]+)/([^/]+)/ms/?([0-9]+)/?$" => 
-			"index.php&ims_gallery=".$wp_rewrite->preg_index(1).
-			'&imspage='.$wp_rewrite->preg_index(2).
-			'&imsmessage='.$wp_rewrite->preg_index(3),
-			__('galleries',ImStore::domain)."/([^/]+)/([^/]+)/?$" => 
-			"index.php&ims_gallery=".$wp_rewrite->preg_index(1).
-			'&imspage='.$wp_rewrite->preg_index(2),
 		);
-		$wp_rewrite->rules = $new_rules + $wp_rewrite->rules; //print_r($wp_rewrite);
-		$wp_rewrite->extra_rules_top =  $new_rules + $wp_rewrite->extra_rules_top;
+
+		foreach($this->pages as $id => $page){
+			$slug = sanitize_title($page);
+			if($id == 1)
+				$new_rules[__('galleries',ImStore::domain)."/([^/]+)/$slug/page/?([0-9]+)/?$"] = 
+				"index.php?ims_gallery=".$wp_rewrite->preg_index(1). "&imspage=$id".
+				'&page='.$wp_rewrite->preg_index(2);
+			
+			$new_rules[__('galleries',ImStore::domain)."/([^/]+)/$slug/logout/?([^/]+)?$"] = 
+			"index.php?ims_gallery=".$wp_rewrite->preg_index(1).
+			'&imslogout='.$wp_rewrite->preg_index(2);
+			
+			$new_rules[__('galleries',ImStore::domain)."/([^/]+)/$slug/ms/?([0-9]+)/?$"] = 
+			"index.php?ims_gallery=".$wp_rewrite->preg_index(1). "&imspage=$id".
+			'&imsmessage='.$wp_rewrite->preg_index(2);
+			
+			$new_rules[__('galleries',ImStore::domain)."/([^/]+)/$slug/?$"] = 
+			"index.php?ims_gallery=".$wp_rewrite->preg_index(1)."&imspage=$id";
+
+			$new_rules[__('galleries',ImStore::domain)."/([^/]+)/$slug/feed/(feed|rdf|rss|rss2|atom|imstore)/?$"] = 
+			"index.php?ims_gallery=".$wp_rewrite->preg_index(1)."&imspage=$id&feed=".$wp_rewrite->preg_index(2);
+
+		}
+		$wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
+		$wp_rewrite->rules["/page/?([0-9]+)/?$"] =  "index.php?paged=".$wp_rewrite->preg_index(1);  //print_r($wp_rewrite);
 		return $wp_rewrite;
 	}
-	 
+	
+		
+	function gallery_permalink($permalink, $post, $leavename){
+		if($post->post_type != 'ims_gallery') return $permalink;
+		$page = ($p = get_query_var('imspage')) ? $this->pages[$p] : $this->pages[1];
+		return str_replace('%imspage%',sanitize_title($page),$permalink);
+	}
+	
+
 	/**
 	*Initial actions
 	*
@@ -236,21 +283,33 @@ class ImStore{
 			'exclude_from_search'=> $searchable,
 			'hierarchical' 		=> false,
 			'revisions'			=> false,
+			'show_in_nav_menus' => false,
 			'capability_type' 	=> 'page',
 			'query_var'			=> 'ims_gallery',
 			'menu_icon' 		=> IMSTORE_URL.'_img/imstore.png',
-			'rewrite' 			=> array('slug' => __('galleries',ImStore::domain),'with_front' => false),
-			'supports' 			=> array('title','comments','author')
+			'rewrite' 			=> array('slug' => __('galleries',ImStore::domain),'with_front'=>false),
+			'supports' 			=> array('title','comments','author'),
+			'taxonomies'		=> array('ims_album')
 		));
-
+		
 		register_taxonomy('ims_album',array('ims_gallery'),array(
 			'labels' => array(
-				'name' 			=> __('Albums',ImStore::domain),
-  				'singular_name' => __('Album',ImStore::domain),
-			),
+				'name' 			=> _x( 'Albums', 'taxonomy general name',ImStore::domain),
+				'singular_name' => _x( 'Album', 'taxonomy singular name',ImStore::domain),
+				'search_items' 	=> __( 'Search Albums',ImStore::domain),
+				'all_items' 	=> __( 'All Albums',ImStore::domain),
+				'parent_item' 	=> __( 'Parent Album',ImStore::domain),
+				'parent_item_colon' => __( 'Parent Album:',ImStore::domain),
+				'edit_item' 	=> __( 'Edit Album',ImStore::domain), 
+				'update_item' 	=> __( 'Update Album',ImStore::domain),
+				'add_new_item' 	=> __( 'Add New Album',ImStore::domain),
+				'new_item_name' => __( 'New Album Name',ImStore::domain),
+				'menu_name' 	=> __( 'Album',ImStore::domain),
+			 ),
 			'show_ui' 		=> true,
 			'query_var' 	=> true,
 			'hierarchical' 	=> true,
+			'show_in_nav_menus' => true,
 			'rewrite' 		=> array('slug' =>__('albums',ImStore::domain)),
 		));
 		

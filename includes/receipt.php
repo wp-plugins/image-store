@@ -34,7 +34,7 @@ $labels = array(
 	 </div>
 </div>
 
-<?php if($_POST['payment_gross'] == number_format($cart['total'],2)){	
+<?php if($_POST['mc_gross'] == number_format($cart['total'],2)){	
 	foreach($cart['images'] as $id => $sizes){
 		$enc = $this->encrypt_id($id);	
 		foreach($sizes as $size => $colors){

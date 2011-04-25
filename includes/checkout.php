@@ -13,9 +13,6 @@
 if(preg_match('#'.basename(__FILE__).'#',$_SERVER['PHP_SELF'])) 
 	die();
 
-$sym 	= $this->opts['symbol']; 
-$loc 	= $this->opts['clocal'];
-$format = array('',"$sym%s","$sym %s","%s$sym","%s $sym");
 $req  = implode(' ',(array)$this->opts['requiredfields']); 
 
 ?>
@@ -58,13 +55,17 @@ $req  = implode(' ',(array)$this->opts['requiredfields']);
 				</label>
 				<input type="text" name="ims_phone" id="ims_phone" value="<?php echo esc_attr($_POST['ims_phone'])?>" class="ims-input" />
 			</div>
+			<div class="ims-p">
+				<label for="ims_instructions"><?php _e('Additional Instructions',ImStore::domain)?></label>
+				<textarea name="instructions" id="ims_instructions" class="ims-instructions"><?php echo strip_tags($this->cart['instructions'])?></textarea>
+			</div>
 			<div class="ims-p"><small><span class="req">*</span> <?php _e("Required fields",ImStore::domain)?></small></div>
 		</fieldset>
 		<fieldset>
 			<legend><?php _e("Order Information",ImStore::domain) ?></legend>
 			<div class="ims-p order-info">
 				<span class="ims-items"><strong><?php _e("Total items: ",ImStore::domain)?></strong> <?php echo $this->cart['items'] ?></span>
-				<span class="ims-total"><strong><?php _e("Order total: ",ImStore::domain)?></strong> <?php printf($format[$loc],number_format($this->cart['total'],2)) ?></span>
+				<span class="ims-total"><strong><?php _e("Order total: ",ImStore::domain)?></strong> <?php printf($this->format[$this->opts['clocal']],number_format($this->cart['total'],2)) ?></span>
 			</div>
 		</fieldset>
 		<div class="shipping-message">

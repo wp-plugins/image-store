@@ -111,7 +111,7 @@ class ImStoreDownloadImage{
 				imagegif($image);
 				break;
 			case "png":
-				imagepng($image,imagepng,9);
+				imagepng($image,NULL,9);
 				break;
 		}
 		
