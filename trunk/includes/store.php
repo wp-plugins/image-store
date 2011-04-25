@@ -30,7 +30,6 @@ class ImStoreFront{
 		add_filter('protected_title_format',array(&$this,'remove_protected'));
 		add_filter('template_include',array(&$this,'taxonomy_template'),1,50);
 		add_filter('single_template',array(&$this,'change_gallery_template'),1,50);
-		
 		add_filter('posts_where',array(&$this,'search_image_info'),2,50);
 		
 		add_action('wp_enqueue_scripts',array(&$this,'load_scripts_styles'));
@@ -96,7 +95,7 @@ class ImStoreFront{
 		echo '<div class="ims-innerbox">';
 		switch($this->imspage){
 			case "2":
-				$this->get_gallery_images();
+				echo $this->get_gallery_images();
 				include_once(dirname(__FILE__).'/slideshow.php');
 				break;
 			case "3":
@@ -107,7 +106,7 @@ class ImStoreFront{
 				$post->comment_status = false;
 				$this->get_favorite_images();
 				if(!$this->opts['disablestore']) $this->store_subnav();
-				$this->display_galleries();
+				echo $this->display_galleries();
 				break;
 			case "5":
 				$post->comment_status = false;
@@ -124,7 +123,7 @@ class ImStoreFront{
 			default:
 				$this->get_gallery_images();
 				if(!$this->opts['disablestore']) $this->store_subnav();
-				$this->display_galleries();
+				echo $this->display_galleries();
 		}
 		echo '</div>';
 		if(!$this->opts['disablestore']) $this->display_list_form();
@@ -146,20 +145,20 @@ class ImStoreFront{
 				if(isset($errors) && is_wp_error($errors)){
 					foreach($errors->get_error_messages() as $err)
 						$output .= '<span class="error">'.$err.'<span>';
-					echo '<div class="ims-message ims-error">'. $output .'</div>';
+					$message = '<div class="ims-message ims-error">'. $output .'</div>';
 				} 
 			}
 			if(empty($_COOKIE['wp-postpass_'.COOKIEHASH]) 
 			|| empty($_COOKIE['ims_galid_'.COOKIEHASH]))
-				$this->get_login_form();
+				return $message . $this->get_login_form();
 			elseif(isset($_COOKIE['wp-postpass_'.COOKIEHASH])) 
 				wp_redirect(get_permalink($_COOKIE['ims_galid_'.COOKIEHASH]));			
 		}elseif($atts['album']){
-			$this->get_galleries($atts['album']); 
-			$this->display_galleries();
+			$this->get_galleries($atts); 
+			return $this->display_galleries();
 		}else{
-			$this->get_galleries(); 
-			$this->display_galleries();
+			$this->get_galleries((array)$atts); 
+			return $this->display_galleries();
 		}
 	}
 	
@@ -170,15 +169,9 @@ class ImStoreFront{
 	 *@return void
 	 *@since 1.1.0
 	 */ 
-	function pre_get_posts(){ 
-		global $wp_query; //print_r($wp_query);
-		if($wp_query->query_vars['ims_gallery'] && 
-		$wp_query->is_home && empty($wp_query->is_singular)){
-			$wp_query->is_page = 1;
-			$wp_query->is_posts_page = 1;
-			$wp_query->query_vars['p'] = $this->page_front;
-			$wp_query->query_vars['page_id'] = $this->page_front;
-		}
+	function pre_get_posts(){
+		if(!is_front_page()) return;
+		global $wp_query; $wp_query->query_vars['paged'] = $_REQUEST['paged'];
 	}
 		
 	/**
@@ -292,16 +285,12 @@ class ImStoreFront{
 	 */
 	function taxonomy_template($template){
 		global $wp_query,$post;
-		if(is_tax() && $wp_query->query_vars['taxonomy'] == 'ims_album'){
+		if(is_tax('ims_album') && ($this->opts['album_template'] == 'page.php' || empty($this->opts['album_template']))){
 			if(file_exists(WP_TEMPLATE_DIR."/page.php")){
-				$post->ID				= NULL;
 				$post->post_password	= NULL;
 				$post->post_title 		= $wp_query->queried_object->name;
 				$post->post_content 	= '[image-store album="'.$wp_query->queried_object->term_id.'"]';
-				$wp_query->init();
-				$wp_query->post_count	= 1;
-				$wp_query->posts[] 		= $wp_query->post = $post;
-				return WP_TEMPLATE_DIR."/page.php";
+				return WP_TEMPLATE_DIR ."/page.php";
 			}
 		}
 		return $template; 
@@ -314,8 +303,8 @@ class ImStoreFront{
 	 *@since 2.0.0
 	 */
 	function ims_init(){
-		global $wpdb,$post;
-		
+		global $wpdb,$post,$ImStore;
+
 		//remove procced cart cookie
 		$cart = get_post($_COOKIE['ims_orderid_'.COOKIEHASH]);
 		
@@ -329,19 +318,18 @@ class ImStoreFront{
 			'googlesand' => 'https://sandbox.google.com/checkout/api/checkout/v2/checkoutForm/Merchant/'.$this->opts['googleid'],
 		);
 		
-		$this->pages[1] = __('Photos',ImStore::domain);
-		$this->pages[2] = __('Slideshow',ImStore::domain);
-		if(!$this->opts['disablestore']){
-			$this->pages[3] = __('Price List',ImStore::domain);
-			$this->pages[4] = __('Favorites',ImStore::domain);
-			$this->pages[5] = __('Shopping Cart',ImStore::domain);
-			$this->pages[6] = __('Receipt',ImStore::domain);
-			$this->pages[7] = __('Shipping',ImStore::domain);
+		$this->pages = $ImStore->pages;
+		if($this->opts['disablestore']){
+			unset($this->pages[3]);
+			unset($this->pages[4]);
+			unset($this->pages[5]);
+			unset($this->pages[6]);
+			unset($this->pages[7]);
 		}
 
 		//dont change array order
 		$this->subtitutions = array(
-			$_POST['payment_gross'],$_POST['payment_status'],
+			$_POST['mc_gross'],$_POST['payment_status'],
 			$wpdb->get_var("SELECT post_title FROM $wpdb->posts WHERE ID = '".$_POST['custom']."' "),
 			$_POST['mc_shipping1'],$data['tracking'],$data['gallery_id'],$_POST['txn_id'],
 			$_POST['last_name'],$_POST['first_name'],$_POST['user_email'],
@@ -354,10 +342,7 @@ class ImStoreFront{
 		$this->secure_page	= get_option('ims_page_secure');
 		$this->permalinks 	= get_option('permalink_structure');
 		$this->imspage		= ($page = get_query_var('imspage'))?$page:1;
-		if($this->permalinks)
-			foreach($this->pages as $id => $link)
-				if($this->imspage == sanitize_title($link))
-					$this->imspage = $id;
+
 		//logout gallery
 		if(get_query_var('imslogout')){
 			ImStore::logout_ims_user();
@@ -371,6 +356,9 @@ class ImStoreFront{
 		$this->order		= ($sort = get_post_meta($this->gallery_id,'_ims_order',true))?$sort:$this->opts['imgsortdirect'];
 		$this->sortby 		= ($sortby = get_post_meta($this->gallery_id,'_ims_sortby',true))?$sortby:$this->opts['imgsortorder'];
 		$this->cart 		= get_post_meta($_COOKIE['ims_orderid_'.COOKIEHASH],'_ims_order_data',true);
+		
+		$sym 				= $this->opts['symbol']; 
+		$this->format 		= array('',"$sym%s","$sym %s","%s$sym","%s $sym");
 
 		//process paypal IPN 
 		if(isset($_POST['txn_id']) && isset($_POST['custom']) && $this->imspage == 1) 
@@ -394,9 +382,12 @@ class ImStoreFront{
 		if(!wp_verify_nonce($_POST["_wpnonce"],"ims_submit_order")) return; 
 		foreach($_POST as $k => $v)
 			if(!is_array($v)) $req .= "&$k=".urlencode($v);
-		$this->cart['tracking'] = get_post_meta($this->gallery_id,'ims_tracking',true);
-		$this->cart['gallery_id'] = get_post_meta($this->gallery_id,'_ims_gallery_id',true);
+			
+		$this->cart['instructions'] = $_POST['instructions'];
+		$this->cart['tracking'] 	= get_post_meta($this->gallery_id,'ims_tracking',true);
+		$this->cart['gallery_id'] 	= get_post_meta($this->gallery_id,'_ims_gallery_id',true);
 		update_post_meta($_COOKIE['ims_orderid_'.COOKIEHASH],'_ims_order_data',$this->cart);
+		
 		header("Location: $addr \r\n",TRUE,307);
 		header("Content-Length: ". strlen($req) ."\r\n");
 		header("Content-Type: application/x-www-form-urlencoded\r\n");
@@ -464,7 +455,7 @@ class ImStoreFront{
 			</div>
 		</form>
 		';
-		echo $output;
+		return $output;
 	}
 	
 	/**
@@ -476,19 +467,23 @@ class ImStoreFront{
 	function store_nav(){
 		global $post;
 		$nav = '<ul id="imstore-nav" class="imstore-nav" >'. "\n";
+		
 		foreach( (array)$this->pages as $key => $page){
 			if($key == 6 || $key == 7) continue;
 			if($key == 1 && $this->opts['hidephoto']) continue;
 			if($key == 2 && $this->opts['hideslideshow']) continue;
+			
 			$title 	= sanitize_title($page);
-			$count 	= ($key == 5  && $this->cart['items'] &&  $this->imspage != 6)? "<span>(".$this->cart['items'].")</span>":'';
 			$css 	= ($key == $this->imspage ||($key == 1 && empty($this->imspage)))?' current':'';
+			$count 	= ($key == 5  && $this->cart['items'] && $this->imspage != 6)? "<span>(".$this->cart['items'].")</span>":'';
 			$nav 	.= '<li class="ims-menu-'.$title.$css.'"><a href="'.$this->get_permalink($key).'">'.$page."</a> $count</li>"."\n";
 		}
 		if($post->post_password && isset($_COOKIE['wp-postpass_'.COOKIEHASH]) && $this->permalinks)
-			$nav .= '<li class="ims-menu-logout"><a href="'.get_permalink().'/logout/true">'.__("Exit Gallery",ImStore::domain).'</a></li>'."\n";
+			$nav .= '<li class="ims-menu-logout"><a href="'.trim(get_permalink(),'/').'/logout/true">'.__("Exit Gallery",ImStore::domain).'</a></li>'."\n";
 		elseif($post->post_password && isset($_COOKIE['wp-postpass_'.COOKIEHASH]))
-			$nav .= '<li class="ims-menu-logout"><a href="'.get_permalink().'&amp;imslogout=true">'.__("Exit Gallery",ImStore::domain).'</a></li>'."\n";			
+			$nav .= '<li class="ims-menu-logout"><a href="'.get_permalink().'&amp;imslogout=true">'.__("Exit Gallery",ImStore::domain).'</a></li>'."\n";
+		if($this->cart['total']) 
+			$nav .= '<li class="ims-menu-total">'.sprintf($this->format[$this->opts['clocal']],number_format($this->cart['total'],2)).'</li>'."\n";
 		echo $nav."</ul>\n";
 	}
 	
@@ -518,13 +513,14 @@ class ImStoreFront{
 	function get_permalink($page = ''){
 		$link = '';
 		if($this->permalinks){
+			$slug = sanitize_title($this->pages[$this->imspage]);
 			$link .= "/". sanitize_title($this->pages[$page]);
 			if($this->success) $link .= '/ms/'.$this->success;
 		}else{
 			$link = '&amp;imspage='.$page;
 			if(is_front_page()) $link .= '?page_id='.$this->page_front;
 			if($this->success) $link .= '&amp;imsmessage='.$this->success; 
-		} return trim(get_permalink(),'/').str_replace('//','/',$link);
+		}  return trim(str_replace($slug,'',get_permalink()),'/').str_replace('//','/',$link);
 	}
 	
 	/**
@@ -534,48 +530,51 @@ class ImStoreFront{
 	*@since 0.5.0 
 	*/
 	function display_galleries(){ 
-		
 		$itemtag 	= 'ul';
 		$icontag 	= 'li';
 		$captiontag = 'div';
 		$columns 	= intval($this->opts['displaycolmns']);
-		//$nonce 	= '_wpnonce='.wp_create_nonce('ims_secure_img');
-		
-		$output = "<{$itemtag} class='ims-gallery'>";
+		$nonce 		= '_wpnonce='.wp_create_nonce('ims_secure_img');
+		$output 	= "<{$itemtag} class='ims-gallery'>";
 		foreach($this->attachments as $image){
 			$enc = $this->encrypt_id($image->ID);	
 			if($image->post_parent){
-				$title = $caption = get_the_title($image->post_parent);
+				global $post; 
+				$post		= $image;
 				$link 		= get_permalink($image->post_parent);
 				$tagatts	= ' class="ims-image" rel="image" ';
+				$title 		= $caption = str_replace(__('Protected:'),'',get_the_title($image->post_parent));
 			}else{
-				$title 		= $image->post_title;
 				$tagatts	= ' class="ims-colorbox" rel="gallery" ';
+				$title 		= str_replace(__('Protected:'),'',$image->post_title);
 				$caption	= ($this->is_galleries)?$title:$image->post_excerpt ;
 				$link 		= IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;w=".$this->opts['watermark'];
 			}
 			
 			$imagetag = '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;thumb=1".'" title="'.esc_attr($caption).'" alt="'.esc_attr($title).'" />'; 
-			
 			$output .= "<{$icontag}>";
-			if(!$this->opts['disablestore'] &&($this->query_id || $this->is_secure)) 
-				$output .= '<input name="imgs[]" type="checkbox" value="'.$enc.'" />';
-			
 			$output .= '<a href="'.$link.'"'.$tagatts.' title="'.esc_attr($title).'">'.$imagetag.'</a>';
-			if($this->is_galleries){
-				$output .= "
-					<{$captiontag} class='gallery-caption'>
-					".wptexturize($title)."
-					</{$captiontag}>";
-			}
+			$output .= "<{$captiontag} class='gallery-caption'>".wptexturize($title)."</{$captiontag}>";
+						
+			if(!$this->opts['disablestore'] && ($this->query_id || $this->is_secure)) 
+				$output .= '<label><span class="ims-label">'.__('Select',ImStore::domain).'</span> <input name="imgs[]" type="checkbox" value="'.$enc.'" /></label>';
 			$output .= "</{$icontag}>";
 		}
-		echo $output .= "</{$itemtag}>";
+		$output .= "</{$itemtag}>";
 		
 		if(!isset($_COOKIE['ims_gal_'.$this->gallery_id.'_'.COOKIEHASH])){
 			update_post_meta($this->gallery_id,'_ims_visits',get_post_meta($this->gallery_id,'_ims_visits',true)+1);
 			setcookie('ims_gal_'.$this->gallery_id.'_'.COOKIEHASH,true,0,COOKIEPATH);
 		}
+		
+		global $wp_query; $wp_query->is_single = false;
+		$output .= '<div class="ims-navigation">';
+		$output .= '<div class="nav-previous">'.get_previous_posts_link(__('<span class="meta-nav">&larr;</span> Previous images','smthem')).'</div>';
+		$output .= '<div class="nav-next">'.get_next_posts_link(__('More images <span class="meta-nav">&rarr;</span>','smthem')).'</div>';
+		$output .= '</div><div class="ims-cl"></div>';
+		$wp_query->post_count		= 1;
+		
+		return $output;
 	}
 	
 	/**
@@ -588,24 +587,19 @@ class ImStoreFront{
 	 */ 
 	function search_image_info($where,$query){
 		$q = $query->query_vars;
-		if(empty($q['s']))  return $where;
-		
+		if(empty($q['s'])) return $where;
 		global $wpdb; $n = !empty($q['exact']) ? '' : '%';
-		
 		foreach( (array) $q['search_terms'] as $term ) {
 			$term = esc_sql( like_escape( $term ) );
 			$search .= "{$searchand}(($wpdb->posts.post_title LIKE '{$n}{$term}{$n}') OR ($wpdb->posts.post_content LIKE '{$n}{$term}{$n}') 
 				OR ($wpdb->posts.post_excerpt LIKE '{$n}{$term}{$n}') OR ($wpdb->posts.post_excerpt LIKE '{$n}{$term}{$n}'))";
 				$searchand = ' AND ';
 		}
-		
 		$term = esc_sql( like_escape( $q['s'] ) );
 		if ( empty($q['sentence']) && count($q['search_terms']) > 1 && $q['search_terms'][0] != $q['s'] )
 			$search .= " OR ($wpdb->posts.post_title LIKE '{$n}{$term}{$n}') OR ($wpdb->posts.post_content LIKE '{$n}{$term}{$n}')";
-		
-		return " $where OR ( ID IN ( SELECT DISTINCT post_parent FROM $wpdb->posts WHERE 1=1 AND $search AND $wpdb->posts.post_status = 'publish' AND post_type IN ('ims_gallery')))";
+		return " $where OR ( ID IN ( SELECT DISTINCT post_parent FROM $wpdb->posts WHERE 1=1 AND $search AND $wpdb->posts.post_status = 'publish'))";
 	}
-	
 	
 	/**
 	*Get gallery price list
@@ -625,34 +619,7 @@ class ImStoreFront{
 		foreach($sizes as $size)
 			return $gallery_sizes = maybe_unserialize($size->meta_value);
 	}
-	
-	/**
-	*Get gallery images
-	*
-	*@return array
-	*@since 0.5.0 
-	*/
-	function get_gallery_images(){
-		global $wpdb;
-		$this->attachments = $wpdb->get_results($wpdb->prepare(
-			"SELECT ID,post_title,guid,
-			meta_value,post_excerpt,post_expire
-			FROM $wpdb->posts AS p 
-			LEFT JOIN $wpdb->postmeta AS pm
-			ON p.ID = pm.post_id
-			WHERE post_type = 'ims_image'
-			AND meta_key = '_wp_attachment_metadata'
-			AND post_status = 'publish'
-			AND post_parent = %d
-			ORDER BY $this->sortby $this->order " 
-		,$this->gallery_id));
-		if(empty($this->attachments)) return;
-		foreach($this->attachments as $post){
-			$post->meta_value = unserialize($post->meta_value);
-			$images[] = $post;
-		} $this->attachments = $images;
-	}
-	
+		
 	/**
 	*Get favorites
 	*
@@ -679,11 +646,61 @@ class ImStoreFront{
 	*Get gallery images
 	*
 	*@return array
+	*@since 0.5.0 
+	*/
+	function get_gallery_images(){
+		global $wpdb,$paged,$page,$post_per_page,$wp_query;
+		
+		$page = $paged 	= ( get_query_var('page')) ? get_query_var('page') : $_REQUEST['paged'];
+		$post_per_page	= ($this->opts['imgs_per_page']) ? $this->opts['imgs_per_page'] : get_query_var('posts_per_page'); 
+		$offset			= ($page) ? (($post_per_page) * $page) - $post_per_page  : 0;
+		
+		$this->attachments = $wpdb->get_results($wpdb->prepare(
+			"SELECT SQL_CALC_FOUND_ROWS ID,post_title,guid,
+			meta_value,post_excerpt,post_expire
+			FROM $wpdb->posts AS p 
+			LEFT JOIN $wpdb->postmeta AS pm
+			ON p.ID = pm.post_id
+			WHERE post_type = 'ims_image'
+			AND meta_key = '_wp_attachment_metadata'
+			AND post_status = 'publish'
+			AND post_parent = %d
+			ORDER BY $this->sortby $this->order
+			LIMIT $offset, $post_per_page" 
+		,$this->gallery_id));
+		
+		if(empty($this->attachments)) return;
+		$wp_query->post_count		= count($this->attachments);
+		$wp_query->found_posts		= $wpdb->get_var('SELECT FOUND_ROWS()');
+		$wp_query->max_num_pages	= ceil($wp_query->found_posts / $post_per_page);
+		
+		foreach($this->attachments as $post){
+			$post->meta_value = unserialize($post->meta_value);
+			$images[] = $post;
+		} $this->attachments = $images;
+	}
+
+	/**
+	*Get gallery images
+	*
+	*@param $atts array
+	*@return array
 	*@since 2.0.0
 	*/
-	function get_galleries($album=''){
-		global $wpdb;
-		$this->is_galleries = true;
+	function get_galleries($atts=array()){
+		global $wpdb,$page,$paged,$post_per_page,$wp_query;
+		
+		extract($atts); //print_r($wp_query);
+		$this->query_id = 0;
+		if(!is_single()) $this->is_galleries = true;
+		
+		$order			= ($order) ? $order : "DESC";
+		$orderby		= ($sortby) ? $sortby : "post_date";		
+		$post_per_page	= ($count) ? (int)$count : $this->opts['album_per_page'];
+		$post_per_page	= ($post_per_page) ? $post_per_page : get_query_var('posts_per_page'); 
+		$page = $paged	= (get_query_var('paged')) ? get_query_var('paged') : $_REQUEST['paged'];
+		$offset			= ($page) ? (($post_per_page) * $page) - $post_per_page  : 0;
+		
 		$type = ($album)?"
 			SELECT DISTINCT object_id FROM $wpdb->terms AS t 
 			INNER JOIN $wpdb->term_taxonomy tt ON t.term_id = tt.term_id 
@@ -693,11 +710,12 @@ class ImStoreFront{
 			FROM $wpdb->posts
 			WHERE post_type = 'ims_gallery'
 			AND post_status = 'publish' AND post_password = ''" ;
+		
 		$this->attachments = $wpdb->get_results(
-			"SELECT ID,post_title,
-			meta_value,post_excerpt,post_parent
-			FROM(SELECT *FROM $wpdb->posts 
-				ORDER BY menu_order ASC,post_date DESC) AS p 
+			"SELECT SQL_CALC_FOUND_ROWS ID, post_title,
+			meta_value, post_excerpt, post_parent
+			FROM( SELECT * FROM $wpdb->posts 
+				ORDER BY {$this->sortby} {$this->order}) AS p 
 			LEFT JOIN $wpdb->postmeta AS pm
 			ON pm.post_id = p.ID
 			WHERE post_type = 'ims_image'
@@ -705,9 +723,14 @@ class ImStoreFront{
 			AND post_status = 'publish'
 			AND post_parent IN($type)
 			GROUP BY p.post_parent
-			ORDER BY p.menu_order ASC,p.post_date DESC "
+			ORDER BY p.{$orderby} {$order}, p.post_date DESC LIMIT $offset, $post_per_page"
 		);
+			
 		if(empty($this->attachments)) return;
+		$wp_query->post_count		= count($this->attachments);
+		$wp_query->found_posts		= $wpdb->get_var('SELECT FOUND_ROWS()');
+		$wp_query->max_num_pages	= ceil($wp_query->found_posts / $post_per_page);
+		
 		foreach($this->attachments as $post){
 			$post->meta_value = unserialize($post->meta_value);
 			$images[] = $post;
@@ -732,7 +755,7 @@ class ImStoreFront{
 		</div>
 		
 		<div class="ims-field">
-			<label for="ims-image-size"><?php _e('Size',ImStore::domain)?> </label>
+			<label for="ims-image-size"><label for="ims-image-size"><?php _e('Size',ImStore::domain)?> </label></label>
 			<?php if($sizes = $this->sizes){
 				unset($sizes['random']); ?>
 			<select name="ims-image-size" id="ims-image-size" class="select">
@@ -742,12 +765,13 @@ class ImStoreFront{
 					if($size['ID']){
 						echo $size['name'].'">'.$size['name'] .': '; $package_sizes = '';
 						foreach((array)get_post_meta($size['ID'],'_ims_sizes',true) as $package_size => $count){
-							if(is_array($count)) $package_sizes .= $package_size .' '. $count['unit'].'('.$count['count'].'),'; 
-							else $package_sizes .= $package_size .'('.$count.'),'; 
+							if(is_array($count)) $package_sizes .= $package_size .$count['unit'].' ('.$count['count'].'), '; 
+							else $package_sizes .= $package_size .'('.$count.'), '; 
 						}
-						echo rtrim($package_sizes,',').'</option>';
+						$price = sprintf($this->format[$this->opts['clocal']],get_post_meta($size['ID'],'_ims_price',true));
+						echo rtrim("$price &mdash; ". $package_sizes,', ').'</option>';
 					}else{ 
-						echo $size['name'].'">'.$size['name'].' </option>';	
+						echo $size['name'].'">'.$size['name']." &mdash; ".sprintf($this->format[$this->opts['clocal']],$size['price']).' </option>';	
 					}
 				}?>
 			</select>
@@ -837,6 +861,7 @@ class ImStoreFront{
 			$orderid = wp_insert_post(array(
 				'ping_status' 	=> 'close',
 				'post_status' 	=> 'draft',
+				'comment_status'=> 'close',
 				'post_type' 	=> 'ims_order',
 				'post_parent' 	=> $this->gallery_id,
 				'post_expire' 	=> date('Y-m-d H:i',current_time('timestamp')+86400),
@@ -850,7 +875,7 @@ class ImStoreFront{
 		}else update_post_meta($_COOKIE['ims_orderid_'.COOKIEHASH],'_ims_order_data',$this->cart);
 		$this->success = '1';
 		unset($_POST['add-to-cart']);
-		wp_redirect($this->get_permalink($this->imspage)); 
+		wp_redirect(html_entity_decode($this->get_permalink($this->imspage))); 
 	}
 	
 	/**
@@ -912,9 +937,10 @@ class ImStoreFront{
 			else $this->cart['tax'] = $this->opts['taxamount']; $this->cart['total'] += $this->cart['tax']; 
 		}
 		$this->success = '2';
+		$this->cart['instructions'] = $_POST['instructions'];
 		update_post_meta($_COOKIE['ims_orderid_'.COOKIEHASH],'_ims_order_data',$this->cart);
 		unset($_POST['applychanges']);
-		wp_redirect($this->get_permalink($this->imspage)); 
+		wp_redirect(html_entity_decode($this->get_permalink($this->imspage))); 
 	}
 	
 	/**
@@ -1012,8 +1038,8 @@ class ImStoreFront{
 		foreach($this->opts['checkoutfields'] as $key => $label){
 			if(preg_match("/$key/i",$req) && empty($_POST[$key]))
 			$this->error .= sprintf(__('The %s is required.',ImStore::domain),$label)."<br />";
+
 		}
-		
 		if(!empty($_POST['user_email']) && !is_email($_POST['user_email']))
 			$this->error .= __('Wrong email format.',ImStore::domain);
 		
@@ -1027,8 +1053,11 @@ class ImStoreFront{
 			'post_status' => 'pending',
 			'post_date' => current_time('timestamp') 
 		));
+		
+		$this->cart['instructions'] = $_POST['instructions'];
 		update_post_meta($_POST['custom'],'_response_data',$_POST);
-			
+		update_post_meta($_POST['custom'],'_ims_order_data',$this->cart);
+		
 		$to 		= $this->opts['notifyemail'];
 		$subject 	= $this->opts['notifysubj'];
 		$message 	= preg_replace($this->opts['tags'],$this->subtitutions,$this->opts['notifymssg']);

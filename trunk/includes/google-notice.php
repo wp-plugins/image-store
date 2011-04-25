@@ -50,7 +50,7 @@ class ImStoreGoogleNotice {
 			return false;
 			
 		$_POST['num_cart_items'] 	= $data['items'];
-		$_POST['payment_gross'] 	= $_POST['order-total'];
+		$_POST['mc_gross'] 			= $_POST['order-total'];
 		$_POST['txn_id'] 			= $_POST['google-order-number'];
 		$_POST['payment_status'] 	= $_POST['financial-order-state'];
 		$_POST['address_city'] 		= $_POST['buyer-shipping-address_city'];
@@ -67,6 +67,7 @@ class ImStoreGoogleNotice {
 			'ID' 			=> $_POST['shopping-cart_merchant-private-data'],
 		));
 		update_post_meta($_POST['shopping-cart_merchant-private-data'],'_response_data',$_POST);
+		$this->subtitutions[] = $data['instructions'];
 		
 		$to 		= $this->opts['notifyemail'];
 		$subject 	= $this->opts['notifysubj'];

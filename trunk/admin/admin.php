@@ -408,9 +408,9 @@ class ImStoreAdmin{
 	*/
 	function add_album_link(){
 		if($this->permalinks) printf(__('To view albums go to: %s/%s/%s',ImStore::domain),
-		"<br /> ".WP_SITEURL,__('albums',ImStore::domain),__('term-slug',ImStore::domain));
+		"<br /> ".WP_SITE_URL,__('albums',ImStore::domain),__('term-slug',ImStore::domain));
 		else printf(__('To view albums go to: %s/?taxonomy=ims_album&term=%s',ImStore::domain)
-		,"<br /> ".WP_SITEURL,__('term-slug',ImStore::domain));
+		,"<br /> ".WP_SITE_URL,__('term-slug',ImStore::domain));
 	}
 	
 	/**

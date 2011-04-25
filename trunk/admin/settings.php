@@ -12,6 +12,19 @@
 if(!current_user_can('ims_change_settings')) 
 	die();
 
+//Update general settings
+if(!empty($_POST['update-general'])){
+	check_admin_referer('ims_settings');
+	$_POST = array_diff_key($_POST,array('_wpnonce'=>'','_wp_http_referer'=>'','updateoption'=>''));
+	foreach(array('deletefiles','imswidget','mediarss','disablestore','stylesheet','hidephoto','hideslideshow') as $box)
+		if(empty($_POST[$box])) $_POST[$box] = '';
+	
+	if(isset($_POST['ims_searchable']))	update_option('ims_searchable',$_POST['ims_searchable']);
+	update_option('ims_front_options',wp_parse_args($_POST,$this->opts));
+	wp_redirect($pagenowurl.'&ms=4');	
+}
+
+
 //Update settings
 if(!empty($_POST['update'])){
 	check_admin_referer('ims_settings');
@@ -20,10 +33,8 @@ if(!empty($_POST['update'])){
 	if(!preg_match('/^\//',$_POST['galleriespath']) && isset($_POST['galleriespath']))
 		$_POST['galleriespath'] = "/{$_POST['galleriespath']}";
 	
-	foreach(array('deletefiles','securegalleries','imswidget','mediarss','disablestore','stylesheet','colorbox',
-	'wplightbox','disablesepia','disablebw','autoStart','hidephoto','hideslideshow') as $box)
+	foreach(array('securegalleries','colorbox','wplightbox','disablesepia','disablebw',) as $box)
 		if(empty($_POST[$box]) && isset($_POST['galleriespath'])) $_POST[$box] = '';
-	
 	
 	if(isset($_POST['gateway'])){
 		unset($this->opts['requiredfields']);
@@ -31,9 +42,7 @@ if(!empty($_POST['update'])){
 			if(!empty($_POST['required'][$key])) $this->opts['requiredfields'][] = $key;
 	}
 	
-	if($_POST['galleriespath'])
-		update_option('ims_searchable', $_POST['ims_searchable']);
-	
+	if(empty($_POST['autoStart']) && !isset($_POST['galleriespath'])) $_POST['autoStart'] = '';
 	update_option('ims_front_options',wp_parse_args($_POST,$this->opts));
 	wp_redirect($pagenowurl.'&ms=4');	
 }
@@ -53,13 +62,6 @@ if(!empty($_POST['resetsettings'])){
 	include_once(IMSTORE_ABSPATH.'/admin/install.php');
 	ImStoreInstaller::imstore_default_options();
 	wp_redirect($pagenowurl.'&ms=3#reset_settings');	
-}
-
-//uninstall Image Store
-if(!empty($_POST['uninstall_ims'])){
-	check_admin_referer('ims_reset_settings');
-	include_once(IMSTORE_ABSPATH.'/admin/install.php');
-	ImStoreInstaller::imstore_uninstall();
 }
 
 //uninstall Image Store
@@ -114,42 +116,59 @@ if(!empty($_POST['updateimages'])){
 	wp_redirect($pagenowurl.'&ms=4#image-settings');	
 }
 
+$currencies = array (
+	'AUD' =>__('Australian Dollar',ImStore::domain),
+	'BRL' =>__('Brazilian Real',ImStore::domain),
+	'CAD' =>__('Canadian Dollar',ImStore::domain),
+	'CZK' =>__('Czech Koruna',ImStore::domain),
+	'DKK' =>__('Danish Krone',ImStore::domain),
+	'EUR' =>__('Euro',ImStore::domain),
+	'HKD' =>__('Hong Kong Dollar',ImStore::domain),
+	'HUF' =>__('Hungarian Forint',ImStore::domain),
+	'ILS' =>__('Israeli New Sheqel',ImStore::domain),
+	'JPY' =>__('Japanese Yen',ImStore::domain),
+	'MYR' =>__('Malaysian Ringgit',ImStore::domain),
+	'MXN' =>__('Mexican Peso',ImStore::domain),
+	'NOK' =>__('Norwegian Krone',ImStore::domain),
+	'NZD' =>__('New Zealand Dollar',ImStore::domain),
+	'PHP' =>__('Philippine Peso',ImStore::domain),
+	'PLN' =>__('Polish Zloty',ImStore::domain),
+	'GBP' =>__('Pound Sterling',ImStore::domain),
+	'SGD' =>__('Singapore Dollar',ImStore::domain),
+	'ZAR' =>__('South African Rands',ImStore::domain),
+	'SEK' =>__('Swedish Krona',ImStore::domain),
+	'CHF' =>__('Swiss Franc',ImStore::domain),
+	'TWD' =>__('Taiwan New Dollar',ImStore::domain),
+	'THB' =>__('Thai Baht',ImStore::domain),
+	'TRY' =>__('Turkish Lira',ImStore::domain),
+	'USD' =>__('U.S.Dollar',ImStore::domain),
+);
+
 ?>
 
 <ul class="ims-tabs add-menu-item-tabs">
-	<li class="tabs"><a href="#gallery-settings"><?php _e('Gallery Settings',ImStore::domain)?></a></li>
-	<li class="tabs"><a href="#image-settings"><?php _e('Image Settings',ImStore::domain)?></a></li>
-	<li class="tabs"><a href="#slideshow-settings"><?php _e('Slideshow Settings',ImStore::domain)?></a></li>
+	<li class="tabs"><a href="#general"><?php _e('General',ImStore::domain)?></a></li>
+	<li class="tabs"><a href="#gallery-settings"><?php _e('Gallery',ImStore::domain)?></a></li>
+	<li class="tabs"><a href="#image-settings"><?php _e('Image',ImStore::domain)?></a></li>
+	<li class="tabs"><a href="#slideshow-settings"><?php _e('Slideshow',ImStore::domain)?></a></li>
 	<?php if(!$this->opts['disablestore']){?>
-	<li class="tabs"><a href="#payment-settings"><?php _e('Payment options',ImStore::domain)?></a></li>
+	<li class="tabs"><a href="#payment-settings"><?php _e('Payment',ImStore::domain)?></a></li>
 	<li class="tabs"><a href="#checkout-settings"><?php _e('Checkout',ImStore::domain)?></a></li>
 	<?php } if(current_user_can('ims_change_permissions')){?>
 	<li class="tabs"><a href="#caps_settings"><?php _e('User permissions',ImStore::domain)?></a></li>
 	<?php }?>
 	<li class="tabs"><a href="#reset_settings"><?php _e('Reset',ImStore::domain)?></a></li>
 </ul>
-			
-<!-- Gallery Settings -->
-<div id="gallery-settings" class="ims-box">
+
+<!-- General Settings -->
+<div id="general" class="ims-box">
 	<form method="post" action="<?php echo $pagenowurl?>" >
 	<table class="ims-table"> 
 		<tbody>
-		<tr> 
-			<td scope="row" width="22%"><label for="galleriespath"><?php _e('Gallery folder path',ImStore::domain)?></label></td>
-			<td>
-			<input type="text" name="galleriespath" id="galleriespath" class="inputlg" value="<?php $this->_v('galleriespath')?>" ><br />
-			<small><?php _e('Default folder path for all the galleries images',ImStore::domain)?></small>
-			</td>
-		</tr>
-		<tr class="alternate">
+		<tr>
 			<td scope="row"><label for="deletefiles"> <?php _e('Delete image files',ImStore::domain)?> </label></td>
 			<td><input type="checkbox" name="deletefiles" id="deletefiles" value="1" <?php checked('1',$this->_vr('deletefiles'))?> />
 			<small> <?php _e('Delete files from server,when deleting a gallery/images',ImStore::domain)?> </small></td>
-		</tr>
-		<tr>
-			<td scope="row"><label for="securegalleries"><?php _e('Secure galleries',ImStore::domain)?></label></td>
-			<td><input type="checkbox" name="securegalleries" id="securegalleries" value="1" <?php checked('1',$this->_vr('securegalleries'))?>/>
-				<small><?php _e('Secure all new galleries with a password by default.',ImStore::domain)?></small></td>
 		</tr>
 		<tr class="alternate">
 			<td scope="row" width="22%"><label for="mediarss"><?php _e('Media RSS feed',ImStore::domain)?></label></td>
@@ -170,32 +189,10 @@ if(!empty($_POST['updateimages'])){
 			</td>
 		</tr>
 		<tr>
-			<td scope="row"><label for="colorbox"><?php _e('Colorbox',ImStore::domain)?></label></td>
-			<td><input type="checkbox" name="colorbox" id="colorbox" value="1" <?php checked('1',$this->_vr('colorbox'))?>/>
-				<small><?php _e('Use the default ligthbox feature',ImStore::domain)?></small></td>
-		</tr>
-		<tr class="alternate">
-			<td scope="row"><label for="wplightbox"><?php _e('Ligthbox for WP galleries',ImStore::domain)?></label></td>
-			<td><input type="checkbox" name="wplightbox" id="wplightbox" value="1" <?php checked('1',$this->_vr('wplightbox'))?>/>
-				<small><?php _e('Use lightbox on WordPress Galleries.',ImStore::domain)?></small></td>
-		</tr>
-		<tr>
 			<td scope="row"><label for="disablestore"><?php _e('Disable store features',ImStore::domain)?></label></td>
 			<td><input type="checkbox" name="disablestore" id="disablestore" value="1" <?php checked('1',$this->_vr('disablestore'))?> />
 				<small><?php _e('Use as a gallery manager only,not a store.',ImStore::domain)?></small></td>
 		</tr>
-		<tr class="alternate">
-			<td scope="row"><label for="disablebw"><?php _e('Disable B and W',ImStore::domain)?></label></td>
-			<td><input type="checkbox" name="disablebw" id="disablebw" value="1" <?php checked('1',$this->_vr('disablebw'))?> />
-				<small><?php _e('Disable black and white color option.',ImStore::domain)?></small></td>
-		</tr>
-		<tr>
-			<td scope="row"><label for="disablesepia"><?php _e('Disable Sepia ',ImStore::domain)?></label></td>
-			<td><input type="checkbox" name="disablesepia" id="disablesepia" value="1" <?php checked('1',$this->_vr('disablesepia'))?> />
-				<small><?php _e('Disable sepia color option.',ImStore::domain)?></small></td>
-		</tr>
-		
-		
 		<tr class="alternate">
 			<td scope="row"><label for="hidephoto"><?php _e('Hide "photo" link',ImStore::domain)?></label></td>
 			<td><input type="checkbox" name="hidephoto" id="hidephoto" value="1" <?php checked('1',$this->_vr('hidephoto'))?> />
@@ -206,26 +203,83 @@ if(!empty($_POST['updateimages'])){
 			<td><input type="checkbox" name="hideslideshow" id="hideslideshow" value="1" <?php checked('1',$this->_vr('hideslideshow'))?> />
 				<small><?php _e('Hide slideshow link from store navigation.',ImStore::domain)?></small></td>
 		</tr>
-			
 		<tr class="alternate">
 			<td scope="row"><label for="ims_searchable"><?php _e('Searchable Galleries',ImStore::domain)?></label></td>
 			<td><input type="checkbox" name="ims_searchable" id="ims_searchable" value="1" <?php checked('1',get_option('ims_searchable'))?> />
 				<small><?php _e('Allow galleries to show in search results.',ImStore::domain)?></small></td>
 		</tr>
-		
 		<tr>
-			<td scope="row"><label for="hideslideshow"><?php _e('Single Gallery Template',ImStore::domain)?></label></td>
-			<td><select name="gallery_template"><option value=""><?php _e('Default Template',ImStore::domain); ?></option>
+			<td scope="row"><label for="album_template"><?php _e('Album Template',ImStore::domain)?></label></td>
+			<td><select name="album_template" id="album_template"><option value=""><?php _e('Default Template',ImStore::domain); ?></option>
+			<option value="page.php" <?php selected('page.php',$this->_vr('album_template'))?>><?php _e('Page template',ImStore::domain); ?></option>
+			</select></td>
+		</tr>
+		<tr class="alternate">
+			<td scope="row"><label for="album_per_page"><?php _e('Albums per page',ImStore::domain)?></label></td>
+			<td><input type="text" name="album_per_page" id="album_per_page" value="<?php $this->_v('album_per_page')?>" /></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><input type="submit" name="update-general" class="button-primary" value="<?php _e('Save',ImStore::domain)?>"/></td>
+		</tr>
+		</tbody>
+	</table>
+	<?php wp_nonce_field('ims_settings')?>
+	</form>
+</div>
+			
+<!-- Gallery Settings -->
+<div id="gallery-settings" class="ims-box">
+	<form method="post" action="<?php echo $pagenowurl.'#gallery-settings'?>" >
+	<table class="ims-table"> 
+		<tbody>
+		<tr> 
+			<td scope="row" width="22%"><label for="galleriespath"><?php _e('Gallery folder path',ImStore::domain)?></label></td>
+			<td>
+			<input type="text" name="galleriespath" id="galleriespath" class="inputlg" value="<?php $this->_v('galleriespath')?>" ><br />
+			<small><?php _e('Default folder path for all the galleries images',ImStore::domain)?></small>
+			</td>
+		</tr>
+		<tr class="alternate">
+			<td scope="row"><label for="securegalleries"><?php _e('Secure galleries',ImStore::domain)?></label></td>
+			<td><input type="checkbox" name="securegalleries" id="securegalleries" value="1" <?php checked('1',$this->_vr('securegalleries'))?>/>
+				<small><?php _e('Secure all new galleries with a password by default.',ImStore::domain)?></small></td>
+		</tr>
+		<tr>
+			<td scope="row"><label for="colorbox"><?php _e('Colorbox',ImStore::domain)?></label></td>
+			<td><input type="checkbox" name="colorbox" id="colorbox" value="1" <?php checked('1',$this->_vr('colorbox'))?>/>
+				<small><?php _e('Use the default ligthbox feature',ImStore::domain)?></small></td>
+		</tr>
+		<tr class="alternate">
+			<td scope="row"><label for="wplightbox"><?php _e('Ligthbox for WP galleries',ImStore::domain)?></label></td>
+			<td><input type="checkbox" name="wplightbox" id="wplightbox" value="1" <?php checked('1',$this->_vr('wplightbox'))?>/>
+				<small><?php _e('Use lightbox on WordPress Galleries.',ImStore::domain)?></small></td>
+		</tr>
+		<tr>
+			<td scope="row"><label for="disablebw"><?php _e('Disable B and W',ImStore::domain)?></label></td>
+			<td><input type="checkbox" name="disablebw" id="disablebw" value="1" <?php checked('1',$this->_vr('disablebw'))?> />
+				<small><?php _e('Disable black and white color option.',ImStore::domain)?></small></td>
+		</tr>
+		<tr class="alternate">
+			<td scope="row"><label for="disablesepia"><?php _e('Disable Sepia ',ImStore::domain)?></label></td>
+			<td><input type="checkbox" name="disablesepia" id="disablesepia" value="1" <?php checked('1',$this->_vr('disablesepia'))?> />
+				<small><?php _e('Disable sepia color option.',ImStore::domain)?></small></td>
+		</tr>
+		<tr>
+			<td scope="row"><label for="gallery_template"><?php _e('Gallery Template',ImStore::domain)?></label></td>
+			<td><select name="gallery_template" id="gallery_template"><option value=""><?php _e('Default Template',ImStore::domain); ?></option>
 			<?php page_template_dropdown($this->_vr('gallery_template'))?></select></td>
 		</tr>
-		
 		<tr class="alternate">
+			<td scope="row"><label for="imgs_per_page"><?php _e('Images per page',ImStore::domain)?></label></td>
+			<td><input type="text" name="imgs_per_page" id="imgs_per_page" value="<?php $this->_v('imgs_per_page')?>" /></td>
+		</tr>
+		<tr>
 			<td scope="row"><label for="galleryexpire"><?php _e('Galleries expire after ',ImStore::domain)?></label></td>
 			<td><input type="text" name="galleryexpire" id="galleryexpire" class="inputxm" value="<?php $this->_v('galleryexpire')?>"/>
 				(<?php _e('days')?>)</td>
 		</tr>
-	
-		<tr>
+		<tr class="alternate">
 			<td valign="top"><?php _e('Sort images',ImStore::domain)?></td>
 			<td><label><input name="imgsortorder" type="radio" value="menu_order" <?php checked('menu_order',$this->_vr('imgsortorder'))?> />
 				<?php _e('Custom order',ImStore::domain)?></label><br />
@@ -236,7 +290,7 @@ if(!empty($_POST['updateimages'])){
 				<label><input name="imgsortorder" type="radio" value="post_date" <?php checked('post_date',$this->_vr('imgsortorder'))?>/>
 				<?php _e('Image date',ImStore::domain)?></label></td>
 		</tr>
-		<tr class="alternate">
+		<tr>
 			<td><?php _e('Sort direction',ImStore::domain)?>:</td>
 			<td><label><input name="imgsortdirect" type="radio" value="ASC" <?php checked('ASC',$this->_vr('imgsortdirect'))?>/>
 				<?php _e('Ascending',ImStore::domain)?></label>
@@ -400,7 +454,7 @@ if(!empty($_POST['updateimages'])){
 			<td colspan="2"><input type="text" name="symbol" id="symbol" class="inputxm" value="<?php $this->_v('symbol')?>" /></td>
 		</tr>
 		<tr class="t alternate">
-			<td scope="row"> <label for="symbol"><?php _e('Currency Symbol Location',ImStore::domain)?></label></td>
+			<td scope="row"> <label><?php _e('Currency Symbol Location',ImStore::domain)?></label></td>
 			<td colspan="2">
 				<label><input type="radio" value="1" name="clocal"<?php checked('1',$this->_vr('clocal'))?> />
 				<?php _e('&#036;100',ImStore::domain)?></label>
@@ -413,63 +467,12 @@ if(!empty($_POST['updateimages'])){
 			</td>
 		</tr>
 		<tr>
-			<td><label for="currency"><?php _e(' Default Currency:',ImStore::domain)?></label></td>
-			<td colspan="2"><select name="currency" id="currency" 		>
+			<td><label for="currency"><?php _e('Default Currency:',ImStore::domain)?></label></td>
+			<td colspan="2"><select name="currency" id="currency">	
 				<option value="">Please Choose Default Currency</option>
-				<option value="AUD"<?php selected('AUD',$this->_vr('currency'))?>>
-					<?php _e('Australian Dollar',ImStore::domain)?>
-					</option>
-				<option value="CAD"<?php selected('CAD',$this->_vr('currency'))?>>
-					<?php _e('Canadian Dollar',ImStore::domain)?>
-					</option>
-				<option value="CZK"<?php selected('CZK',$this->_vr('currency'))?>>
-					<?php _e('Czech Koruna',ImStore::domain)?>
-					</option>
-				<option value="DKK"<?php selected('DKK',$this->_vr('currency'))?>>
-					<?php _e('Danish Krone',ImStore::domain)?>
-					</option>
-				<option value="EUR"<?php selected('EUR',$this->_vr('currency'))?>>
-					<?php _e('Euro',ImStore::domain)?>
-					</option>
-				<option value="HKD"<?php selected('HKD',$this->_vr('currency'))?>>
-					<?php _e('Hong Kong Dollar',ImStore::domain)?>
-					</option>
-				<option value="HUF"<?php selected('HUF',$this->_vr('currency'))?>>
-					<?php _e('Hungarian Forint',ImStore::domain)?>
-					</option>
-				<option value="ILS"<?php selected('ILS',$this->_vr('currency'))?>>
-					<?php _e('Israeli New Sheqel',ImStore::domain)?>
-					</option>
-				<option value="JPY"<?php selected('JPY',$this->_vr('currency'))?>>
-					<?php _e('Japanese Yen',ImStore::domain)?>
-					</option>
-				<option value="MXN"<?php selected('MXN',$this->_vr('currency'))?>>
-					<?php _e('Mexican Peso',ImStore::domain)?>
-					</option>
-				<option value="NOK"<?php selected('NOK',$this->_vr('currency'))?>>
-					<?php _e('Norwegian Krone',ImStore::domain)?>
-					</option>
-				<option value="NZD"<?php selected('NZD',$this->_vr('currency'))?>>
-					<?php _e('New Zealand Dollar',ImStore::domain)?>
-					</option>
-				<option value="PLN"<?php selected('PLN',$this->_vr('currency'))?>>
-					<?php _e('Polish Zloty',ImStore::domain)?>
-					</option>
-				<option value="GBP"<?php selected('GBP',$this->_vr('currency'))?>>
-					<?php _e('Pound Sterling',ImStore::domain)?>
-					</option>
-				<option value="SGD"<?php selected('SGD',$this->_vr('currency'))?>>
-					<?php _e('Singapore Dollar',ImStore::domain)?>
-					</option>
-				<option value="SEK"<?php selected('SEK',$this->_vr('currency'))?>>
-					<?php _e('Swedish Krona',ImStore::domain)?>
-					</option>
-				<option value="CHF"<?php selected('CHF',$this->_vr('currency'))?>>
-					<?php _e('Swiss Franc',ImStore::domain)?>
-					</option>
-				<option value="USD"<?php selected('USD',$this->_vr('currency'))?>>
-					<?php _e('U.S.Dollar',ImStore::domain)?>
-					</option>
+				<?php foreach($currencies as $code => $currency){ ?>
+				<option value="<?php echo $code?>"<?php selected($code,$this->_vr('currency'))?>><?php echo $currency?></option>
+				<?php } ?>
 			</select></td>
 		</tr>
 		<tr class="alternate">
@@ -666,7 +669,7 @@ function ims_dowpdown_users($selected = ''){
 			AND meta_value NOT LIKE '%customer%' ";
 			
 	$output.= '<select name="ims_user" id="ims_user" >';
-	$output.= '<option value="">'.__('Select User',ImStore::domain).' &#8212; </option>';
+	$output.= '<option value="">&mdash; '.__('Select User',ImStore::domain).' &mdash;</option>';
 	foreach($wpdb->get_results($q,'ARRAY_A') as $user):
 		$roles = @unserialize($user['meta_value']);
 		if(!$roles['administrator']):$userCount ++; 

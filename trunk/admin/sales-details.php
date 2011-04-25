@@ -122,6 +122,11 @@ $format 	= array('',"$this->sym%s","$this->sym %s","%s$this->sym","%s $this->sym
 				<td><span class="total"><?php printf($format[$loc],number_format($cart['total'],2))?></span></td>
 				<td>&nbsp;</td>
 			</tr>
+			<tr>
+				<td class="column-thumb" scope="row">&nbsp;</td>
+				<td><?php _e('Additional Instructions',ImStore::domain)?></td>
+				<td scope="row" colspan="5"><?php echo strip_tags($cart['instructions']) ?></td>
+			</tr>
 			<tr><td scope="row" colspan="7">&nbsp;</td></tr>
 		</tbody>
 	</table>

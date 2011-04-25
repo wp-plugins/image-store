@@ -50,6 +50,13 @@ class ImStoreInstaller{
 			$wpdb->query("UPDATE $wpdb->posts SET post_content = '[ims-gallery-content]' WHERE post_type = 'ims_gallery'");
 		}
 		
+		if($this->version <= "2.0.8"){
+			$ims_ft_opts = get_option('ims_front_options');
+		  	$ims_ft_opts['tags'][]			= __('/%instructions%/',ImStore::domain);
+			$ims_ft_opts['album_template']	= 'page.php';
+		  	update_option('ims_front_options',$ims_ft_opts);
+		}
+		
 		$ims_caps = array(
 			'ims_add_galleries','ims_read_sales','ims_manage_galleries','ims_change_pricing',
 			'ims_change_settings','ims_manage_customers','ims_change_permissions',
@@ -156,12 +163,13 @@ class ImStoreInstaller{
 		$ims_ft_opts['clocal']			= '1';
 		$ims_ft_opts['currency']		= 'USD';
 		$ims_ft_opts['gateway']			= 'paypalsand';
+		$ims_ft_opts['album_template']	= 'page.php';
 		$ims_ft_opts['paymentname']		= 'Pay by check';
 		$ims_ft_opts['watermarktext']	= get_option('blogname');
 		$ims_ft_opts['notifyemail']		= get_option('admin_email');
 		$ims_ft_opts['notifysubj']		= __('New purchase notification',ImStore::domain);
 		$ims_ft_opts['thankyoureceipt']	= sprintf(__("<h2>Thank You,%%customer_first%% %%customer_last%%</h2>\nsave the information bellow for your records.\n\nTotal payment:%%total%%\nTransaction number:%%order_number%%\n\nIf you have any question about your order please contat us at:%s",ImStore::domain),get_option('admin_email'));
-		$ims_ft_opts['notifymssg']		= sprintf(__("A new order was place at you image store at %s \n\nOrder number:%%order_number%% \nTo view the order details please login to your site at:%s",ImStore::domain),get_option('blogname'),wp_login_url());	
+		$ims_ft_opts['notifymssg']		= sprintf(__("A new order was place at you image store at %s \n\nOrder number: %%order_number%% \nTo view the order details please login to your site at:%s  \n\n%%instructions%%",ImStore::domain),get_option('blogname'),wp_login_url());	
 		
 		//dont change array order
 		$ims_ft_opts['tags'] 			= array(
@@ -175,6 +183,7 @@ class ImStoreInstaller{
 											 __('/%customer_last%/',ImStore::domain),
 											 __('/%customer_first%/',ImStore::domain),
 											 __('/%customer_email%/',ImStore::domain),
+											 __('/%instructions%/',ImStore::domain),
 										);
 		
 		$ims_ft_opts['requiredfields']	= array('user_email','address_street','address_zip','first_name'); 
@@ -199,6 +208,7 @@ class ImStoreInstaller{
 		update_option('preview_crop',1);
 		update_option('preview_size_w',380);
 		update_option('preview_size_h',380);
+		update_option('preview_size_q',80);
 		
 		update_option('ims_dis_images',$ims_dis_img);
 		update_option('ims_front_options',$ims_ft_opts);
@@ -371,6 +381,7 @@ class ImStoreInstaller{
 		
 		//redirect user
 		wp_redirect(admin_url().'plugins.php?deactivate=true');
+		wp_clear_scheduled_hook('imstore_expire');
 	
 	}
 	

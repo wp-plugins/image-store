@@ -89,7 +89,7 @@ class ImStorePaypalIPN {
 		$data = get_post_meta($_POST['custom'],'_ims_order_data',true);
 		$total = ($data['discounted'])?$data['discounted']:$data['total'];
 		
-		if($_POST['payment_gross'] != number_format($total,2))
+		if($_POST['mc_gross'] != number_format($total,2))
 			return false;
 		
 		wp_update_post(array(
@@ -99,6 +99,7 @@ class ImStorePaypalIPN {
 			'post_date' => current_time('timestamp') 
 		));
 		update_post_meta($_POST['custom'],'_response_data',$_POST);
+		$this->subtitutions[] = $data['instructions'];
 		
 		$to 		= $this->opts['notifyemail'];
 		$subject 	= $this->opts['notifysubj'];
