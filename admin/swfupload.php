@@ -16,12 +16,32 @@ header('Cache-control:private');
 header('Last-Modified:'.gmdate('D,d M Y H:i:s').' GMT');
 header('Cache-control:no-cache,no-store,must-revalidate,max-age=0');;
 
+if(($_POST['domain'] != $_SERVER['SERVER_NAME']) || empty($_REQUEST['userid'])) die();
+
+//define constants
+define('WP_ADMIN',true);
+define('DOING_AJAX',true);
+
 //use to process big images
 ini_set('memory_limit','256M');
 ini_set('set_time_limit','1000');
-		
-if(!empty($_FILES)){
-	
+
+//load wp
+require_once '../../../../wp-load.php';
+
+$i		= wp_nonce_tick();
+$uid	= $_REQUEST['userid'];
+$nonce 	= $_REQUEST['_wpnonce'];
+
+global $current_user;
+wp_set_current_user($uid);
+
+if(!current_user_can("ims_add_galleries"))  die();
+
+
+if(($nonce == (substr(wp_hash($i.'ims_ajax'.$uid,'nonce'),-12,10) 
+|| substr(wp_hash(($i - 1)."ims_ajax".$uid,'nonce'),-12,10))) && !empty($_FILES)){
+
 	$relpath = getenv("SCRIPT_NAME");
 	$abspath = str_replace("\\","/",__FILE__);
 	$docroot = str_replace($relpath,"",$abspath).'/';

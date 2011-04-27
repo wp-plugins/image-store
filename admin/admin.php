@@ -787,6 +787,7 @@ class ImStoreAdmin{
 	*/
 	function load_admin_scripts(){
 		global $current_screen;
+		
 		if($current_screen->id == 'ims_gallery' || $_GET['page'] == 'ims-settings' || $_GET['page'] == 'ims-pricing'){
 			wp_enqueue_script('postbox');
 			wp_enqueue_script('thickbox');
@@ -800,9 +801,11 @@ class ImStoreAdmin{
 			$jquery = array('dd','D','d','DD','*','*','*','o','*','MM','mm','M','m','*','*','*','yy','y');
 			$php 	= array('/d/','/D/','/j/','/l/','/N/','/S/','/w/','/z/','/W/','/F/','/m/','/M/','/n/','/t/','/L/','/o/','/Y/','/y/');
 			$format = preg_replace($php,$jquery,get_option('date_format'));
-
+			
+			$user = wp_get_current_user();
 			wp_localize_script('ims-admin','imslocal',array(
 				'dateformat'	=> $format,
+				'userid'		=> $user->ID,
 				'imsurl'		=> IMSTORE_URL,
 				'dformat'		=> $this->dformat,
 				'imsajax' 		=> IMSTORE_ADMIN_URL.'ajax.php',

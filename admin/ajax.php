@@ -16,8 +16,8 @@ header('Last-Modified:'.gmdate('D,d M Y H:i:s').' GMT');
 header('Cache-control:no-cache,no-store,must-revalidate,max-age=0');
 
 //define constants
-define('DOING_AJAX',true);
 define('WP_ADMIN',true);
+define('DOING_AJAX',true);
 
 //load wp
 require_once '../../../../wp-load.php';
