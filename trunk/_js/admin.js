@@ -327,7 +327,7 @@ jQuery(document).ready(function($){
 			'buttonText'	 :imslocal.flastxt,
 			'uploader' 		 :imslocal.imsurl + '_swf/uploadify.swf',
 			'script' 		 :imslocal.imsurl + 'admin/swfupload.php',
-			'scriptData' 	 :{'action':'swupload'},
+			'scriptData' 	 :{'_wpnonce':imslocal.nonceajax,'userid':imslocal.userid,'domain':document.domain},
 			'cancelImg' 	 :imslocal.imsurl + '_img/xit.gif',
 			'height'		 :'26',
 			'width'			 :'118',

@@ -554,11 +554,10 @@ class ImStoreFront{
 			$imagetag = '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;thumb=1".'" title="'.esc_attr($caption).'" alt="'.esc_attr($title).'" />'; 
 			$output .= "<{$icontag}>";
 			$output .= '<a href="'.$link.'"'.$tagatts.' title="'.esc_attr($title).'">'.$imagetag.'</a>';
-			$output .= "<{$captiontag} class='gallery-caption'>".wptexturize($title)."</{$captiontag}>";
-						
+			$output .= "<{$captiontag} class='gallery-caption'>".wptexturize($title);
 			if(!$this->opts['disablestore'] && ($this->query_id || $this->is_secure)) 
 				$output .= '<label><span class="ims-label">'.__('Select',ImStore::domain).'</span> <input name="imgs[]" type="checkbox" value="'.$enc.'" /></label>';
-			$output .= "</{$icontag}>";
+			$output .= "</{$captiontag}></{$icontag}>";
 		}
 		$output .= "</{$itemtag}>";
 		

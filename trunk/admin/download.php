@@ -19,10 +19,9 @@ define('DOING_AJAX',true);
 require_once '../../../../wp-load.php';
 
 //make sure that the request came from the same domain	
-
 if(!wp_verify_nonce($_REQUEST["_wpnonce"],"ims_download_img"))
 	die();
-	
+
 class ImStoreDownloadImage{
 	
 	
