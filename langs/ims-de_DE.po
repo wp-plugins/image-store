@@ -1,0 +1,2822 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: \n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: ImStore.php:60
+#@ ims
+msgid "Photos"
+msgstr "Fotos"
+
+#: ImStore.php:61
+#: admin/settings.php:153
+#@ ims
+msgid "Slideshow"
+msgstr "Diashow"
+
+#: ImStore.php:62
+#: admin/admin.php:1041
+#@ ims
+msgid "Price List"
+msgstr "Preisliste"
+
+#: ImStore.php:63
+#@ ims
+msgid "Favorites"
+msgstr "Favoriten"
+
+#: ImStore.php:64
+#@ ims
+msgid "Shopping Cart"
+msgstr "Warenkorb"
+
+#: ImStore.php:65
+#@ ims
+msgid "Receipt"
+msgstr "Beleg"
+
+#: ImStore.php:66
+#: admin/sales-details.php:92
+#: includes/cart.php:121
+#: includes/cart.php:192
+#: includes/pricelist.php:56
+#@ ims
+msgid "Shipping"
+msgstr "Versand"
+
+#: ImStore.php:212
+#: ImStore.php:215
+#: ImStore.php:217
+#: ImStore.php:225
+#: ImStore.php:229
+#: ImStore.php:233
+#: ImStore.php:237
+#: ImStore.php:240
+#: ImStore.php:290
+#@ ims
+msgid "galleries"
+msgstr "Galerien"
+
+#: ImStore.php:268
+#@ ims
+msgctxt "post type general name"
+msgid "Galleries"
+msgstr "Galerien"
+
+#: ImStore.php:269
+#@ ims
+msgctxt "post type singular name"
+msgid "Gallery"
+msgstr "Galerie"
+
+#: ImStore.php:270
+#@ ims
+msgctxt "Gallery"
+msgid "Add New"
+msgstr "Hinzufügen"
+
+#: ImStore.php:271
+#@ ims
+msgid "Add New Gallery"
+msgstr "Neue Galerie erstellen"
+
+#: ImStore.php:272
+#@ ims
+msgid "Edit Gallery"
+msgstr "Galerie bearbeiten"
+
+#: ImStore.php:273
+#@ ims
+msgid "New Gallery"
+msgstr "Neue Galerie"
+
+#: ImStore.php:274
+#@ ims
+msgid "View Gallery"
+msgstr "Galerie ansehen"
+
+#: ImStore.php:275
+#@ ims
+msgid "Search galleries"
+msgstr "Galerien durchsuchen"
+
+#: ImStore.php:276
+#@ ims
+msgid "No galleries found"
+msgstr "Keine Galerien gefunden"
+
+#: ImStore.php:277
+#@ ims
+msgid "No galleries found in Trash"
+msgstr "Keine Galerien im Papierkorb gefunden"
+
+#: ImStore.php:297
+#@ ims
+msgctxt "taxonomy general name"
+msgid "Albums"
+msgstr "Alben"
+
+#: ImStore.php:298
+#@ ims
+msgctxt "taxonomy singular name"
+msgid "Album"
+msgstr "Album"
+
+#: ImStore.php:299
+#@ ims
+msgid "Search Albums"
+msgstr "Alben durchsuchen"
+
+#: ImStore.php:300
+#@ ims
+msgid "All Albums"
+msgstr "Alle Alben"
+
+#: ImStore.php:301
+#@ ims
+msgid "Parent Album"
+msgstr "Übergeordnetes Album"
+
+#: ImStore.php:302
+#@ ims
+msgid "Parent Album:"
+msgstr "Übergeordnetes Album:"
+
+#: ImStore.php:303
+#@ ims
+msgid "Edit Album"
+msgstr "Album bearbeiten"
+
+#: ImStore.php:304
+#@ ims
+msgid "Update Album"
+msgstr "Aktualisiere Album"
+
+#: ImStore.php:305
+#@ ims
+msgid "Add New Album"
+msgstr "Neues Album hinzufügen"
+
+#: ImStore.php:306
+#@ ims
+msgid "New Album Name"
+msgstr "Neuer Album Name"
+
+#: ImStore.php:307
+#@ ims
+msgid "Album"
+msgstr "Album"
+
+#: ImStore.php:313
+#: admin/admin.php:411
+#@ ims
+msgid "albums"
+msgstr "Alben"
+
+#: ImStore.php:317
+#@ ims
+msgid "Expired"
+msgstr "Ungültig"
+
+#: ImStore.php:318
+#: admin/admin.php:642
+#: admin/customers.php:148
+#: admin/customers.php:178
+#: admin/customers.php:273
+#@ ims
+msgid "Active"
+msgstr "Aktiv"
+
+#: ImStore.php:319
+#@ ims
+msgid "Inative"
+msgstr "Inaktiv"
+
+#: admin/admin.php:61
+#@ ims
+msgid "in"
+msgstr "in"
+
+#: admin/admin.php:61
+#@ ims
+msgid "cm"
+msgstr "cm"
+
+#: admin/admin.php:61
+#@ ims
+msgid "px"
+msgstr "px"
+
+#: admin/admin.php:231
+#: admin/ajax.php:138
+#@ ims
+msgid "Unknown"
+msgstr "Unbekannt"
+
+#: admin/admin.php:302
+#: admin/admin.php:891
+#: admin/template.php:17
+#@ ims
+msgid "Sales"
+msgstr "Verkäufe"
+
+#: admin/admin.php:304
+#: admin/template.php:20
+#@ ims
+msgid "Pricing"
+msgstr "Preise"
+
+#: admin/admin.php:306
+#: admin/admin.php:879
+#: admin/admin.php:919
+#@ ims
+msgid "Customers"
+msgstr "Kunden"
+
+#: admin/admin.php:309
+#: admin/template.php:21
+#@ ims
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: admin/admin.php:311
+#: admin/widget.php:20
+#@ ims
+msgid "Image Store"
+msgstr "ImageStore"
+
+#: admin/admin.php:311
+#: admin/admin.php:847
+#: admin/template.php:19
+#@ ims
+msgid "Galleries"
+msgstr "Galerien"
+
+#: admin/admin.php:410
+#, php-format
+#@ ims
+msgid "To view albums go to: %s/%s/%s"
+msgstr "Zum betrachten der Alben klicken Sie auf: %s/%s/%s"
+
+#: admin/admin.php:411
+#: admin/admin.php:413
+#@ ims
+msgid "term-slug"
+msgstr "Kurzname"
+
+#: admin/admin.php:412
+#, php-format
+#@ ims
+msgid "To view albums go to: %s/?taxonomy=ims_album&term=%s"
+msgstr "Zum betrachten der Alben gehen Sie auf: %s/?taxonomy=ims_album&term=%s"
+
+#: admin/admin.php:642
+#: admin/customers.php:151
+#: admin/customers.php:181
+#: admin/customers.php:273
+#@ ims
+msgid "Inactive"
+msgstr "Inaktiv"
+
+#: admin/admin.php:709
+#: admin/admin.php:718
+#: admin/admin.php:840
+#: admin/sales-details.php:39
+#: admin/settings.php:151
+#: admin/widget.php:57
+#@ ims
+msgid "Gallery"
+msgstr "Galerie"
+
+#: admin/admin.php:709
+#: admin/admin.php:718
+#: admin/admin.php:841
+#: admin/admin.php:1034
+#: admin/widget.php:83
+#@ ims
+msgid "Gallery ID"
+msgstr "Galerie ID"
+
+#: admin/admin.php:710
+#: admin/admin.php:720
+#: admin/admin.php:1052
+#@ ims
+msgid "Visits"
+msgstr "Besuche"
+
+#: admin/admin.php:710
+#: admin/admin.php:719
+#@ ims
+msgid "Tracking"
+msgstr "Tracking"
+
+#: admin/admin.php:711
+#: admin/admin.php:719
+#: admin/admin.php:729
+#: admin/admin.php:844
+#: admin/admin.php:858
+#: admin/admin.php:887
+#: admin/admin.php:922
+#: admin/sales-csv.php:61
+#@ ims
+msgid "Images"
+msgstr "Bilder"
+
+#: admin/admin.php:711
+#: admin/admin.php:854
+#: admin/ajax.php:182
+#@ ims
+msgid "Author"
+msgstr "Autor"
+
+#: admin/admin.php:712
+#: admin/admin.php:720
+#: admin/admin.php:843
+#: admin/admin.php:864
+#@ ims
+msgid "Expires"
+msgstr "Läuft ab"
+
+#: admin/admin.php:712
+#: admin/admin.php:721
+#: admin/admin.php:727
+#: admin/admin.php:885
+#: admin/ajax.php:181
+#: admin/sales-csv.php:56
+#: admin/sales-details.php:71
+#: admin/widget.php:48
+#@ ims
+msgid "Date"
+msgstr "Datum"
+
+#: admin/admin.php:727
+#: admin/admin.php:885
+#: admin/sales-csv.php:55
+#: admin/sales-details.php:80
+#@ ims
+msgid "Order number"
+msgstr "Bestellnummer"
+
+#: admin/admin.php:728
+#: admin/admin.php:886
+#: admin/pricing.php:80
+#: admin/sales-csv.php:57
+#: admin/settings.php:565
+#@ ims
+msgid "Amount"
+msgstr "Anzahl"
+
+#: admin/admin.php:728
+#: admin/admin.php:886
+#: admin/sales-details.php:89
+#@ ims
+msgid "Customer"
+msgstr "Kunde"
+
+#: admin/admin.php:729
+#: admin/admin.php:887
+#: admin/sales-csv.php:62
+#@ ims
+msgid "Payment status"
+msgstr "Bezahlstatus"
+
+#: admin/admin.php:730
+#: admin/admin.php:888
+#: admin/sales-csv.php:63
+#@ ims
+msgid "Order Status"
+msgstr "Bestellstatus"
+
+#: admin/admin.php:736
+#@ ims
+msgid "Username"
+msgstr "Benutzername"
+
+#: admin/admin.php:737
+#: admin/admin.php:872
+#: admin/admin.php:1132
+#: admin/customer-csv.php:46
+#: admin/customers.php:91
+#: admin/install.php:199
+#: includes/checkout.php:24
+#@ ims
+msgid "First Name"
+msgstr "Vorname"
+
+#: admin/admin.php:737
+#: admin/admin.php:873
+#: admin/admin.php:1136
+#: admin/customer-csv.php:47
+#: admin/customers.php:93
+#: admin/install.php:198
+#: includes/checkout.php:28
+#@ ims
+msgid "Last Name"
+msgstr "Nachname"
+
+#: admin/admin.php:738
+#: admin/customer-csv.php:48
+#@ ims
+msgid "E-mail"
+msgstr "E-Mail"
+
+#: admin/admin.php:738
+#: admin/admin.php:874
+#: admin/customer-csv.php:50
+#: admin/customers.php:99
+#: admin/install.php:192
+#: admin/sales-csv.php:65
+#: includes/checkout.php:42
+#@ ims
+msgid "City"
+msgstr "Ort"
+
+#: admin/admin.php:739
+#: admin/admin.php:874
+#: admin/admin.php:1148
+#: admin/customer-csv.php:53
+#: admin/customers.php:107
+#: admin/install.php:195
+#: includes/checkout.php:54
+#@ ims
+msgid "Phone"
+msgstr "Telefon"
+
+#: admin/admin.php:739
+#@ ims
+msgid "Status"
+msgstr "Status"
+
+#: admin/admin.php:813
+#: admin/ajax.php:206
+#: admin/gallery.php:43
+#: admin/gallery.php:110
+#: admin/sales.php:185
+#@ ims
+msgid "Trash"
+msgstr "Papierkorb"
+
+#: admin/admin.php:814
+#: includes/store.php:501
+#@ ims
+msgid "Remove"
+msgstr "Entfernen"
+
+#: admin/admin.php:815
+#: admin/settings.php:371
+#@ ims
+msgid "Pixels"
+msgstr "Pixel"
+
+#: admin/admin.php:816
+#: admin/gallery.php:44
+#: admin/sales.php:189
+#@ ims
+msgid "Published"
+msgstr "Veröffentlicht"
+
+#: admin/admin.php:817
+#@ ims
+msgid "File Exist."
+msgstr "Datei existiert."
+
+#: admin/admin.php:818
+#@ ims
+msgid "Select files."
+msgstr "Dateien auswählen."
+
+#: admin/admin.php:819
+#@ ims
+msgid "Please,select a gallery!"
+msgstr "Bitte wählen Sie eine Galerie"
+
+#: admin/admin.php:821
+#@ ims
+msgid "Are you sure that you want to delete this list?"
+msgstr "Sind Sie sicher, dass Sie diese Liste löschen möchten?"
+
+#: admin/admin.php:822
+#@ ims
+msgid "Are you sure that you want to delete this package?"
+msgstr "Sind Sie sicher, dass Sie dieses Paket löschen möchten?"
+
+#: admin/admin.php:823
+#@ ims
+msgid "Are you sure that you want to delete this entry?"
+msgstr "Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?"
+
+#: admin/admin.php:842
+#@ ims
+msgid "Password"
+msgstr "Passwort"
+
+#: admin/admin.php:852
+#: admin/ajax.php:180
+#@ ims
+msgid "Thumbnail"
+msgstr "Vorschaubild"
+
+#: admin/admin.php:852
+#: admin/ajax.php:180
+#@ ims
+msgid "Metadata"
+msgstr "Metadaten"
+
+#: admin/admin.php:853
+#: admin/ajax.php:181
+#@ ims
+msgid "Title/Caption"
+msgstr "Titel / Bildunterschrift"
+
+#: admin/admin.php:854
+#: admin/ajax.php:182
+#@ ims
+msgid "Order"
+msgstr "Bestellung"
+
+#: admin/admin.php:855
+#: admin/ajax.php:183
+#@ ims
+msgid "ID"
+msgstr "ID"
+
+#: admin/admin.php:863
+#: admin/pricing.php:97
+#: admin/pricing.php:170
+#: admin/pricing.php:248
+#: admin/pricing.php:308
+#: admin/pricing.php:358
+#: admin/pricing.php:395
+#: admin/pricing.php:479
+#@ ims
+msgid "Name"
+msgstr "Name"
+
+#: admin/admin.php:863
+#: admin/pricing.php:484
+#@ ims
+msgid "Code"
+msgstr "Code"
+
+#: admin/admin.php:864
+#@ ims
+msgid "Starts"
+msgstr "Startet"
+
+#: admin/admin.php:865
+#: admin/pricing.php:468
+#@ ims
+msgid "Type"
+msgstr "Typ"
+
+#: admin/admin.php:865
+#@ ims
+msgid "Discount/Items"
+msgstr "Discount/Items"
+
+#: admin/admin.php:868
+#: admin/pricing.php:87
+#@ ims
+msgid "Promotions"
+msgstr "Promotions"
+
+#: admin/admin.php:873
+#@ ims
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: admin/admin.php:875
+#: admin/admin.php:1140
+#: admin/customer-csv.php:51
+#: admin/customers.php:103
+#: admin/install.php:193
+#: admin/sales-csv.php:66
+#: includes/checkout.php:46
+#@ ims
+msgid "State"
+msgstr "Status"
+
+#: admin/admin.php:875
+#@ ims
+msgid "eNewsletter"
+msgstr "Newsletter"
+
+#: admin/admin.php:900
+#@ ims
+msgid "Show per page"
+msgstr "Anzahl pro Seite"
+
+#: admin/admin.php:902
+#: admin/customers.php:154
+#: admin/gallery.php:68
+#: admin/pricing.php:545
+#: admin/sales.php:49
+#@ default
+#@ ims
+msgid "Apply"
+msgstr "Anwenden"
+
+#: admin/admin.php:920
+#@ ims
+msgid "Gallery Information"
+msgstr "Galerie Information"
+
+#: admin/admin.php:921
+#@ ims
+msgid "Import Images"
+msgstr "Bilder importieren"
+
+#: admin/admin.php:924
+#: includes/cart.php:18
+#@ ims
+msgid "Sepia + "
+msgstr "Sepia + "
+
+#: admin/admin.php:925
+#: includes/cart.php:19
+#: includes/store.php:783
+#@ ims
+msgid "Full Color"
+msgstr "Farbig"
+
+#: admin/admin.php:926
+#: includes/cart.php:20
+#@ ims
+msgid "B &amp; W + "
+msgstr "schwarz/weiß + "
+
+#: admin/admin.php:1029
+#@ ims
+msgid "Folder path"
+msgstr "Verzeichnispfad"
+
+#: admin/admin.php:1039
+#@ ims
+msgid "Tracking Number"
+msgstr "Tracking-Nummer"
+
+#: admin/admin.php:1054
+#@ ims
+msgid "Expiration Date"
+msgstr "Ablaufdatum"
+
+#: admin/admin.php:1061
+#@ ims
+msgid "Sort Order"
+msgstr "Reihenfolge"
+
+#: admin/admin.php:1064
+#: admin/admin.php:1071
+#@ ims
+msgid "Default"
+msgstr "Standard"
+
+#: admin/admin.php:1065
+#: admin/settings.php:285
+#@ ims
+msgid "Custom order"
+msgstr "Kundenbestellung"
+
+#: admin/admin.php:1066
+#: admin/settings.php:287
+#: admin/widget.php:51
+#@ ims
+msgid "Caption"
+msgstr "Beschriftung"
+
+#: admin/admin.php:1067
+#: admin/settings.php:289
+#@ ims
+msgid "Image title"
+msgstr "Bildtitel"
+
+#: admin/admin.php:1068
+#: admin/settings.php:291
+#@ ims
+msgid "Image date"
+msgstr "Bilddatum"
+
+#: admin/admin.php:1072
+#: admin/settings.php:296
+#@ ims
+msgid "Ascending"
+msgstr "aufsteigend"
+
+#: admin/admin.php:1073
+#: admin/settings.php:298
+#@ ims
+msgid "Descending"
+msgstr "absteigend"
+
+#: admin/admin.php:1093
+#@ ims
+msgid "Upload Images"
+msgstr "Bilder hochladen"
+
+#: admin/admin.php:1094
+#@ ims
+msgid "Upload zip file"
+msgstr "ZIP-Datei hochladen"
+
+#: admin/admin.php:1095
+#@ ims
+msgid "Scan folder"
+msgstr "Verzeichnis durchsuchen"
+
+#: admin/admin.php:1098
+#@ ims
+msgid "Upload images"
+msgstr "Bilder hochladen"
+
+#: admin/admin.php:1102
+#@ ims
+msgid "Zip file"
+msgstr "Zip-Datei"
+
+#: admin/admin.php:1103
+#@ ims
+msgid "Or enter zip file URL"
+msgstr "Oder URL zur Zip-Datei"
+
+#: admin/admin.php:1105
+#, php-format
+#@ ims
+msgid "Import a zip file with images from a url. Your server's maximum file size upload is <strong>%sB</strong>. Publish or update gallery to upload images."
+msgstr "Eine Zip-Datei von einer URL hochladen. Ihr Server erlaubt eine maximale Dateigröße für Datei-Uploads von <strong>%sB</strong>. Veröffentlichen oder Aktualisieren zum Hochladen der Bilder."
+
+#: admin/admin.php:1108
+#@ ims
+msgid "Import From Server Path"
+msgstr "Import von einem Serverfpad"
+
+#: admin/admin.php:1112
+#@ ims
+msgid "Scan"
+msgstr "Durchsuchen"
+
+#: admin/admin.php:1113
+#@ ims
+msgid "Path relative to the wp-content folder."
+msgstr "Pfad relativ zum wp-content Verzeichnis."
+
+#: admin/admin.php:1129
+#@ ims
+msgid "Address Information"
+msgstr "Adressinformation"
+
+#: admin/admin.php:1144
+#: admin/customer-csv.php:52
+#: admin/customers.php:105
+#: admin/sales-csv.php:67
+#@ ims
+msgid "Zip"
+msgstr "Zip"
+
+#: admin/ajax.php:200
+#: admin/gallery.php:100
+#@ ims
+msgid "Format:"
+msgstr "Format:"
+
+#: admin/ajax.php:201
+#: admin/gallery.php:101
+#@ ims
+msgid " pixels"
+msgstr " Pixel"
+
+#: admin/ajax.php:202
+#: admin/gallery.php:102
+#@ ims
+msgid "Color:"
+msgstr "Farbe:"
+
+#: admin/ajax.php:204
+#: admin/customers.php:176
+#: admin/gallery.php:108
+#: admin/pricing.php:565
+#@ ims
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: admin/ajax.php:205
+#: admin/customers.php:129
+#: admin/gallery.php:109
+#: admin/pricing.php:188
+#: admin/pricing.php:369
+#: admin/pricing.php:526
+#@ ims
+msgid "Update"
+msgstr "Update"
+
+#: admin/ajax.php:260
+#: admin/ajax.php:288
+#@ ims
+msgid "Please,select an image"
+msgstr "Bitte wählen Sie ein Bild"
+
+#: admin/ajax.php:274
+#@ ims
+msgid "Image added to favorites"
+msgstr "Bild zu den Favoriten hinzugefügt"
+
+#: admin/ajax.php:275
+#, php-format
+#@ ims
+msgid "%d images added to favorites"
+msgstr "%d Bilder zu den Favoriten hinzugefügt"
+
+#: admin/ajax.php:304
+#@ ims
+msgid "Image removed from favorites"
+msgstr "Bild aus den Favoriten entfernt"
+
+#: admin/ajax.php:305
+#, php-format
+#@ ims
+msgid "%d images removed from favorites"
+msgstr "%d Bilder aus den Favoriten entfernt"
+
+#: admin/customer-csv.php:49
+#: admin/customers.php:97
+#: admin/install.php:196
+#: admin/sales-csv.php:64
+#: includes/checkout.php:38
+#@ ims
+msgid "Address"
+msgstr "Adresse"
+
+#: admin/customers.php:86
+#@ ims
+msgid "Edit Customer"
+msgstr "Kunde bearbeiten"
+
+#: admin/customers.php:86
+#: admin/customers.php:156
+#@ ims
+msgid "New Customer"
+msgstr "Neuer Kunde"
+
+#: admin/customers.php:111
+#: admin/install.php:194
+#: includes/checkout.php:33
+#@ ims
+msgid "Email"
+msgstr "E-Mail"
+
+#: admin/customers.php:114
+#@ ims
+msgid "Added to eNewsletter"
+msgstr "Zum Newsletter hinzugefügt"
+
+#: admin/customers.php:123
+#: admin/pricing.php:523
+#: includes/checkout.php:75
+#@ ims
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: admin/customers.php:125
+#@ ims
+msgid "Add New Customer"
+msgstr "Neuen Kunden hinzufügen"
+
+#: admin/customers.php:146
+#: admin/pricing.php:542
+#: admin/sales.php:38
+#@ ims
+msgid "Bulk Actions"
+msgstr "Mehrere Aktionen"
+
+#: admin/customers.php:149
+#: admin/customers.php:179
+#: admin/gallery.php:105
+#: admin/pricing.php:130
+#: admin/pricing.php:208
+#: admin/pricing.php:258
+#: admin/pricing.php:543
+#: admin/pricing.php:566
+#: admin/settings.php:356
+#: includes/cart.php:40
+#@ ims
+msgid "Delete"
+msgstr "Löschen"
+
+#: admin/customers.php:155
+#: admin/sales.php:61
+#@ ims
+msgid "Download CSV"
+msgstr "CSV herunterladen"
+
+#: admin/customers.php:176
+#@ ims
+msgid "Edit information"
+msgstr "Informationen bearbeiten"
+
+#: admin/customers.php:178
+#@ ims
+msgid "Make entry active"
+msgstr "Eintrag freischalten"
+
+#: admin/customers.php:179
+#@ ims
+msgid "Delete entry permanently"
+msgstr "Eintrag endgültig löschen"
+
+#: admin/customers.php:181
+#@ ims
+msgid "Make entry inactive"
+msgstr "Eintrag einbehalten"
+
+#: admin/customers.php:204
+#@ ims
+msgid "Yes"
+msgstr "Ja"
+
+#: admin/customers.php:204
+#@ ims
+msgid "No"
+msgstr "Nein"
+
+#: admin/customers.php:311
+#@ ims
+msgid "The first name is required."
+msgstr "Der Vorname ist erforderlich"
+
+#: admin/customers.php:314
+#@ ims
+msgid "The last name is required."
+msgstr "Der Nachname ist erforderlich"
+
+#: admin/customers.php:317
+#@ ims
+msgid "The email is required."
+msgstr "Eine E-Mail-Adresse ist erforderlich"
+
+#: admin/customers.php:320
+#@ ims
+msgid "Wrong email format. That doesn&#8217;t look like an email to me."
+msgstr "Falsches E-Mail-Format. Bitte überprüfen Sie die korrekte Schreibweise."
+
+#: admin/customers.php:324
+#@ ims
+msgid "That customer already exists."
+msgstr "Kunde bereits vorhanden."
+
+#: admin/galleries-read.php:31
+#@ ims
+msgid "Search Galleries"
+msgstr "Galerien durchsuchen"
+
+#: admin/gallery.php:48
+#@ ims
+msgid "Upload failed."
+msgstr "Upload fehlgeschlagen"
+
+#: admin/gallery.php:49
+#@ ims
+msgid "Not a valid URL path"
+msgstr "Kein gültiger URL Pfad"
+
+#: admin/gallery.php:50
+#@ ims
+msgid "This is not a zip file."
+msgstr "Dies ist keine Zip-Datei"
+
+#: admin/gallery.php:51
+#@ ims
+msgid "Please enter a folder path."
+msgstr "Bitte tragen Sie einen Verzeichnispfad ein."
+
+#: admin/gallery.php:52
+#@ ims
+msgid "There was an error extracting the images."
+msgstr "Fehler beim extrahieren der Bilder."
+
+#: admin/gallery.php:53
+#@ ims
+msgid "The folder doesn&#8217;t exist,please check your folder path."
+msgstr "Das Verzeichnis existiert nicht. Bitte überprüfen Sie den Verzeichnispfad."
+
+#: admin/gallery.php:60
+#@ ims
+msgid "Actions"
+msgstr "Aktionen"
+
+#: admin/gallery.php:62
+#: admin/gallery.php:106
+#: admin/sales.php:40
+#@ ims
+msgid "Restore"
+msgstr "Wiederherstellen"
+
+#: admin/gallery.php:63
+#: admin/sales.php:41
+#@ ims
+msgid "Delete Permanently"
+msgstr "Permanent löschen"
+
+#: admin/gallery.php:65
+#: admin/sales.php:46
+#@ ims
+msgid "Move to Trash"
+msgstr "In den Papierkorb legen"
+
+#: admin/image-edit.php:19
+#: admin/image-edit.php:22
+#@ ims
+msgid "Cheatin&#8217; uh?"
+msgstr "Versuchst Du zu tricksen, hmm? :)"
+
+#: admin/image-edit.php:43
+#@ default
+msgid "Uploads"
+msgstr "Uploads"
+
+#: admin/image-edit.php:45
+#@ default
+msgid "WordPress"
+msgstr "WordPress"
+
+#: admin/install.php:56
+#: admin/install.php:187
+#, php-format
+#@ ims
+msgid "/%instructions%/"
+msgstr "/%instructions%/"
+
+#: admin/install.php:139
+#: includes/shortcode.php:193
+#: includes/slideshow.php:62
+#@ ims
+msgid "Play"
+msgstr "Abspielen"
+
+#: admin/install.php:140
+#: includes/shortcode.php:194
+#: includes/slideshow.php:63
+#@ ims
+msgid "Next"
+msgstr "Weiter"
+
+#: admin/install.php:141
+#@ ims
+msgid "Pause"
+msgstr "Pause"
+
+#: admin/install.php:142
+#@ ims
+msgid "Close"
+msgstr "Schließen"
+
+#: admin/install.php:143
+#@ ims
+msgid "Previous"
+msgstr "Zurück"
+
+#: admin/install.php:144
+#@ ims
+msgid "Next &rsaquo;"
+msgstr "Nächstes &rsaquo;"
+
+#: admin/install.php:145
+#@ ims
+msgid "&lsaquo; Prev"
+msgstr "&lsaquo; Vorheriges"
+
+#: admin/install.php:171
+#@ ims
+msgid "New purchase notification"
+msgstr "Neue Kaufbenachrichtigung"
+
+#: admin/install.php:172
+#, php-format
+#@ ims
+msgid ""
+"<h2>Thank You,%%customer_first%% %%customer_last%%</h2>\n"
+"save the information bellow for your records.\n"
+"\n"
+"Total payment:%%total%%\n"
+"Transaction number:%%order_number%%\n"
+"\n"
+"If you have any question about your order please contat us at:%s"
+msgstr ""
+"<h2>Vielen Dank,%%customer_first%% %%customer_last%%</h2>\n"
+"Speichern Sie die folgenden Informationen für Ihre Unterlagen.\n"
+"\n"
+"Gesamtbetrag:%%total%%\n"
+"Bestellnummer:%%order_number%%\n"
+"\n"
+"Falls Sie eine Frage zur Bestellung haben, nehmen Sie bitte Kontakt auf unter:%s"
+
+#: admin/install.php:173
+#, php-format
+#@ ims
+msgid ""
+"A new order was place at you image store at %s \n"
+"\n"
+"Order number: %%order_number%% \n"
+"To view the order details please login to your site at:%s  \n"
+"\n"
+"%%instructions%%"
+msgstr ""
+"Eine neue Foto-Bestellung ist auf der Seite %s eingegangen \n"
+"\n"
+"Bestellnummer: %%order_number%% \n"
+"Für weitere Details loggen Sie sich bitte auf Ihrer Seite ein:%s  \n"
+"\n"
+"%%instructions%%"
+
+#: admin/install.php:177
+#, php-format
+#@ ims
+msgid "/%total%/"
+msgstr "/%total%/"
+
+#: admin/install.php:178
+#, php-format
+#@ ims
+msgid "/%status%/"
+msgstr "/%status%/"
+
+#: admin/install.php:179
+#, php-format
+#@ ims
+msgid "/%gallery%/"
+msgstr "/%gallery%/"
+
+#: admin/install.php:180
+#, php-format
+#@ ims
+msgid "/%shipping%/"
+msgstr "/%shipping%/"
+
+#: admin/install.php:181
+#, php-format
+#@ ims
+msgid "/%tracking%/"
+msgstr "/%tracking%/"
+
+#: admin/install.php:182
+#, php-format
+#@ ims
+msgid "/%gallery_id%/"
+msgstr "/%gallery_id%/"
+
+#: admin/install.php:183
+#, php-format
+#@ ims
+msgid "/%order_number%/"
+msgstr "/%order_number%/"
+
+#: admin/install.php:184
+#, php-format
+#@ ims
+msgid "/%customer_last%/"
+msgstr "/%customer_last%/"
+
+#: admin/install.php:185
+#, php-format
+#@ ims
+msgid "/%customer_first%/"
+msgstr "/%customer_first%/"
+
+#: admin/install.php:186
+#, php-format
+#@ ims
+msgid "/%customer_email%/"
+msgstr "/%customer_email%/"
+
+#: admin/install.php:197
+#: includes/checkout.php:50
+#@ ims
+msgid "Zip Code"
+msgstr "PLZ"
+
+#: admin/install.php:247
+#@ ims
+msgid "Default Price List"
+msgstr "Standard Preisliste"
+
+#: admin/install.php:264
+#@ ims
+msgid "Package 1"
+msgstr "Paket 1"
+
+#: admin/install.php:270
+#@ ims
+msgid "Package 2"
+msgstr "Paket 2"
+
+#: admin/install.php:276
+#@ ims
+msgid "Package 3"
+msgstr "Paket 3"
+
+#: admin/install.php:282
+#@ ims
+msgid "Wallets"
+msgstr "Versandtaschen"
+
+#: admin/pricing.php:79
+#: admin/settings.php:564
+#@ ims
+msgid "Percent"
+msgstr "Prozent"
+
+#: admin/pricing.php:81
+#@ ims
+msgid "Free Shipping"
+msgstr "Kostenloser Versand"
+
+#: admin/pricing.php:85
+#@ ims
+msgid "Price lists"
+msgstr "Preisliste"
+
+#: admin/pricing.php:86
+#: admin/pricing.php:201
+#: admin/pricing.php:317
+#@ ims
+msgid "Packages"
+msgstr "Pakete"
+
+#: admin/pricing.php:94
+#@ ims
+msgid "New Price List"
+msgstr "Neue Preisliste"
+
+#: admin/pricing.php:98
+#@ ims
+msgid "Add List"
+msgstr "Liste hinzufügen"
+
+#: admin/pricing.php:103
+#@ ims
+msgid "Add options by dragging image sizes or packages into the desired list."
+msgstr "Weitere Optionen, indem Sie Bildgrößen oder Pakete in die gewünschte Liste angeben."
+
+#: admin/pricing.php:106
+#@ ims
+msgid "Price Lists"
+msgstr "Preislisten"
+
+#: admin/pricing.php:161
+#: admin/pricing.php:224
+#: admin/pricing.php:267
+#@ ims
+msgid "downloadable"
+msgstr "Downloadbar"
+
+#: admin/pricing.php:163
+#: admin/pricing.php:347
+#@ ims
+msgid "Sort"
+msgstr "Sortieren"
+
+#: admin/pricing.php:166
+#: admin/pricing.php:351
+#@ ims
+msgid "Add options by dragging image sizes here"
+msgstr "Weitere Optionen hinzufügen durch ziehen der Bildgröße"
+
+#: admin/pricing.php:175
+#@ ims
+msgid "BW"
+msgstr "schwarz/weiß"
+
+#: admin/pricing.php:177
+#: includes/pricelist.php:66
+#: includes/receipt.php:25
+#: includes/shortcode.php:188
+#: includes/slideshow.php:56
+#: includes/store.php:785
+#@ ims
+msgid "Sepia"
+msgstr "Sepia"
+
+#: admin/pricing.php:179
+#@ ims
+msgid "Local Shipping"
+msgstr "Nationaler Versand"
+
+#: admin/pricing.php:181
+#@ ims
+msgid "Internacional Shipping"
+msgstr "Internationaler Versand"
+
+#: admin/pricing.php:226
+#: admin/pricing.php:268
+#: admin/pricing.php:411
+#@ ims
+msgid "Move to list"
+msgstr "Verschieben nach Liste"
+
+#: admin/pricing.php:239
+#: admin/pricing.php:385
+#@ ims
+msgid "Image Sizes"
+msgstr "Bildgrößen"
+
+#: admin/pricing.php:240
+#: admin/pricing.php:386
+#: admin/settings.php:362
+#@ ims
+msgid "Add image size"
+msgstr "Bildgröße hinzufügen"
+
+#: admin/pricing.php:249
+#: admin/pricing.php:362
+#: admin/pricing.php:396
+#: includes/pricelist.php:22
+#@ ims
+msgid "Price"
+msgstr "Preis"
+
+#: admin/pricing.php:250
+#: admin/pricing.php:397
+#: admin/settings.php:361
+#@ ims
+msgid "Unit"
+msgstr "Einheit"
+
+#: admin/pricing.php:282
+#: admin/pricing.php:424
+#@ ims
+msgid "in:inches &bull; cm:centimeters &bull; px:pixels"
+msgstr "in:Inches &bull; cm:Zentimeter &bull; px:Pixel"
+
+#: admin/pricing.php:286
+#: admin/pricing.php:428
+#@ ims
+msgid "Update sizes"
+msgstr "Aktualisiere Größen"
+
+#: admin/pricing.php:305
+#@ ims
+msgid "New Package"
+msgstr "Neues Paket"
+
+#: admin/pricing.php:309
+#@ ims
+msgid "Add Package"
+msgstr "Paket hinzufügen"
+
+#: admin/pricing.php:314
+#@ ims
+msgid "Add options by dragging image sizes into the desired package."
+msgstr "Optionen hinzufügen durch ziehen der Bildgrößen in das gewünschte Paket"
+
+#: admin/pricing.php:338
+#: admin/pricing.php:340
+#: admin/sales-details.php:32
+#: includes/cart.php:35
+#: includes/store.php:752
+#@ ims
+msgid "Quantity"
+msgstr "Menge"
+
+#: admin/pricing.php:447
+#@ ims
+msgid "Promotion Information"
+msgstr "Gutschein Information"
+
+#: admin/pricing.php:448
+#: admin/pricing.php:546
+#@ ims
+#@ default
+msgid "New Promotion"
+msgstr "Neuer Gutschein"
+
+#: admin/pricing.php:489
+#@ ims
+msgid "starts"
+msgstr "Startet"
+
+#: admin/pricing.php:495
+#@ ims
+msgid "Expire"
+msgstr "Läuft ab"
+
+#: admin/pricing.php:501
+#: admin/sales-details.php:101
+#: includes/cart.php:135
+#: includes/cart.php:204
+#@ ims
+msgid "Discount"
+msgstr "Wert"
+
+#: admin/pricing.php:509
+#@ ims
+msgid "Conditions"
+msgstr "Konditionen"
+
+#: admin/pricing.php:511
+#@ ims
+msgid "Item quantity"
+msgstr "Anzahl der Produkte"
+
+#: admin/pricing.php:512
+#@ ims
+msgid "Total amount"
+msgstr "Gesamtsumme"
+
+#: admin/pricing.php:513
+#@ ims
+msgid "Subtotal amount"
+msgstr "Zwischensumme"
+
+#: admin/pricing.php:516
+#@ ims
+msgid "Is equal to"
+msgstr "Ist gleich"
+
+#: admin/pricing.php:517
+#@ ims
+msgid "Is greater than"
+msgstr "Ist größer als"
+
+#: admin/pricing.php:518
+#@ ims
+msgid "Is less than"
+msgstr "Ist weniger als"
+
+#: admin/pricing.php:528
+#@ ims
+msgid "Add promotion"
+msgstr "Gutschein hinzufügen"
+
+#: admin/pricing.php:652
+#: admin/pricing.php:679
+#: admin/pricing.php:706
+#: admin/pricing.php:732
+#@ ims
+msgid "A name is required."
+msgstr "Ein Name ist erforderlich"
+
+#: admin/pricing.php:662
+#@ ims
+msgid "There was a problem creating the package."
+msgstr "Es gab ein Problem bei der Erstellung des Pakets"
+
+#: admin/pricing.php:690
+#@ ims
+msgid "There was a problem creating the list."
+msgstr "Es gab ein Problem beim erstellen der Liste"
+
+#: admin/pricing.php:757
+#@ ims
+msgid "A promotion name is required."
+msgstr "Ein Gutscheinname ist erforderlich"
+
+#: admin/pricing.php:760
+#@ ims
+msgid "A discount is required"
+msgstr "Ein Wert ist erforderlich"
+
+#: admin/pricing.php:776
+#@ ims
+msgid "There was a problem creating the promotion."
+msgstr "Es gab ein Problem bei der Erstellung des Gutscheins"
+
+#: admin/pricing.php:804
+#@ ims
+msgid "Please select a promo to be deleted."
+msgstr "Bitte wählen Sie einen Gutschein zum löschen"
+
+#: admin/sales-csv.php:58
+#: admin/sales-details.php:111
+#: admin/settings.php:561
+#: includes/cart.php:142
+#@ ims
+msgid "Tax"
+msgstr "Steuer"
+
+#: admin/sales-csv.php:59
+#@ ims
+msgid "Firstname"
+msgstr "Vorname"
+
+#: admin/sales-csv.php:60
+#@ ims
+msgid "Lastname"
+msgstr "Nachname"
+
+#: admin/sales-csv.php:68
+#@ ims
+msgid "Country"
+msgstr "Land"
+
+#: admin/sales-details.php:33
+#: includes/cart.php:36
+#: includes/store.php:757
+#@ ims
+msgid "Size"
+msgstr "Größe"
+
+#: admin/sales-details.php:34
+#: admin/settings.php:340
+#: includes/cart.php:37
+#: includes/receipt.php:23
+#: includes/store.php:781
+#@ ims
+msgid "Color"
+msgstr "Farbe"
+
+#: admin/sales-details.php:35
+#: includes/cart.php:38
+#@ ims
+msgid "Unit Price"
+msgstr "Einzelpreis"
+
+#: admin/sales-details.php:36
+#: includes/cart.php:39
+#@ ims
+msgid "Subtotal"
+msgstr "Zwischensumme"
+
+#: admin/sales-details.php:37
+#: admin/widget.php:49
+#: admin/widget.php:61
+#@ ims
+msgid "Title"
+msgstr "Titel"
+
+#: admin/sales-details.php:38
+#@ ims
+msgid "Image ID"
+msgstr "Bild ID"
+
+#: admin/sales-details.php:74
+#: includes/cart.php:107
+#@ ims
+msgid "Item subtotal"
+msgstr "Produkt Zwischensumme"
+
+#: admin/sales-details.php:83
+#: includes/cart.php:112
+#@ ims
+msgid "Promotional code"
+msgstr "Gutschein Code"
+
+#: admin/sales-details.php:98
+#@ ims
+msgid "Shipping Adress"
+msgstr "Versandadresse"
+
+#: admin/sales-details.php:107
+#@ ims
+msgid "Shipping Adress 2"
+msgstr "Abweichende Versandadresse"
+
+#: admin/sales-details.php:121
+#: includes/cart.php:151
+#@ ims
+msgid "Total"
+msgstr "Gesamt"
+
+#: admin/sales-details.php:127
+#: includes/cart.php:157
+#: includes/checkout.php:59
+#@ ims
+msgid "Additional Instructions"
+msgstr "Zusätzliche Hinweise"
+
+#: admin/sales.php:43
+#: admin/sales.php:187
+#: includes/checkout.php:83
+#@ ims
+msgid "Pending"
+msgstr "Wartet"
+
+#: admin/sales.php:44
+#@ ims
+msgid "Order Shipped"
+msgstr "Versendet"
+
+#: admin/sales.php:45
+#@ ims
+msgid "Closed Order"
+msgstr "Abgeschlossene Bestellung"
+
+#: admin/sales.php:51
+#@ ims
+msgid "Select date created"
+msgstr "Erstellungsdatum auswählen"
+
+#: admin/sales.php:57
+#@ ims
+msgid "Filter"
+msgstr "Filter"
+
+#: admin/sales.php:59
+#@ ims
+msgid "Empty Trash"
+msgstr "Papierkorb leeren"
+
+#: admin/sales.php:65
+#@ ims
+msgid "Search Orders"
+msgstr "Durchsuche Bestellungen"
+
+#: admin/sales.php:186
+#@ ims
+msgid "Closed"
+msgstr "Geschlossen"
+
+#: admin/sales.php:188
+#@ ims
+msgid "Shipped"
+msgstr "Versendet"
+
+#: admin/sales.php:201
+#@ ims
+msgid "All"
+msgstr "Alle"
+
+#: admin/settings.php:120
+#@ ims
+msgid "Australian Dollar"
+msgstr "Australischer Dollar"
+
+#: admin/settings.php:121
+#@ ims
+msgid "Brazilian Real"
+msgstr "Brasilianischer Real"
+
+#: admin/settings.php:122
+#@ ims
+msgid "Canadian Dollar"
+msgstr "Kanadischer Dollar"
+
+#: admin/settings.php:123
+#@ ims
+msgid "Czech Koruna"
+msgstr "Tschechische Krone"
+
+#: admin/settings.php:124
+#@ ims
+msgid "Danish Krone"
+msgstr "Dänische Krone"
+
+#: admin/settings.php:125
+#@ ims
+msgid "Euro"
+msgstr "Euro"
+
+#: admin/settings.php:126
+#@ ims
+msgid "Hong Kong Dollar"
+msgstr "Hongkong-Dollar"
+
+#: admin/settings.php:127
+#@ ims
+msgid "Hungarian Forint"
+msgstr "Ungarischer Forint"
+
+#: admin/settings.php:128
+#@ ims
+msgid "Israeli New Sheqel"
+msgstr "Israelischer Schekel"
+
+#: admin/settings.php:129
+#@ ims
+msgid "Japanese Yen"
+msgstr "Japanischer Yen"
+
+#: admin/settings.php:130
+#@ ims
+msgid "Malaysian Ringgit"
+msgstr "Malaysische Ringgit"
+
+#: admin/settings.php:131
+#@ ims
+msgid "Mexican Peso"
+msgstr "Mexikanischer Peso"
+
+#: admin/settings.php:132
+#@ ims
+msgid "Norwegian Krone"
+msgstr "Norwegische Krone"
+
+#: admin/settings.php:133
+#@ ims
+msgid "New Zealand Dollar"
+msgstr "Neuseeland-Dollar"
+
+#: admin/settings.php:134
+#@ ims
+msgid "Philippine Peso"
+msgstr "Philippinischen Peso"
+
+#: admin/settings.php:135
+#@ ims
+msgid "Polish Zloty"
+msgstr "Polnischer Zloty"
+
+#: admin/settings.php:136
+#@ ims
+msgid "Pound Sterling"
+msgstr "Pfund Sterling"
+
+#: admin/settings.php:137
+#@ ims
+msgid "Singapore Dollar"
+msgstr "Singapur-Dollar"
+
+#: admin/settings.php:138
+#@ ims
+msgid "South African Rands"
+msgstr "Südafrikanische Rand"
+
+#: admin/settings.php:139
+#@ ims
+msgid "Swedish Krona"
+msgstr "Schwedische Krone"
+
+#: admin/settings.php:140
+#@ ims
+msgid "Swiss Franc"
+msgstr "Schweizer Franken"
+
+#: admin/settings.php:141
+#@ ims
+msgid "Taiwan New Dollar"
+msgstr "Neuer Taiwan-Dollar"
+
+#: admin/settings.php:142
+#@ ims
+msgid "Thai Baht"
+msgstr "Thai Baht"
+
+#: admin/settings.php:143
+#@ ims
+msgid "Turkish Lira"
+msgstr "Türkische Lira"
+
+#: admin/settings.php:144
+#@ ims
+msgid "U.S.Dollar"
+msgstr "USDollar"
+
+#: admin/settings.php:150
+#@ ims
+msgid "General"
+msgstr "Allgemein"
+
+#: admin/settings.php:152
+#@ ims
+msgid "Image"
+msgstr "Bild"
+
+#: admin/settings.php:155
+#@ ims
+msgid "Payment"
+msgstr "Bezahlung"
+
+#: admin/settings.php:156
+#@ ims
+msgid "Checkout"
+msgstr "Kasse"
+
+#: admin/settings.php:158
+#@ ims
+msgid "User permissions"
+msgstr "Benutzerberechtigungen"
+
+#: admin/settings.php:160
+#@ ims
+msgid "Reset"
+msgstr "Reset"
+
+#: admin/settings.php:169
+#@ ims
+msgid "Delete image files"
+msgstr "Löschen von Bilddateien"
+
+#: admin/settings.php:171
+#@ ims
+msgid "Delete files from server,when deleting a gallery/images"
+msgstr "Dateien vom Server löschen, wenn Galerien/Bilder gelöscht werden"
+
+#: admin/settings.php:174
+#@ ims
+msgid "Media RSS feed"
+msgstr "RSS Feed"
+
+#: admin/settings.php:176
+#@ ims
+msgid "Add RSS feed the blog header for unsecured galleries.Useful for CoolIris/PicLens"
+msgstr "Einen RSS feed im header für offene Galerien einfügen. Nützlich für CoolIris/PicLens"
+
+#: admin/settings.php:180
+#@ ims
+msgid "Use CSS"
+msgstr "CSS verwenden"
+
+#: admin/settings.php:182
+#@ ims
+msgid "Use the Image Store stylesheet?"
+msgstr "ImageStore stylesheet verwenden?"
+
+#: admin/settings.php:186
+#@ ims
+msgid "Widget"
+msgstr "Widget"
+
+#: admin/settings.php:188
+#@ ims
+msgid "Enable the use of the Image Store Widget"
+msgstr "ImageStore Widget aktivieren"
+
+#: admin/settings.php:192
+#@ ims
+msgid "Disable store features"
+msgstr "Store Features deaktivieren"
+
+#: admin/settings.php:194
+#@ ims
+msgid "Use as a gallery manager only,not a store."
+msgstr "Nur als Katalog, ohne Bestellfunktion nutzen."
+
+#: admin/settings.php:197
+#@ ims
+msgid "Hide \"photo\" link"
+msgstr "\"Foto\" Link verbergen"
+
+#: admin/settings.php:199
+#@ ims
+msgid "Hide photo link from store navigation."
+msgstr "Foto-Link in Shop-Navigation ausblenden"
+
+#: admin/settings.php:202
+#@ ims
+msgid "Hide \"slideshow\" link"
+msgstr "\"Diashow\" -Link verbergen"
+
+#: admin/settings.php:204
+#@ ims
+msgid "Hide slideshow link from store navigation."
+msgstr "Diashow-Link in Shop-Navigation ausblenden"
+
+#: admin/settings.php:207
+#@ ims
+msgid "Searchable Galleries"
+msgstr "Durchsuchbare Galerien"
+
+#: admin/settings.php:209
+#@ ims
+msgid "Allow galleries to show in search results."
+msgstr "Galerien erlauben, in Suchergebnisse zu erscheinen"
+
+#: admin/settings.php:212
+#@ ims
+msgid "Album Template"
+msgstr "Album Template"
+
+#: admin/settings.php:213
+#: admin/settings.php:270
+#@ ims
+msgid "Default Template"
+msgstr "Standard Template"
+
+#: admin/settings.php:214
+#@ ims
+msgid "Page template"
+msgstr "Seiten Template"
+
+#: admin/settings.php:218
+#@ ims
+msgid "Albums per page"
+msgstr "Alben pro Seite"
+
+#: admin/settings.php:223
+#: admin/settings.php:302
+#: admin/settings.php:378
+#: admin/settings.php:436
+#: admin/settings.php:546
+#: admin/settings.php:597
+#@ ims
+msgid "Save"
+msgstr "Speichern"
+
+#: admin/settings.php:237
+#@ ims
+msgid "Gallery folder path"
+msgstr "Galerie Verzeichnispfad"
+
+#: admin/settings.php:240
+#@ ims
+msgid "Default folder path for all the galleries images"
+msgstr "Standard-Verzeichnispfad für alle Galerie Fotos"
+
+#: admin/settings.php:244
+#@ ims
+msgid "Secure galleries"
+msgstr "Geschützte Galerien"
+
+#: admin/settings.php:246
+#@ ims
+msgid "Secure all new galleries with a password by default."
+msgstr "Alle neuen Galerien standardm&auml;&szlig;ig mit einem Passwort schützen."
+
+#: admin/settings.php:249
+#@ ims
+msgid "Colorbox"
+msgstr "Colorbox"
+
+#: admin/settings.php:251
+#@ ims
+msgid "Use the default ligthbox feature"
+msgstr "Benutze das standard Lightbox Feature"
+
+#: admin/settings.php:254
+#@ ims
+msgid "Ligthbox for WP galleries"
+msgstr "Ligthbox für WP Galerien"
+
+#: admin/settings.php:256
+#@ ims
+msgid "Use lightbox on WordPress Galleries."
+msgstr "Lightbox für WordPress Galerien benutzen"
+
+#: admin/settings.php:259
+#@ ims
+msgid "Disable B and W"
+msgstr "s/w deaktivieren"
+
+#: admin/settings.php:261
+#@ ims
+msgid "Disable black and white color option."
+msgstr "Schwarz/Wei&szlig; als Option deaktivieren"
+
+#: admin/settings.php:264
+#@ ims
+msgid "Disable Sepia "
+msgstr "Sepia deaktivieren "
+
+#: admin/settings.php:266
+#@ ims
+msgid "Disable sepia color option."
+msgstr "Sepia als Farboption ausschlie&szlig;en"
+
+#: admin/settings.php:269
+#@ ims
+msgid "Gallery Template"
+msgstr "Galerie Template"
+
+#: admin/settings.php:274
+#@ ims
+msgid "Images per page"
+msgstr "Bilder pro Seite"
+
+#: admin/settings.php:278
+#@ ims
+msgid "Galleries expire after "
+msgstr "Galerien laufen ab nach "
+
+#: admin/settings.php:280
+#@ default
+msgid "days"
+msgstr "Tage"
+
+#: admin/settings.php:283
+#@ ims
+msgid "Sort images"
+msgstr "Bilder sortieren"
+
+#: admin/settings.php:294
+#@ ims
+msgid "Sort direction"
+msgstr "Sortierreihenfolge"
+
+#: admin/settings.php:316
+#@ default
+msgid "Image preview size(pixels)"
+msgstr "Bilder Vorschau-Größe (Pixel)"
+
+#: admin/settings.php:317
+#@ ims
+msgid "Max Width"
+msgstr "Max. Breite"
+
+#: admin/settings.php:319
+#@ ims
+msgid "Max Height"
+msgstr "Max H&ouml;he"
+
+#: admin/settings.php:321
+#: admin/settings.php:360
+#@ ims
+msgid "Quality"
+msgstr "Qualit&auml;t"
+
+#: admin/settings.php:330
+#@ ims
+msgid "No watermark"
+msgstr "Kein Wasserzeichen"
+
+#: admin/settings.php:332
+#@ ims
+msgid "Use text as watermark"
+msgstr "Benutze Text als Wasserzeichen"
+
+#: admin/settings.php:334
+#@ ims
+msgid "Use image as watermark"
+msgstr "Benutze Bild als Wasserzeichen"
+
+#: admin/settings.php:337
+#@ ims
+msgid "Watermark text"
+msgstr "Wasserzeichen Text"
+
+#: admin/settings.php:342
+#@ ims
+msgid "Font size"
+msgstr "Schriftgr&ouml;&szlig;e"
+
+#: admin/settings.php:344
+#@ ims
+msgid "Transparency"
+msgstr "Transparenz"
+
+#: admin/settings.php:349
+#@ ims
+msgid "Watermark URL"
+msgstr "Wasserzeichen URL"
+
+#: admin/settings.php:354
+#@ ims
+msgid "Downloadable image sizes"
+msgstr "Größe der downloadbaren Bilder"
+
+#: admin/settings.php:357
+#@ ims
+msgid "Image Size"
+msgstr "Bildgröße"
+
+#: admin/settings.php:358
+#@ ims
+msgid "Width"
+msgstr "Breite"
+
+#: admin/settings.php:359
+#@ ims
+msgid "Height"
+msgstr "H&ouml;he"
+
+#: admin/settings.php:393
+#@ ims
+msgid "Number of thumbnails to show"
+msgstr "Anzahl der angezeigten Vorschaubilder"
+
+#: admin/settings.php:395
+#@ ims
+msgid "Maximun number of pages"
+msgstr "Maximale Anzahl an Seiten"
+
+#: admin/settings.php:399
+#@ ims
+msgid "Transition time"
+msgstr "&Uuml;bergangszeit"
+
+#: admin/settings.php:402
+#: admin/settings.php:407
+#@ ims
+msgid "1000 = 1 second"
+msgstr "1000 = 1 Sekunde"
+
+#: admin/settings.php:404
+#@ ims
+msgid "Slideshow speed"
+msgstr "Diashow Geschwindigkeit"
+
+#: admin/settings.php:411
+#@ ims
+msgid "Play link text"
+msgstr "Abspielen Link-Text"
+
+#: admin/settings.php:413
+#@ ims
+msgid "Pause link text"
+msgstr "Pause Link-Text"
+
+#: admin/settings.php:417
+#@ ims
+msgid "Next link text"
+msgstr "N&auml;chstes Link-Text"
+
+#: admin/settings.php:419
+#@ ims
+msgid "Previous link text"
+msgstr "Vorheriges Link-Text"
+
+#: admin/settings.php:423
+#@ ims
+msgid "Next page link text"
+msgstr "N&auml;chste Seite Link-Text"
+
+#: admin/settings.php:425
+#@ ims
+msgid "Previous page link text"
+msgstr "Vorherige Seite Link-Text"
+
+#: admin/settings.php:429
+#@ ims
+msgid "Close link text"
+msgstr "Schlie&szlig;en Link-Text"
+
+#: admin/settings.php:431
+#@ ims
+msgid "Auto start?"
+msgstr "Autostart?"
+
+#: admin/settings.php:453
+#@ ims
+msgid "Currency Symbol"
+msgstr "W&auml;hrungssymbol"
+
+#: admin/settings.php:457
+#@ ims
+msgid "Currency Symbol Location"
+msgstr "W&auml;hrungssymbol Platzierung"
+
+#: admin/settings.php:460
+#@ ims
+msgid "&#036;100"
+msgstr "&#036;100"
+
+#: admin/settings.php:462
+#@ ims
+msgid "&#036; 100"
+msgstr "&euro; 100"
+
+#: admin/settings.php:464
+#@ ims
+msgid "100&#036;"
+msgstr "100&euro;"
+
+#: admin/settings.php:466
+#@ ims
+msgid "100 &#036;"
+msgstr "100 &euro;"
+
+#: admin/settings.php:470
+#@ ims
+msgid "Default Currency:"
+msgstr "Standard W&auml;hrung:"
+
+#: admin/settings.php:479
+#@ ims
+msgid "Gateway"
+msgstr "Gateway"
+
+#: admin/settings.php:482
+#@ ims
+msgid "Email notification only"
+msgstr "nur E-Mail Benachrichtigung"
+
+#: admin/settings.php:483
+#@ ims
+msgid "Paypal Cart Sanbox"
+msgstr "PayPal Warenkorb Sandbox"
+
+#: admin/settings.php:484
+#@ ims
+msgid "Paypal Cart Production"
+msgstr "PayPal Warenkorb Produktiv"
+
+#: admin/settings.php:485
+#@ ims
+msgid "Google Checkout Sandbox"
+msgstr "Google Checkout Sandbox"
+
+#: admin/settings.php:486
+#@ ims
+msgid "Google Checkout Production"
+msgstr "Google Checkout Production"
+
+#: admin/settings.php:491
+#@ ims
+msgid "Country Code"
+msgstr "Ländercode"
+
+#: admin/settings.php:495
+#@ ims
+msgid "Google merchant ID"
+msgstr "Google Merchant ID"
+
+#: admin/settings.php:500
+#@ ims
+msgid "Merchant key"
+msgstr "Merchant Schlüssel"
+
+#: admin/settings.php:508
+#@ ims
+msgid "PayPal account email"
+msgstr "PayPal Account E-Mail"
+
+#: admin/settings.php:513
+#@ ims
+msgid "PayPal API signature"
+msgstr "PayPal API Signatur"
+
+#: admin/settings.php:518
+#@ ims
+msgid "PayPal API password"
+msgstr "PayPal API Passwort"
+
+#: admin/settings.php:525
+#@ ims
+msgid "Shipping Message"
+msgstr "Versandmitteilung"
+
+#: admin/settings.php:529
+#@ ims
+msgid "Required Fields"
+msgstr "Erforderliche Felder"
+
+#: admin/settings.php:566
+#@ ims
+msgid "Set tax to 0 to remove tax calculation."
+msgstr "Steuer auf 0 Setzen, um die Steuer aus der Berechnung zu entfernen"
+
+#: admin/settings.php:569
+#@ ims
+msgid "Order Notification email(s)"
+msgstr "Bestellbenachrichtigungs E-Mail(s)"
+
+#: admin/settings.php:573
+#@ ims
+msgid "Order Notification subject"
+msgstr "Bestellbenachrichtigung Betreff"
+
+#: admin/settings.php:577
+#@ ims
+msgid "Order Notification message"
+msgstr "Bestellbenachrichtigungsmitteilung"
+
+#: admin/settings.php:579
+#@ ims
+msgid "Tags:"
+msgstr "Tags:"
+
+#: admin/settings.php:584
+#@ ims
+msgid "Purchase Receipt"
+msgstr "Kaufbeleg"
+
+#: admin/settings.php:587
+#@ ims
+msgid "Thank you message and receipt information"
+msgstr "Dankestext und Empfangsbestätigung"
+
+#: admin/settings.php:591
+#@ ims
+msgid "Terms and Conditions"
+msgstr "Allgemeine Geschäftsbedingungen"
+
+#: admin/settings.php:623
+#@ ims
+msgid "Save User"
+msgstr "Benutzer speichern"
+
+#: admin/settings.php:636
+#@ ims
+msgid "Reset All Settings to defaults"
+msgstr "Alles Einstellungen zurücksetzen auf Ursprungszustand"
+
+#: admin/settings.php:642
+#@ ims
+msgid "UNINSTALL IMAGE STORE WARNING"
+msgstr "IMAGE STORE UNINSTALL WARNUNG"
+
+#: admin/settings.php:643
+#@ ims
+msgid "Once uninstalled,this cannot be undone.<strong> You should backup your database </strong> and image files before doing this,Just in case!!."
+msgstr "Die Deinstallation kann nicht rückgängig gemacht werden.<strong> Sie sollten unbedingt Ihre Datenbank </strong> und Dateien sichern, bevor Sie fortfahren."
+
+#: admin/settings.php:644
+#@ ims
+msgid "If you are not sure what are your doing,please don't do anything"
+msgstr "Falls Sie nicht sicher sind was Sie gerade machen, fahren Sie besser nicht fort."
+
+#: admin/settings.php:645
+#@ ims
+msgid "Uninstall Image Store"
+msgstr "ImageStore Deinstallieren"
+
+#: admin/settings.php:672
+#@ ims
+msgid "Select User"
+msgstr "Benutzer auswählen"
+
+#: admin/settings.php:682
+#@ ims
+msgid "No users to manage"
+msgstr "Keine Benutzer vorhanden"
+
+#: admin/template.php:18
+#@ ims
+msgid "Users"
+msgstr "Benutzer"
+
+#: admin/template.php:25
+#@ ims
+msgid "Cache cleared."
+msgstr "Cache geleert"
+
+#: admin/template.php:26
+#@ ims
+msgid "The user was updated."
+msgstr "Benutzer wurde aktualisiert"
+
+#: admin/template.php:27
+#@ ims
+msgid "All settings were reseted."
+msgstr "Alle Einstellungen wurden zurückgesetzt."
+
+#: admin/template.php:28
+#@ ims
+msgid "The settings were updated."
+msgstr "Die Einstellungen wurden aktualisiert"
+
+#: admin/template.php:31
+#@ ims
+msgid "A new customer was added successfully."
+msgstr "Neuer Kunde wurde erfolgreich hinzugefügt."
+
+#: admin/template.php:32
+#@ ims
+msgid "Customer updated."
+msgstr "Kunde aktualisiert."
+
+#: admin/template.php:33
+#@ ims
+msgid "Status successfully updated."
+msgstr "Status erfolgreich aktualisiert."
+
+#: admin/template.php:34
+#@ ims
+msgid "Customer deleted."
+msgstr "Kunde gelöscht."
+
+#: admin/template.php:35
+#, php-format
+#@ ims
+msgid "%d customers updated."
+msgstr "%d Kunden aktualisiert."
+
+#: admin/template.php:36
+#, php-format
+#@ ims
+msgid "%d customers deleted."
+msgstr "%d Kunden gelöscht."
+
+#: admin/template.php:39
+#@ ims
+msgid "Trash emptied"
+msgstr "Papierkorb geleert."
+
+#: admin/template.php:40
+#@ ims
+msgid "Order deleted."
+msgstr "Bestellung gelöscht."
+
+#: admin/template.php:41
+#@ ims
+msgid "Order status updated."
+msgstr "Bestellungsstatus aktualisiert."
+
+#: admin/template.php:42
+#@ ims
+msgid "Order moved to trash."
+msgstr "Bestellung in den Papierkorb verschoben."
+
+#: admin/template.php:43
+#, php-format
+#@ ims
+msgid "%d orders deleted."
+msgstr "%d Bestellungen gelöscht."
+
+#: admin/template.php:44
+#, php-format
+#@ ims
+msgid "Status updated on %d orders."
+msgstr "Status aktualisiert für %d Bestellungen."
+
+#: admin/template.php:45
+#, php-format
+#@ ims
+msgid "%d orders moved to trash."
+msgstr "%d Bestellungen in den Papierkorb verschoben."
+
+#: admin/template.php:48
+#@ ims
+msgid "Promotion updated."
+msgstr "Gutschein aktualisiert."
+
+#: admin/template.php:49
+#@ ims
+msgid "Promotion deleted."
+msgstr "Gutschein gelöscht."
+
+#: admin/template.php:50
+#@ ims
+msgid "New promotion added."
+msgstr "Neuer Gutschein hinzugefügt."
+
+#: admin/template.php:51
+#@ ims
+msgid "The package was updated."
+msgstr "Das Paket wurde aktualisiert."
+
+#: admin/template.php:52
+#@ ims
+msgid "The Price list was updated."
+msgstr "Die Preisliste wurde aktualisiert."
+
+#: admin/template.php:53
+#@ ims
+msgid "The new package was created."
+msgstr "Ein neues Paket wurde erstellt."
+
+#: admin/template.php:54
+#@ ims
+msgid "A new image size was created."
+msgstr "Eine neue Bildergröße wurde erstellt."
+
+#: admin/template.php:55
+#@ ims
+msgid "Image size list was updated."
+msgstr "Liste der Bildergrößen wurde aktualisiert."
+
+#: admin/template.php:56
+#@ ims
+msgid "The new list was created successfully."
+msgstr "Die neue Liste wurde erfolgreich hinzugefügt."
+
+#: admin/template.php:57
+#, php-format
+#@ ims
+msgid "%d promotions deleted."
+msgstr "%d Gutscheine gelöscht."
+
+#: admin/template.php:74
+#@ ims
+msgid "or help promote the imstore site."
+msgstr "oder helfen Sie, den Shop bekannter zu machen."
+
+#: admin/widget.php:19
+#@ ims
+msgid "Display images from unsecure galleries"
+msgstr "Bilder der öffentlichen Galerien anzeigen."
+
+#: admin/widget.php:50
+#@ ims
+msgid "Custom"
+msgstr "Eigene"
+
+#: admin/widget.php:54
+#@ ims
+msgid "Latest images"
+msgstr "Neuste Bilder"
+
+#: admin/widget.php:55
+#@ ims
+msgid "Oldest images"
+msgstr "Älteste Bilder"
+
+#: admin/widget.php:56
+#@ ims
+msgid "Random images"
+msgstr "Zufällige Bilder"
+
+#: admin/widget.php:64
+#@ ims
+msgid "Order by"
+msgstr "Reihenfolge nach"
+
+#: admin/widget.php:72
+#@ ims
+msgid "Show"
+msgstr "Zeige"
+
+#: admin/widget.php:80
+#@ ims
+msgid "How many images"
+msgstr "Wie viele Bilder"
+
+#: admin/widget.php:84
+#@ ims
+msgid "To be use with show gallery option"
+msgstr "Zur Verwendung mit Show-Galerie Option"
+
+#: includes/cart.php:27
+#@ ims
+msgid "Your shopping cart is empty!!"
+msgstr "Ihr Warenkorb ist leer."
+
+#: includes/cart.php:116
+#@ ims
+msgid "Update cart to apply promotional code."
+msgstr "Aktualisiere Warenkorb, um Gutschein-Code einzuberechnen."
+
+#: includes/cart.php:126
+#@ ims
+msgid "Local + "
+msgstr "National + "
+
+#: includes/cart.php:127
+#@ ims
+msgid "International + "
+msgstr "International + "
+
+#: includes/cart.php:165
+#@ ims
+msgid "Update Cart"
+msgstr "Aktualisiere Warenkorb"
+
+#: includes/cart.php:167
+#@ ims
+msgid "Check out"
+msgstr "Zu Kasse"
+
+#: includes/cart.php:199
+#@ ims
+msgid "Downloads:"
+msgstr "Downloads:"
+
+#: includes/cart.php:208
+#@ ims
+msgid "Promotion Code"
+msgstr "Gutschein Code"
+
+#: includes/cart.php:225
+#, php-format
+#@ ims
+msgid "Return to %s"
+msgstr "Zurück nach %s"
+
+#: includes/checkout.php:22
+#@ ims
+msgid "Shipping Information"
+msgstr "Informationen zum Versand"
+
+#: includes/checkout.php:62
+#@ ims
+msgid "Required fields"
+msgstr "Erforderliche Felder"
+
+#: includes/checkout.php:65
+#@ ims
+msgid "Order Information"
+msgstr "Bestellinformation"
+
+#: includes/checkout.php:67
+#@ ims
+msgid "Total items: "
+msgstr "Produkte Gesamt: "
+
+#: includes/checkout.php:68
+#@ ims
+msgid "Order total: "
+msgstr "Bestellung Gesamt: "
+
+#: includes/checkout.php:76
+#@ ims
+msgid "Submit Order"
+msgstr "Bestellung ausführen"
+
+#: includes/image-rss.php:60
+#@ ims
+msgid "No images have been added yet."
+msgstr "Es wurden noch keine Bilder hinzugefügt."
+
+#: includes/image-rss.php:114
+#@ ims
+msgid "image RSS"
+msgstr "Bilder RSS"
+
+#: includes/pricelist.php:20
+#: includes/store.php:761
+#@ ims
+msgid "Image size"
+msgstr "Bildgröße"
+
+#: includes/pricelist.php:23
+#@ ims
+msgid "Download"
+msgstr "Download"
+
+#: includes/pricelist.php:46
+#@ ims
+msgid "Included"
+msgstr "Inklusive"
+
+#: includes/pricelist.php:59
+#@ ims
+msgid "Color Options"
+msgstr "Farboptionen"
+
+#: includes/pricelist.php:63
+#@ ims
+msgid "Local"
+msgstr "National"
+
+#: includes/pricelist.php:70
+#@ ims
+msgid "International"
+msgstr "International"
+
+#: includes/pricelist.php:73
+#: includes/receipt.php:24
+#@ ims
+msgid "Black & White"
+msgstr "Schwarz & Weiß"
+
+#: includes/shortcode.php:186
+#: includes/slideshow.php:54
+#: includes/store.php:788
+#@ ims
+msgid "Black &amp; White"
+msgstr "Schwarz &amp; Wei&szlig;"
+
+#: includes/shortcode.php:192
+#: includes/slideshow.php:61
+#@ ims
+msgid "Back"
+msgstr "Zurück"
+
+#: includes/slideshow.php:48
+#: includes/store.php:502
+#: includes/store.php:794
+#@ ims
+msgid "Add to cart"
+msgstr "Zum Warenkorb hinzufügen"
+
+#: includes/slideshow.php:49
+#: includes/store.php:500
+#@ ims
+msgid "Add to favorites"
+msgstr "Zu den Favoriten hinzufügen"
+
+#: includes/store.php:86
+#@ ims
+msgid "Expires: "
+msgstr "Läuft ab: "
+
+#: includes/store.php:338
+#@ ims
+msgid "Successfully added to cart"
+msgstr "Erfolgreich zum Warenkorb hinzugefügt."
+
+#: includes/store.php:339
+#@ ims
+msgid "Cart successfully updated"
+msgstr "Warenkorb erfolgreich aktualisiert."
+
+#: includes/store.php:340
+#@ ims
+msgid "Your transaction has been cancel!!"
+msgstr "Ihre Transaktion wurde abgebrochen!"
+
+#: includes/store.php:447
+#@ default
+msgid "To view your images please enter your login information below:"
+msgstr "Um zur geschützen Galerie zu gelangen, geben Sie bitte hier Ihre Zugangsdaten ein:"
+
+#: includes/store.php:449
+#@ ims
+msgid "Gallery ID:"
+msgstr "Galerie ID:"
+
+#: includes/store.php:451
+#@ ims
+msgid "Password:"
+msgstr "Passwort:"
+
+#: includes/store.php:453
+#@ ims
+msgid "Log In"
+msgstr "Login"
+
+#: includes/store.php:482
+#: includes/store.php:484
+#@ ims
+msgid "Exit Gallery"
+msgstr "Galerie verlassen"
+
+#: includes/store.php:498
+#@ ims
+msgid "Select all"
+msgstr "Alles auswählen"
+
+#: includes/store.php:499
+#@ ims
+msgid "Unselect all"
+msgstr "Alles abwählen"
+
+#: includes/store.php:546
+#: includes/store.php:549
+#@ default
+msgid "Protected:"
+msgstr "Geschützt:"
+
+#: includes/store.php:559
+#@ ims
+msgid "Select"
+msgstr "Wählen"
+
+#: includes/store.php:571
+#@ smthem
+msgid "<span class=\"meta-nav\">&larr;</span> Previous images"
+msgstr "<span class=\"meta-nav\">&larr;</span> Vorherige Bilder"
+
+#: includes/store.php:572
+#@ smthem
+msgid "More images <span class=\"meta-nav\">&rarr;</span>"
+msgstr "Weitere Bilder <span class=\"meta-nav\">&rarr;</span>"
+
+#: includes/store.php:747
+#@ ims
+msgid "Selected"
+msgstr "Gewählte"
+
+#: includes/store.php:748
+#@ ims
+msgid "These preferences will be apply to all the selected images"
+msgstr "Diese Vorgaben werden auf alle ausgewählten Bilder angewendet."
+
+#: includes/store.php:749
+#@ ims
+msgid "There are no images selected"
+msgstr "Keine Bilder ausgewählt"
+
+#: includes/store.php:808
+#@ ims
+msgid "Please,enter a valid image quantity"
+msgstr "Bitte tragen Sie eine gültige Anzahl an Bildern ein"
+
+#: includes/store.php:811
+#@ ims
+msgid "Please,select an image size."
+msgstr "Bitte wählen Sie eine Bildgröße"
+
+#: includes/store.php:814
+#@ ims
+msgid "There was a problem adding the images to the cart."
+msgstr "Es gab ein Problem beim hinzufügen der Bild zum Warenkorb"
+
+#: includes/store.php:956
+#@ ims
+msgid "Please enter a gallery id. "
+msgstr "Bitte tragen Sie hier die Galerie ID ein "
+
+#: includes/store.php:959
+#@ ims
+msgid "Please enter a password. "
+msgstr "Bitte geben Sie das Passwort ein "
+
+#: includes/store.php:975
+#@ ims
+msgid "Gallery ID or password is incorrect. Please try again. "
+msgstr "Galerie ID oder Passwort inkorrekt. Bitte versuchen Sie es erneut. "
+
+#: includes/store.php:1002
+#@ ims
+msgid "Invalid promotion code"
+msgstr "Ungültiger Gutschein Code"
+
+#: includes/store.php:1024
+#@ ims
+msgid "Your current purchase doesn't meet the promotion requirements."
+msgstr "Ihre aktueller Kauf entspricht nicht die Gutschein Anforderungen."
+
+#: includes/store.php:1039
+#, php-format
+#@ ims
+msgid "The %s is required."
+msgstr "%s ist erforderlich."
+
+#: includes/store.php:1043
+#@ ims
+msgid "Wrong email format."
+msgstr "Falsches E-Mail Format."
+
