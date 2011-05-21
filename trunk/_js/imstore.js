@@ -3,6 +3,7 @@ jQuery(document).ready(function($){
 	//hide boxes
 	$('.ims-add-error').hide(); 
 	$('#ims-pricelist').hide();
+	
 	//slected label
 	slcttxt = $('.ims-image-count').html();
 	

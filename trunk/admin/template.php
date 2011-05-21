@@ -67,17 +67,20 @@ if(!empty($_POST['screen_options'])){
 <div class="wrap imstore">
 	
 	<?php if($page == 'ims-settings'){?>
-	<form action="https://www.paypal.com/cgi-bin/webscr" method="post" class="paypal-donate">
-		<div class="paypalinfo"> <img src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" alt="donate">
-		<input type="hidden" name="cmd" value="_s-xclick"> <input type="hidden" name="hosted_button_id" value="D64HFDXBBMXEG">
-		<input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_SM.gif" name="submit" alt="PayPal - The safer,easier way to pay online!">
-		<a href="http://imstore.xparkmedia.com/" title="image store wp plugin"><?php _e("or help promote the imstore site.",ImStore::domain)?></a>
-		</div>
-	</form>
-	<?php }?>
 	
 	<?php screen_icon($screens[$page][0])?>
 	<h2><?php echo $screens[$page][1]?></h2>
+	
+	<div class="adunitbox postbox">
+		<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=8SJEQXK5NK4ES" class="donate" title="Like the plugin? Please Donate">
+		<img src="<?php echo IMSTORE_URL ?>/_img/donate.jpg" alt="donate"></a>
+		<div id="adunit"><a href="#" class="hidead"><?php _e('Hide ad',ImStore::domain)?></a><script type="text/javascript"><!--
+		google_ad_client = "ca-pub-8321526637092371";google_ad_slot = "2870704299";google_ad_width = 468;google_ad_height = 60;//--></script>
+		<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+		</div>
+	</div>
+
+	<?php }?>
 	
 	<div id="poststuff" class="metabox-holder">
 		<?php if(!empty($_GET['ms'])){?><div class="updated fade" id="message"><p><?php echo $message[$_GET['ms']]?></p></div><?php }?>

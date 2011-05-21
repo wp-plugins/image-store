@@ -25,7 +25,8 @@ $labels = array(
 		'ims_sepia' => __('Sepia',ImStore::domain),
 );
 
-
+setcookie('ims_orderid_'.COOKIEHASH,'',time() - 31536000,COOKIEPATH,COOKIE_DOMAIN);
+unset($_COOKIE['ims_orderid_'.COOKIEHASH]); 
 ?>
 
 <div class="ims-innerbox">
@@ -55,6 +56,4 @@ $labels = array(
 	}
 	
 } ?>
-
-<?php setcookie('ims_orderid_'.COOKIEHASH,' ',time() - 31536000,COOKIEPATH,COOKIE_DOMAIN); //destroy cookie cart ?>
 <div class="cl"></div>

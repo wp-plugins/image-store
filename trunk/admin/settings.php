@@ -33,7 +33,7 @@ if(!empty($_POST['update'])){
 	if(!preg_match('/^\//',$_POST['galleriespath']) && isset($_POST['galleriespath']))
 		$_POST['galleriespath'] = "/{$_POST['galleriespath']}";
 	
-	foreach(array('securegalleries','colorbox','wplightbox','disablesepia','disablebw',) as $box)
+	foreach(array('securegalleries','downloadorig','colorbox','wplightbox','disablesepia','disablebw',) as $box)
 		if(empty($_POST[$box]) && isset($_POST['galleriespath'])) $_POST[$box] = '';
 	
 	if(isset($_POST['gateway'])){
@@ -212,11 +212,12 @@ $currencies = array (
 			<td scope="row"><label for="album_template"><?php _e('Album Template',ImStore::domain)?></label></td>
 			<td><select name="album_template" id="album_template"><option value=""><?php _e('Default Template',ImStore::domain); ?></option>
 			<option value="page.php" <?php selected('page.php',$this->_vr('album_template'))?>><?php _e('Page template',ImStore::domain); ?></option>
-			</select></td>
+			</select> <small><?php _e('Select the template that should be used to display albums.',ImStore::domain)?></small></td>
 		</tr>
 		<tr class="alternate">
 			<td scope="row"><label for="album_per_page"><?php _e('Albums per page',ImStore::domain)?></label></td>
-			<td><input type="text" name="album_per_page" id="album_per_page" value="<?php $this->_v('album_per_page')?>" /></td>
+			<td><input type="text" name="album_per_page" id="album_per_page" value="<?php $this->_v('album_per_page')?>" />
+			<small><?php _e('How many albums to display per page on the front-end',ImStore::domain)?></small></td>
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
@@ -261,25 +262,32 @@ $currencies = array (
 				<small><?php _e('Disable black and white color option.',ImStore::domain)?></small></td>
 		</tr>
 		<tr class="alternate">
-			<td scope="row"><label for="disablesepia"><?php _e('Disable Sepia ',ImStore::domain)?></label></td>
+			<td scope="row"><label for="disablesepia"><?php _e('Disable Sepia',ImStore::domain)?></label></td>
 			<td><input type="checkbox" name="disablesepia" id="disablesepia" value="1" <?php checked('1',$this->_vr('disablesepia'))?> />
 				<small><?php _e('Disable sepia color option.',ImStore::domain)?></small></td>
 		</tr>
 		<tr>
-			<td scope="row"><label for="gallery_template"><?php _e('Gallery Template',ImStore::domain)?></label></td>
-			<td><select name="gallery_template" id="gallery_template"><option value=""><?php _e('Default Template',ImStore::domain); ?></option>
-			<?php page_template_dropdown($this->_vr('gallery_template'))?></select></td>
+			<td scope="row"><label for="downloadorig"><?php _e('Download Original',ImStore::domain)?></label></td>
+			<td><input type="checkbox" name="downloadorig" id="downloadorig" value="1" <?php checked('1',$this->_vr('downloadorig'))?> />
+				<small><?php _e('Allow users to download original image if image size selected is not available',ImStore::domain)?></small></td>
 		</tr>
 		<tr class="alternate">
-			<td scope="row"><label for="imgs_per_page"><?php _e('Images per page',ImStore::domain)?></label></td>
-			<td><input type="text" name="imgs_per_page" id="imgs_per_page" value="<?php $this->_v('imgs_per_page')?>" /></td>
+			<td scope="row"><label for="gallery_template"><?php _e('Gallery Template',ImStore::domain)?></label></td>
+			<td><select name="gallery_template" id="gallery_template"><option value=""><?php _e('Default Template',ImStore::domain); ?></option>
+			<?php page_template_dropdown($this->_vr('gallery_template'))?></select>
+			 <small><?php _e('Select the template that should be used to display galleries.',ImStore::domain)?></small></td>
 		</tr>
 		<tr>
+			<td scope="row"><label for="imgs_per_page"><?php _e('Images per page',ImStore::domain)?></label></td>
+			<td><input type="text" name="imgs_per_page" id="imgs_per_page" value="<?php $this->_v('imgs_per_page')?>" />
+			<small><?php _e('How many images to display per page on the front-end',ImStore::domain)?></small></td>
+		</tr>
+		<tr class="alternate">
 			<td scope="row"><label for="galleryexpire"><?php _e('Galleries expire after ',ImStore::domain)?></label></td>
 			<td><input type="text" name="galleryexpire" id="galleryexpire" class="inputxm" value="<?php $this->_v('galleryexpire')?>"/>
 				(<?php _e('days')?>)</td>
 		</tr>
-		<tr class="alternate">
+		<tr>
 			<td valign="top"><?php _e('Sort images',ImStore::domain)?></td>
 			<td><label><input name="imgsortorder" type="radio" value="menu_order" <?php checked('menu_order',$this->_vr('imgsortorder'))?> />
 				<?php _e('Custom order',ImStore::domain)?></label><br />
@@ -290,7 +298,7 @@ $currencies = array (
 				<label><input name="imgsortorder" type="radio" value="post_date" <?php checked('post_date',$this->_vr('imgsortorder'))?>/>
 				<?php _e('Image date',ImStore::domain)?></label></td>
 		</tr>
-		<tr>
+		<tr class="alternate">
 			<td><?php _e('Sort direction',ImStore::domain)?>:</td>
 			<td><label><input name="imgsortdirect" type="radio" value="ASC" <?php checked('ASC',$this->_vr('imgsortdirect'))?>/>
 				<?php _e('Ascending',ImStore::domain)?></label>

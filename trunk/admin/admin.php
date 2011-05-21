@@ -244,7 +244,7 @@ class ImStoreAdmin{
 						'width'	=>$info[0],
 						'height'=>$info[1],
 						'url'	=> dirname($guid)."/$imgname",
-						'path'	=> dirname($filepath)."/$imgname",
+						'path'	=> $despath."/$imgname",
 					);
 					$metadata['sizes'][$size['name']] = $data;
 					$metadata['image_meta'] = wp_read_image_metadata($filepath);
@@ -557,12 +557,10 @@ class ImStoreAdmin{
 	*@return void
 	*@since 2.0.1
 	*/
-	function decrypt_id($string) {
-   		$parts 	= base64_decode(urldecode($string));
-		$hex 	= substr($parts,6);
-		$int 	= hexdec($hex);
-		$part1  = substr($parts,0,6);
-		return (substr(sha1("imstore".$int.SECURE_AUTH_KEY),0,6) === $part1) ? $int : false;
+	function decrypt_id($id) {
+		$md5_8 = substr($id, 0, 8);
+		$real_id = hexdec(substr($id, 8));
+		return ($md5_8==substr(md5($real_id), 0, 8)) ? $real_id : 0;
     }
 	
 	/**
@@ -771,8 +769,9 @@ class ImStoreAdmin{
 	*/
 	function load_admin_styles(){
 		global $current_screen;
-		if($current_screen->id == 'ims_gallery' || $_GET['page'] == 'ims-settings' 
-			|| $_GET['page'] == 'ims-pricing' || $_GET['page'] == 'ims-sales' || $_GET['page'] == 'ims-customers'){
+		if($current_screen->id == 'ims_gallery' || $_GET['page'] == 'ims-settings' || $current_screen->id == 'edit-ims_album' || 
+		$current_screen->id == 'edit-ims_gallery' || $_GET['page'] == 'ims-pricing'|| $_GET['page'] == 'ims-sales' 
+		|| $_GET['page'] == 'ims-customers'){
 			wp_enqueue_style('thickbox');
 			wp_enqueue_style('adminstyles',IMSTORE_URL.'_css/admin.css',false,ImStore::version,'all');
 			wp_enqueue_style('datepicker',IMSTORE_URL.'_css/jquery-datepicker.css',false,ImStore::version,'all');

@@ -1,3 +1,7 @@
+ <Files image.php>
+   ExpiresDefault "access plus 900 seconds"
+ </Files>
+ 
   RewriteEngine on
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

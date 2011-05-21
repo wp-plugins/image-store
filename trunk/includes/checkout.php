@@ -77,7 +77,7 @@ $req  = implode(' ',(array)$this->opts['requiredfields']);
 		</div>
 		<input type="hidden" name="custom" value="<?php echo $_COOKIE['ims_orderid_'.COOKIEHASH]?>"/>
 		<input type="hidden" name="mc_currency" id="mc_currency" value="<?php echo $this->opts['currency'] ?>" />
-		<input type="hidden" name="payment_total" id="payment_total" value="<?php echo $this->cart['total']?>" />
+		<input type="hidden" name="mc_gross" id="mc_gross" value="<?php echo $this->cart['total']?>" />
 		<input type="hidden" name="num_cart_items" id="num_cart_items" value="<?php echo $this->cart['items'] ?>" />
 		<input type="hidden" name="_wpnonce" id="_wpnonce" value="<?php echo wp_create_nonce("ims_submit_order")?>" />
 		<input type="hidden" name="payment_status" id="payment_status" value="<?php _e('Pending',ImStore::domain)?>" />

@@ -36,16 +36,16 @@ class ImStoreDownloadImage{
 		if(empty($_REQUEST['img'])) die();
 		
 		global $ImStore; 
-		if(is_admin()) $this->attachment = get_post_meta($ImStore->admin->decrypt_id($_REQUEST['img']),'_wp_attachment_metadata',true);
-		else $this->attachment = get_post_meta($ImStore->store->decrypt_id($_REQUEST['img']),'_wp_attachment_metadata',true);
-		if($this->attachment['sizes'][$_GET['sz']]['url']) 
+		$this->store = (is_admin()) ? $ImStore->admin : $ImStore->store;
+		$this->attachment = get_post_meta($this->store->decrypt_id($_REQUEST['img']),'_wp_attachment_metadata',true);
+		
+		if($this->attachment['sizes'][$_GET['sz']]['url']){
 			$this->image_dir = str_ireplace(WP_CONTENT_URL,WP_CONTENT_DIR,$this->attachment['sizes'][$_GET['sz']]['url']);
-		elseif($this->attachment['sizes']['preview']['url']) 
-			$this->image_dir = str_ireplace(WP_CONTENT_URL,WP_CONTENT_DIR,$this->attachment['sizes']['preview']['url']);
-		
-		if(!file_exists($this->image_dir)) die(); 
+		}else{
+			if($this->store->opts['downloadorig']) $this->image_dir = $this->attachment['path'];
+			else  $this->image_dir = str_ireplace(WP_CONTENT_URL,WP_CONTENT_DIR,$this->attachment['sizes']['preview']['url']);
+		}
 		$this->display_image();
-		
 	}
 	
 	
@@ -73,6 +73,8 @@ class ImStoreDownloadImage{
 		header('Content-Type: ' . $filetype['type']);
 		header('Content-Disposition: attachment; filename=' . $filename);
 
+		if(!$_REQUEST['c']) echo file_get_contents($this->image_dir); die();
+		
 		
 		switch($filetype['ext']){
 			case "jpg":
