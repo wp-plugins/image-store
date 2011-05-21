@@ -5,6 +5,9 @@ jQuery(document).ready(function($){
 	$('.ims-box').eq(0).show();
 	$('.ims-tabs li').eq(0).addClass('current');
 	
+	//setTimeout(function(){$("#adunit").hide()},5000)
+	//$(".hidead").click(function(){$("#adunit").hide();});
+
 	//tabs actions
 	$('.ims-tabs li').click(function(){
 		$('#message').remove();

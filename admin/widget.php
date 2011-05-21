@@ -109,7 +109,7 @@ class ImStoreWidget extends WP_Widget {
 		}else{ $order = $show; }
 		if($limit) $limit = "LIMIT $limit";
 		$result = $wpdb->get_results($wpdb->prepare(
-			"SELECT ID,post_title,guid,post_excerpt
+			"SELECT ID,post_title,guid,post_parent,post_excerpt
 			FROM $wpdb->posts AS p 
 			WHERE post_type = 'ims_image'
 			AND post_status = 'publish'
@@ -138,7 +138,7 @@ class ImStoreWidget extends WP_Widget {
 		foreach((array)$images as $image){
 			$enc = $ImStore->store->encrypt_id($image->ID);	
 			$output .= "<{$icontag}>";
-			$output .= '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;mini=1".'" class="ims-widget-img" alt="'.$image->post_title .'" />';			$output .= "</{$icontag}>";
+			$output .= '<a href="'.get_permalink($image->post_parent).'"><img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;mini=1".'" class="ims-widget-img" alt="'.$image->post_title .'" /></a>';			$output .= "</{$icontag}>";
 		}
 		echo $output .= "</{$itemtag}>";
 	}

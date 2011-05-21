@@ -4,10 +4,10 @@ Plugin Name: Image Store
 Plugin URI: http://imstore.xparkmedia.com
 Description: Your very own image store within wordpress "ImStore"
 Author: Hafid R. Trujillo Huizar
-Version: 2.0.9
+Version: 2.1.0
 Author URI:http://www.xparkmedia.com
 Requires at least: 3.0.0
-Tested up to: 3.1.0
+Tested up to: 3.2
 
 Copyright 2010-2011 by Hafid Trujillo http://www.xparkmedia.com
 
@@ -42,7 +42,7 @@ class ImStore{
 	*Make sure that new language(.mo) files have 'ims-' as base name
 	*/
 	const domain	= 'ims';
-	const version	= '2.0.9';
+	const version	= '2.1.0';
 	
 	/**
 	*Constructor
@@ -214,9 +214,6 @@ class ImStore{
 		$new_rules = array(
 			__('galleries',ImStore::domain)."/imspaypalipn/?([0-9]+)/?$" =>
 			"index.php&paypalipn=".$wp_rewrite->preg_index(1),
-			__('galleries',ImStore::domain)."/([^/]+)/logout/?([^/]+)?$" => 
-			"index.php&ims_gallery=".$wp_rewrite->preg_index(1).
-			'&imslogout='.$wp_rewrite->preg_index(2),
 		);
 
 		foreach($this->pages as $id => $page){
@@ -237,12 +234,12 @@ class ImStore{
 			$new_rules[__('galleries',ImStore::domain)."/([^/]+)/$slug/?$"] = 
 			"index.php?ims_gallery=".$wp_rewrite->preg_index(1)."&imspage=$id";
 
-			$new_rules[__('galleries',ImStore::domain)."/([^/]+)/$slug/feed/(feed|rdf|rss|rss2|atom|imstore)/?$"] = 
+			$new_rules[__('galleries',ImStore::domain)."/([^/]+)/$slug/feed/?$"] = 
 			"index.php?ims_gallery=".$wp_rewrite->preg_index(1)."&imspage=$id&feed=".$wp_rewrite->preg_index(2);
 
 		}
 		$wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
-		$wp_rewrite->rules["/page/?([0-9]+)/?$"] =  "index.php?paged=".$wp_rewrite->preg_index(1);  //print_r($wp_rewrite);
+		$wp_rewrite->rules["/page/?([0-9]+)/?$"] =  "index.php?paged=".$wp_rewrite->preg_index(1); //print_r($wp_rewrite);
 		return $wp_rewrite;
 	}
 	

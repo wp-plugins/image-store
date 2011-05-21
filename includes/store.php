@@ -205,27 +205,25 @@ class ImStoreFront{
 	/**
 	*Encrypt image ID for downlaods
 	*
-	*@return void
+	*@param $id unit
+	*@return string
 	*@since 2.0.1
 	*/
-	function encrypt_id($int) {
-    	$HashedChecksum = substr(sha1("imstore".$int.SECURE_AUTH_KEY),0,6);
-    	$hex = dechex($int);
-    	return urlencode(base64_encode($HashedChecksum.$hex));
+	function encrypt_id($id) {
+    	return substr(md5($id), 0, 8).dechex($id);
     }
 	
 	/**
 	*Dencrypt image ID for downlaods
 	*
-	*@return void
+	*@param $id string
+	*@return unit
 	*@since 2.0.1
 	*/
-	function decrypt_id($string) {
-   		$parts 	= base64_decode(urldecode($string));
-		$hex 	= substr($parts,6);
-		$int 	= hexdec($hex);
-		$part1  = substr($parts,0,6);
-		return (substr(sha1("imstore".$int.SECURE_AUTH_KEY),0,6) === $part1) ? $int : false;
+	function decrypt_id($id) {
+		$md5_8 = substr($id, 0, 8);
+		$real_id = hexdec(substr($id, 8));
+		return ($md5_8==substr(md5($real_id), 0, 8)) ? $real_id : 0;
     }
 
 	/**
@@ -444,7 +442,7 @@ class ImStoreFront{
 		$nonce 	= wp_create_nonce('ims_access_form');
 
 		$output = '<form action="'.get_permalink($post->ID).'" method="post">
-		<p class="message login">'.__("To view your images please enter your login information below:").'</p>
+		<p class="message login">'.__("To view your images please enter your login information below:",ImStore::domain).'</p>
 			<div class="ims-fields">
 				<label for="'.$glabel.'">'.__("Gallery ID:",ImStore::domain).'</label> <input name="'.$glabel.'" id="'.$glabel.'" />
 				<span class="linebreak"></span>
@@ -472,6 +470,7 @@ class ImStoreFront{
 			if($key == 6 || $key == 7) continue;
 			if($key == 1 && $this->opts['hidephoto']) continue;
 			if($key == 2 && $this->opts['hideslideshow']) continue;
+			$key = (isset($_POST['enotification']))? false : $key;
 			
 			$title 	= sanitize_title($page);
 			$css 	= ($key == $this->imspage ||($key == 1 && empty($this->imspage)))?' current':'';
@@ -533,8 +532,6 @@ class ImStoreFront{
 		$itemtag 	= 'ul';
 		$icontag 	= 'li';
 		$captiontag = 'div';
-		$columns 	= intval($this->opts['displaycolmns']);
-		$nonce 		= '_wpnonce='.wp_create_nonce('ims_secure_img');
 		$output 	= "<{$itemtag} class='ims-gallery'>";
 		foreach($this->attachments as $image){
 			$enc = $this->encrypt_id($image->ID);	
@@ -548,10 +545,10 @@ class ImStoreFront{
 				$tagatts	= ' class="ims-colorbox" rel="gallery" ';
 				$title 		= str_replace(__('Protected:'),'',$image->post_title);
 				$caption	= ($this->is_galleries)?$title:$image->post_excerpt ;
-				$link 		= IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;w=".$this->opts['watermark'];
+				$link 		= IMSTORE_URL."image.php?img={$enc}&amp;w=".$this->opts['watermark'];
 			}
 			
-			$imagetag = '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;thumb=1".'" title="'.esc_attr($caption).'" alt="'.esc_attr($title).'" />'; 
+			$imagetag = '<img src="'.IMSTORE_URL."image.php?img={$enc}&amp;thumb=1".'" title="'.esc_attr($caption).'" alt="'.esc_attr($title).'" />'; 
 			$output .= "<{$icontag}>";
 			$output .= '<a href="'.$link.'"'.$tagatts.' title="'.esc_attr($title).'">'.$imagetag.'</a>';
 			$output .= "<{$captiontag} class='gallery-caption'>".wptexturize($title);
@@ -669,10 +666,11 @@ class ImStoreFront{
 		,$this->gallery_id));
 		
 		if(empty($this->attachments)) return;
-		$wp_query->post_count		= count($this->attachments);
-		$wp_query->found_posts		= $wpdb->get_var('SELECT FOUND_ROWS()');
-		$wp_query->max_num_pages	= ceil($wp_query->found_posts / $post_per_page);
-		
+		if($this->imspage == 1 ){
+			$wp_query->post_count		= count($this->attachments);
+			$wp_query->found_posts		= $wpdb->get_var('SELECT FOUND_ROWS()');
+			$wp_query->max_num_pages	= ceil($wp_query->found_posts / $post_per_page);
+		}
 		foreach($this->attachments as $post){
 			$post->meta_value = unserialize($post->meta_value);
 			$images[] = $post;
@@ -1043,7 +1041,7 @@ class ImStoreFront{
 			$this->error .= __('Wrong email format.',ImStore::domain);
 		
 		if(!empty($this->error)) return;
-		if($_POST['payment_total'] != $this->cart['total']) return false;
+		if($_POST['mc_gross'] != $this->cart['total']) return false;
 		if($_POST['mc_currency'] != $this->opts['currency']) return false;
 		
 		wp_update_post(array(

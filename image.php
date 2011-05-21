@@ -17,12 +17,6 @@ define('DOING_AJAX',true);
 //load wp
 require_once '../../../wp-load.php';
 
-//make sure that the request came from the same domain	
-/*if(stripos($_SERVER['HTTP_REFERER'],get_bloginfo('siteurl')) === false) 
-	die();
-
-if(!wp_verify_nonce($_REQUEST["_wpnonce"],'ims_secure_img'))
-	die();*/
 	
 class ImStoreImage{
 	
@@ -66,10 +60,7 @@ class ImStoreImage{
 	*/
 	function display_image(){
 		
-		//use to process big images
-		ini_set('memory_limit','256M');
-		ini_set('set_time_limit','1000');
-		
+		$opts = get_option('ims_front_options');
 		$filetype 	= wp_check_filetype(basename($this->image_dir));
 		$modified 	= gmdate("D,d M Y H:i:s",filemtime($this->image_dir));
 		$expired	= gmdate("D,d M Y H:i:s",(filemtime($this->image_dir) + strtotime('+1 month')));
@@ -78,7 +69,14 @@ class ImStoreImage{
 		header('Last-Modified:'.$modified);
 		header('Content-Type:'.$filetype['type']);
 		header('Cache-Control:max-age='.strtotime('+1 month').',must-revalidate');
-		//header('Cache-control:no-cache,no-store,must-revalidate,max-age=0');
+				
+		if($_REQUEST['thumb'] || $_REQUEST['mini'] || !$opts['watermark']){
+			echo file_get_contents($this->image_dir); die();
+		}
+		
+		//use to process big images
+		ini_set('memory_limit','256M');
+		ini_set('set_time_limit','1000');
 		
 		switch($filetype['ext']){
 			case "jpg":
@@ -93,10 +91,8 @@ class ImStoreImage{
 				break;
 		}
 		
-		
 		//add water mark		
-		$opts = get_option('ims_front_options');
-		if($opts['watermark'] && !($_REQUEST['thumb'] || $_REQUEST['mini'])){
+		if($opts['watermark']){
 			
 			//text watermark
 			if($opts['watermark'] == 1){

@@ -33,10 +33,8 @@ class ImStoreShortCode{
 	*@return void
 	*@since 2.0.4
 	*/
-	function encrypt_id($int) {
-    	$HashedChecksum = substr(sha1("imstore".$int.SECURE_AUTH_KEY),0,6);
-    	$hex = dechex($int);
-    	return urlencode(base64_encode($HashedChecksum.$hex));
+	function encrypt_id($id){
+		return substr(md5($id), 0, 8).dechex($id);
     }
 	
 	/**
@@ -119,24 +117,22 @@ class ImStoreShortCode{
 	 * @since 0.5.3 
 	 */
 	function display_galleries($atts){ 
-		
 		extract($atts);
-		
 		$itemtag 	= 'ul';
 		$icontag 	= 'li';
 		$captiontag = 'div';
-		$nonce 		= '_wpnonce='.wp_create_nonce('ims_secure_img');
-		
 		$output = "<{$itemtag} class='ims-gallery'>";
 		foreach($this->attachments as $image){
-
 			$link 		= IMSTORE_URL."image.php?$nonce&amp;img=".$this->encrypt_id($image->ID);
-			$title_att 	= ($caption)? 'title="'.esc_attr($image->post_title).'" name="'.esc_attr($image->post_excerpt).'"':' ' ;
+			$title_att 	= ($caption)? 'title="'.esc_attr($image->post_excerpt).'"':' ' ;
 			$tagatts 	= ($lightbox)?' class="ims-colorbox" rel="gallery" ':' class="ims-image" rel="image" ';
-			$imagetag 	= '<img src="'.$image->meta_value['sizes']['thumbnail']['url'].'" alt="'.$image->post_title.'" />'; 
+			$imagetag 	= '<img src="'.$image->meta_value['sizes']['thumbnail']['url'].'"'.$title_att.'alt="'.$image->post_title.'" />'; 
 			
 			$output .= "<{$icontag}>";
 			$output .= '<a href="'.$link.'"'. $tagatts.$title_att .' >'.$imagetag.'</a>';
+			$output .= "<{$captiontag} class='gallery-caption'>";
+			$output .= ($caption) ? wptexturize($image->post_excerpt) : wptexturize($image->post_title) ;
+			$output .= "</{$captiontag}></{$icontag}>";
 			$output .= "</{$icontag}>";
 		}
 		return $output .= "</{$itemtag}>";

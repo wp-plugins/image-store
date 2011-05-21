@@ -152,7 +152,7 @@ function ajax_ims_flash_image_data(){
 			'width'	=>$info[0],
 			'height'=>$info[1],
 			'url'	=> dirname($guid)."/$imgname",
-			'path'	=> dirname($abspath)."/$imgname",
+			'path'	=> $despath ."/$imgname",
 		);
 		$metadata['sizes'][$img_size['name']] = $data;
 		$metadata['image_meta'] = wp_read_image_metadata($abspath);		

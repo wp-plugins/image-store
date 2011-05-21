@@ -28,9 +28,12 @@ class ImStoreFeeds{
 	 *@since 0.5.3 
 	 */
 	function print_rss_link(){
-		global $ImStore,$post;
-		if($ImStore->store->opts['mediarss'] && $post->post_type == "ims_gallery")
+		global $ImStore,$pos;
+		$album = get_query_var('ims_album');
+		if($ImStore->store->opts['mediarss'] && $post->post_type == "ims_gallery" && is_single())
 			echo '<link rel="alternate" type="application/rss+xml" title="gallery feed" href="'.$this->get_feed_url().'" />'."\n";
+		elseif(is_tax("ims_album")&&$album)
+			echo '<link rel="alternate" type="application/rss+xml" title="album feed" href="'.trim(get_term_link($album,"ims_album"),'/').'/feed" />'."\n";
 	}
 	
 	/**
@@ -41,8 +44,7 @@ class ImStoreFeeds{
 	*/
 	function get_feed_url(){
 		global $ImStore;
-		if($ImStore->permalinks) $link = get_permalink()."/feed/imstore";
-		else $link = get_permalink()."&amp;feed=imstore";
+		$link  = ($ImStore->permalinks) ? trim(get_permalink(),'/')."/feed/imstore": get_permalink()."&amp;feed=imstore";
 		return $link;
 	}
 	
