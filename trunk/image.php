@@ -70,7 +70,7 @@ class ImStoreImage{
 		header('Content-Type:'.$filetype['type']);
 		header('Cache-Control:max-age='.strtotime('+1 month').',must-revalidate');
 				
-		if($_REQUEST['thumb'] || $_REQUEST['mini'] || !$opts['watermark']){
+		if($_REQUEST['thumb'] || $_REQUEST['mini']){
 			echo file_get_contents($this->image_dir); die();
 		}
 		
