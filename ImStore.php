@@ -98,7 +98,7 @@ class ImStore{
 		$key = substr(preg_replace("([^a-zA-Z0-9])",'',NONCE_KEY),0,15);
 		if(!file_exists(IMSTORE_ABSPATH."/admin/key/{$key}.txt")){
 			@mkdir(IMSTORE_ABSPATH."/admin/key/");
-			$fh = @fopen(IMSTORE_ABSPATH."/admin/key/{$key}.txt", 'w'); @fclose($fh);
+			$fh = @fopen(IMSTORE_ABSPATH."/admin/key/{$key}.txt", 'w');  @fclose($fh);
 		}
 	}
 			
