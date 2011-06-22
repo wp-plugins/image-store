@@ -33,7 +33,7 @@ class ImStoreImage{
 				if($obj == '.' || $obj == '..'){ continue;
 				}else{ $this->key = current(explode('.',$obj)); break;}
 			}
-			closedir($dh);
+			@closedir($dh);
 		}
 		
 		if(empty($_GET['i'])) die();
