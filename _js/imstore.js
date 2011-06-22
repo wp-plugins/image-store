@@ -58,7 +58,7 @@ jQuery(document).ready(function($){
 	
 	// add to image to cart
 	$(".add-images-to-cart a").colorbox({
-		width:"75%",height: '280px',inline:true,href:"#ims-pricelist",
+		width:"80%",height: '280px',inline:true,href:"#ims-pricelist",
 		onClosed: function(){ 
 			$('.ims-add-error').hide();
 			$('#ims-pricelist').hide(); 
@@ -133,7 +133,7 @@ jQuery(document).ready(function($){
 	
 	// add a single image to favorites
 	$('.add-to-favorite-single a').click(function(){
-		url = $('.image-wrapper img').attr('src').replace('&c=s','').replace('&c=g','').split('&img=');
+		url = $('.image-wrapper img').attr('src').replace('&c=s','').replace('&c=g','').split('&id=');
 		$.get(imstore.imstoreurl+'ajax.php',{_wpnonce:imstore.ajaxnonce,galid:imstore.galid,action:"favorites",imgids:url[1]},
 		function(data){
 			response = data.split('|');

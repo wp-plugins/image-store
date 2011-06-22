@@ -12,7 +12,6 @@
 // Stop direct access of the file
 if(preg_match('#'.basename(__FILE__).'#',$_SERVER['PHP_SELF'])) 
 	die();
-
 ?>
 
 <div class="ims-imgs-nav">
@@ -21,12 +20,18 @@ if(preg_match('#'.basename(__FILE__).'#',$_SERVER['PHP_SELF']))
 		<?php if(!empty($this->attachments)){
 			$nonce = '_wpnonce='.wp_create_nonce('ims_secure_img');
 			foreach($this->attachments as $image){
+				
 				$title = $image->post_title;
-				$enc = $this->encrypt_id($image->ID);	
-				$w = $image->meta_value['sizes']['mini']['width'];
-				$h = $image->meta_value['sizes']['mini']['height'];
-				$imagetag = '<img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;mini=1".'" width="'.$w.'" height="'.$h.'" alt="'. $title.'" />'; 
-				echo '<li class="ims-thumb"><a class="thumb" href="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}".'" title="'.esc_attr($image->post_title).'" rel="nofollow">'.$imagetag.'</a>
+				$base = IMSTORE_URL."image.php?i=";
+				$enc  = $this->encrypt_id($image->ID);
+				$mini = $image->meta_value['sizes']['mini'];
+				$prev = $image->meta_value['sizes']['preview'];
+				$size = ' width="'.$mini['width'].'" height="'.$mini['height'].'"';
+				$url  = $base.$this->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$mini['path']));
+				$link = $base.$this->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$prev['path']))."&amp;p=1&amp;id=$enc";
+				$imagetag = '<img src="'.$url.'" title="'.esc_attr($image->post_excerpt).'" alt="'.esc_attr($title).'"'.$size.' />'; 
+
+				echo '<li class="ims-thumb"><a class="thumb" href="'.$link.'" title="'.esc_attr($image->post_title).'">'.$imagetag.'</a>
 				<span class="caption">'.$image->post_excerpt.'</span></li>';
 			}
 		}?>

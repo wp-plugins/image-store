@@ -4,7 +4,7 @@ Plugin Name: Image Store
 Plugin URI: http://imstore.xparkmedia.com
 Description: Your very own image store within wordpress "ImStore"
 Author: Hafid R. Trujillo Huizar
-Version: 2.1.0
+Version: 2.1.1
 Author URI:http://www.xparkmedia.com
 Requires at least: 3.0.0
 Tested up to: 3.2
@@ -42,7 +42,7 @@ class ImStore{
 	*Make sure that new language(.mo) files have 'ims-' as base name
 	*/
 	const domain	= 'ims';
-	const version	= '2.1.0';
+	const version	= '2.1.1';
 	
 	/**
 	*Constructor
@@ -66,7 +66,6 @@ class ImStore{
 		$this->pages[7] = __('Shipping',ImStore::domain);
 		
 		// register hooks
-		//if($wp_version >= 3.1) register_update_hook(IMSTORE_FILE_NAME,array(&$this,'update'));
 		register_activation_hook(IMSTORE_FILE_NAME,array(&$this,'activate'));
 		register_deactivation_hook(IMSTORE_FILE_NAME,array(&$this,'deactivate'));
 		
@@ -95,6 +94,12 @@ class ImStore{
 		if(!defined('WP_EDIT_URL')) define('WP_EDIT_URL',admin_url()."/post.php?post=");
 		if(!defined('WP_CONTENT_URL')) define('WP_CONTENT_URL',WP_SITE_URL.'/wp-content');
 		if(!defined('WP_TEMPLATE_DIR')) define('WP_TEMPLATE_DIR',get_template_directory());
+		
+		$key = substr(preg_replace("([^a-zA-Z0-9])",'',NONCE_KEY),0,15);
+		if(!file_exists(IMSTORE_ABSPATH."/admin/key/{$key}.txt")){
+			@mkdir(IMSTORE_ABSPATH."/admin/key/");
+			$fh = fopen(IMSTORE_ABSPATH."/admin/key/{$key}.txt", 'w'); fclose($fh);
+		}
 	}
 			
 	/**
@@ -204,7 +209,9 @@ class ImStore{
 	*@since 0.5.0 
 	*/
 	 function add_rewrite_rules($wp_rewrite){
-		 
+		
+		if(is_admin()) return $wp_rewrite;
+		
 		$wp_rewrite->add_rewrite_tag("%gallery%",'([^/]+)',"ims_gallery=");
 		$wp_rewrite->add_rewrite_tag('%paypalipn%','([^/]+)','paypalipn=');
 		$wp_rewrite->add_rewrite_tag('%imslogout%','([^/]+)','imslogout=');
@@ -249,7 +256,6 @@ class ImStore{
 		$page = ($p = get_query_var('imspage')) ? $this->pages[$p] : $this->pages[1];
 		return str_replace('%imspage%',sanitize_title($page),$permalink);
 	}
-	
 
 	/**
 	*Initial actions
@@ -258,6 +264,7 @@ class ImStore{
 	*@since 0.5.0 
 	*/
 	function int_actions(){
+		register_post_type('ims_image',array('public'=>true,'show_ui'=>false,)); 
 		add_feed('imstore',array(&$this,'create_feed'));
 		$searchable = (get_option('ims_searchable'))? false : true;
 		register_post_type('ims_gallery',array(
@@ -285,10 +292,9 @@ class ImStore{
 			'query_var'			=> 'ims_gallery',
 			'menu_icon' 		=> IMSTORE_URL.'_img/imstore.png',
 			'rewrite' 			=> array('slug' => __('galleries',ImStore::domain),'with_front'=>false),
-			'supports' 			=> array('title','comments','author'),
+			'supports' 			=> array('title','comments','author','excerpt'),
 			'taxonomies'		=> array('ims_album')
 		));
-		
 		register_taxonomy('ims_album',array('ims_gallery'),array(
 			'labels' => array(
 				'name' 			=> _x( 'Albums', 'taxonomy general name',ImStore::domain),
@@ -309,13 +315,11 @@ class ImStore{
 			'show_in_nav_menus' => true,
 			'rewrite' 		=> array('slug' =>__('albums',ImStore::domain)),
 		));
-		
 		$statuses = array(
 			'expire' 	=> __('Expired',ImStore::domain),
 			'active' 	=> __('Active',ImStore::domain),
 			'inative'	=> __('Inative',ImStore::domain),
 		);
-		
 		foreach($statuses as $status => $label){
 			register_post_status($status,array(
 				'protected' 	=> true,

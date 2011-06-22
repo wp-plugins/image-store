@@ -13,6 +13,17 @@
 if(preg_match('#'.basename(__FILE__).'#',$_SERVER['PHP_SELF'])) 
 	die();
 
+if(is_user_logged_in() && current_user_can('customer') && empty($_POST['enoticecheckout'])){
+	$user= wp_get_current_user(); 
+	$_POST['last_name'] = $user->last_name;
+	$_POST['first_name'] = $user->first_name;
+	$_POST['user_email'] = $user->user_email;
+	$_POST['address_street'] = $user->ims_address;
+	$_POST['address_city'] = $user->ims_address;
+	$_POST['address_state'] = $user->ims_state;
+	$_POST['address_zip'] = $user->ims_zip;
+	$_POST['ims_phone'] = $user->ims_phone;
+}
 $req  = implode(' ',(array)$this->opts['requiredfields']); 
 
 ?>

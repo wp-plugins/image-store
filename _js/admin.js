@@ -226,7 +226,12 @@ jQuery(document).ready(function($){
 	function ims_file_selected(){
 		$('#message').remove();
 		folder = 'wp-content/'+$('#_ims_folder_path').val();
-		$('#imagefiles').uploadifySettings('folder',folder);
+		$('#imagefiles').uploadifySettings('folder',folder); 
+		if ( '1' == $('#auto_draft').val() ) {
+			autosaveLast = '';
+			$('#auto_draft').val(2);
+			autosave()
+		}
 	};
 	
 	// run every time a file is uploaded
@@ -262,10 +267,12 @@ jQuery(document).ready(function($){
 		});
 		
 		if($('li.statustrash').length < 1)
-		$('<li class="statustrash"> | <a href="'+document.location.href+'&status=trash">'+imslocal.trash
-		 +' <span class="count">(<em>1</em>)</span></a></li>').appendTo('.subsubsub');
+		$('<li class="statustrash"> | <a href="'+userSettings.url+'wp-admin/post.php?post='+$('#post_ID').val()
+		+'&action=edit&status=trash">'+imslocal.trash +' <span class="count">(<em>1</em>)</span></a></li>').appendTo('.subsubsub');
 		else $('li.statustrash a em').html(parseInt($('li.statustrash a em').text())+1);
-		$('li.statuspublish a em').html(parseInt($('li.statuspublish a em').text())-1);
+		if(parseInt($('li.statuspublish a em').text())-1 > 0 ) 
+			$('li.statuspublish a em').html(parseInt($('li.statuspublish a em').text())-1);
+		else $('li.statuspublish').remove();
 		return false;
 	});
 	
@@ -280,11 +287,12 @@ jQuery(document).ready(function($){
 		});
 		
 		if($('li.statuspublish').length < 1)
-		$('<li class="statuspublish"><a href="'+document.location.href+'">'+imslocal.publish
+		$('<li class="statuspublish"><a href="'+document.location.href+'&status=publish">'+imslocal.publish
 		 +' <span class="count">(<em>1</em>)</span></a> | </li>').prependTo('.subsubsub');
 		else $('li.statuspublish a em').html(parseInt($('li.statuspublish a em').text())+1);
-		
-		$('li.statustrash a em').html(parseInt($('li.statustrash a em').text())-1);
+		if(parseInt($('li.statustrash a em').text())-1 > 0 ) 
+			$('li.statustrash a em').html(parseInt($('li.statustrash a em').text())-1);
+		else $('li.statustrash').remove();
 		return false;
 	});
 	
@@ -297,7 +305,9 @@ jQuery(document).ready(function($){
 				postid		:$(this).attr('href').replace('#',''),
 				_wpnonce	:imslocal.nonceajax
 		});
-		$('li.statustrash a em').html(parseInt($('li.statustrash a em').text())-1);
+		if(parseInt($('li.statustrash a em').text())-1 > 0 ) 
+			$('li.statustrash a em').html(parseInt($('li.statustrash a em').text())-1);
+		else $('li.statustrash').remove();
 		return false;	
 	});
 	
@@ -332,8 +342,8 @@ jQuery(document).ready(function($){
 			'script' 		 :imslocal.imsurl + 'admin/swfupload.php',
 			'scriptData' 	 :{'_wpnonce':imslocal.nonceajax,'userid':imslocal.userid,'domain':document.domain},
 			'cancelImg' 	 :imslocal.imsurl + '_img/xit.gif',
-			'height'		 :'26',
-			'width'			 :'118',
+			'height'		 :'24',
+			'width'			 :'135',
 			'buttonTextColor':'#333333',
 			'fileExt'		 :'*.jpg;*.jpeg;*.gif;*.png',
 			'fileDesc'		 :'Image files',

@@ -22,6 +22,7 @@ $galleries 	= get_ims_galleries($this->per_page);
 $columns	= get_column_headers('profile_page_user-galleries'); 
 
 ?>
+
 <div id="poststuff" class="metabox-holder">
 	<form method="get" action="<?php echo $pagenowurl?>">
 		<div class="tablenav">

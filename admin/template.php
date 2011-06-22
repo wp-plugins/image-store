@@ -66,11 +66,10 @@ if(!empty($_POST['screen_options'])){
 
 <div class="wrap imstore">
 	
-	<?php if($page == 'ims-settings'){?>
-	
 	<?php screen_icon($screens[$page][0])?>
 	<h2><?php echo $screens[$page][1]?></h2>
 	
+	<?php if($page == 'ims-settings'){?>
 	<div class="adunitbox postbox">
 		<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=8SJEQXK5NK4ES" class="donate" title="Like the plugin? Please Donate">
 		<img src="<?php echo IMSTORE_URL ?>/_img/donate.jpg" alt="donate"></a>
