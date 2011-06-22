@@ -73,7 +73,8 @@ class ImStoreDownloadImage{
 		header('Content-Type: ' . $filetype['type']);
 		header('Content-Disposition: attachment; filename=' . $filename);
 
-		if(!$_REQUEST['c']) echo file_get_contents($this->image_dir); die();
+		if(!$_REQUEST['c']){
+			echo file_get_contents($this->image_dir); die();}
 		
 		
 		switch($filetype['ext']){

@@ -43,10 +43,14 @@ $colors_options = array(
 		</thead>
 		<tbody>
 		<?php $i=1; foreach($this->cart['images'] as $id => $sizes){?>
-			<?php $image = get_post_meta($id,'_wp_attachment_metadata',true)?>
+			<?php 
+			$base  = IMSTORE_URL."image.php?i=";
+			$image = get_post_meta($id,'_wp_attachment_metadata',true);
+			$mini  = $image['sizes']['mini'];
+			?>
 			<tr>
 				<td class="preview">
-				<img src="<?php echo $image['sizes']['mini']['url']?>" 
+				<img src="<?php echo $base.$this->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$mini['path']));?>" 
 				width="<?php echo $image['sizes']['mini']['width']?>" 
 				height="<?php echo $image['sizes']['mini']['height']?>" 
 				alt="<?php echo $image['sizes']['mini']['file']?>"/></td>
@@ -116,6 +120,13 @@ $colors_options = array(
 					<small><?php _e('Update cart to apply promotional code.',ImStore::domain)?></small>
 				</td>
 			</tr>
+			<?php if($this->cart['discounted']){ ?>
+			<tr>
+				<td colspan="4">&nbsp;</td>
+				<td><?php _e('Discount',ImStore::domain)?></td>
+				<td colspan="2" class="discount"><?php printf('- ' .$this->format[$this->opts['clocal']],number_format($this->cart['promo']['discount'],2)) ?></td>
+			</tr>
+			<?php } ?>
 			<tr>
 				<td colspan="4">&nbsp;</td>
 				<td><label for="shipping_1"><?php _e('Shipping',ImStore::domain)?></label></td>
@@ -129,13 +140,6 @@ $colors_options = array(
 					<?php } ?>
 				</td>
 			</tr>
-			<?php if($this->cart['discounted']){ ?>
-			<tr>
-				<td colspan="4">&nbsp;</td>
-				<td><?php _e('Discount',ImStore::domain)?></td>
-				<td colspan="2" class="discount"><?php printf('- ' .$this->format[$this->opts['clocal']],number_format($this->cart['promo']['discount'],2)) ?></td>
-			</tr>
-			<?php } ?>
 			<?php if($this->cart['tax']){ ?>
 			<tr>
 				<td colspan="4">&nbsp;</td>

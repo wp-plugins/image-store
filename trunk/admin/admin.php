@@ -37,6 +37,10 @@ class ImStoreAdmin{
 		add_filter('manage_edit-ims_gallery_columns',array(&$this,"add_columns"),10);
 		add_filter('manage_posts_custom_column',array(&$this,'add_columns_val_gal'),15,2);
 		
+		add_action('manage_edit-ims_album_columns', array(&$this,'add_id_column'));
+		add_filter('manage_ims_album_custom_column', array(&$this,'show_cat_id'), 10, 3 );
+		add_action('manage_edit-ims_album_sortable_columns', array(&$this,'add_id_column'));
+
 		//speed up ajax we don't need this
 		if(defined('DOING_AJAX') || defined('DOING_AUTOSAVE')) return;
 		
@@ -60,14 +64,40 @@ class ImStoreAdmin{
 
 		$this->units = array('in' => __('in',ImStore::domain),'cm' => __('cm',ImStore::domain),'px' => __('px',ImStore::domain));
 	}
-
+	
 	/**
-	 *Save gallery data and images
-	 *
-	 *@param unit $postid
-	 *@param array $post
-	 *@since 2.0.0
-	 *return unit|string
+	* Add value to ID album Column
+	*
+	*@param null $none
+	*@param string $column_name
+	*@param unit $postid
+	*@since 2.1.1
+	*return unit|string
+	*/
+	function show_cat_id( $none, $column_name, $id ){
+		if ( $column_name == 'id' )
+			return $id;
+	}	
+	
+	/**
+	*Add ID Column
+	*
+	*@param array $columns
+	*@since 2.1.1
+	*return unit|string
+	*/
+	function add_id_column($columns){
+		if( current_user_can( 'administrator' ) ) $columns['id'] = 'ID';
+		return $columns;
+	}
+	
+	/**
+	*Save gallery data and images
+	*
+	*@param unit $postid
+	*@param array $post
+	*@since 2.0.0
+	*return unit|string
 	*/
 	function save_post($postid,$post){
 		
@@ -621,8 +651,10 @@ class ImStoreAdmin{
 	*/
 	function add_auto_password($messages){
 		global $post,$pagenow;
-		if($this->opts['securegalleries'] && $pagenow == 'post-new.php' && $post->post_type == "ims_gallery" ) 
+		if($this->opts['securegalleries'] && $pagenow == 'post-new.php' && $post->post_type == "ims_gallery" ){
 			$post->post_password = wp_generate_password(8);
+			$post->post_title = __('Gallery ',ImStore::domain) . $post->ID;
+		}
 		return $messages;
 	}
 	
@@ -768,7 +800,7 @@ class ImStoreAdmin{
 	*@since 2.0.0
 	*/
 	function load_admin_styles(){
-		global $current_screen;
+		global $current_screen; //print_r($current_screen);
 		if($current_screen->id == 'ims_gallery' || $_GET['page'] == 'ims-settings' || $current_screen->id == 'edit-ims_album' || 
 		$current_screen->id == 'edit-ims_gallery' || $_GET['page'] == 'ims-pricing'|| $_GET['page'] == 'ims-sales' 
 		|| $_GET['page'] == 'ims-customers'){
@@ -935,7 +967,7 @@ class ImStoreAdmin{
 	function dis_customers(){
 		$customers = $this->get_active_customers();
 		$this->meta['_ims_customer'] = maybe_unserialize($this->meta['_ims_customer'][0]);
-		echo '<div class="categorydiv"><div class="tabs-panel">
+		echo '<div class="taxonomydiv"><div class="tabs-panel">
 			<ul class="categorychecklist form-no-clear">';
 			if(is_array($this->meta['_ims_customer'])){
 				foreach($customers as $customer){

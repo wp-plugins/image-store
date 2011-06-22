@@ -270,10 +270,10 @@ function ims_change_status(){
 	$count = count($_GET['orders']);
 	$s = ($_GET['action'] == 'trash')?1:2;
 	
-	if($count < 2 && $s == 2) $a = 22;
-	elseif($count < 2 && $s == 1) $a = 23;
-	elseif($s == 1) $a = 26;
-	else $a = 26;
+	if($count > 1 && $s == 2) $a = 25;
+	elseif($count > 1 && $s == 1) $a = 26;
+	elseif($s == 2) $a = 22;
+	else $a = 23;
 	wp_redirect($pagenowurl."&ms=$a&c=$count");
 }
 

@@ -25,8 +25,8 @@ $labels = array(
 		'ims_sepia' => __('Sepia',ImStore::domain),
 );
 
-setcookie('ims_orderid_'.COOKIEHASH,'',time() - 31536000,COOKIEPATH,COOKIE_DOMAIN);
 unset($_COOKIE['ims_orderid_'.COOKIEHASH]); 
+setcookie('ims_orderid_'.COOKIEHASH,' ',time()-31536000,COOKIEPATH,COOKIE_DOMAIN);
 ?>
 
 <div class="ims-innerbox">
@@ -35,7 +35,7 @@ unset($_COOKIE['ims_orderid_'.COOKIEHASH]);
 	 </div>
 </div>
 
-<?php if($_POST['mc_gross'] == number_format($cart['total'],2)){	
+<?php if($_POST['mc_gross'] == number_format($cart['total'],2) && empty($_POST['enoticecheckout'])){	
 	foreach($cart['images'] as $id => $sizes){
 		$enc = $this->encrypt_id($id);	
 		foreach($sizes as $size => $colors){

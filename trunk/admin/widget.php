@@ -91,6 +91,7 @@ class ImStoreWidget extends WP_Widget {
 	 * Get recent images
 	 * From unsecure galleries
 	 *
+	 * @param array $instance
 	 * @return array
 	 * @since 0.5.3 
 	 */
@@ -109,22 +110,25 @@ class ImStoreWidget extends WP_Widget {
 		}else{ $order = $show; }
 		if($limit) $limit = "LIMIT $limit";
 		$result = $wpdb->get_results($wpdb->prepare(
-			"SELECT ID,post_title,guid,post_parent,post_excerpt
-			FROM $wpdb->posts AS p 
-			WHERE post_type = 'ims_image'
+			"SELECT ID,post_title,guid,post_parent,post_excerpt,meta_value
+			FROM $wpdb->posts AS p  LEFT JOIN $wpdb->postmeta AS pm
+			ON p.ID = pm.post_id WHERE post_type = 'ims_image'
 			AND post_status = 'publish'
 			AND post_parent $parent
 			ORDER BY $orderby $order $limit"
 		));
 		if(empty($result)) return;
-		foreach($result as $post)$images[] = $post;
+		foreach($result as $post){
+			$post->meta_value = unserialize($post->meta_value);
+			$images[] = $post;
+		} 
 		return $images;
 	}
-	
 	
 	/**
 	 * Display galleries
 	 *
+	 * @param array $images
 	 * @return array
 	 * @since 0.5.3 
 	 */
@@ -133,12 +137,18 @@ class ImStoreWidget extends WP_Widget {
 		$itemtag 	= 'ul';
 		$icontag 	= 'li';
 		$captiontag = 'div';
-		$nonce 		= '_wpnonce='.wp_create_nonce('ims_secure_img');
+
 		$output = "<{$itemtag} class='ims-gallery'>";
 		foreach((array)$images as $image){
-			$enc = $ImStore->store->encrypt_id($image->ID);	
+			$base = IMSTORE_URL."image.php?i=";
+			$link = get_permalink($image->post_parent);
+			$mini = $image->meta_value['sizes']['mini'];
+			$size = ' width="'.$mini['width'].'" height="'.$mini['height'].'"';
+			$url  = $base.$ImStore->store->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$mini['path']));
+
 			$output .= "<{$icontag}>";
-			$output .= '<a href="'.get_permalink($image->post_parent).'"><img src="'.IMSTORE_URL."image.php?$nonce&amp;img={$enc}&amp;mini=1".'" class="ims-widget-img" alt="'.$image->post_title .'" /></a>';			$output .= "</{$icontag}>";
+			$output .= '<a href="'.$link.'"><img src="'.$url.'" alt="'.esc_attr($image->post_title).'"'.$size.' />'.'</a>';
+			$output .= "</{$icontag}>";
 		}
 		echo $output .= "</{$itemtag}>";
 	}

@@ -28,12 +28,14 @@ class ImStoreFeeds{
 	 *@since 0.5.3 
 	 */
 	function print_rss_link(){
-		global $ImStore,$pos;
+		global $ImStore;
 		$album = get_query_var('ims_album');
-		if($ImStore->store->opts['mediarss'] && $post->post_type == "ims_gallery" && is_single())
-			echo '<link rel="alternate" type="application/rss+xml" title="gallery feed" href="'.$this->get_feed_url().'" />'."\n";
+		if($ImStore->store->opts['mediarss'] && is_singular("ims_gallery"))
+			echo '<link rel="alternate" type="application/rss+xml" title="'.get_bloginfo('name')." &raquo; ".
+			__('Gallery Feed',ImStore::domain).'" href="'.$this->get_feed_url().'" />'."\n";
 		elseif(is_tax("ims_album")&&$album)
-			echo '<link rel="alternate" type="application/rss+xml" title="album feed" href="'.trim(get_term_link($album,"ims_album"),'/').'/feed" />'."\n";
+			echo '<link rel="alternate" type="application/rss+xml" title="'.get_bloginfo('name')." &raquo; ".
+			__('Gallery Feed',ImStore::domain).'" href="'.trim(get_term_link($album,"ims_album"),'/').'/feed" />'."\n";
 	}
 	
 	/**
@@ -43,8 +45,8 @@ class ImStoreFeeds{
 	*return void
 	*/
 	function get_feed_url(){
-		global $ImStore;
-		$link  = ($ImStore->permalinks) ? trim(get_permalink(),'/')."/feed/imstore": get_permalink()."&amp;feed=imstore";
+		global $ImStore; 
+		$link  = ($ImStore->permalinks) ? trim(dirname(get_permalink()),'/')."/feed/imstore": get_permalink()."&amp;feed=imstore";
 		return $link;
 	}
 	
@@ -121,13 +123,17 @@ class ImStoreFeeds{
 			<language><?php echo get_option('rss_language');?></language>
 			<sy:updatePeriod><?php echo apply_filters('rss_update_period','hourly');?></sy:updatePeriod>
 			<sy:updateFrequency><?php echo apply_filters('rss_update_frequency','1');?></sy:updateFrequency>
-			<?php foreach($this->attachments as $image){ $encr = $ImStore->store->encrypt_id($image->ID)?>
-			<?php $filetype = wp_check_filetype(basename($image->post_title));?>
+			<?php foreach($this->attachments as $image){
+				$base = IMSTORE_URL."image.php?i=";
+				$prev = $image->meta_value['sizes']['preview'];
+				$thmb = $image->meta_value['sizes']['thumbnail'];
+				$filetype = wp_check_filetype(basename($image->post_title));
+			?>
 			<item>
 				<title><![CDATA[<?php echo $image->post_title?>]]></title>
-				<link><?php echo IMSTORE_URL."image.php?img={$encr}";?></link>
-				<media:thumbnail url="<?php echo IMSTORE_URL."image.php?img={$encr}&amp;thumb=1";?>"/>
-				<media:content type="<?php echo $filetype['type']?>" url="<?php echo IMSTORE_URL."image.php?img={$encr}";?>"/>
+				<link><?php echo $base.$ImStore->store->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$prev['path']))."&amp;p=1"?></link>
+				<media:thumbnail url="<?php echo $base.$ImStore->store->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$thmb['path']))?>"/>
+				<media:content type="<?php echo $filetype['type']?>" url="<?php echo $base.$ImStore->store->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$prev['path']))."&amp;p=1"?>"/>
 			</item>
 			<?php }?>
 		</channel>

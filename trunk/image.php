@@ -15,11 +15,10 @@
 define('DOING_AJAX',true);
 
 //load wp
-require_once '../../../wp-load.php';
-
+if(!empty($_REQUEST['p'])) 
+	require_once '../../../wp-load.php';
 	
 class ImStoreImage{
-	
 	
 	/**
 	*Constructor
@@ -29,28 +28,28 @@ class ImStoreImage{
 	*/
 	function __construct(){
 		
-		if(empty($_REQUEST['img'])) die();
+		if($dh = @opendir(dirname(__FILE__)."/admin/key")){
+			while(false !== ($obj = readdir($dh))){
+				if($obj == '.' || $obj == '..'){ continue;
+				}else{ $this->key = current(explode('.',$obj)); break;}
+			}
+			closedir($dh);
+		}
 		
-		global $ImStore; 
-		$this->attachment = get_post_meta($ImStore->store->decrypt_id($_REQUEST['img']),'_wp_attachment_metadata',true);
-		if($_REQUEST['mini'] == 1) 
-			$this->image_dir = str_ireplace(WP_CONTENT_URL,WP_CONTENT_DIR,$this->attachment['sizes']['mini']['url']);
-		elseif($_REQUEST['thumb'] == 1) 
-			$this->image_dir = str_ireplace(WP_CONTENT_URL,WP_CONTENT_DIR,$this->attachment['sizes']['thumbnail']['url']);
-		elseif($this->attachment['sizes']['preview']['url']) 
-			$this->image_dir = str_ireplace(WP_CONTENT_URL,WP_CONTENT_DIR,$this->attachment['sizes']['preview']['url']);
-		else $this->image_dir = WP_CONTENT_DIR.$this->attachment['file'];
+		if(empty($_GET['i'])) die();
+		$path = $this->url_decrypt($_GET['i']);
+		$this->root = implode('/',explode('/',str_replace('\\','/',dirname(__FILE__)),-3))."/";
+		if(!preg_match("/(_resized)/",$path)) $path = dirname($path)."/_resized/".basename($path);;
 		
-		if(!file_exists($this->image_dir)) die(); 
-
+		$this->image_dir = "{$this->root}wp-content/$path";
+		
+		if(!file_exists($this->image_dir)) die();
 		if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && isset($_SERVER['HTTP_IF_NONE_MATCH'])
 		&&(strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == filemtime($this->image_dir))){
 			header('HTTP/1.1 304 Not Modified'); 
 			die();
 		}else $this->display_image();
-			 
 	}
-	
 	
 	/**
 	*Display image
@@ -60,23 +59,24 @@ class ImStoreImage{
 	*/
 	function display_image(){
 		
-		$opts = get_option('ims_front_options');
-		$filetype 	= wp_check_filetype(basename($this->image_dir));
+		$ext 		= end(explode('.',basename($this->image_dir)));
 		$modified 	= gmdate("D,d M Y H:i:s",filemtime($this->image_dir));
 		$expired	= gmdate("D,d M Y H:i:s",(filemtime($this->image_dir) + strtotime('+1 month')));
 		
 		header('Expires:'.$expired);
 		header('Last-Modified:'.$modified);
-		header('Content-Type:'.$filetype['type']);
-		header('Cache-Control:max-age='.strtotime('+1 month').',must-revalidate');
-				
-		if($_REQUEST['thumb'] || $_REQUEST['mini']){
-			echo file_get_contents($this->image_dir); die();
-		}
+		header('Content-Type: image/'.$ext);
+		header('Cache-Control:max-age='.strtotime('+5 minutes').',must-revalidate');
+		
+		if(empty($_REQUEST['p'])){
+			echo file_get_contents($this->image_dir); die();}
 		
 		//use to process big images
 		ini_set('memory_limit','256M');
 		ini_set('set_time_limit','1000');
+		
+		$opts 		= get_option('ims_front_options');
+		$filetype 	= wp_check_filetype(basename($this->image_dir));
 		
 		switch($filetype['ext']){
 			case "jpg":
@@ -192,11 +192,11 @@ class ImStoreImage{
 		die();
 	}
 	
-	
 	/**
 	*Conver hex color to rgb
-	 *
-	*@return void
+	*
+	*@param string $hex
+	*@return unit/string
 	*@since 0.5.0 
 	*/
 	function HexToRGB($hex){
@@ -213,14 +213,15 @@ class ImStoreImage{
 			$color['g'] = hexdec(substr($hex,2,2));
 			$color['b'] = hexdec(substr($hex,4,2));
 		}
- 
 		return $color;
 	}
 	
-	
 	/**
 	*Get image ratio
-	 *
+	*
+	*@param unit $w
+	*@param unit $h
+	*@param unit $immax
 	*@return unit
 	*@since 0.5.0 
 	*/
@@ -230,6 +231,25 @@ class ImStoreImage{
 		$i['w']	= ceil($w*$r*.7);
 		$i['h']	= ceil($h*$r*.7);
 		return $i;
+	}
+	
+	/**
+	 *Decrypt url
+	 *
+	 *@parm string $string 
+	 *@return string
+	 *@since 2.1.1
+	 */	
+	function url_decrypt($string) {
+		$result= '';
+		$string = base64_decode($string);
+		for($i=0; $i<strlen($string); $i++) {
+			$char = substr($string, $i, 1);
+			$keychar = substr($this->key, ($i % strlen($this->key))-1, 1);
+			$char = chr(ord($char)-ord($keychar));
+			$result.=$char;
+		}  
+	return $result;
 	}
 
 }
