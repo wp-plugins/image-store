@@ -4,7 +4,7 @@ Plugin Name: Image Store
 Plugin URI: http://imstore.xparkmedia.com
 Description: Your very own image store within wordpress "ImStore"
 Author: Hafid R. Trujillo Huizar
-Version: 2.1.1
+Version: 2.1.2
 Author URI:http://www.xparkmedia.com
 Requires at least: 3.0.0
 Tested up to: 3.2
@@ -42,7 +42,7 @@ class ImStore{
 	*Make sure that new language(.mo) files have 'ims-' as base name
 	*/
 	const domain	= 'ims';
-	const version	= '2.1.1';
+	const version	= '2.1.2';
 	
 	/**
 	*Constructor
@@ -97,8 +97,8 @@ class ImStore{
 		
 		$key = substr(preg_replace("([^a-zA-Z0-9])",'',NONCE_KEY),0,15);
 		if(!file_exists(IMSTORE_ABSPATH."/admin/key/{$key}.txt")){
-			@chmod(IMSTORE_ABSPATH."/admin/key/",777);
-			$fh = @fopen(IMSTORE_ABSPATH."/admin/key/{$key}.txt", 'w');  @fclose($fh);
+			$fh = @fopen(IMSTORE_ABSPATH."/admin/key/{$key}.txt", 'w');  
+			@fclose($fh); @chmod(IMSTORE_ABSPATH."/admin/key/{$key}.txt",0640);
 		}
 	}
 			

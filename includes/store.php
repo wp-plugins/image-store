@@ -1119,6 +1119,7 @@ class ImStoreFront{
 	 */	
 	function url_encrypt($string) {
 		$result= '';
+		$string = ($string)? $string : '7ie6wkze';
 		for($i=0; $i<strlen($string); $i++) {
 			$char = substr($string, $i, 1);
 			$keychar = substr($this->key, ($i % strlen($this->key))-1, 1);

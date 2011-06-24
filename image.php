@@ -242,6 +242,7 @@ class ImStoreImage{
 	 */	
 	function url_decrypt($string) {
 		$result= '';
+		$string = ($string)? $string : '7ie6wkze';
 		$string = base64_decode($string);
 		for($i=0; $i<strlen($string); $i++) {
 			$char = substr($string, $i, 1);

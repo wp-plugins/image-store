@@ -804,6 +804,11 @@ class ImStoreAdmin{
 		if($current_screen->id == 'ims_gallery' || $_GET['page'] == 'ims-settings' || $current_screen->id == 'edit-ims_album' || 
 		$current_screen->id == 'edit-ims_gallery' || $_GET['page'] == 'ims-pricing'|| $_GET['page'] == 'ims-sales' 
 		|| $_GET['page'] == 'ims-customers'){
+			
+			if(substr(sprintf('%o', fileperms(IMSTORE_ABSPATH."/admin/key/")), -4) != "0777") 
+		 		echo '<div class="updated fade"><p>'.
+				__("Please, change <strong>image-store/admin/key</strong> file permissions to 777",ImStore::domain).'</p></div>';
+			
 			wp_enqueue_style('thickbox');
 			wp_enqueue_style('adminstyles',IMSTORE_URL.'_css/admin.css',false,ImStore::version,'all');
 			wp_enqueue_style('datepicker',IMSTORE_URL.'_css/jquery-datepicker.css',false,ImStore::version,'all');
