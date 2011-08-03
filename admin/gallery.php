@@ -45,6 +45,7 @@ $status_labels 	= array(
 );
 
 //errors
+$blog_ID   = get_current_blog_id();
 $errors[1] = __('Upload failed.',ImStore::domain);
 $errors[2] = __('Not a valid URL path',ImStore::domain);
 $errors[3] = __('This is not a zip file.',ImStore::domain);
@@ -91,7 +92,8 @@ if(isset($_GET['error']))
 			<?php break;
 			case 'imthumb':?>
 			<td class="column-<?php echo "$key $class"?>">
-				<a href="<?php echo WP_CONTENT_URL.$meta[0]['file']?>" class="thickbox" rel="gallery">
+				<?php $imageurl = (MULTISITE == true) ? WP_CONTENT_URL."/blogs.dir/{$blog_ID}".$meta[0]['file']: WP_CONTENT_URL.$meta[0]['file']?>
+				<a href="<?php echo $imageurl?>" class="thickbox" rel="gallery">
 				<img src="<?php echo dirname($image->guid).'/'.$meta[0]['sizes']['mini']['file']?>" /></a>
 			</td>
 			<?php break;

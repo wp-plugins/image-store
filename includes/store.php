@@ -25,12 +25,14 @@ class ImStoreFront{
 		add_action('get_header',array(&$this,'ims_init'));
 		add_action('wp_head',array(&$this,'print_ie_styles'));
 		add_action('pre_get_posts',array(&$this,'pre_get_posts'));
-		add_filter('pre_get_posts',array(&$this,'dis_custom_types'),1,30);
 		add_filter('query_vars',array(&$this,'add_var_for_rewrites'),1,10);
 		add_filter('protected_title_format',array(&$this,'remove_protected'));
 		add_filter('template_include',array(&$this,'taxonomy_template'),1,50);
 		add_filter('single_template',array(&$this,'change_gallery_template'),1,50);
 		add_filter('posts_where',array(&$this,'search_image_info'),2,50);
+		
+		if(version_compare($wp_version, '3.2', '<'))
+			add_filter('pre_get_posts',array(&$this,'dis_custom_types'),1,30); 
 		
 		add_action('wp_enqueue_scripts',array(&$this,'load_scripts_styles'));
 		add_shortcode('image-store',array(&$this,'imstore_shortcode'));
@@ -54,7 +56,7 @@ class ImStoreFront{
 	 *@since 2.0.0
 	 */ 
 	function ims_gallery_shortcode($atts){
-		if(!is_single()) return;
+		if(!is_singular('ims_gallery')) return;
 		
 		//add images to cart
 		if(!empty($_POST['add-to-cart']))
@@ -277,7 +279,8 @@ class ImStoreFront{
 	 *@since 0.5.2 
 	 */
 	function print_ie_styles(){
-		if(isset($_SERVER['HTTP_USER_AGENT']) &&(strpos($_SERVER['HTTP_USER_AGENT'],'MSIE') !== false))
+		if(isset($_SERVER['HTTP_USER_AGENT']) &&(strpos($_SERVER['HTTP_USER_AGENT'],'MSIE') !== false 
+			&& $this->opts['colorbox'] && !defined('JQUERYCOLORBOX_NAME')))
 			echo '<!--[if IE]><link rel="stylesheet" id="colorboxie-css" href="'.IMSTORE_URL.'_css/colorbox.ie.php?url='.IMSTORE_URL.'&amp;ver=0.5.0" type="text/css" media="all" /><![endif]-->';
 	}
 	
@@ -311,12 +314,6 @@ class ImStoreFront{
 	function ims_init(){
 		global $wpdb,$post,$ImStore;
 
-		//get cart id
-		$cart = get_post($_COOKIE['ims_orderid_'.COOKIEHASH]);
-		
-		if($cart->post_status == "pending") 
-			setcookie('ims_orderid_'.COOKIEHASH,' ',time()-31536000,COOKIEPATH,COOKIE_DOMAIN);
-		
 		$this->gateway = array(
 			'paypalprod' => 'https://www.paypal.com/cgi-bin/webscr',
 			'paypalsand' => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
@@ -348,12 +345,11 @@ class ImStoreFront{
 		$this->secure_page	= get_option('ims_page_secure');
 		$this->permalinks 	= get_option('permalink_structure');
 		$this->imspage		= ($page = get_query_var('imspage'))?$page:1;
+		
+		//try to clear cookie
+		if($this->imspage==6)
+			setcookie('ims_orderid_'.COOKIEHASH,'',(time()-31536000),COOKIEPATH,COOKIE_DOMAIN);
 
-		//logout gallery
-		if(get_query_var('imslogout')){
-			ImStore::logout_ims_user();
-			wp_redirect(get_permalink($this->secure_page)); 
-		}
 		$this->gallery_id	= $post->ID;
 		$this->sizes 		= $this->get_price_list();
 		$this->message		= $messages[get_query_var('imsmessage')];
@@ -361,11 +357,18 @@ class ImStoreFront{
 		$this->listmeta 	= get_post_meta($this->pricelist_id,'_ims_list_opts',true);
 		$this->order		= ($sort = get_post_meta($this->gallery_id,'_ims_order',true))?$sort:$this->opts['imgsortdirect'];
 		$this->sortby 		= ($sortby = get_post_meta($this->gallery_id,'_ims_sortby',true))?$sortby:$this->opts['imgsortorder'];
-		$this->cart 		= get_post_meta($_COOKIE['ims_orderid_'.COOKIEHASH],'_ims_order_data',true);
-		
 		$sym 				= $this->opts['symbol']; 
 		$this->format 		= array('',"$sym%s","$sym %s","%s$sym","%s $sym");
-
+		$this->cart_stat	= get_post_status($_COOKIE['ims_orderid_'.COOKIEHASH]);
+		if($this->cart_stat == "draft") 
+			$this->cart = get_post_meta($_COOKIE['ims_orderid_'.COOKIEHASH],'_ims_order_data',true);
+					
+		//logout gallery
+		if(get_query_var('imslogout')){
+			ImStore::logout_ims_user();
+			wp_redirect(get_permalink($this->secure_page)); die();
+		}
+		
 		//process paypal IPN 
 		if(isset($_POST['txn_id']) && isset($_POST['custom']) && $this->imspage == 1) 
 			include_once(dirname(__FILE__).'/paypal-ipn.php');
@@ -408,8 +411,11 @@ class ImStoreFront{
 	 */
 	function load_scripts_styles(){
 		global $post;
-		wp_enqueue_style('colorbox',IMSTORE_URL.'_css/colorbox.css',NULL,'1.1.6');
-		wp_enqueue_script('colorbox',IMSTORE_URL.'_js/jquery.colorbox.js',array('jquery'),'1.1.6',true); 	
+		
+		if($this->opts['colorbox'] || !defined('JQUERYCOLORBOX_NAME')){
+			wp_enqueue_style('colorbox',IMSTORE_URL.'_css/colorbox.css',NULL,'1.1.6');
+			wp_enqueue_script('colorbox',IMSTORE_URL.'_js/jquery.colorbox.js',array('jquery'),'1.1.6',true); 	
+		}
 		wp_enqueue_script('galleriffic',IMSTORE_URL.'_js/jquery.galleriffic.js',array('jquery'),'1.3.6 ',true); 
 		if($this->opts['stylesheet']) wp_enqueue_style('imstore',IMSTORE_URL.'_css/imstore.css',NULL,ImStore::version);
 		wp_enqueue_script('imstorejs',IMSTORE_URL.'_js/imstore.js',array('jquery','colorbox','galleriffic'),ImStore::version,true);
@@ -540,7 +546,7 @@ class ImStoreFront{
 	*/
 	function display_galleries(){ 
 		
-		global $post;
+		global $post,$wp_query;
 		$itemtag 	= 'ul';
 		$icontag 	= 'li';
 		$captiontag = 'div';
@@ -550,12 +556,13 @@ class ImStoreFront{
 		
 		$output 	.= "<{$itemtag} class='ims-gallery'>";
 		foreach($this->attachments as $image){
-
+			
 			$base = IMSTORE_URL."image.php?i=";
 			$enc  = $this->encrypt_id($image->ID);
 			$prev = $image->meta_value['sizes']['preview'];
 			$thmb = $image->meta_value['sizes']['thumbnail'];
 			$size = ' width="'.$thmb['width'].'" height="'.$thmb['height'].'"';
+			$wm	  = ($this->opts['watermark'])? "&w=".$this->opts['watermark'] : ''; //force update image cache
 			$url  = $base.$this->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$thmb['path']));
 			
 			if($image->post_parent){
@@ -568,9 +575,9 @@ class ImStoreFront{
 				$tagatts	= ' class="ims-colorbox" rel="gallery" ';
 				$title 		= str_replace(__('Protected:',ImStore::domain),'',$image->post_title);
 				$caption	= ($this->is_galleries)?$title:$image->post_excerpt ;
-				$link 		= $base.$this->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$prev['path']))."&amp;p=1";
+				$link 		= $base.$this->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$prev['path']))."&amp;p=1$wm";
 			}
-			$imagetag = '<img src="'.$url.'" title="'.esc_attr($caption).'" alt="'.esc_attr($title).'"'.$size.' />'; 
+			$imagetag = '<img src="'.$url.'" title="'.esc_attr($caption).'" class="colorbox-2" alt="'.esc_attr($title).'"'.$size.' />'; 
 			
 			$output .= "<{$icontag}>";
 			$output .= '<a href="'.$link.'"'.$tagatts.' title="'.esc_attr($title).'">'.$imagetag.'</a>';
@@ -586,11 +593,13 @@ class ImStoreFront{
 			setcookie('ims_gal_'.$this->gallery_id.'_'.COOKIEHASH,true,0,COOKIEPATH);
 		}
 		
-		global $wp_query; $wp_query->is_single = false;
+		$wp_query->is_single = false;
 		$output .= '<div class="ims-navigation">';
 		$output .= '<div class="nav-previous">'.get_previous_posts_link(__('<span class="meta-nav">&larr;</span> Previous images','smthem')).'</div>';
 		$output .= '<div class="nav-next">'.get_next_posts_link(__('More images <span class="meta-nav">&rarr;</span>','smthem')).'</div>';
 		$output .= '</div><div class="ims-cl"></div>';
+		
+		$wp_query->is_single		= 1;
 		$wp_query->post_count		= 1;
 		
 		return $output;
@@ -649,18 +658,23 @@ class ImStoreFront{
 	function get_favorite_images(){
 		global $wpdb,$user_ID;
 		if(is_user_logged_in()) $ids = trim(get_user_meta($user_ID,'_ims_favorites',true),','); 
-		else $ids = trim($_COOKIE['ims_favorites_'.COOKIEHASH],',');
+		else $ids = trim($_COOKIE['ims_favorites_'.COOKIEHASH],','); 
+		
+		if(empty($ids)){
+			$this->attachments = array();
+			return;
+		}
 		$this->attachments = $wpdb->get_results(
-			"SELECT ID,post_title,guid,meta_value,post_excerpt
+			"SELECT DISTINCT ID,guid,meta_value,post_excerpt
 			FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm
 			ON p.ID = pm.post_id WHERE post_type = 'ims_image'
-			AND ID IN($ids) ORDER BY $this->sortby $this->order " 
+			AND meta_value !='' AND p.ID IN($ids) ORDER BY $this->sortby $this->order " 
 		);
 		if(empty($this->attachments)) return;
 		foreach($this->attachments as $post){
 			$post->meta_value = unserialize($post->meta_value);
 			$images[] = $post;
-		} $this->attachments = $images;
+		} $this->attachments = $images; //print_r($this->attachments);
 	}
 	
 	/**
@@ -881,7 +895,7 @@ class ImStoreFront{
 			else $this->cart['tax'] = $this->opts['taxamount']; $this->cart['total'] += $this->cart['tax']; 
 		}
 		
-		if(empty($_COOKIE['ims_orderid_'.COOKIEHASH])){
+		if(empty($_COOKIE['ims_orderid_'.COOKIEHASH]) || $this->cart_stat != 'draft' ){
 			$orderid = wp_insert_post(array(
 				'ping_status' 	=> 'close',
 				'post_status' 	=> 'draft',
@@ -893,7 +907,7 @@ class ImStoreFront{
 			));
 			if(!empty($orderid) && !empty($this->cart)){
 				add_post_meta($orderid,'_ims_order_data',$this->cart);
-				setcookie('ims_orderid_'.COOKIEHASH,$orderid,0,COOKIEPATH);
+				setcookie('ims_orderid_'.COOKIEHASH,$orderid,time()+31536000,COOKIEPATH);
 				update_post_meta($orderid,'_ims_order_data',$this->cart);
 			}
 		}else update_post_meta($_COOKIE['ims_orderid_'.COOKIEHASH],'_ims_order_data',$this->cart);

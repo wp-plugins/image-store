@@ -27,7 +27,9 @@ $format 	= array('',"$this->sym%s","$this->sym %s","%s$this->sym","%s $this->sym
 	<table class="widefat post fixed imstore-table store-detail">
 		<thead>
 			<tr>
-				<th scope="col" class="column-thumb">&nbsp;</th>
+				<th scope="col" class="column-thumb">
+					<input type="button" onclick="javascript:window.print()" class="print-bt" value="<?php _e('Print',ImStore::domain)?>"  />
+				</th>
 				<th scope="col" colspan="6">
 					<span class="quantity"><?php _e('Quantity',ImStore::domain)?></span>
 					<span class="size"><?php _e('Size',ImStore::domain)?></span>

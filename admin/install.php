@@ -377,8 +377,8 @@ class ImStoreInstaller{
 		$wpdb->query("ALTER TABLE $wpdb->posts DROP post_expire");
 		
 		//destroy active cookies
-		setcookie('ims_orderid_'.COOKIEHASH,' ',time() - 31536000,COOKIEPATH,COOKIE_DOMAIN);
-		setcookie('imstore_galleryid'.COOKIEHASH,' ',time() - 31536000,COOKIEPATH,COOKIE_DOMAIN);
+		setcookie('ims_orderid_'.COOKIEHASH,' ',(time()-31536000),COOKIEPATH,COOKIE_DOMAIN);
+		setcookie('imstore_galleryid'.COOKIEHASH,' ',(time()-31536000),COOKIEPATH,COOKIE_DOMAIN);
 		
 		//redirect user
 		wp_redirect(admin_url().'plugins.php?deactivate=true');

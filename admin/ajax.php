@@ -36,7 +36,7 @@ if(stripos($_SERVER['HTTP_REFERER'],get_bloginfo('siteurl')) === false)
 function ajax_imstore_pricelist_delete(){
 	if(!current_user_can("ims_change_pricing"))return;
 	check_ajax_referer("ims_ajax");
-	wp_delete_post(intval($_GET['listid']),true);
+	wp_delete_post(intval($_GET['postid']),true);
 	die();
 }
 
@@ -50,12 +50,20 @@ function ajax_imstore_delete_post(){
 	if(!current_user_can("ims_change_pricing"))return;
 	check_ajax_referer("ims_ajax");
 	
+	$blog_ID  = get_current_blog_id();
 	$metadata = get_post_meta((int)$_GET['postid'],'_wp_attachment_metadata');
 	if($metadata[0]['sizes'] && !empty($_GET['deletefile'])){
-		foreach($metadata[0]['sizes'] as $size)
-			@unlink(WP_CONTENT_DIR.$folder.'/'.$size['file']);
-		@unlink(WP_CONTENT_DIR.$metadata[0]['file']);
-		@unlink(WP_CONTENT_DIR.str_replace('_resized/','',$metadata[0]['file']));
+		foreach($metadata[0]['sizes'] as $size){
+			if(MULTISITE == true) @unlink(WP_CONTENT_DIR."/blogs.dir/{$blog_ID}".$folder.'/'.$size['file']);
+			else @unlink(WP_CONTENT_DIR.$folder.'/'.$size['file']);
+		}
+		if(MULTISITE == true){
+			@unlink(WP_CONTENT_DIR."/blogs.dir/{$blog_ID}".$metadata[0]['file']);
+			@unlink(WP_CONTENT_DIR."/blogs.dir/{$blog_ID}".str_replace('_resized/','',$metadata[0]['file']));
+		}else{
+			@unlink(WP_CONTENT_DIR.$metadata[0]['file']);
+			@unlink(WP_CONTENT_DIR.str_replace('_resized/','',$metadata[0]['file']));
+		}
 	}
 	wp_delete_post((int)$_GET['postid'],true);
 	die();
@@ -95,12 +103,13 @@ function ajax_ims_flash_image_data(){
 	@ini_set('memory_limit','256M');
 	@ini_set('max_execution_time',1000);
 	
+	$blog_ID	= get_current_blog_id();
 	$galleid 	= $_GET['galleryid'];
 	$filename 	= sanitize_file_name($_GET['imagename']);
 	$abspath 	= $_GET['filepath'];
 	$filetype 	= wp_check_filetype($filename);
-	$despath 	= dirname($abspath).'/_resized';
-	$relative 	= str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',str_replace('\\','/',$despath.'/'.$filename));
+	$despath 	= str_replace(array('\\\\','//'),'/',dirname($abspath).'/_resized');
+	$relative 	= str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',str_replace('\\','/',$despath.'/'.$filename));  
 	$guid 		= WP_CONTENT_URL.$relative;
 	if(!file_exists($despath)) @mkdir($despath,0775);
 
@@ -192,7 +201,7 @@ function ajax_ims_flash_image_data(){
 			case 'imthumb':
 				$row .= '<td class="column-'.$key.$class.'">';
 				$row .= '<a href="'.$attachment['guid'].'" class="thickbox" rel="gallery">';
-				$row .= '<img src="'.dirname($attachment['guid']).'/'.$metadata['sizes']['mini']['file'].'" /></a>';
+				$row .= '<img src="'.dirname($guid).'/'.$metadata['sizes']['mini']['file'].'" /></a>';
 				$row .= '</td>';
 				break;
 			case 'immetadata':
@@ -261,7 +270,7 @@ function ajax_ims_add_images_to_favorites(){
 	}elseif(is_user_logged_in()){
 		$new 	= explode(',',$_GET['imgids']);
 		foreach ($new as $id) $dec_ids[] = $ImStore->admin->decrypt_id($id);
-		$join 	= trim(get_user_meta($user_ID,'_ims_favorites',true).",".implode(',',$dec_ids),','); 
+		$join 	= trim(get_user_meta($user_ID,'_ims_favorites',true).",".implode(',',$dec_ids),',');
 		$ids	= implode(',',array_unique(explode(',',$join)));
 		update_user_meta($user_ID,'_ims_favorites',$ids);
 	}else{ 

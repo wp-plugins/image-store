@@ -4,7 +4,7 @@ Plugin Name: Image Store
 Plugin URI: http://imstore.xparkmedia.com
 Description: Your very own image store within wordpress "ImStore"
 Author: Hafid R. Trujillo Huizar
-Version: 2.1.2
+Version: 2.2.0
 Author URI:http://www.xparkmedia.com
 Requires at least: 3.0.0
 Tested up to: 3.2
@@ -42,7 +42,7 @@ class ImStore{
 	*Make sure that new language(.mo) files have 'ims-' as base name
 	*/
 	const domain	= 'ims';
-	const version	= '2.1.2';
+	const version	= '2.2.0';
 	
 	/**
 	*Constructor
@@ -74,9 +74,10 @@ class ImStore{
 		add_action('imstore_expire',array(&$this,'expire_galleries'));
 		add_filter('post_type_link',array(&$this,'gallery_permalink'),10,3);
 		add_filter('wp_insert_post_data',array(&$this,'insert_post_data'),20,2);
+		add_filter('redirect_canonical',array(&$this,'redirect_canonical'),20,2);
 		add_action('generate_rewrite_rules',array(&$this,'add_rewrite_rules'),10,1);
 	}
-
+	
 	/**
 	*Define contant variables
 	*
@@ -141,8 +142,8 @@ class ImStore{
 	*@since 0.5.0 
 	*/
 	function logout_ims_user(){
-		setcookie('ims_galid_'.COOKIEHASH,' ',time() - 31536000,COOKIEPATH,COOKIE_DOMAIN);
-		setcookie('wp-postpass_'.COOKIEHASH,' ',time() - 31536000,COOKIEPATH,COOKIE_DOMAIN);
+		setcookie('ims_galid_'.COOKIEHASH,'',(time()-31536000),COOKIEPATH,COOKIE_DOMAIN);
+		setcookie('wp-postpass_'.COOKIEHASH,'',(time()-31536000),COOKIEPATH,COOKIE_DOMAIN);
 	}
 	
 	/**
@@ -201,6 +202,21 @@ class ImStore{
 		require_once(dirname(__FILE__).'/includes/image-rss.php');
 	}
 	
+	
+	/**
+	*Stop canonical redirect for
+	*Custom permalink structure
+	*
+	*@return void
+	*@since 0.5.0 
+	*/
+	function redirect_canonical($redirect_url, $requested_url){
+		$slug = sanitize_title($this->pages[1]);
+		if(strpos($requested_url, "/$slug/page/")==true )
+			return false;
+		return $redirect_url;
+	}
+	
 	/**
 	*Rewrites for custom page managers
 	*
@@ -217,18 +233,19 @@ class ImStore{
 		$wp_rewrite->add_rewrite_tag('%imslogout%','([^/]+)','imslogout=');
 		$wp_rewrite->add_rewrite_tag('%imsmessage%','([0-9]+)','imsmessage=');
 		$wp_rewrite->add_permastruct('ims_gallery',__('galleries',ImStore::domain).'/%ims_gallery%/%imspage%',false);
-	
-		$new_rules = array(
-			__('galleries',ImStore::domain)."/imspaypalipn/?([0-9]+)/?$" =>
-			"index.php&paypalipn=".$wp_rewrite->preg_index(1),
-		);
+
 
 		foreach($this->pages as $id => $page){
 			$slug = sanitize_title($page);
-			if($id == 1)
+			if($id == 1){
+				$new_rules[__('galleries',ImStore::domain)."/([^/]+)/page/?([0-9]+)/?$"] = 
+				"index.php?ims_gallery=".$wp_rewrite->preg_index(1). "&imspage=$id".
+				'&page='.$wp_rewrite->preg_index(2);
+				
 				$new_rules[__('galleries',ImStore::domain)."/([^/]+)/$slug/page/?([0-9]+)/?$"] = 
 				"index.php?ims_gallery=".$wp_rewrite->preg_index(1). "&imspage=$id".
 				'&page='.$wp_rewrite->preg_index(2);
+			}
 			
 			$new_rules[__('galleries',ImStore::domain)."/([^/]+)/$slug/logout/?([^/]+)?$"] = 
 			"index.php?ims_gallery=".$wp_rewrite->preg_index(1).
@@ -241,7 +258,7 @@ class ImStore{
 			$new_rules[__('galleries',ImStore::domain)."/([^/]+)/$slug/?$"] = 
 			"index.php?ims_gallery=".$wp_rewrite->preg_index(1)."&imspage=$id";
 
-			$new_rules[__('galleries',ImStore::domain)."/([^/]+)/$slug/feed/?$"] = 
+			$new_rules[__('galleries',ImStore::domain)."/([^/]+)/$slug/feed/(imstore)?$"] = 
 			"index.php?ims_gallery=".$wp_rewrite->preg_index(1)."&imspage=$id&feed=".$wp_rewrite->preg_index(2);
 
 		}
@@ -264,9 +281,10 @@ class ImStore{
 	*@since 0.5.0 
 	*/
 	function int_actions(){
-		register_post_type('ims_image',array('public'=>true,'show_ui'=>false,)); 
 		add_feed('imstore',array(&$this,'create_feed'));
 		$searchable = (get_option('ims_searchable'))? false : true;
+		
+		register_post_type('ims_image',array('public'=>true,'show_ui'=>false,'exclude_from_search'=>true)); 
 		register_post_type('ims_gallery',array(
 			'labels' => array(
 				'name' 			=> _x('Galleries','post type general name',ImStore::domain),

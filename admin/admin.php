@@ -33,8 +33,11 @@ class ImStoreAdmin{
 		add_filter('load_image_to_edit_path',array(&$this,'load_ims_image_path'),15,2);
 		add_filter('wp_update_attachment_metadata',array(&$this,'update_attachment_metadata'),15,2);
 		
+		add_filter('manage_users_columns',array(&$this,'add_columns'),10);
+		add_filter('manage_users_sortable_columns',array(&$this,'add_columns'),10);
 		add_filter('intermediate_image_sizes',array(&$this,'ims_image_sizes'),15,1);
 		add_filter('manage_edit-ims_gallery_columns',array(&$this,"add_columns"),10);
+		add_filter('manage_users_custom_column',array(&$this,'add_columns_val'),15,3);
 		add_filter('manage_posts_custom_column',array(&$this,'add_columns_val_gal'),15,2);
 		
 		add_action('manage_edit-ims_album_columns', array(&$this,'add_id_column'));
@@ -48,6 +51,7 @@ class ImStoreAdmin{
 		add_action('save_post',array(&$this,'save_post'),1,2);
 		add_action('admin_init',array(&$this,'int_actions'),1);	
 		add_action('delete_post',array(&$this,'delete_post'),1);
+		add_action('before_delete_post',array(&$this,'delete_post'),1);
 		add_action('edit_user_profile',array(&$this,'profile_fields'),1);
 		add_action('show_user_profile',array(&$this,'profile_fields'),1);
 		add_action('post_edit_form_tag',array(&$this,'multidata_form'),20);	
@@ -101,6 +105,7 @@ class ImStoreAdmin{
 	*/
 	function save_post($postid,$post){
 		
+		$blog_ID = get_current_blog_id();
 		if($post->post_type != 'ims_gallery') return $postid;
 		if(!wp_verify_nonce($_POST['ims_save_post'],'ims_save_post') 
 		|| !current_user_can('ims_add_galleries')) return $postid;
@@ -137,8 +142,15 @@ class ImStoreAdmin{
 			if(!preg_match('/^\//',trim($_POST['galleryfolder']))) 
 				$folderpath	 = "/".trim($_POST['galleryfolder']);
 			else $folderpath = trim($_POST['galleryfolder']);
-			$galpath = WP_CONTENT_DIR.$folderpath;
-			@rename($galpath,WP_CONTENT_DIR.$this->sanitize_path($folderpath));
+			
+			if(MULTISITE == true){
+				$galpath 	= WP_CONTENT_DIR."/blogs.dir/{$blog_ID}".$folderpath;
+				@rename($galpath,WP_CONTENT_DIR."/blogs.dir/{$blog_ID}".$this->sanitize_path($folderpath));
+			} else{
+				$galpath 	= WP_CONTENT_DIR.$folderpath;
+				@rename($galpath,WP_CONTENT_DIR.$this->sanitize_path($folderpath));
+			}
+
 			$wpdb->query(
 				"DELETE p,pm FROM $wpdb->posts p 
 				LEFT JOIN $wpdb->postmeta pm ON(p.ID = pm.post_id) 
@@ -185,10 +197,17 @@ class ImStoreAdmin{
 					if($this->opts['deletefiles']){
 						$metadata = get_post_meta($d,'_wp_attachment_metadata');
 						if($metadata[0]['sizes']){
-							foreach($metadata[0]['sizes'] as $size)
-								@unlink(WP_CONTENT_DIR.$folder.'/'.$size['file']);
-							@unlink(WP_CONTENT_DIR.$metadata[0]['file']);
-							@unlink(WP_CONTENT_DIR.str_replace('_resized/','',$metadata[0]['file']));
+							foreach($metadata[0]['sizes'] as $size){
+								if(MULTISITE == true) @unlink(WP_CONTENT_DIR."/blogs.dir/{$blog_ID}".$folder.'/'.$size['file']);
+								else @unlink(WP_CONTENT_DIR.$folder.'/'.$size['file']);
+							}
+							if(MULTISITE == true){
+								@unlink(WP_CONTENT_DIR."/blogs.dir/{$blog_ID}".$metadata[0]['file']);
+								@unlink(WP_CONTENT_DIR."/blogs.dir/{$blog_ID}".str_replace('_resized/','',$metadata[0]['file']));
+							}else{
+								@unlink(WP_CONTENT_DIR.$metadata[0]['file']);
+								@unlink(WP_CONTENT_DIR.str_replace('_resized/','',$metadata[0]['file']));
+							}
 						}
 					}
 					wp_delete_post($d,true);
@@ -231,9 +250,9 @@ class ImStoreAdmin{
 				
 				$filename 	= wp_unique_filename($gallerypath,sanitize_file_name($filename));
 				$filetype 	= wp_check_filetype($filename);
-				$galpath 	= WP_CONTENT_DIR.$folderpath;
+				$galpath 	= (MULTISITE == true) ? WP_CONTENT_DIR."/blogs.dir/{$blog_ID}".$folderpath : WP_CONTENT_DIR.$folderpath;
 				$relative 	= "$folderpath/_resized/$filename";
-				$guid		= WP_CONTENT_URL.$relative;
+				$guid 		= (MULTISITE == true) ? WP_CONTENT_URL."/blogs.dir/{$blog_ID}".$relative : WP_CONTENT_URL.$relative;
 				$filepath	= str_replace('\\','/',"$galpath/$filename");
 				$despath 	= str_replace('\\','/',"$galpath/_resized");
 				
@@ -294,7 +313,7 @@ class ImStoreAdmin{
 				$attach_id = wp_insert_post($attachment);
 				if(empty($attach_id)) continue;
 				
-				wp_update_attachment_metadata($attach_id,$metadata);
+				wp_update_attachment_metadata($attach_id,$metadata); //print_r($metadata); die();
 			}
 		}
 	}
@@ -308,7 +327,8 @@ class ImStoreAdmin{
 	 *@since 0.5.0 
 	*/	
 	function update_attachment_metadata($data,$postid){
-		$contdir 		= str_replace("\\","/",WP_CONTENT_DIR);
+		$blog_ID  = get_current_blog_id();
+		$contdir = (MULTISITE == true) ? str_replace("\\","/",WP_CONTENT_DIR."/blogs.dir/{$blog_ID}"):str_replace("\\","/",WP_CONTENT_DIR); 
 		$data['file'] 	= str_replace($contdir,"",dirname($data['file'])."/".basename($data['file'])); 
 		if($data['sizes']['mini'] && !stristr($data['file'],date('Y/m')) && !$data['sizes']['thumbnail']['url']){
 			foreach($data['sizes'] as $size => $filedata){
@@ -423,9 +443,11 @@ class ImStoreAdmin{
 	*/	
 	function load_ims_image_path($filepath,$postid){
 		global $wpdb;
+		$blog_ID = get_current_blog_id();
 		if('ims_image' == $wpdb->get_var($wpdb->prepare("SELECT post_type FROM $wpdb->posts WHERE ID = %s",$postid))){
 			$imagedata = get_post_meta($postid,'_wp_attachment_metadata'); 
-			$filepath = str_replace("\\","/",WP_CONTENT_DIR.$imagedata[0]['file']);
+			if(MULTISITE == true) $filepath = str_replace("\\","/",WP_CONTENT_DIR."/blogs.dir/{$blog_ID}".$imagedata[0]['file']);
+			else $filepath = str_replace("\\","/",WP_CONTENT_DIR.$imagedata[0]['file']);
 		}
 		return $filepath;
 	}
@@ -601,11 +623,14 @@ class ImStoreAdmin{
 	 *return void
 	*/
 	function delete_post($postid){
+		$blog_ID = get_current_blog_id(); 
 		if($this->opts['deletefiles']){
-			global $wpdb;
-			if('ims_gallery' == $wpdb->get_var($wpdb->prepare("SELECT post_type FROM $wpdb->posts WHERE ID = %d",$postid))){
-				if($folderpath = get_post_meta($postid,'_ims_folder_path',true))
-					$this->delete_folder(WP_CONTENT_DIR.$folderpath);
+			global $wpdb; 
+			if('ims_gallery' == get_post_type($postid)){
+				if($folderpath = get_post_meta($postid,'_ims_folder_path',true)){
+					$deletepath = (MULTISITE == true) ? WP_CONTENT_DIR."/blogs.dir/{$blog_ID}".$folderpath : WP_CONTENT_DIR.$folderpath;
+					$this->delete_folder( $deletepath);
+				}
 			}
 			$wpdb->query(
 				"DELETE p,pm FROM $wpdb->posts p 
@@ -670,6 +695,7 @@ class ImStoreAdmin{
 	function add_columns_val($null,$column_name,$user_id){
 		$data = get_userdata($user_id);
 		$status = array("active" => __('Active',ImStore::domain),"inactive" => __('Inactive',ImStore::domain));
+		
 		switch($column_name){
 			case 'status':
 				return $status[$data->ims_status];
@@ -812,6 +838,8 @@ class ImStoreAdmin{
 			wp_enqueue_style('thickbox');
 			wp_enqueue_style('adminstyles',IMSTORE_URL.'_css/admin.css',false,ImStore::version,'all');
 			wp_enqueue_style('datepicker',IMSTORE_URL.'_css/jquery-datepicker.css',false,ImStore::version,'all');
+			if($_GET['page'] == 'ims-sales')
+				wp_enqueue_style('print',IMSTORE_URL.'_css/print.css',false,ImStore::version,'print');
 		}
 	}
 	
@@ -844,6 +872,7 @@ class ImStoreAdmin{
 				'userid'		=> $user->ID,
 				'imsurl'		=> IMSTORE_URL,
 				'dformat'		=> $this->dformat,
+				'adminurl'		=> trim(admin_url(),'/')."/",
 				'imsajax' 		=> IMSTORE_ADMIN_URL.'ajax.php',
 				'deletefile'	=> $this->opts['deletefiles'],
 				'trash'			=> __('Trash',ImStore::domain),
@@ -851,6 +880,7 @@ class ImStoreAdmin{
 				'pixels'		=> __('Pixels',ImStore::domain),
 				'publish'		=> __('Published',ImStore::domain),
 				'exists'		=> __('File Exist.',ImStore::domain),
+				'download'		=> __('downloadable.',ImStore::domain),
 				'flastxt'		=> __('Select files.',ImStore::domain),
 				'selectgal' 	=> __('Please,select a gallery!',ImStore::domain),
 				'hiddengal' 	=> '.column-'.implode(',.column-',(array)get_hidden_columns('ims_gallery')),

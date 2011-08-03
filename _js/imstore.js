@@ -20,26 +20,32 @@ jQuery(document).ready(function($){
 	});
 	
 	// image colorbox
-	if(imstore.colorbox){
-		$(".ims-gallery .ims-colorbox").colorbox({
-			current:'',
-			photo:true,
-			maxWidth:"98%",
-			maxHeight:'98%',
-			speed: imstore.slideshowSpeed,
-			next: imstore.nextLinkText,
-			close: imstore.closeLinkText,
-			previous: imstore.prevLinkText,
-			title: function(){
-				return ($(this).find('img').attr('title') == '') ? ' ' : $(this).find('img').attr('title');
-			}
-		})
+	if(imstore.colorbox || typeof(COLORBOX_MANUAL)!='undefined'){
+		if(typeof(Colorbox)=="object"){
+			Colorbox.photo=true;
+			$(".ims-gallery .ims-colorbox").colorbox(Colorbox);
+		}else{
+			$(".ims-gallery .ims-colorbox").colorbox({
+				current:'',
+				photo:true,
+				maxWidth:"98%",
+				maxHeight:'98%',
+				speed: imstore.slideshowSpeed,
+				next: imstore.nextLinkText,
+				close: imstore.closeLinkText,
+				previous: imstore.prevLinkText,
+				title: function(){
+					return ($(this).find('img').attr('title') == '') ? ' ' : $(this).find('img').attr('title');
+				}
+			})
+		}
 	};
+
 	
 	//black and white preview
 	$('#ims-color-bw').click(function(){
 		color = ($(this).is(':checked'))? '&c=g': '';
-		$('#ims-color-sepia').attr({checked:''});
+		$('#ims-color-sepia').removeAttr('checked');
 		$('.image-wrapper img').animate({opacity:0},400,function(){
 			$(this).attr({ src: $('.image-wrapper img').attr('src').replace('&c=g','').replace('&c=s','') + color})
 			.delay(900/1.5).animate({opacity:1},700);
@@ -48,7 +54,7 @@ jQuery(document).ready(function($){
 	
 	//sepia preview
 	$('#ims-color-sepia').click(function(){
-		$('#ims-color-bw').attr({checked:''});
+		$('#ims-color-bw').removeAttr('checked');
 		color = ($(this).is(':checked'))? '&c=s': '';
 		$('.image-wrapper img').animate({opacity:0},400,function(){
 			$(this).attr({ src: $('.image-wrapper img').attr('src').replace('&c=g','').replace('&c=s','') + color})
@@ -82,7 +88,7 @@ jQuery(document).ready(function($){
 		},
 		onOpen:	function(){ 
 			$('#ims-pricelist').show(); 
-			url = $('.image-wrapper img').attr('src').replace('&c=s','').replace('&c=g','').split('&img=');
+			url = $('.image-wrapper img').attr('src').replace('&c=s','').replace('&c=g','').split('&id=');
 			$('#ims-to-cart-ids').val(url[1]);
 		}
 	});

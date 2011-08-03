@@ -35,28 +35,24 @@ $nonce 	= $_REQUEST['_wpnonce'];
 
 global $current_user;
 wp_set_current_user($uid);
-
 if(!current_user_can("ims_add_galleries"))  die();
-
 
 if(($nonce == (substr(wp_hash($i.'ims_ajax'.$uid,'nonce'),-12,10) 
 || substr(wp_hash(($i - 1)."ims_ajax".$uid,'nonce'),-12,10))) && !empty($_FILES)){
-
-	$relpath = getenv("SCRIPT_NAME");
-	$abspath = str_replace("\\","/",__FILE__);
-	$docroot = str_replace($relpath,"",$abspath).'/';
-	$special_chars = array("?","[","]","/","\\","=","<",">",":",";",",","'","\"","&","$","#","*","(",")","|","~","`","!","{","}",chr(0));
-
+	
 	$tempfile 		= $_FILES['Filedata']['tmp_name'];
-	$filename 		= str_replace($special_chars,'',$_FILES['Filedata']['name']);
-	$filename 		= preg_replace('/[\s-]+/','-',$filename);
-	$targetpath 	= str_replace(array('//','/wp-admin/'),'/',$docroot.$_REQUEST['folder']);
-	$targetfile 	= $targetpath.'/'.$filename;
+	$filename 		= trim(sanitize_file_name($_FILES['Filedata']['name']),"/");
 	
-	if(!file_exists($targetpath)){
+	if(MULTISITE == true){
+		$blog_ID 		= get_current_blog_id();
+		$targetpath 	= WP_CONTENT_DIR."/blogs.dir/{$blog_ID}".$_REQUEST['folder'];
+	} else $targetpath	= WP_CONTENT_DIR."/".$_REQUEST['folder'];
+	
+	$targetfile 		= "{$targetpath}/{$filename}";
+	
+	if(!file_exists($targetpath))
 		@mkdir($targetpath,0775,true);
-	}
-	
+		
 	if(preg_match('/(png|jpg|jpeg|gif)$/i',$filename)){
 		if(!file_exists($targetfile)){
 			move_uploaded_file($tempfile,$targetfile);

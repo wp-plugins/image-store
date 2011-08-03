@@ -28,7 +28,7 @@ if(preg_match('#'.basename(__FILE__).'#',$_SERVER['PHP_SELF']))
 				$prev = $image->meta_value['sizes']['preview'];
 				$size = ' width="'.$mini['width'].'" height="'.$mini['height'].'"';
 				$url  = $base.$this->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$mini['path']));
-				$link = $base.$this->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$prev['path']))."&amp;p=1&amp;id=$enc";
+				$link = $base.$this->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$prev['path']))."&amp;p=1";
 				$imagetag = '<img src="'.$url.'" title="'.esc_attr($image->post_excerpt).'" alt="'.esc_attr($title).'"'.$size.' />'; 
 
 				echo '<li class="ims-thumb"><a class="thumb" href="'.$link.'" title="'.esc_attr($image->post_title).'">'.$imagetag.'</a>

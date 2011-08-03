@@ -88,7 +88,7 @@ class ImStoreShortCode{
 	function get_galleries($album=''){
 		global $wpdb;
 		
-		$wpdb->show_errors();
+		//$wpdb->show_errors();
 		if($this->limit) $limit = " LIMIT $this->limit ";
 		$this->attachments = $wpdb->get_results($wpdb->prepare(
 			"SELECT ID,post_title,guid,

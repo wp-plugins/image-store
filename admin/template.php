@@ -73,9 +73,8 @@ if(!empty($_POST['screen_options'])){
 	<div class="adunitbox postbox">
 		<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=8SJEQXK5NK4ES" class="donate" title="Like the plugin? Please Donate">
 		<img src="<?php echo IMSTORE_URL ?>/_img/donate.jpg" alt="donate"></a>
-		<div id="adunit"><a href="#" class="hidead"><?php _e('Hide ad',ImStore::domain)?></a><script type="text/javascript"><!--
-		google_ad_client = "ca-pub-8321526637092371";google_ad_slot = "2870704299";google_ad_width = 468;google_ad_height = 60;//--></script>
-		<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+		<div id="adunit"><a href="#" class="hidead"><?php _e('Hide ad',ImStore::domain)?></a>
+		<iframe allowtransparency="true" src="http://xparkmedia.com/_rsc/ad.html" frameborder="0"  marginheight="0" marginwidth="0" scrolling="no"  height="60" width="468"></iframe>
 		</div>
 	</div>
 

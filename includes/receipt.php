@@ -24,9 +24,7 @@ $labels = array(
 		'ims_bw'	=> __('Black & White',ImStore::domain),
 		'ims_sepia' => __('Sepia',ImStore::domain),
 );
-
-unset($_COOKIE['ims_orderid_'.COOKIEHASH]); 
-setcookie('ims_orderid_'.COOKIEHASH,' ',time()-31536000,COOKIEPATH,COOKIE_DOMAIN);
+unset($_COOKIE['ims_orderid_'.COOKIEHASH]);
 ?>
 
 <div class="ims-innerbox">
@@ -55,5 +53,7 @@ setcookie('ims_orderid_'.COOKIEHASH,' ',time()-31536000,COOKIEPATH,COOKIE_DOMAIN
 		echo "</ul>\n</div>";
 	}
 	
-} ?>
+} 
+setcookie('ims_orderid_'.COOKIEHASH,'',(time()-31536000),COOKIEPATH,COOKIE_DOMAIN);
+?>
 <div class="cl"></div>

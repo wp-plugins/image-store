@@ -359,7 +359,7 @@ $currencies = array (
 				<input type="text" name="watermarkurl" id="watermarkurl" class="inputlg" value="<?php $this->_v('watermarkurl')?>"/></td>
 			</tr>
 			<tr><td scope="row" colspan="7">&nbsp;</td></tr>
-			<tr class="alternate"><td scope="row" colspan="7"><?php _e('Downloadable image sizes',ImStore::domain)?></td></tr>
+<!--			<tr class="alternate"><td scope="row" colspan="7"><?php _e('Downloadable image sizes',ImStore::domain)?></td></tr>
 			<tr class="t">
 				<td scope="row"><?php _e('Delete',ImStore::domain)?></td>
 				<td scope="row"><?php _e('Image Size',ImStore::domain)?></td>
@@ -368,9 +368,9 @@ $currencies = array (
 				<td scope="row"><?php _e('Quality',ImStore::domain)?></td>
 				<td scope="row"><?php _e('Unit',ImStore::domain)?></td>
 				<td scope="row"><input type="button" id="addimagesize" value="<?php _e('Add image size',ImStore::domain)?>" class="button" /></td>
-			</tr>
+			</tr>-->
 			<?php if($sizes = get_option('ims_download_sizes')):for($x=0; $x<count($sizes); $x++):?>
-			<tr class="t image-size">
+			<!--<tr class="t image-size">
 			<td scope="row"><input type="checkbox" name="imgid_<?php echo $x?>" class="inputmd" value="1" /></td>
 				<td><input type="text" name="imagesize_<?php echo $x?>[name]" class="inputmd" value="<?php echo $sizes[$x]['name']?>" /></td>
 				<td><label><input type="text" name="imagesize_<?php echo $x?>[w]" class="inputsm" value="<?php echo $sizes[$x]['w']?>" /></label></td>
@@ -378,7 +378,7 @@ $currencies = array (
 				<td><label><input type="text" name="imagesize_<?php echo $x?>[q]" class="inputsm" value="<?php echo $sizes[$x]['q']?>" />(%)</label></td>
 				<td><?php _e('Pixels',ImStore::domain)?></td>
 				<td>&nbsp;</td>
-			</tr>
+			</tr>-->
 			<?php endfor; endif;?>
 			<tr class="t ims-image-sizes">
 				<td colspan="2" scope="row">&nbsp;</td>
@@ -517,7 +517,7 @@ $currencies = array (
 			<td><input type="text" name="paypalname" id="paypalname" class="inputxl" value="<?php $this->_v('paypalname')?>" /></td>
 			<td>&nbsp;</td>
 		</tr>
-		<tr class="alternate">
+<!--		<tr class="alternate">
 			<td><label for="paypalsig"><?php _e('PayPal API signature',ImStore::domain)?></label></td>
 			<td><input type="text" name="paypalsig" id="paypalsig" class="inputxl" value="<?php $this->_v('paypalsig')?>"/></td>
 			<td>&nbsp;</td>
@@ -526,7 +526,7 @@ $currencies = array (
 			<td width="20%"><label for="paypalpass"><?php _e('PayPal API password',ImStore::domain)?></label></td>
 			<td><input type="text" name="paypalpass" id="paypalpass" class="inputxl" value="<?php $this->_v('paypalpass')?>" /></td>
 			<td>&nbsp;</td>
-		</tr>
+		</tr>-->
 		
 		<?php }elseif($this->opts['gateway'] == 'notification'){?>
 		<tr>

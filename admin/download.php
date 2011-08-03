@@ -24,7 +24,6 @@ if(!wp_verify_nonce($_REQUEST["_wpnonce"],"ims_download_img"))
 
 class ImStoreDownloadImage{
 	
-	
 	/**
 	 * Constructor
 	 *
@@ -36,14 +35,25 @@ class ImStoreDownloadImage{
 		if(empty($_REQUEST['img'])) die();
 		
 		global $ImStore; 
+		$img_size = explode('x',strtolower($_GET['sz']));
+		
 		$this->store = (is_admin()) ? $ImStore->admin : $ImStore->store;
 		$this->attachment = get_post_meta($this->store->decrypt_id($_REQUEST['img']),'_wp_attachment_metadata',true);
 		
 		if($this->attachment['sizes'][$_GET['sz']]['url']){
 			$this->image_dir = str_ireplace(WP_CONTENT_URL,WP_CONTENT_DIR,$this->attachment['sizes'][$_GET['sz']]['url']);
+		}elseif(count($img_size)==2 && !$this->store->opts['downloadorig']){ 
+			$this->image_dir = image_resize($this->attachment['path'],$img_size[0],$img_size[1],0,0,0,100);
+			
+			if(is_wp_error($this->image_dir) && !$this->store->opts['downloadorig'])
+				$this->image_dir = $this->attachment['sizes']['preview']['path'];
+			elseif(is_wp_error($this->image_dir) && $this->store->opts['downloadorig'])
+				$this->image_dir = $this->attachment['path'];
+			
+		}elseif($this->store->opts['downloadorig']){
+			$this->image_dir = $this->attachment['path'];
 		}else{
-			if($this->store->opts['downloadorig']) $this->image_dir = $this->attachment['path'];
-			else  $this->image_dir = str_ireplace(WP_CONTENT_URL,WP_CONTENT_DIR,$this->attachment['sizes']['preview']['url']);
+		 	$this->image_dir = $this->attachment['sizes']['preview']['path'];
 		}
 		$this->display_image();
 	}
@@ -72,10 +82,18 @@ class ImStoreDownloadImage{
 		header("Content-Transfer-Encoding: binary");
 		header('Content-Type: ' . $filetype['type']);
 		header('Content-Disposition: attachment; filename=' . $filename);
-
-		if(!$_REQUEST['c']){
-			echo file_get_contents($this->image_dir); die();}
 		
+		// Optional support for X-Sendfile and X-Accel-Redirect
+		if (defined('WPMU_ACCEL_REDIRECT') && WPMU_ACCEL_REDIRECT == true ) {
+			header( 'X-Accel-Redirect: ' . str_replace( WP_CONTENT_DIR, '', $this->image_dir ) );
+			die();
+		} elseif (defined('WPMU_SENDFILE')  && WPMU_ACCEL_REDIRECT == true ) {
+			header( 'X-Sendfile: ' . $this->image_dir );
+			die();
+		}
+		
+		if(!$_REQUEST['c'] || $_REQUEST['c'] =='color' ){
+			readfile($this->image_dir); die();}
 		
 		switch($filetype['ext']){
 			case "jpg":

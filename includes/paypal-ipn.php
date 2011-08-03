@@ -43,16 +43,16 @@ class ImStorePaypalIPN {
 		if(!$fp) { 
 			die();
 		} else {
-			fputs($fp,"POST ".$web['path']." HTTP/1.1\r\n");
+			fputs($fp,"POST /cgi-bin/webscr HTTP/1.1\r\n");
 			fputs($fp,"Host: ".$web['host']."\r\n");
 			fputs($fp,"Content-type: application/x-www-form-urlencoded\r\n");
 			fputs($fp,"Content-length: ".strlen($postdata)."\r\n");
 			fputs($fp,"Connection: close\r\n\r\n");
 			fputs($fp,$postdata."\r\n\r\n");
 		
-			while(!feof($fp)) { 
+			while(!feof($fp))
 				$info[] = @fgets($fp,1024); 
-			}
+			
 			fclose($fp);
 			$info = implode(',',$info);
 							
@@ -107,7 +107,6 @@ class ImStorePaypalIPN {
 		$headers 	= 'From: "Image Store" <imstore@'.$_SERVER['HTTP_HOST'].">\r\n";
 		
 		wp_mail($to,$subject,$message,$headers);
-		setcookie('ims_orderid_'.COOKIEHASH,' ',time() - 31536000,COOKIEPATH,COOKIE_DOMAIN);
 		
 		/*foreach($_POST as $i => $v)
 			$postdata .= $i.'='.$v."\n";

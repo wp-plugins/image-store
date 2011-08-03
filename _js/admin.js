@@ -200,8 +200,8 @@ jQuery(document).ready(function($){
 		if(del){
 			id = $(this).parent().find('.packageid').val();
 			$.get(imslocal.imsajax,{ 	
+				postid:id,
 				action:'deletepackage',
-				packageid:id,
 				_wpnonce:imslocal.nonceajax
 			},function(){$('#package-list-'+id).remove()});
 			
@@ -215,6 +215,11 @@ jQuery(document).ready(function($){
 		else $('input[name="discount"]').removeAttr('disabled');
 	});
 	
+	$(".price-list-box input[title=downloadable]").click(function(){
+		if($(this).is(":checked")) $(this).parents('tr.size').find('td').eq(1).append("<em>"+imslocal.download+"</em>");
+		else  $(this).parents('tr.size').find('td').eq(1).find('em').remove();
+	});
+	
 	/********IMAGE UPLOAD **********/
 	
 	//set up
@@ -225,7 +230,7 @@ jQuery(document).ready(function($){
 	//remove message
 	function ims_file_selected(){
 		$('#message').remove();
-		folder = 'wp-content/'+$('#_ims_folder_path').val();
+		folder = $('#_ims_folder_path').val();
 		$('#imagefiles').uploadifySettings('folder',folder); 
 		if ( '1' == $('#auto_draft').val() ) {
 			autosaveLast = '';
@@ -246,7 +251,10 @@ jQuery(document).ready(function($){
 				action		:'flashimagedata',
 				galleryid	:$('#post_ID').val(),
 				_wpnonce	:imslocal.nonceajax
-			},function(data){$(data).prependTo('#ims_images_box .ims-table tbody:eq(1)')});
+			},function(data){
+				$(data).prependTo('#ims_images_box .ims-table tbody:eq(1)');
+				$('li.statuspublish a em').html(parseInt($('li.statuspublish a em').text())+1);
+			});
 		}
 	};
 
@@ -267,7 +275,7 @@ jQuery(document).ready(function($){
 		});
 		
 		if($('li.statustrash').length < 1)
-		$('<li class="statustrash"> | <a href="'+userSettings.url+'wp-admin/post.php?post='+$('#post_ID').val()
+		$('<li class="statustrash"> | <a href="'+imslocal.adminurl+'post.php?post='+$('#post_ID').val()
 		+'&action=edit&status=trash">'+imslocal.trash +' <span class="count">(<em>1</em>)</span></a></li>').appendTo('.subsubsub');
 		else $('li.statustrash a em').html(parseInt($('li.statustrash a em').text())+1);
 		if(parseInt($('li.statuspublish a em').text())-1 > 0 ) 

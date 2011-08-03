@@ -12,6 +12,8 @@
 
 
 //define constants
+if(isset($_REQUEST['w']))
+define('SHORTINIT',true);
 define('DOING_AJAX',true);
 
 //load wp
@@ -44,11 +46,7 @@ class ImStoreImage{
 		$this->image_dir = "{$this->root}wp-content/$path";
 		
 		if(!file_exists($this->image_dir)) die();
-		if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && isset($_SERVER['HTTP_IF_NONE_MATCH'])
-		&&(strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == filemtime($this->image_dir))){
-			header('HTTP/1.1 304 Not Modified'); 
-			die();
-		}else $this->display_image();
+		$this->display_image();
 	}
 	
 	/**
@@ -59,20 +57,52 @@ class ImStoreImage{
 	*/
 	function display_image(){
 		
-		$ext 		= end(explode('.',basename($this->image_dir)));
-		$modified 	= gmdate("D,d M Y H:i:s",filemtime($this->image_dir));
-		$expired	= gmdate("D,d M Y H:i:s",(filemtime($this->image_dir) + strtotime('+1 month')));
-		
-		header('Expires:'.$expired);
-		header('Last-Modified:'.$modified);
+		$ext = end(explode('.',basename($this->image_dir)));
 		header('Content-Type: image/'.$ext);
-		header('Cache-Control:max-age='.strtotime('+5 minutes').',must-revalidate');
+		
+		//Optional support for X-Sendfile and X-Accel-Redirect
+		if (defined('WPMU_ACCEL_REDIRECT') && WPMU_ACCEL_REDIRECT == true ) {
+			header( 'X-Accel-Redirect: ' . str_replace( WP_CONTENT_DIR, '', $this->image_dir ) );
+			die();
+		} elseif (defined('WPMU_SENDFILE')  && WPMU_ACCEL_REDIRECT == true ) {
+			header( 'X-Sendfile: ' . $this->image_dir );
+			die();
+		}
+		
+		$modified 	= gmdate("D, d M Y H:i:s",filemtime($this->image_dir));
+		$etag 		= '"' . md5( $modified ) . '"';
+		
+		header( "Last-Modified: $modified GMT" );
+		header( 'ETag: ' . $etag );
+		header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', time() + 100000000 ) . ' GMT' );
+		header('Cache-Control:max-age='.(time() + 100000000 ).',must-revalidate');
+
+		// Support for Conditional GET
+		$client_etag = isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) ? stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) : false;
+		
+		if( ! isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) )
+			$_SERVER['HTTP_IF_MODIFIED_SINCE'] = false;
+		
+		$client_last_modified = trim( $_SERVER['HTTP_IF_MODIFIED_SINCE'] );
+		$client_modified_timestamp = $client_last_modified ? strtotime( $client_last_modified ) : 0;
+		$modified_timestamp = strtotime($modified);
+		
+		if ( ( $client_last_modified && $client_etag )
+			? ( ( $client_modified_timestamp >= $modified_timestamp) && ( $client_etag == $etag ) )
+			: ( ( $client_modified_timestamp >= $modified_timestamp) || ( $client_etag == $etag ) )
+			) {
+			status_header( 304 );
+			die();
+		}
 		
 		if(empty($_REQUEST['p'])){
-			echo file_get_contents($this->image_dir); die();}
+			readfile( $this->image_dir );
+			die();
+		}
 		
 		//use to process big images
 		ini_set('memory_limit','256M');
+		ini_set('allow_url_fopen',true);
 		ini_set('set_time_limit','1000');
 		
 		$opts 		= get_option('ims_front_options');
@@ -90,14 +120,14 @@ class ImStoreImage{
 				$image = imagecreatefrompng($this->image_dir);
 				break;
 		}
-		
+
 		//add water mark		
 		if($opts['watermark']){
 			
 			//text watermark
 			if($opts['watermark'] == 1){
 				$font_size = $opts['fontsize'];
-				$font = IMSTORE_ABSPATH.'/_fonts/arial.ttf';
+				$font = dirname(__FILE__).'/_fonts/arial.ttf';
 				$rgb = $this->HexToRGB($opts['textcolor']);
 				
 				$black = imagecolorallocatealpha($image,0,0,0,90);
@@ -115,22 +145,28 @@ class ImStoreImage{
 			//image watermark
 			}elseif($opts['watermark'] == 2){
 				
-				$wmpath		= WP_CONTENT_DIR.str_ireplace(WP_CONTENT_URL,'',$opts["watermarkurl"]);
+				$wmpath		= $opts["watermarkurl"];
 				$wmtype 	= wp_check_filetype(basename($opts["watermarkurl"]));
+
+				if(!preg_match('/(png|jpg|jpeg|gif)$/i',$wmtype['ext'])){
+					readfile( $this->image_dir ); 
+					die();
+				}
 				
-				if(file_exists($wmpath)){
+				//if(file_exists($wmpath)){
 					switch($wmtype['ext']){
 						case "jpg":
 						case "jpeg":
-							$watermark = imagecreatefromjpeg($wmpath);
+							$watermark = @imagecreatefromjpeg($wmpath);
 							break;
 						case "gif":
-							$watermark = imagecreatefromgif($wmpath);
+							$watermark = @imagecreatefromgif($wmpath);
 							break;
 						case "png":
-							$watermark = imagecreatefrompng($wmpath);
+							$watermark = @imagecreatefrompng($wmpath);
 						 break;
 					}
+					
 					$wminfo 	= getimagesize($wmpath);
 					$info		= getimagesize($this->image_dir);
 					$wmratio 	= $this->image_ratio($wminfo[0],$wminfo[1],max($info[0],$info[1]));
@@ -153,7 +189,7 @@ class ImStoreImage{
 					
 					@imagedestroy($wmnew);
 					@imagedestroy($watermark);
-				}
+				//}
 			}
 			
 		}

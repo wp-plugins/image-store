@@ -35,7 +35,7 @@ class ImStoreFeeds{
 			__('Gallery Feed',ImStore::domain).'" href="'.$this->get_feed_url().'" />'."\n";
 		elseif(is_tax("ims_album")&&$album)
 			echo '<link rel="alternate" type="application/rss+xml" title="'.get_bloginfo('name')." &raquo; ".
-			__('Gallery Feed',ImStore::domain).'" href="'.trim(get_term_link($album,"ims_album"),'/').'/feed" />'."\n";
+			__('Gallery Feed',ImStore::domain).'" href="'.trim(get_term_link($album,"ims_album"),'/').'/feed/" />'."\n";
 	}
 	
 	/**
@@ -46,7 +46,7 @@ class ImStoreFeeds{
 	*/
 	function get_feed_url(){
 		global $ImStore; 
-		$link  = ($ImStore->permalinks) ? trim(dirname(get_permalink()),'/')."/feed/imstore": get_permalink()."&amp;feed=imstore";
+		$link  = ($ImStore->permalinks) ? trim(dirname(get_permalink()),'/')."/feed/imstore/": get_permalink()."&amp;feed=imstore";
 		return $link;
 	}
 	

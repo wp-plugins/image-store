@@ -100,7 +100,8 @@ $type[3] 	= __('Free Shipping',ImStore::domain);
 			 </form>
 			</div>
 		</div>
-		<p><small><?php _e('Add options by dragging image sizes or packages into the desired list.',ImStore::domain)?></small></p>
+		<p><small><?php _e('Add options by dragging image sizes or packages into the desired list.',ImStore::domain)?>
+		<?php _e('Check the box next to the price to make size downloadable, or image will have to be shipped.',ImStore::domain)?></small></p>
 		<div class="postbox price-list-box">
 			<div class="handlediv" ><br /></div>
 			<h3 class='hndle'><span><?php _e('Price Lists',ImStore::domain)?></span></h3>
@@ -137,7 +138,11 @@ $type[3] 	= __('Free Shipping',ImStore::domain);
 									else $package_sizes .= $package_size.'('.$count.'),'; 
 								}
 								echo rtrim($package_sizes,',');
-							}else echo $size['name'];	
+							}else {
+								echo $size['name'];	
+								if($size['download']) 
+									echo " <em>".__('downloadable.',ImStore::domain)."</em>";
+							}
 						?>
 						</td>
 						<td width="15%" align="right">
