@@ -554,10 +554,11 @@ class ImStoreFront{
 		if(!empty($post->post_excerpt) && ($this->imspage == 1 || $this->imspage == 2)) 
 			$output = '<div class="ims-excerpt">'.$post->post_excerpt.'</div>';
 		
+		$base = IMSTORE_URL."image.php?i=";
 		$output 	.= "<{$itemtag} class='ims-gallery'>";
+		
 		foreach($this->attachments as $image){
 			
-			$base = IMSTORE_URL."image.php?i=";
 			$enc  = $this->encrypt_id($image->ID);
 			$prev = $image->meta_value['sizes']['preview'];
 			$thmb = $image->meta_value['sizes']['thumbnail'];

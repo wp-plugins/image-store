@@ -18,11 +18,12 @@ if(preg_match('#'.basename(__FILE__).'#',$_SERVER['PHP_SELF']))
 	<div id="ims-thumbs">
 		<ul class="thumbs">
 		<?php if(!empty($this->attachments)){
+			$base = IMSTORE_URL."image.php?i=";
 			$nonce = '_wpnonce='.wp_create_nonce('ims_secure_img');
+			
 			foreach($this->attachments as $image){
 				
 				$title = $image->post_title;
-				$base = IMSTORE_URL."image.php?i=";
 				$enc  = $this->encrypt_id($image->ID);
 				$mini = $image->meta_value['sizes']['mini'];
 				$prev = $image->meta_value['sizes']['preview'];

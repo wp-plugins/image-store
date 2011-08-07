@@ -24,7 +24,7 @@ $colors_options = array(
 <form method="post" >
 
 	<?php if(empty($this->cart['images'])){?>
-	<div class="ims-message ims-error"><?php _e('Your shopping cart is empty!!',ImStore::domain)?></div>
+	<div class="ims-message ims-error"><?php _e('Your shopping cart is empty.',ImStore::domain)?></div>
 	<?php }else{?>
 	
 	<table class="ims-table">

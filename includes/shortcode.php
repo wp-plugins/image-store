@@ -26,17 +26,7 @@ class ImStoreShortCode{
 		$this->opts = get_option('ims_front_options');
 		add_shortcode('ims-gallery',array(&$this,'ims_gallery_shortcode'),50);
 	}
-	
-	/**
-	*Encrypt image ID for downlaods
-	*
-	*@return void
-	*@since 2.0.4
-	*/
-	function encrypt_id($id){
-		return substr(md5($id), 0, 8).dechex($id);
-    }
-	
+
 	/**
 	 * Core function display gallery
 	 *
@@ -121,19 +111,31 @@ class ImStoreShortCode{
 		$itemtag 	= 'ul';
 		$icontag 	= 'li';
 		$captiontag = 'div';
+		
+		global $ImStore;
+		$base = IMSTORE_URL."image.php?i=";
 		$output = "<{$itemtag} class='ims-gallery'>";
+		
 		foreach($this->attachments as $image){
-			$link 		= IMSTORE_URL."image.php?$nonce&amp;img=".$this->encrypt_id($image->ID);
-			$title_att 	= ($caption)? 'title="'.esc_attr($image->post_excerpt).'"':' ' ;
-			$tagatts 	= ($lightbox)?' class="ims-colorbox" rel="gallery" ':' class="ims-image" rel="image" ';
-			$imagetag 	= '<img src="'.$image->meta_value['sizes']['thumbnail']['url'].'"'.$title_att.'alt="'.$image->post_title.'" />'; 
 			
+			$enc  = $ImStore->store->encrypt_id($image->ID);
+			$prev = $image->meta_value['sizes']['preview'];
+			$thmb = $image->meta_value['sizes']['thumbnail'];
+			$size = ' width="'.$thmb['width'].'" height="'.$thmb['height'].'"';
+			$wm	  = ($this->opts['watermark'])? "&w=".$this->opts['watermark'] : ''; //force update image cache
+			$url  = $base.$ImStore->store->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$thmb['path']));
+			
+			$tagatts	= ' class="ims-colorbox" rel="gallery" ';
+			$title 		= str_replace(__('Protected:',ImStore::domain),'',$image->post_title);
+			$caption	= ($this->is_galleries)?$title:$image->post_excerpt ;
+			$link 		= $base.$ImStore->store->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$prev['path']))."&amp;p=1$wm";
+			
+			$imagetag = '<img src="'.$url.'" title="'.esc_attr($caption).'" class="colorbox-2" alt="'.esc_attr($title).'"'.$size.' />'; 
 			$output .= "<{$icontag}>";
-			$output .= '<a href="'.$link.'"'. $tagatts.$title_att .' >'.$imagetag.'</a>';
-			$output .= "<{$captiontag} class='gallery-caption'>";
-			$output .= ($caption) ? wptexturize($image->post_excerpt) : wptexturize($image->post_title) ;
+			$output .= '<a href="'.$link.'"'.$tagatts.' title="'.esc_attr($title).'">'.$imagetag.'</a>';
+			$output .= "<{$captiontag} class='gallery-caption'>".wptexturize($title);
 			$output .= "</{$captiontag}></{$icontag}>";
-			$output .= "</{$icontag}>";
+
 		}
 		return $output .= "</{$itemtag}>";
 	}
@@ -154,15 +156,21 @@ class ImStoreShortCode{
 		$output .= '<div id="ims-thumbs">
 						<ul class="thumbs">';
 		if(!empty($this->attachments)){
+			global $ImStore;
+			$base = IMSTORE_URL."image.php?i=";
 			$nonce = '_wpnonce='.wp_create_nonce('ims_secure_img');
+			
 			foreach($this->attachments as $image){
 				$title = $image->post_title;
-				$w = $image->meta_value['sizes']['mini']['width'];
-				$h = $image->meta_value['sizes']['mini']['height'];
-				$imagetag = '<img src="'.$image->meta_value['sizes']['mini']['url'].'" width="'.$w.'" height="'.$h.'" alt="'. $title.'" />'; 
-				$output .= '<li class="ims-thumb"><a class="thumb" href="'.IMSTORE_URL."image.php?$nonce&amp;img=".$this->encrypt_id($image->ID).'" title="'.esc_attr($image->post_title).'" rel="nofollow">'.$imagetag.'</a>';
-				if($caption) $output .= '<span class="caption">'.$image->post_excerpt.'</span>';
-				$output .= '</li>';
+				$mini = $image->meta_value['sizes']['mini'];
+				$prev = $image->meta_value['sizes']['preview'];
+				$size = ' width="'.$mini['width'].'" height="'.$mini['height'].'"';
+				$url  = $base.$ImStore->store->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$mini['path']));
+				$link = $base.$ImStore->store->url_encrypt(str_replace(str_replace('\\','/',WP_CONTENT_DIR),'',$prev['path']))."&amp;p=1";
+				$imagetag = '<img src="'.$url.'" title="'.esc_attr($image->post_excerpt).'" alt="'.esc_attr($title).'"'.$size.' />'; 
+
+				$output .= '<li class="ims-thumb"><a class="thumb" href="'.$link.'" title="'.esc_attr($image->post_title).'">'.$imagetag.'</a>
+				<span class="caption">'.$image->post_excerpt.'</span></li>';
 			}
 		}
 		$output .= '</ul>

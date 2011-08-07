@@ -83,6 +83,10 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+= 2.2.1 =
+* Fixed: RSS sql error.
+* Fixed: Shortcode image link.
+
 = 2.2.0 =
 * Security update
 * Revised: PayPal IPN.
