@@ -45,7 +45,8 @@ $status_labels 	= array(
 );
 
 //errors
-$blog_ID   = get_current_blog_id();
+if( function_exists('get_current_blog_id') )
+	$blog_ID   = get_current_blog_id();
 $errors[1] = __('Upload failed.',ImStore::domain);
 $errors[2] = __('Not a valid URL path',ImStore::domain);
 $errors[3] = __('This is not a zip file.',ImStore::domain);

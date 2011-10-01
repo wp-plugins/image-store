@@ -50,7 +50,8 @@ function ajax_imstore_delete_post(){
 	if(!current_user_can("ims_change_pricing"))return;
 	check_ajax_referer("ims_ajax");
 	
-	$blog_ID  = get_current_blog_id();
+	if( function_exists('get_current_blog_id') )
+		$blog_ID  = get_current_blog_id();
 	$metadata = get_post_meta((int)$_GET['postid'],'_wp_attachment_metadata');
 	if($metadata[0]['sizes'] && !empty($_GET['deletefile'])){
 		foreach($metadata[0]['sizes'] as $size){
@@ -103,7 +104,8 @@ function ajax_ims_flash_image_data(){
 	@ini_set('memory_limit','256M');
 	@ini_set('max_execution_time',1000);
 	
-	$blog_ID	= get_current_blog_id();
+	if( function_exists('get_current_blog_id') )
+		$blog_ID	= get_current_blog_id();
 	$galleid 	= $_GET['galleryid'];
 	$filename 	= sanitize_file_name($_GET['imagename']);
 	$abspath 	= $_GET['filepath'];

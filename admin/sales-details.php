@@ -116,6 +116,27 @@ $format 	= array('',"$this->sym%s","$this->sym %s","%s$this->sym","%s $this->sym
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
+                <td scope="row">&nbsp;</td>
+                <td><?php _e('E-mail',ImStore::domain)?></td>
+                <td colspan="2">
+                <?php echo (  $data['payer_email']  ) ?  $data['payer_email'] : $data['user_email']?>
+                </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+
+              <tr>
+                <td scope="row">&nbsp;</td>
+                <td><?php _e('Phone',ImStore::domain)?></td>
+                <td colspan="2">
+                <?php echo $data['ims_phone']?>
+                </td>
+                <td>&nbsp; <?php print_r(  ); ?></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+			<tr>
 				<td class="column-thumb" scope="row">&nbsp;</td>
 				<td><?php //_e('Gallery ID',ImStore::domain)?>&nbsp;</td>
 				<td><?php //echo get_post_meta($order->post_parent,'_ims_gallery_id',true)?>&nbsp;</td>
