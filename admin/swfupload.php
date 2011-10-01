@@ -44,7 +44,8 @@ if(($nonce == (substr(wp_hash($i.'ims_ajax'.$uid,'nonce'),-12,10)
 	$filename 		= trim(sanitize_file_name($_FILES['Filedata']['name']),"/");
 	
 	if(MULTISITE == true){
-		$blog_ID 		= get_current_blog_id();
+		if( function_exists('get_current_blog_id') )
+			$blog_ID 		= get_current_blog_id();
 		$targetpath 	= WP_CONTENT_DIR."/blogs.dir/{$blog_ID}".$_REQUEST['folder'];
 	} else $targetpath	= WP_CONTENT_DIR."/".$_REQUEST['folder'];
 	

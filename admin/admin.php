@@ -105,7 +105,9 @@ class ImStoreAdmin{
 	*/
 	function save_post($postid,$post){
 		
-		$blog_ID = get_current_blog_id();
+		if( function_exists('get_current_blog_id') )
+			$blog_ID = get_current_blog_id();
+			
 		if($post->post_type != 'ims_gallery') return $postid;
 		if(!wp_verify_nonce($_POST['ims_save_post'],'ims_save_post') 
 		|| !current_user_can('ims_add_galleries')) return $postid;
@@ -327,7 +329,8 @@ class ImStoreAdmin{
 	 *@since 0.5.0 
 	*/	
 	function update_attachment_metadata($data,$postid){
-		$blog_ID  = get_current_blog_id();
+		if( function_exists('get_current_blog_id') )
+			$blog_ID  = get_current_blog_id();
 		$contdir = (MULTISITE == true) ? str_replace("\\","/",WP_CONTENT_DIR."/blogs.dir/{$blog_ID}"):str_replace("\\","/",WP_CONTENT_DIR); 
 		$data['file'] 	= str_replace($contdir,"",dirname($data['file'])."/".basename($data['file'])); 
 		if($data['sizes']['mini'] && !stristr($data['file'],date('Y/m')) && !$data['sizes']['thumbnail']['url']){
@@ -443,7 +446,8 @@ class ImStoreAdmin{
 	*/	
 	function load_ims_image_path($filepath,$postid){
 		global $wpdb;
-		$blog_ID = get_current_blog_id();
+		if( function_exists('get_current_blog_id') )
+			$blog_ID = get_current_blog_id();
 		if('ims_image' == $wpdb->get_var($wpdb->prepare("SELECT post_type FROM $wpdb->posts WHERE ID = %s",$postid))){
 			$imagedata = get_post_meta($postid,'_wp_attachment_metadata'); 
 			if(MULTISITE == true) $filepath = str_replace("\\","/",WP_CONTENT_DIR."/blogs.dir/{$blog_ID}".$imagedata[0]['file']);
@@ -623,7 +627,8 @@ class ImStoreAdmin{
 	 *return void
 	*/
 	function delete_post($postid){
-		$blog_ID = get_current_blog_id(); 
+		if( function_exists('get_current_blog_id') )
+			$blog_ID = get_current_blog_id(); 
 		if($this->opts['deletefiles']){
 			global $wpdb; 
 			if('ims_gallery' == get_post_type($postid)){
@@ -831,9 +836,9 @@ class ImStoreAdmin{
 		$current_screen->id == 'edit-ims_gallery' || $_GET['page'] == 'ims-pricing'|| $_GET['page'] == 'ims-sales' 
 		|| $_GET['page'] == 'ims-customers'){
 			
-			if(substr(sprintf('%o', fileperms(IMSTORE_ABSPATH."/admin/key/")), -4) != "0777") 
+			if( ! is_readable( IMSTORE_ABSPATH."/admin/key") ) 
 		 		echo '<div class="updated fade"><p>'.
-				__("Please, change <strong>image-store/admin/key</strong> file permissions to 777",ImStore::domain).'</p></div>';
+				__("Please, make <strong>image-store/admin/key</strong> readeable",ImStore::domain).'</p></div>';
 			
 			wp_enqueue_style('thickbox');
 			wp_enqueue_style('adminstyles',IMSTORE_URL.'_css/admin.css',false,ImStore::version,'all');

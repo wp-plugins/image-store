@@ -491,12 +491,12 @@ class ImStoreFront{
 			$count 	= ($key == 5  && $this->cart['items'] && $this->imspage != 6)? "<span>(".$this->cart['items'].")</span>":'';
 			$nav 	.= '<li class="ims-menu-'.$title.$css.'"><a href="'.$this->get_permalink($key).'">'.$page."</a> $count</li>"."\n";
 		}
+		if($this->cart['total']) 
+			$nav .= '<li class="ims-menu-total">'.sprintf($this->format[$this->opts['clocal']],number_format($this->cart['total'],2)).'</li>'."\n";
 		if($post->post_password && isset($_COOKIE['wp-postpass_'.COOKIEHASH]) && $this->permalinks)
 			$nav .= '<li class="ims-menu-logout"><a href="'.trim(get_permalink(),'/').'/logout/true">'.__("Exit Gallery",ImStore::domain).'</a></li>'."\n";
 		elseif($post->post_password && isset($_COOKIE['wp-postpass_'.COOKIEHASH]))
 			$nav .= '<li class="ims-menu-logout"><a href="'.get_permalink().'&amp;imslogout=true">'.__("Exit Gallery",ImStore::domain).'</a></li>'."\n";
-		if($this->cart['total']) 
-			$nav .= '<li class="ims-menu-total">'.sprintf($this->format[$this->opts['clocal']],number_format($this->cart['total'],2)).'</li>'."\n";
 		echo $nav."</ul>\n";
 	}
 	
@@ -742,7 +742,7 @@ class ImStoreFront{
 			SELECT DISTINCT object_id FROM $wpdb->terms AS t 
 			INNER JOIN $wpdb->term_taxonomy tt ON t.term_id = tt.term_id 
 			INNER JOIN $wpdb->term_relationships tr ON tt.term_taxonomy_id = tr.term_taxonomy_id 
-			WHERE t.term_id = $album"
+			WHERE t.term_id = '$album'"
 		: 	"SELECT DISTINCT ID
 			FROM $wpdb->posts
 			WHERE post_type = 'ims_gallery'
