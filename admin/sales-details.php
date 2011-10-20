@@ -132,7 +132,7 @@ $format 	= array('',"$this->sym%s","$this->sym %s","%s$this->sym","%s $this->sym
                 <td colspan="2">
                 <?php echo $data['ims_phone']?>
                 </td>
-                <td>&nbsp; <?php print_r(  ); ?></td>
+                <td>&nbsp; </td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
             </tr>
