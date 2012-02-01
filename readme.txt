@@ -4,8 +4,8 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: e-commerce,shop,photo store,picture,image,galleries,imstore,image-store,secure,translate,translatable,watermark,
 slideshow,gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints
 Requires at least: 3.0.0
-Tested up to: 3.2
-Stable tag: 2.2.2
+Tested up to: 3.3.1
+Stable tag: 3.0.0
 
 Image Store (ImStore) is a photo gallery and store plugin for WordPress with Paypal and Google Checkout integration.
 
@@ -15,9 +15,9 @@ This plugin was created because there was a need in the WorPress community to ha
 The plugin fully integrated with the WordPress database it only creates a post_expire column on the posts table.
 so you will not find extra tables on your database(Cool!.. at least for me I hate extra tables).
 
-* Example http://imstore.xparkmedia.com/photo-store
-* Languages http://imstore.xparkmedia.com/languages
-* Shortcode guide http://imstore.xparkmedia.com/usage
+* Example http://xparkmedia.com/image-store/demos/
+* Languages http://xparkmedia.com/plugins/image-store/#languages
+* Shortcode guide http://xparkmedia.com/image-store/usage/
 
 = Features =
 
@@ -79,23 +79,26 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 
 == Frequently Asked Questions ==
 
-* http://imstore.xparkmedia.com/blog
+* http://xparkmedia.com/support/plugin/popular-widget/
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
 
-= 2.2.2 =
-Securty update.
-* Fixed: Mysql Error.
-* Fixed: php function errors.
-* Fixed: image refresh error.
-* Fixed: Add to cart in slideshow.
-* Added: Phone and email information to sales log.
+= 3.0.0 =
+* Added: hooks
+* Added: Gallery embed feature.
+* Added: Favorite link feature without store.
+* Added: Template examples.
+* Changed: ImStore class structure.
+* Changed: Full integration with wp media upload.
+* Fixed: Shortcode display.
+* Fixed: Permalink Issues.
+* Fixed: Image display issues.
+* Fixed: Sale information page.
 
 = 2.2.1 =
 * Fixed: RSS sql error.
 * Fixed: Shortcode image link.
-* Fixed: Sale information missing.
 
 = 2.2.0 =
 * Security update
@@ -308,49 +311,6 @@ Securty update.
 * Fixed: WP thumbnail preview conflict.
 * Fixed: file not being deleted from server when image was deleted.
 
-= 0.5.5 =
-* Added: drag and drop image sort(admin).
-* Security fix: image url.
-* Fixed: Image edit didn't create new image when thumb only was selected.
-* Fixed: php error on dynamic css file for IE colorbox support.
-
-= 0.5.4 =
-* Fixed: Flash image upload
-* Fixed: Preview size settings not saving when updated.
-* Fixed: Add new menu "Save into" not displaying galleries for selection.
-
-= 0.5.3 =
-* Added: widget.
-* Added: image rss.
-* Added: gallery shortcode.
-* Fixed: permalink confict.
-* Fixed: js error with new slideshow options.
-* Fixed: admind displaying wrong expiration date.
-* Removed: columns setting,not needed controled by css.
-
-= 0.5.2 =
-* CSS compression.
-* CSS modifications.
-* Added: Slideshow options
-* Added: colorbox gallery feature.
-* Fixed: js errors on IE.
-* Fixed: watermark text location.
-* Fixed: expire gallery query/cron
-* Fixed: CSS AlphaImageLoader image url for(color box)IE.
-* Text change: Inside USA to Local.
-* Relocated colorbox styles and images.
-
-= 0.5.1 =
-* HTML clean up
-* CSS modifications.
-* Add image cache(htaccess).
-* Fixed: permalinks admin/frontend.
-* Fixed: images displaying on the frontend with trash status.
-* Remove: login link from unsecure galleries.
-* Increase RAM memory for swfupload to process big images.
-
-= 0.5.0 =
-* Beta release
 
 == CREDITS ==
 
@@ -359,9 +319,6 @@ Trent Foley(http://www.twospy.com/galleriffic/)
 
 = Colorbox =
 Jack Moore,Alex Gregory(http://colorpowered.com/colorbox/)
-
-= Uploadfy =
-Ronnie Garcia,Benj Arriola,RonnieSan(http://www.uploadify.com/)
 
 
 == Upgrade Notice ==
@@ -377,7 +334,7 @@ Ronnie Garcia,Benj Arriola,RonnieSan(http://www.uploadify.com/)
 3. Screenshot Pricing
 4. Screenshot Sales / Screen Options
 5. Screenshot Settings
-6. Screenshot Galley Options
-7. Screenshot Slideshow
-8. Screenshot Pricelist
-9. Screenshot Shopping Cart
+6. Screenshot Slideshow
+7. Screenshot Pricelist
+8. Screenshot Shopping Cart
+9. Screenshot Gallery embed
