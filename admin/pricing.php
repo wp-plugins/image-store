@@ -339,7 +339,7 @@ function ims_package_list( $ims ){
 				</tr>
 			</tfoot>
 		</table>
-		<?php wp_nonce_field( 'ims_update_packages')?>
+		<?php wp_nonce_field( 'ims_update_packages' )?>
 		</form>
 		<?php
 	}
@@ -408,7 +408,7 @@ function ims_image_sizes( $ims ){
 				</tr>
 			</tfoot>
 		</table>
-		<?php wp_nonce_field( 'ims_imagesizes')?>
+		<?php wp_nonce_field( 'ims_imagesizes' )?>
 	</form>
 	<?php
 }
