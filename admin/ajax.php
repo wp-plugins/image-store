@@ -84,27 +84,29 @@ function ajax_imstore_update_post( ){
  *@since 2.0.0
 */
 function ajax_imstore_delete_post( ){
-	check_ajax_referer("ims_ajax");
-	if( !current_user_can( "ims_manage_galleries") 
-		|| empty( $_GET['postid'] )) 
-		die( );
-		
-	$postid = (int)$_GET['postid'];
 	
-	//delete file from server
-	if( !empty( $_GET['parent'] ) && isset($_GET['deletefile']) && $_GET['deletefile'] == true ){
-		$data = get_post_meta( $postid, '_wp_attachment_metadata', true);
-		if( $data && is_array( $data['sizes'] ) ){
-			$imgpath = WP_CONTENT_DIR . '/' . dirname( $data['file'] ) ;
-			foreach( $data['sizes'] as $size ){
-				if( file_exists( $imgpath . "/_resized/" . $size['file'] ) )
-					@unlink( $imgpath . "/_resized/" . $size['file'] );
-				else @unlink( $imgpath . "/" . $size['file'] );
+	check_ajax_referer("ims_ajax");
+	if( empty( $_GET['postid'] )) 
+		die( );
+	
+	if( current_user_can( "ims_manage_galleries" ) 
+	|| current_user_can("ims_change_pricing") ){
+		$postid = (int)$_GET['postid'];
+		//delete file from server
+		if( !empty( $_GET['parent'] ) && isset($_GET['deletefile']) && $_GET['deletefile'] == true ){
+			$data = get_post_meta( $postid, '_wp_attachment_metadata', true);
+			if( $data && is_array( $data['sizes'] ) ){
+				$imgpath = WP_CONTENT_DIR . '/' . dirname( $data['file'] ) ;
+				foreach( $data['sizes'] as $size ){
+					if( file_exists( $imgpath . "/_resized/" . $size['file'] ) )
+						@unlink( $imgpath . "/_resized/" . $size['file'] );
+					else @unlink( $imgpath . "/" . $size['file'] );
+				}
+				@unlink( WP_CONTENT_DIR . "/" . $data['file'] );
 			}
-			@unlink( WP_CONTENT_DIR . "/" . $data['file'] );
 		}
+		wp_delete_post( $postid ,true );
 	}
-	wp_delete_post( $postid ,true);
 	die( );
 }
 
@@ -172,7 +174,7 @@ function ajax_ims_add_images_to_favorites( ){
 		trim( $_COOKIE['ims_favorites_'.COOKIEHASH] .",". implode( ',', $dec_ids ), ',' ) : implode( ',', $dec_ids);
 	
 		$ids	= implode( ',', array_unique( explode( ',', $join )) );
-		setcookie( 'ims_favorites_' . COOKIEHASH, $ids, 0, COOKIEPATH );
+		setcookie( 'ims_favorites_' . COOKIEHASH, $ids, 0, COOKIEPATH, COOKIE_DOMAIN );
 	}
 	
 	if( count($new) < 2 ) echo __( 'Image added to favorites', $ImStore->domain ).'|ims-success';
@@ -223,7 +225,7 @@ function ajax_ims_remove_images_from_favorites(){
 			unset( $join[$remove] );
 		
 		$ids	= implode( ',', array_flip( $join ) );
-		setcookie('ims_favorites_'.COOKIEHASH,$ids,0,COOKIEPATH);
+		setcookie( 'ims_favorites_' . COOKIEHASH, $ids, 0, COOKIEPATH, COOKIE_DOMAIN );
 	}
 	
 	if(count($new) < 2) echo __('Image removed from favorites', $ImStore->domain).'|ims-success';
@@ -285,6 +287,9 @@ switch($_GET['action']){
 		break;
 	case 'deleteimage':
 		ajax_imstore_delete_post( );
+		break;
+	case 'deletepackage':
+	ajax_imstore_delete_post( );
 		break;
 	case 'upadateimage':
 		ajax_imstore_update_post( );

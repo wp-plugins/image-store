@@ -50,10 +50,8 @@ class ImStoreImage{
 		$this->image_dir = "{$this->root}wp-content/$path";
 		
 		if( !file_exists( $this->image_dir ) 
-		|| !preg_match( '/\.(png|jpe?g|gif)$/i', $this->image_dir )) {
-			header("HTTP/1.0 404 Not Found");
+		|| !preg_match( '/\.(png|jpe?g|gif)$/i', $this->image_dir ))
 			die( );
-		}
 		
 		$this->display_image();
 	}

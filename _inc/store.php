@@ -832,8 +832,8 @@ class ImStoreFront extends ImStore{
 			
 		}elseif( $gal->post_password === $pass ){
 			
-			setcookie( 'ims_galid_' . COOKIEHASH, $gal->ID, 0, COOKIEPATH );
-			setcookie( 'wp-postpass_' . COOKIEHASH, $gal->post_password, 0, COOKIEPATH );
+			setcookie( 'ims_galid_' . COOKIEHASH, $gal->ID, 0, COOKIEPATH, COOKIE_DOMAIN );
+			setcookie( 'wp-postpass_' . COOKIEHASH, $gal->post_password, 0, COOKIEPATH, COOKIE_DOMAIN );
 			update_post_meta( $gal->post_id, '_ims_visits', get_post_meta( $gal->ID, '_ims_visits', true ) +1 );
 			
 			wp_redirect( get_permalink( $gal->ID ) );
@@ -1122,7 +1122,7 @@ class ImStoreFront extends ImStore{
 				
 		//regisgter visit
 		if( empty( $_COOKIE['ims_gal_' . $this->galid . '_' . COOKIEHASH] ) ){
-			setcookie( 'ims_gal_' . $this->galid . '_' . COOKIEHASH, true, 0, COOKIEPATH );
+			setcookie( 'ims_gal_' . $this->galid . '_' . COOKIEHASH, true, 0, COOKIEPATH, COOKIE_DOMAIN );
 			update_post_meta( $this->galid, '_ims_visits', get_post_meta( $this->galid, '_ims_visits', true) +1 );
 		}
 		
@@ -1475,7 +1475,7 @@ class ImStoreFront extends ImStore{
 			$orderid = wp_insert_post( apply_filters( 'ims_new_order', $order, $this->cart ) );
 			
 			if( !empty( $orderid ) && !empty( $this->cart )){
-				setcookie( 'ims_orderid_' . COOKIEHASH, $orderid, time( )+31536000, COOKIEPATH );
+				setcookie( 'ims_orderid_' . COOKIEHASH, $orderid, time( )+31536000, COOKIEPATH, COOKIE_DOMAIN );
 				add_post_meta( $orderid, '_ims_order_data', $this->cart );
 			}
 		} else update_post_meta( $this->orderid, '_ims_order_data', $this->cart );
