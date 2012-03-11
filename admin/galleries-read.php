@@ -58,7 +58,7 @@ $page_links = paginate_links( array(
 	'base' => $this->pageurl . '%_%',
 	'format' => '&p=%#%',
 	'prev_text' => __( '&laquo;', $this->domain ),
-	'next_text' => __( '&raquo;', $this->doamain ),
+	'next_text' => __( '&raquo;', $this->domain ),
 	'total' => $galleries->max_num_pages,
 	'current' => $page,
 ));

@@ -71,7 +71,7 @@ if( empty($this->cart['images']) && apply_filters( 'ims_empty_car', true, $this-
 		$output .= '<img src="' . $this->get_image_url( $image, 'mini' ) . '" title="' . esc_attr($mini['file']) . '" alt="' . esc_attr($mini['file']) . '"'. $size . ' />'; 
 		$output .= '</td>';
 		
-		$output .= '<td class="ims-subrows" colspan="2">';
+		$output .= '<td class="ims-subrows" colspan="6">';
 		 foreach($sizes as $size => $colors){
 			foreach($colors as $color => $item){
 				$enc = $this->encrypt_id( $id );
@@ -141,11 +141,11 @@ if( empty($this->cart['images']) && apply_filters( 'ims_empty_car', true, $this-
 	$output .= '</tbody><tfoot>';
 	
 	$output .= '<tr><td>&nbsp;</td><td><label>' . __( 'Item subtotal', $this->domain ) . '</label></td>
-	<td class="total" colspan="2">' . $this->format_price( $this->cart['subtotal'] ) . '</td></tr>';
+	<td class="total" colspan="5">' . $this->format_price( $this->cart['subtotal'] ) . '</td></tr>';
 	
 	$output .= '<tr>
 	<td>&nbsp;</td><td><label for="ims-promo-code">' . __( 'Promotional code', $this->domain ) . '</label></td>
-	<td class="total promo-code" colspan="2">
+	<td class="total promo-code" colspan="5">
 	<input name="promocode" id="ims-promo-code" type="text" value="' . ( isset( $this->cart['promo']['code'] ) ? esc_attr( $this->cart['promo']['code'] ) : '' ) . '" />
 	<span class="ims-break"></span> <small>' . __( 'Update cart to apply promotional code.', $this->domain ) . '</small></td>
 	</tr>';
@@ -153,11 +153,11 @@ if( empty($this->cart['images']) && apply_filters( 'ims_empty_car', true, $this-
 	//display discounted data
 	if( !empty( $this->cart['discounted'] ) ){
 		$output .= '<tr><td>&nbsp;</td><td>' . __( 'Discount', $this->domain ) . '</td>
-		<td colspan="2" class="discount">' . $this->format_price( $this->cart['promo']['discount'], ' - ' ) . '</td></tr>';
+		<td colspan="5" class="discount">' . $this->format_price( $this->cart['promo']['discount'], ' - ' ) . '</td></tr>';
 	}
 	
 	$output .= '<tr><td>&nbsp;</td><td><label for="shipping">' . __( 'Shipping', $this->domain ) . '</label></td>
-	<td colspan="2" class="shipping">' . ( isset( $this->cart['shippingcost'] ) ? $this->shipping_options( ) : '' ) . '</td></tr>';
+	<td colspan="5" class="shipping">' . ( isset( $this->cart['shippingcost'] ) ? $this->shipping_options( ) : '' ) . '</td></tr>';
 	
 	//display tax fields
 	if( isset( $this->cart['tax'] ) ){
@@ -167,15 +167,15 @@ if( empty($this->cart['images']) && apply_filters( 'ims_empty_car', true, $this-
 	
 	//display total
 	$output .= '<tr><td>&nbsp;</td> <td><label>' . __( 'Total', $this->domain ) . '</label></td>
-	<td colspan="2" class="total">' . $this->format_price( $this->cart['total'] ) . ' </td></tr>';
+	<td colspan="5" class="total">' . $this->format_price( $this->cart['total'] ) . ' </td></tr>';
 	
 	//display notification
 	if( $this->opts['gateway'] != 'notification' ){
-		$output .= '<tr><td>&nbsp;</td><td colspan="2"><label>' . __( 'Additional Instructions', $this->domain ) . '<br />
+		$output .= '<tr><td>&nbsp;</td><td colspan="6"><label>' . __( 'Additional Instructions', $this->domain ) . '<br />
 		<textarea name="instructions" class="ims-instructions">' . esc_textarea( isset($this->cart['instructions']) ? $this->cart['instructions'] : '' ) . '</textarea></label></td></tr>';
 	}
 	
-	$output .= '<tr><td>&nbsp;</td><td colspan="2"><input name="apply-changes" type="submit" value="' . esc_attr__( 'Update Cart', $this->domain ) . '" class="secondary" />
+	$output .= '<tr><td>&nbsp;</td><td colspan="6"><input name="apply-changes" type="submit" value="' . esc_attr__( 'Update Cart', $this->domain ) . '" class="secondary" />
 	<input name="' . (( $this->opts['gateway'] == 'notification') ? 'enotification' : 'checkout' ) . '" type="submit" value="' . esc_attr__( 'Check out', $this->domain ) . '" class="primary" />
 	'. 	apply_filters( 'ims_store_cart_actions', '', &$this->cart ) . '</td></tr>';
 	
