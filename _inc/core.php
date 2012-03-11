@@ -18,7 +18,7 @@ class ImStore{
 	*Make sure that new language( .mo ) files have 'ims-' as base name
 	*/
 	public $domain	= 'ims';
-	public $version	= '3.0.1';
+	public $version	= '3.0.2';
 
 	/**
 	*Public variables
@@ -289,9 +289,11 @@ class ImStore{
 	function load_text_domain( ){
 		$locale 	= get_locale( );
 		$filedir 	= WP_CONTENT_DIR . '/languages/_ims/'. $this->domain . '-' . $locale . '.mo';
-		$mofile 	= apply_filters( 'ims_load_textdomain', $filedir, $this->domain , $locale );
-		if( function_exists( 'load_textdomain' ) )
-			load_textdomain( $this->domain , $mofile );
+		
+		if( function_exists( 'load_plugin_textdomain' ) )
+			load_plugin_textdomain( $this->domain, false, apply_filters( 'ims_load_textdomain', '../languages/_ims/', $this->domain , $locale ) );
+		elseif( function_exists( 'load_textdomain' ) )
+			load_textdomain( $this->domain, apply_filters( 'ims_load_textdomain', $filedir, $this->domain , $locale ) );
 	}
 	
 	/**
@@ -349,6 +351,7 @@ class ImStore{
 	*/
 	function set_user_caps( ){
 		global $current_user;
+		
 		if ( !isset($current_user->ID) || 
 		isset($current_user->caps['administrator']) )
 			return;
@@ -377,7 +380,7 @@ class ImStore{
 			 )
 		 ); 
 		
-		$searchable = get_option( 'ims_searchable' )  ? false : true;
+		$searchable = ( get_option( 'ims_searchable' ) ) ? false : true;
 		$texedit = isset( $this->opts['showtexteditor'] ) ? 'editor' : false;
 		
 		//register gallery post type assign ims_album taxonomy

@@ -20,6 +20,7 @@ class ImStoreAdmin extends ImStore{
 	public $per_page 	= 20;
 	public $page			= false;
 	public $action 		= false;
+	public $pagenow	= false;
 	public $uopts 		= array( );
 	public $screens		= array( );
 	public $user_fields = array( );
@@ -34,7 +35,7 @@ class ImStoreAdmin extends ImStore{
 	function ImStoreAdmin( ){
 		
 		global $pagenow;
-		parent::__construct( );
+		parent::ImStore( );
 		
 		add_filter( 'get_attached_file', array( &$this, 'load_ims_image_path' ), 15,2 );
 		add_filter( 'ims_album_row_actions', array( &$this, 'add_taxonomy_link' ), 1,3 );
@@ -60,24 +61,26 @@ class ImStoreAdmin extends ImStore{
 		register_activation_hook( IMSTORE_FILE_NAME, array( &$this, 'activate') );
 		register_deactivation_hook( IMSTORE_FILE_NAME, array( &$this, 'deactivate') );
 		
-		add_action( 'init', array( &$this, 'admin_init' ), 1 );	
-		add_action( 'admin_menu', array( &$this, 'add_menu' ), 20 );
-		add_action( 'init', array( &$this, 'save_screen_option' ), 5 );	
-		add_action( 'user_register', array( &$this, 'update_user' ), 1 );
-		add_action( 'edit_user_profile', array( &$this, 'profile_fields' ), 1)	;
-		add_action( 'show_user_profile', array( &$this, 'profile_fields' ), 1 );
-		add_action( 'edit_user_profile_update', array( &$this, 'update_user' ), 1 );
+		add_action( 'init', array( &$this, 'admin_init' ),1 );	
+		add_action( 'init', array( &$this, 'save_screen_option' ),5 );	
+		add_action( 'admin_menu', array( &$this, 'add_menu' ),20 );
+		add_action( 'user_register', array( &$this, 'update_user' ),1 );
+		add_action( 'edit_user_profile', array( &$this, 'profile_fields' ),1);
+		add_action( 'show_user_profile', array( &$this, 'profile_fields' ),1 );
+		add_action( 'edit_user_profile_update', array( &$this, 'update_user' ),1 );
 
-		add_filter( 'manage_users_columns', array( &$this, 'add_columns' ), 10 );
-		add_filter( 'wp_insert_post_data', array( &$this, 'insert_post_data' ), 20,2 );
-		add_filter( 'manage_users_sortable_columns', array( &$this, 'add_columns' ), 10 );
-		add_filter( 'manage_users_custom_column', array( &$this, 'add_columns_val' ), 15,3 );
+		add_filter( 'manage_users_columns', array( &$this, 'add_columns' ),10 );
+		add_filter( 'wp_insert_post_data', array( &$this, 'insert_post_data' ),20, 2 );
+		add_filter( 'manage_users_sortable_columns', array( &$this, 'add_columns' ),10 );
+		add_filter( 'manage_users_custom_column', array( &$this, 'add_columns_val' ),15, 3 );
 
-		add_action( 'admin_print_styles', array( &$this, 'load_styles' ), 1 );
-		add_action( 'admin_print_scripts', array( &$this, 'load_admin_scripts' ), 1 );
+		add_action( 'admin_print_styles', array( &$this, 'load_styles' ),1 );
+		add_action( 'admin_print_scripts', array( &$this, 'load_admin_scripts' ),1 );
 	
 		if( is_multisite( ) ){
 			add_action( 'wpmu_options', array( &$this, 'wpmu_options' ) );
+			add_action( 'activated_plugin', array( &$this, 'activated_plugin' ),1, 2 );
+			add_action( 'wpmu_new_blog', array( &$this, 'wpmu_create_blog' ),1 );
 			add_action( 'update_wpmu_options', array( &$this, 'update_wpmu_options' ) );
 		}
 	
@@ -163,6 +166,49 @@ class ImStoreAdmin extends ImStore{
 	}
 	
 	/**
+	*Set settings when the pluigin
+	* is activated in the entire network 
+	*
+	*@return void
+	*@since 0.5.0 
+	*/
+	function activated_plugin( $plugin, $network_wide ){
+		if( !$network_wide) return;
+		global $wpdb;
+		
+		$opts = get_site_option( $this->optionkey );
+		if( get_site_option( 'ims_sync_settings' ) && empty( $opts ) ){
+			include_once( IMSTORE_ABSPATH.'/admin/install.php' );
+			ImStoreInstaller::imstore_default_options( );
+		}else{
+			$blogs = $wpdb->get_results( "SELECT blog_id id FROM $wpdb->blogs WHERE public = '1' AND archived = '0' AND deleted = '0'" ); 
+			foreach( $blogs as $blog ){
+				switch_to_blog ( $blog->id );
+				$customer = @get_role( 'customer' );
+				if( empty( $customer ) )  add_role( 'customer', 'Customer', array('read' => 1, 'ims_read_galleries' => 1 ) );
+				 $wpdb->query( "ALTER IGNORE TABLE  $wpdb->posts ADD post_expire DATETIME NOT NULL" );
+			}
+			restore_current_blog( );
+		}
+	}
+	
+	/**
+	*Add cutomer role and expire column
+	*to blogs under wpmu
+	*
+	*@return void
+	*@since 3.0.2
+	*/
+	function wpmu_create_blog( $blog_id ){
+		if( !is_plugin_active_for_network( IMSTORE_FILE_NAME ) )
+			return;
+			
+		switch_to_blog ( $blog_id );
+		include_once( IMSTORE_ABSPATH . '/admin/install.php' );
+		restore_current_blog( );
+	}
+	
+	/**
 	*Update WPMU optons
 	*
 	*@return void
@@ -208,7 +254,10 @@ class ImStoreAdmin extends ImStore{
 		wp_enqueue_style( ' adminstyles', IMSTORE_URL.'/_css/admin.css', false, $this->version, 'all' );
 		
 		if( !is_readable( IMSTORE_ABSPATH . "/admin/_key") ) 
-			echo '<div class="updated fade"><p>' . __( "Please, make <strong>image-store/admin/key</strong> readeable", $this->domain ) . '</p></div>';
+			echo '<div class="updated fade"><p>' . __( "Please, make <strong>image-store/admin/_key</strong> readeable", $this->domain ) . '</p></div>';
+		
+		if( is_multisite( ) && empty( $this->opts ) ) 
+			echo '<div class="error fade"><p>' . __( "Options not available, please reset all settings under the reset tab.", $this->domain ) . '</p></div>';
 		
 		if( $current_screen->id == 'ims_gallery_page_ims-sales' ) 
 			wp_enqueue_style( 'print', IMSTORE_URL.'/_css/print.css', false, $this->version, 'print' );
@@ -377,7 +426,6 @@ class ImStoreAdmin extends ImStore{
 		$this->action 		= isset($_GET['action']) ? $_GET['action'] : false;	
 		
 		if( $this->galid ) 		$url = $this->pagenow	. "?post=$this->galid&action=" . $this->action;
-	//	elseif( $this->pagenow	== 'profile.php' ) $url = $this->pagenow	. '?page=' . $this->page;
 		elseif( $this->page ) 	$url = $this->pagenow	. '?post_type=ims_gallery&page=' . $this->page;
 		else							$url = $this->pagenow	. '?post_type=ims_gallery';
 		
@@ -618,8 +666,11 @@ class ImStoreAdmin extends ImStore{
 		
 		add_submenu_page( 'edit.php?post_type=ims_gallery',__( 'Settings', $this->domain ),__( 'Settings', $this->domain ),
 			'ims_change_settings', 'ims-settings', array( &$this, 'show_menu') );
-		add_users_page(__( 'Image Store', $this->domain ),__( 'Galleries', $this->domain ),
-			'ims_read_galleries', 'user-galleries', array( &$this, 'show_menu') );
+		
+		global $current_user;
+		if( isset( $current_user->allcaps['ims_read_galleries'] ) )
+			add_users_page(__( 'Image Store', $this->domain ),__( 'Galleries', $this->domain ),
+				'ims_read_galleries', 'user-galleries', array( &$this, 'show_menu') );
 	}
 	
 	/**
@@ -654,11 +705,12 @@ class ImStoreAdmin extends ImStore{
 	*@return array
 	*@since 0.5.0 
 	*/
-	function insert_post_data( $data,$args ){
+	function insert_post_data( $data, $args ){
 		if( $data['post_type'] == 'ims_gallery' ){
-			if(empty( $data['post_content']  )) 
+			if( empty( $data['post_content'] )) 
 				$data['post_content'] = '[ims-gallery-content]';
-			$data['post_expire'] = ( isset( $_POST['_ims_expire'] ) ) ? $_POST['_ims_expire'] : false ;
+			if( $this->pagenow !== 'post-new.php' ) 
+				$data['post_expire'] = ( isset( $_POST['_ims_expire'] ) ) ? $_POST['_ims_expire'] : false ;
 		}
 		if( $data['post_type'] == 'ims_promo' ) 
 			$data['post_expire'] = $_POST['expiration_date'];
@@ -705,10 +757,12 @@ class ImStoreAdmin extends ImStore{
 			
 		if( $type == null ) return false;
 			
-		switch($type){
+		switch($type){ //, count(meta_key) count 
 			case 'customer':
-				$query = "SELECT meta_value status, count(meta_key) count 
-				FROM $wpdb->usermeta WHERE meta_key = 'ims_status' GROUP by meta_value";
+				$query = "SELECT um.meta_value status, count(um.meta_value) count 
+				FROM $wpdb->usermeta um LEFT JOIN $wpdb->usermeta ur ON um.user_id = ur.user_id 
+				WHERE um.meta_key = 'ims_status'  
+				AND ( ur.meta_key =  '{$wpdb->prefix}capabilities' AND ur.meta_value LIKE '%customer%' ) GROUP by um.user_id";
 				break;
 			case 'order':
 				$query = "SELECT post_status AS status, count(post_status) AS count FROM $wpdb->posts
@@ -748,14 +802,12 @@ class ImStoreAdmin extends ImStore{
 		$customers = wp_cache_get( 'ims_customers' );
 		if ( false == $customers ){
 			global $wpdb;
-			
-			$key = ( $this->blog_id > 1 ) ? 'ims_{$this->blog_id}_capabilities' : 'ims_capabilities';
-					
-			$q = "SELECT DISTINCT ID, user_login FROM $wpdb->users AS u 
+
+		 	$q = "SELECT DISTINCT ID, user_login FROM $wpdb->users AS u 
 			LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id
 			LEFT JOIN $wpdb->usermeta ur ON u.ID = ur.user_id 
 			WHERE um.meta_key = 'ims_status' AND um.meta_value = 'active' 
-			AND ( ur.meta_key = '$key' AND ur.meta_value LIKE '%customer%' )";
+			AND ( ur.meta_key = '{$wpdb->prefix}capabilities' AND ur.meta_value LIKE '%customer%' )";
 		
 			$customers = $wpdb->get_results( $q );
 			wp_cache_set( 'ims_customers', $customers );

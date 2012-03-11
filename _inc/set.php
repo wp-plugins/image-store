@@ -19,7 +19,7 @@ class ImStoreSet extends ImStoreAdmin{
 	*/
 	function ImStoreSet( ){
 		
-		parent::__construct( );
+		parent::ImStoreAdmin( );
 		
 		//speed up ajax we don't need this
 		if( defined( 'DOING_AJAX' ) || defined( 'DOING_AUTOSAVE' || defined( 'SHORTINIT')) ) 

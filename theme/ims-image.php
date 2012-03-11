@@ -29,7 +29,6 @@
 										get_the_title( $post->post_parent )
 									);
 								?>
-								<?php edit_post_link( __( 'Edit'), '<span class="edit-link">', '</span>' ); ?>
 							</div><!-- .entry-meta -->
 
 						</header><!-- .entry-header -->

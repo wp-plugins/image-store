@@ -162,6 +162,7 @@ class ImStoreWidget extends WP_Widget {
 				FROM $wpdb->posts p LEFT JOIN $wpdb->postmeta pm
 				ON p.ID = pm.post_id WHERE post_type = 'ims_image' 
 				AND post_status = 'publish' AND post_parent $parent
+				AND pm.meta_key = '_wp_attachment_metadata'
 				ORDER BY $orderby $order $limit "
 			));
 			wp_cache_set( 'ims_widget_' . $this->number, $images );

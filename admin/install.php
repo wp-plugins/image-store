@@ -143,6 +143,9 @@ class ImStoreInstaller extends ImStore{
 		update_option( 'preview_size_w', 380 );
 		update_option( 'preview_size_h', 380 );
 		update_option( 'preview_size_q', 80 );
+		
+		//display galleries on front-end
+		update_option( 'ims_searchable', true );
 				
 		//save all options
 		update_option( 'ims_dis_images', $ims_dis_img );
@@ -171,7 +174,7 @@ class ImStoreInstaller extends ImStore{
 		wp_cache_flush( );
 		
 		//update database if updating before 2.0.0
-		if( $this->version < "2.0.0" ){
+		if( $this->ver < "2.0.0" ){
 			$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key 
 			IN( 'ims_downloads', 'ims_download_max', '_ims_image_count', '_ims_customer' )" );
 			$wpdb->query( "UPDATE $wpdb->postmeta SET meta_key = '_ims_visits' WHERE meta_key = 'ims_visits'" );
@@ -180,15 +183,16 @@ class ImStoreInstaller extends ImStore{
 		}
 		
 		$ims_ft_opts 	 = get_option( $this->optionkey );
+		
 		//update options if updating from 2.0.8 and prior
-		if( $this->version <= "2.0.8" ){
+		if( $this->ver <= "2.0.8" ){
 			$ims_ft_opts['album_template']	= 'page . php';
 		 	$ims_ft_opts['tags'][]			= __( '/%instructions%/', $this->domain );
 		 	update_option( $this->optionkey, $ims_ft_opts );
 		}
-
-		//update options if updating to 3.0.o
-		if( $this->version <= "3.0.0" || empty($ims_ft_opts['carttags'])){
+		
+		//update options if updating to 3.0.0
+		if( $this->ver <= "3.0.0" || empty($ims_ft_opts['carttags'])){
 			$ims_ft_opts['gateway_method']	= 'post';		
 			$ims_ft_opts['carttags'] = array( 
 																__( '%image_id%', $this->domain ),
@@ -255,7 +259,7 @@ class ImStoreInstaller extends ImStore{
 		'ims_pricelist', 'ims_options', 'ims_page_galleries', 'ims_sizes', 'ims_image_key', 'ims_download_sizes', 'ims_dis_images', 'ims_user_options' ) ); 
 		
 		//add expire column
-		 if( empty( $this->ver ) )
+		 if( empty( $this->ver ) || ( $this->ver <= "3.0.1" && is_multisite( ) ) )
 			$wpdb->query( "ALTER IGNORE TABLE  $wpdb->posts ADD post_expire DATETIME NOT NULL" );
 		
 		//create secure page
@@ -363,6 +367,18 @@ class ImStoreInstaller extends ImStore{
 			'_ims_price' => '15.90', '_ims_sizes' => array( '2.5x3.5' => array( 'unit' => 'in', 'count' => 8 ) ) )
 		 );
 		
+		//fix insallation headers already sent wit multisites
+		if( is_multisite( ) ){
+			global $wp_post_types;
+			$obj = new stdClass();
+			$obj->name = false; 
+			$obj->public = false; 
+			$obj->_builtin = false; 
+			$obj->hierarchical = false; 
+			$wp_post_types['ims_pricelist'] = $obj;
+			$wp_post_types['ims_package'] = $obj;		
+		}
+		
 		//update package information
 		foreach( $packages as $package ){
 			$package_id = wp_insert_post( $package );
@@ -380,11 +396,14 @@ class ImStoreInstaller extends ImStore{
 		if( empty( $list_id ) ) return; 
 		update_post_meta( $list_id, '_ims_list_opts', $price_list['options'] );
 		update_post_meta( $list_id, '_ims_sizes', $price_list['sizes'] );
-	
+		
+		if( is_multisite( ) ){
+			unset( $wp_post_types['ims_pricelist'] );
+			unset( $wp_post_types['ims_package'] );
+		}
 	}
 	
-	
-		/**
+	/**
 	 *Uninstall all settings
 	 *
 	 *@return void

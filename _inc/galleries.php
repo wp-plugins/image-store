@@ -32,7 +32,7 @@ class ImStoreGallery extends ImStoreAdmin{
 	*@since 3.0.0
 	*/
 	function ImStoreGallery( ){
-		parent::__construct( );
+		parent::ImStoreAdmin( );
 			
 		add_filter( 'upload_dir', array( &$this, 'change_upload_path' ), 80,1 );
 		add_filter( 'ims_async_upload', array( &$this, 'display_image_columns' ), 0,3 );
@@ -608,6 +608,11 @@ class ImStoreGallery extends ImStoreAdmin{
 		
 		//scan folder
 		if( !empty($_POST['scannfolder']) && !empty( $this->galpath ) ){
+			
+			//increase memory resources
+			ini_set( 'memory_limit', '256M' );
+			ini_set( 'set_time_limit', '1300' );
+			
 			$scan = true;
 			//delete old data
 			$wpdb->query(

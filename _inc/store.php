@@ -47,18 +47,16 @@ class ImStoreFront extends ImStore{
 			return;
 			
 		ob_start( ); 
-		parent::__construct( ); 
+		parent::ImStore( ); 
 	 
 		$this->page_front	= get_option( 'page_on_front' );
-		
-		//$imagepath = ( $this->permalinks ) ? '/images/' : '/image.php?i=' ; 
 		$this->baseurl = apply_filters( 'ims_base_image_url', IMSTORE_URL .  '/image.php?i='  );
 	
 		//more speed up actions
 		add_action( 'wp', array( &$this, 'init_hooks' ),0 );		
-		
 		add_shortcode( 'image-store', array( &$this, 'imstore_shortcode') );
 		
+		add_filter( 'get_pagenum_link',array( &$this, 'page_link' ));
 		add_filter( 'ims_subnav', array( &$this, 'ad_favorite_options' ),1,1 );	
 		add_filter( 'parse_query', array( &$this, 'album_pagination' ),2, 20 );
 		add_filter( 'query_vars', array( &$this, 'add_var_for_rewrites' ),1,10 );
@@ -85,9 +83,8 @@ class ImStoreFront extends ImStore{
 		//load image rss
 		if( !empty( $this->opts['mediarss'] ) )
 			require_once( IMSTORE_ABSPATH . '/_store/image-rss.php' );
-		
 	}
-	
+
 	/**
 	 *Initiate actions
 	 *
@@ -113,7 +110,6 @@ class ImStoreFront extends ImStore{
 				add_shortcode( 'ims-gallery-content', array( &$this, 'ims_gallery_shortcode') );
 			}
 		}
-		
 		require_once( IMSTORE_ABSPATH . '/_store/shortcode.php' );
 	}
 
@@ -316,7 +312,6 @@ class ImStoreFront extends ImStore{
 		header( "Location: " . $url . "\r\n", true, 307 );
 		header( "Content-Type: application/x-www-form-urlencoded\r\n" );
 		exit( );
-		
 	}
 	
 	/**
@@ -397,7 +392,6 @@ class ImStoreFront extends ImStore{
 		wp_mail( $to, $subject, $message, $headers );
 		
 		$this->imspage = 'receipt';
-		
 	}
 	
 	/**
@@ -409,11 +403,10 @@ class ImStoreFront extends ImStore{
 	 */
 	function custom_types( &$query ){
 		$types = get_query_var( 'post_type' );
-		if( !is_tax( ) || ( isset($query->query_vars['post_type'] ) 
-			&& $query->query_vars['post_type'] == 'nav_menu_item') )
+		if( (!is_archive( ) && empty( $query->query_vars['post_type'] ) ) ||
+		( isset( $query->query_vars['post_type'] ) && $query->query_vars['post_type'] == 'nav_menu_item' ) )
 			return $query;
-			
-	 	$query->set( 'post_type', get_post_types( array( 'public' => true, 'publicly_queryable' => true) ) );
+	 	$query->set( 'post_type', get_post_types( array( 'public' => true ) ) );
 	}
 	
 	/**
@@ -459,7 +452,6 @@ class ImStoreFront extends ImStore{
 			'wplightbox'			=> isset( $this->opts['wplightbox'] ) ? $this->opts['wplightbox'] : false,
 			'ajaxnonce'			=> wp_create_nonce("ims_ajax_favorites")
 		) ); wp_localize_script( 'imstorejs', 'imstore', $localize );
-
 	}
 	
 	/**
@@ -539,19 +531,32 @@ class ImStoreFront extends ImStore{
 		$output = "<{$imagetag} class='ims-img'>" ;
 		$output .= '<a href="' . get_permalink( $next_post->ID ) . "#post-{$next_post->ID}" . '" class="ims-image" rel="image" title="' . esc_attr( $title ) . '">' . $img . '</a>';
 		$output .= "<{$captiontag} class='gallery-caption'><span class='ims-img-name'>" . wptexturize( $post->post_excerpt ) . "</span>";
-		
-		/*if( empty( $this->opts['disablestore'] ) ) 
-			$output .= '<span class="ims-add-to-cart-button">
-				<input name="add_to_cart" type="button" class="img-'.  esc_attr( $this->encrypt_id( $post->ID ) ) .'" value="' . esc_attr( __( "Add to cart", $this->domain ) ) . '" />
-			</span>';*/
 				
 		$output .= "</{$captiontag}></{$imagetag}>";
 		return apply_filters( 'ims_image_content' , $output,  $tags, $next_post );
 	}
 		
-	/*
-	*
-	*/
+	/**
+	 *Fix next/previous links on single galleries
+	 *when message is displayed
+	 *
+	 *@param $order string
+	 *@return string
+	 *@since 3.0.2
+	 */ 	
+	function page_link( $link ){
+		if( !is_singular('ims_gallery') && !is_singular('ims_image') )
+			return $link;
+		return preg_replace( '/\/ms\/([0-9]+)/', '', $link );
+	}
+	
+	/**
+	 *Fix pagination order to attachment (im_image) page 
+	 *
+	 *@param $order string
+	 *@return string
+	 *@since 3.0.1
+	 */ 
 	function adjacent_post_sort( $order ){
 		if( !is_singular( 'ims_image' ) )
 			return $order;
@@ -559,9 +564,13 @@ class ImStoreFront extends ImStore{
 		return " ORDER BY p.{$this->sortby} $dir, p.ID $dir";
 	}
 
-	/*
-	*
-	*/
+	/**
+	 *Fix pagination to attachment (im_image) page 
+	 *
+	 *@param $where string
+	 *@return string
+	 *@since 3.0.1
+	 */ 
 	function adjacent_post_where( $where ){
 		if( !is_singular( 'ims_image' ) )
 			return $where;
@@ -619,9 +628,9 @@ class ImStoreFront extends ImStore{
 	 *@since 2.0.0
 	 */
 	function taxonomy_template( $template ){
-		if( !is_tax( 'ims_album' ) || empty( $this->opts['album_template'] ) )
+		if( !is_tax( 'ims_album' ) )
 			return $template; 
-		
+					
 		if( file_exists( WP_TEMPLATE_DIR . "/page.php" )
 		&& $this->opts['album_template'] == 'page.php' ){
 			global $wp_query, $post;
@@ -635,12 +644,15 @@ class ImStoreFront extends ImStore{
 		
 		if( file_exists( WP_TEMPLATE_DIR . '/'. $this->opts['album_template'] ))
 			return WP_TEMPLATE_DIR . '/' . $this->opts['album_template'] ;
+		
+		if( file_exists( IMSTORE_ABSPATH . "/theme/taxonomy-ims_album.php" ))
+			return IMSTORE_ABSPATH . "/theme/taxonomy-ims_album.php";
 			
 		return $template;
 	}
 	
 	/**
-	 *add paging option to albums 
+	 *Add paging option to albums 
 	 *
 	 *@param $query object
 	 *@return object
@@ -698,7 +710,6 @@ class ImStoreFront extends ImStore{
 	 *@since 3.0.0
 	 */
 	function add_gallerific_js_vars( $vars ){
-			
 		$vars = array_merge( $vars, array(
 			'galleriffic'				=> true,
 			'numThumbs'			=> $this->opts['numThumbs'],
@@ -714,7 +725,6 @@ class ImStoreFront extends ImStore{
 			'nextPageLinkText' 	=> $this->opts['nextPageLinkText'],
 			'prevPageLinkText'	=> $this->opts['prevPageLinkText'],	 
 		) ); return $vars;
-		
 	}
 	
 	/**
@@ -733,7 +743,6 @@ class ImStoreFront extends ImStore{
 			
 		$this->get_galleries( $atts ); 
 		return $this->display_galleries( );
-		
 	}
 	
 	/**
@@ -778,7 +787,7 @@ class ImStoreFront extends ImStore{
 		$output = '<form action="' . get_permalink( $this->galid ) . '" method="post">
 		<p class="message login">'.__("To view your images please enter your login information below:", $this->domain ).'</p>
 			<div class="ims-fields">
-				<label for="'.$glabel.'">'.__("Gallery ID:", $this->domain ).'</label> <input name="'.$glabel.'" id="'.$glabel.'" />
+				<label for="'.$glabel.'">'.__("Gallery ID:", $this->domain ).'</label> <input type="text" name="'.$glabel.'" id="'.$glabel.'" />
 				<span class="linebreak"></span>
 				<label for="'.$plabel.'">'.__("Password:", $this->domain ).'
 				</label> <input name="'.$plabel.'" id="'.$plabel.'" type="password" />
@@ -1004,7 +1013,6 @@ class ImStoreFront extends ImStore{
 			$post->meta = maybe_unserialize( $post->meta );
 			$images[] = $post;
 		} $this->attachments = $images;
-	
 	}
 	
 	/**
@@ -1107,7 +1115,7 @@ class ImStoreFront extends ImStore{
 						
 			$tag 		= '<img src="' . $this->get_image_url( $image, 'thumbnail' ) . '" title="' . esc_attr($caption) . '" class="colorbox-2" alt="' . esc_attr($title) . '"'. $size . ' />'; 
 			
-			$output .= "<{$imagetag} class='ims-img'>";
+			$output .= "<{$imagetag} class='ims-img imgid-{$image->ID}'>";
 			$output .= '<a href="' . $link . '"' . $tagatts . ' title="' . esc_attr( $title ) . '">' . $tag . '</a>';
 			$output .= "<{$captiontag} class='gallery-caption'><span class='ims-img-name'>" . wptexturize( $title ) . "</span>";
 			
@@ -1386,7 +1394,8 @@ class ImStoreFront extends ImStore{
 			return;
 		
 		$this->cart['items'] = 0;
-		$this->cart['subtotal'] = 0;
+		if( empty($this->cart['subtotal'] ) )
+			$this->cart['subtotal'] = 0;
 	
 		$images = explode( ',', $_POST['ims-to-cart-ids'] );
 		$color	= ( empty($_POST['_imstore-color']) ) ? 'color' : $_POST['_imstore-color'];
@@ -1481,7 +1490,7 @@ class ImStoreFront extends ImStore{
 		} else update_post_meta( $this->orderid, '_ims_order_data', $this->cart );
 		
 		do_action( 'ims_after_add_to_cart', &$this->cart );
-			
+		
 		$this->success = '1';
 		wp_redirect( html_entity_decode( $this->get_permalink( $this->imspage )) ); 
 		die( );
