@@ -18,7 +18,7 @@ class ImStore{
 	*Make sure that new language( .mo ) files have 'ims-' as base name
 	*/
 	public $domain	= 'ims';
-	public $version	= '3.0.2';
+	public $version	= '3.0.3';
 
 	/**
 	*Public variables
@@ -52,9 +52,11 @@ class ImStore{
 			$this->sync = get_site_option( 'ims_sync_settings' );
 		}
 		
-		if( empty( $this->opts ) && $this->sync == false )
-			$this->opts = get_option( $this->optionkey );
-		else $this->opts = get_site_option( $this->optionkey );
+		if( empty( $this->opts ) && $this->sync == true )
+			switch_to_blog( 1 );
+		
+		$this->opts = get_option( $this->optionkey );
+		if( is_multisite() ) restore_current_blog( );
 		
 		add_filter( 'posts_orderby', array( &$this, 'posts_orderby' ), 10,3 );
 		add_filter( 'post_type_link', array( &$this, 'gallery_permalink' ), 10,3 );
@@ -235,16 +237,20 @@ class ImStore{
 			if( $id == 'photos' ){
 				$new_rules[$galleries . "/([^/]+)/page/?([0-9]+)/?$"] = 
 				"index.php?ims_gallery=". $wp_rewrite->preg_index(1). "&imspage=$id".
-				'&paged='.$wp_rewrite->preg_index(2 );
+				'&paged='.$wp_rewrite->preg_index(2);
 				
 				$new_rules[$galleries . "/([^/]+)/$slug/page/?([0-9]+)/?$"] = 
 				"index.php?ims_gallery=". $wp_rewrite->preg_index(1). "&imspage=$id".
-				'&paged='.$wp_rewrite->preg_index(2 );
+				'&paged='.$wp_rewrite->preg_index(2);
+				
+				$new_rules[$galleries . "/([^/]+)/$slug/page/?([0-9]+)/ms/?([0-9]+)/?$"] = 
+				"index.php?ims_gallery=". $wp_rewrite->preg_index(1). "&imspage=$id".
+				'&paged='.$wp_rewrite->preg_index(2).'&imsmessage='.$wp_rewrite->preg_index(3);
 			}
 					
 			$new_rules[$galleries . "/([^/]+)/$slug/ms/?([0-9]+)/?$"] = 
 			"index.php?ims_gallery=".$wp_rewrite->preg_index(1). "&imspage=$id".
-			'&imsmessage='.$wp_rewrite->preg_index(2 );
+			'&imsmessage='.$wp_rewrite->preg_index(2);
 		
 			$new_rules[$galleries . "/([^/]+)/$slug/?$"] = 
 			"index.php?ims_gallery=" . $wp_rewrite->preg_index(1)."&imspage=$id";

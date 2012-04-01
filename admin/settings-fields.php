@@ -254,7 +254,7 @@ $settings['image'] = array(
 	'watermarkurl' => array( 
 		'val'	=> '',
 		'type' 	=> 'text',
-		'label' => '<a id="addwatermarkurl">'. __( 'Watermark URL', $this->domain ) . '</a>',
+		'label' =>  __( 'Watermark URL', $this->domain ) ,
 		'desc'	=> __( 'Full URL to image, PNG with transparency recommended', $this->domain ),
 	 ),
 );

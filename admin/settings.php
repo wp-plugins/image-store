@@ -52,7 +52,7 @@ include( IMSTORE_ABSPATH . "/admin/settings-fields.php");
 				<?php 
 				$css = '';
 				foreach( $settings[$boxid] as $name => $row ){
-					echo '<tr'.$css.'>'	;
+					echo '<tr class="row-'.$name.$css.'">'	;
 					if( isset($row['col']) ){
 						foreach( (array)$row['opts'] as $id => $opt ){
 							echo '<td scope="row" class="col"><label for="', $id , '">', $opt['label'] , '</label></td>';
@@ -121,7 +121,7 @@ include( IMSTORE_ABSPATH . "/admin/settings-fields.php");
 						echo '</td>'; 
 					}
 					echo '</tr>';
-					$css = ($css == ' class="alternate"') ? '' : ' class="alternate"'; 
+					$css = ($css == ' alternate') ? '' : ' alternate'; 
 				}
 				?>
 				<?php do_action( 'ims_settings', $boxid) ?>

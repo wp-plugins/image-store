@@ -66,6 +66,7 @@ class ImStoreFront extends ImStore{
 		
 		add_filter( 'the_content', array( &$this,'ims_image_content'),10 );
 		add_filter( 'single_template', array( &$this, 'get_image_template' ),10,1 );	
+		
 		add_filter( 'get_next_post_sort', array( &$this, 'adjacent_post_sort' ),20 );
 		add_filter( 'get_previous_post_sort', array( &$this, 'adjacent_post_sort' ),20); 
 		add_filter( 'get_next_post_where', array( &$this, 'adjacent_post_where' ),20); 
@@ -284,7 +285,9 @@ class ImStoreFront extends ImStore{
 			}
 		}
 		
-		$total += $this->cart['shipping'];
+		if( empty( $this->cart['discounted'] ) )
+			$total += $this->cart['shipping'];
+			
 		if( isset( $this->cart['tax'] ))
 			$total += $this->cart['tax'];
 			
@@ -444,13 +447,14 @@ class ImStoreFront extends ImStore{
 		wp_enqueue_script( 'imstorejs', IMSTORE_URL . '/_js/imstore.js', array( 'jquery', 'galleriffic' ), $this->version, true );
 		
 		$localize = apply_filters( 'ims_localize_js', array(
-			'galleriffic'				=> false,
+			'galleriffic'			=> false,
 			'galid'					=> $this->galid,	
 			'imstoreurl'			=> IMSTORE_ADMIN_URL,	
+			'addtocart'				=> __('Add to cart', $this->domain ),
 			'attchlink'				=> isset( $this->opts['attchlink'] ) ? $this->opts['attchlink'] : false,			
 			'colorbox'				=> isset( $this->opts['colorbox'] ) ? $this->opts['colorbox'] : false,									 
 			'wplightbox'			=> isset( $this->opts['wplightbox'] ) ? $this->opts['wplightbox'] : false,
-			'ajaxnonce'			=> wp_create_nonce("ims_ajax_favorites")
+			'ajaxnonce'				=> wp_create_nonce("ims_ajax_favorites")
 		) ); wp_localize_script( 'imstorejs', 'imstore', $localize );
 	}
 	
@@ -545,9 +549,21 @@ class ImStoreFront extends ImStore{
 	 *@since 3.0.2
 	 */ 	
 	function page_link( $link ){
+
 		if( !is_singular('ims_gallery') && !is_singular('ims_image') )
 			return $link;
-		return preg_replace( '/\/ms\/([0-9]+)/', '', $link );
+		$link =  preg_replace( '/\/ms\/([0-9]+)/', '', $link );
+		
+		global $paged;
+		$link =  preg_replace( "/\/page\/$paged/", '', $link );
+		
+		$num =  basename( $link );
+		if( $paged == $num ){
+			if( ($paged -1) > 1 ) $link = dirname( $link ) . "/" . ( $paged -1 );
+			else $link = dirname( $link );
+		}
+			
+		return $link;
 	}
 	
 	/**
@@ -713,15 +729,15 @@ class ImStoreFront extends ImStore{
 		$vars = array_merge( $vars, array(
 			'galleriffic'				=> true,
 			'numThumbs'			=> $this->opts['numThumbs'],
-			'autoStart'				=> $this->opts['autoStart'],
-			'playLinkText'			=> $this->opts['playLinkText'],
+			'autoStart'			=> $this->opts['autoStart'],
+			'playLinkText'		=> $this->opts['playLinkText'],
 			'pauseLinkTex'		=> $this->opts['pauseLinkTex'],
-			'prevLinkText'			=> $this->opts['prevLinkText'],
+			'prevLinkText'		=> $this->opts['prevLinkText'],
 			'nextLinkText' 		=> $this->opts['nextLinkText'],
-			'closeLinkText' 		=> $this->opts['closeLinkText'],
+			'closeLinkText' 	=> $this->opts['closeLinkText'],
 			'maxPagesToShow'	=> $this->opts['maxPagesToShow'],
 			'slideshowSpeed'	=> $this->opts['slideshowSpeed'],
-			'transitionTime'		=> $this->opts['transitionTime'],
+			'transitionTime'	=> $this->opts['transitionTime'],
 			'nextPageLinkText' 	=> $this->opts['nextPageLinkText'],
 			'prevPageLinkText'	=> $this->opts['prevPageLinkText'],	 
 		) ); return $vars;
@@ -974,7 +990,7 @@ class ImStoreFront extends ImStore{
 		$order			= (empty($order)) ? "DESC" : $order;
 		$orderby		= (empty($sortby)) ? "post_date" : $sortby;	
 		$paged			= (get_query_var( 'paged')) ? get_query_var( 'paged') : false;
-		$per_page		= (empty($count)) ? get_query_var( 'posts_per_page') : (int) $count;
+		$per_page		= (!isset($count)) ? get_query_var( 'posts_per_page') : (int) $count;
 		$offset			= (empty($paged)) ? 0 : (($per_page) * $paged) - $per_page ;
 		$limit			= ( $per_page  < 1 ) ? '' : "LIMIT %d, %d";
 		
@@ -1093,34 +1109,35 @@ class ImStoreFront extends ImStore{
 		
 		foreach( $this->attachments as $image ){
 			
+			$enc = esc_attr( $this->encrypt_id( $image->ID ) ) ;
 			if( !empty( $image->post_parent )){
 				$post 		= $image;
 				$tagatts	= ' class="ims-image" rel="image" ';
-				$link 		= get_permalink( $image->post_parent );
-				$title		= $caption = str_replace(__( 'Protected:' ), '',get_the_title($image->post_parent) );
+				$link 			= get_permalink( $image->post_parent );
+				$title			= $caption = str_replace(__( 'Protected:' ), '',get_the_title($image->post_parent) );
 			}else{
-				$caption= $image->post_excerpt;
-				$title		= get_the_title( $image->ID );
+				$caption	= $image->post_excerpt;
+				$title			= get_the_title( $image->ID );
 				$tagatts	= ' class="ims-colorbox" rel="gallery"';
 				
-				$link 		= empty( $this->opts['attchlink'] ) 
+				$link 			= empty( $this->opts['attchlink'] ) 
 				? $this->get_image_url( $image ) : get_permalink( $image->ID );
 			}
 			
 			$size = '';
 			if( isset( $image->meta['sizes']['thumbnail']['width'] ) ) 
-				$size 	.= ' width="' .  $image->meta['sizes']['thumbnail']['width'] . '" ';
+				$size .= ' width="' .  $image->meta['sizes']['thumbnail']['width'] . '" ';
 			if( isset( $image->meta['sizes']['thumbnail']['height'] ) ) 
-				$size 	.=  'height="' .  $image->meta['sizes']['thumbnail']['height'] . '"';
+				$size .=  'height="' .  $image->meta['sizes']['thumbnail']['height'] . '"';
 						
 			$tag 		= '<img src="' . $this->get_image_url( $image, 'thumbnail' ) . '" title="' . esc_attr($caption) . '" class="colorbox-2" alt="' . esc_attr($title) . '"'. $size . ' />'; 
 			
 			$output .= "<{$imagetag} class='ims-img imgid-{$image->ID}'>";
-			$output .= '<a href="' . $link . '"' . $tagatts . ' title="' . esc_attr( $title ) . '">' . $tag . '</a>';
+			$output .= '<a id="'. $enc .'" href="' . $link . '"' . $tagatts . ' title="' . esc_attr( $title ) . '">' . $tag . '</a>';
 			$output .= "<{$captiontag} class='gallery-caption'><span class='ims-img-name'>" . wptexturize( $title ) . "</span>";
 			
 			if( ( empty( $this->opts['disablestore'] ) || empty( $this->opts['hidefavorites'] ) ) && $this->query_id ) 
-				$output .= ' <label><input name="imgs[]" type="checkbox" value="' . esc_attr( $this->encrypt_id( $image->ID ) ) . '" />
+				$output .= ' <label><input name="imgs[]" type="checkbox" value="' . $enc . '" />
 				<span class="ims-label">' . __( 'Select', $this->domain ) . '</span> </label>';
 			$output .= "</{$captiontag}></{$imagetag}>";
 			
@@ -1189,7 +1206,7 @@ class ImStoreFront extends ImStore{
 	*@since 0.5.0 
 	*return void
 	*/
-	function get_permalink( $page = '', $encode = true ){
+	function get_permalink( $page = '', $encode = true, $paged = false ){
 		
 		$link = '';
 		if( $this->permalinks ){
@@ -1200,6 +1217,9 @@ class ImStoreFront extends ImStore{
 			
 			if( $link == '/' )
 				$link .= $page;
+			
+			if( $paged )
+				$link .= '/page/'. $paged;
 				
 			if( $this->success != false) 
 				$link .= '/ms/' . $this->success;
@@ -1492,7 +1512,9 @@ class ImStoreFront extends ImStore{
 		do_action( 'ims_after_add_to_cart', &$this->cart );
 		
 		$this->success = '1';
-		wp_redirect( html_entity_decode( $this->get_permalink( $this->imspage )) ); 
+		$paged = get_query_var( 'paged');
+		
+		wp_redirect( html_entity_decode( $this->get_permalink( $this->imspage, false, $paged ) ) . $page ); 
 		die( );
 	}
 	
@@ -1636,6 +1658,8 @@ class ImStoreFront extends ImStore{
 		$output .= '<div class="ims-message'.$error.'">'.$this->message.'</div>';
 			
 		$output .= '<div class="ims-innerbox">';
+		$output .= apply_filters( 'ims_before_page', '', $this->imspage );
+		
 		switch( $this->imspage ){
 			case 'slideshow':
 				$this->get_gallery_images( );
@@ -1668,6 +1692,7 @@ class ImStoreFront extends ImStore{
 				$output .= $this->store_subnav( );
 				$output .= $this->display_galleries( );
 		}
+		$output .= apply_filters( 'ims_after_page', '', $this->imspage);
 		$output .= '</div>';
 		
 		if( empty( $this->opts['disablestore'] ) ) 
