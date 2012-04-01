@@ -158,7 +158,8 @@ function ims_price_lists( $ims ){
 			<tbody class="content">
 				<?php 
 				if( $sizes = get_post_meta( $list->ID, '_ims_sizes', true) ){
-					 unset($sizes['random']); foreach( $sizes as $size ){
+					unset($sizes['random']); 
+					foreach( $sizes as $size ){
 				?>
 				<tr class="alternate size">
 					<td class="move" title="<?php _e( 'Move to list', $ims->domain )?>">&nbsp;</td>
@@ -182,19 +183,20 @@ function ims_price_lists( $ims ){
 						<?php 
 							if( isset($size['ID']) ){
 								printf( $ims->cformat[$ims->loc], get_post_meta( $size['ID'], '_ims_price', true) );
-							?><input type="hidden" name="sizes[<?php echo $x?>][ID]" value="<?php echo esc_attr( $size['ID'] )?>"/>
-							<input type="hidden" name="sizes[<?php echo $x?>][name]" value="<?php echo esc_attr( $size['name'] )?>"/> <?php
+							?><input type="hidden" name="sizes[<?php echo $x?>][ID]" class="id" value="<?php echo esc_attr( $size['ID'] )?>"/>
+							<input type="hidden" name="sizes[<?php echo $x?>][name]" class="name"value="<?php echo esc_attr( $size['name'] )?>"/> <?php
 							}else{
 								printf( $ims->cformat[$ims->loc], $size['price'] );
-							?><input type="hidden" name="sizes[<?php echo $x?>][name]" value="<?php echo esc_attr( $size['name'] )?>"/>
-							<input type="hidden" name="sizes[<?php echo $x?>][price]" value="<?php echo esc_attr( $size['price'] )?>"/><?php
+							?><input type="hidden" name="sizes[<?php echo $x?>][name]" class="name"value="<?php echo esc_attr( $size['name'] )?>"/>
+							<input type="hidden" name="sizes[<?php echo $x?>][price]" class="price" value="<?php echo esc_attr( $size['price'] )?>"/><?php
 							}
 						?>
 					</td>
 					<td> 
 						<?php 
-							if( isset( $size['unit'] ) && isset( $ims->units[$size['unit']]) )
-								echo $ims->units[$size['unit']] , '<input type="hidden" name="sizes[',$x, '][unit]" value="', esc_attr( $ims->units[$size['unit']] ), '" />';
+							if( isset( $size['unit'] ) && isset( $ims->units[$size['unit']]) ) {
+								echo $ims->units[$size['unit']] , '<input type="hidden" class="unit" name="sizes[',$x, '][unit]" value="', $size['unit'] , '" />';
+							}
 						?>
 					</td>
 					<td title="<?php _e( 'Check to make size downloadable', $ims->domain ) ?>" class="download">
@@ -258,8 +260,8 @@ function ims_price_lists_packages( $ims ){
 				</td>
 				<td align="right">
 					<?php printf($ims->cformat[$ims->loc], get_post_meta($package->ID, '_ims_price', true) )?>
-					<input type="hidden" name="sizes[<?php echo $x?>][ID]" value="<?php echo esc_attr( $package->ID )?>"/>
-					<input type="hidden" name="sizes[<?php echo $x?>][name]" value="<?php echo esc_attr( $package->post_title )?>"/>
+					<input type="hidden" name="sizes[<?php echo $x?>][ID]" class="id" value="<?php echo esc_attr( $package->ID )?>"/>
+					<input type="hidden" name="sizes[<?php echo $x?>][name]" class="name" value="<?php echo esc_attr( $package->post_title )?>"/>
 				</td>
 				<td class="hidden">&nbsp;</td>
 				<td class="hidden">
@@ -301,7 +303,7 @@ function ims_package_list( $ims ){
 					<td class="move">&nbsp;</td>
 					<td class="packagename"><?php echo $size?></td>
 					<td class="count">
-						<input type="hidden" name="sizes[<?php echo $x?>][name]" value="<?php echo esc_attr( $size )?>" />
+						<input type="hidden" name="sizes[<?php echo $x?>][name]" class="name" value="<?php echo esc_attr( $size )?>" />
 						<?php if( is_array( $count) ){?>
 						<input type="text" name="sizes[<?php echo $x?>][count]" value="<?php echo esc_attr( $count['count'] )?>" title="<?php _e( 'Quantity', $ims->domain )?>" />
 						<?php }else{?>
@@ -372,11 +374,11 @@ function ims_image_sizes( $ims ){
 				<tr class="imgsize size alternate">
 					<td class="move" title="<?php _e( 'Move to list', $ims->domain )?>">&nbsp;</td>
 					<td><span class="hidden"><?php echo $size['name']?></span>
-					<input type="text" name="sizes[<?php echo $x ?>][name]" value="<?php echo esc_attr( $size['name'] )?>" />
+					<input type="text" name="sizes[<?php echo $x ?>][name]" class="name" value="<?php echo esc_attr( $size['name'] )?>" />
 					</td>
 					<td align="right" class="count">
 						<span class="hidden price"><?php printf( $ims->cformat[$ims->loc], $price ) ?></span>
-						<input type="text" name="sizes[<?php echo $x?>][count]" class="hidden" />
+						<input type="text" name="sizes[<?php echo $x?>][count]" value="<?php echo $size['name']?>" class="hidden" />
 						<input type="text" name="sizes[<?php echo $x ?>][price]" value="<?php echo esc_attr( $price )?>" class="price" />
 					</td>
 					<td class="d"><input type="text" name="sizes[<?php echo $x ?>][w]" value="<?php echo esc_attr( $sizedata[0] )?>" /></td>

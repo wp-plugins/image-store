@@ -71,6 +71,9 @@ class ImStoreImage{
 		$cache 		= substr( @filemtime( dirname( __FILE__ ) . "/admin/_key/{$this->key}.txt" ) , -4 );
 		$modified 	= gmdate( "D, d M Y H:i:s", ( @filemtime( $this->image_dir ) + $cache ) ); $etag = '"' . md5( $modified . $color ) . '"';
 		$client_etag = isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) ? stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) : false;
+		
+		header( 'Last-Modified:'.gmdate( 'D,d M Y H:i:s').' GMT' );
+		header( 'Cache-control:no-cache,no-store,must-revalidate,max-age=0' );
 	
 		header( 'ETag: ' . $etag );
 		header( "Last-Modified: $modified GMT" );
@@ -99,10 +102,12 @@ class ImStoreImage{
 			die( );
 		}
 		
-		if( get_site_option( 'ims_sync_settings' )  )
-			$opts = get_option( 'ims_front_options' );
-		else $opts = get_site_option( 'ims_front_options' );
-
+		if( get_site_option( 'ims_sync_settings' )  ) 
+			switch_to_blog( 1 );
+			
+		$opts = get_option( 'ims_front_options' );
+		if( is_multisite() ) restore_current_blog( );
+		
 		$filetype 	= wp_check_filetype( basename( $this->image_dir ) );
 		$filetype['ext'] = strtolower($filetype['ext']);
 		
@@ -124,6 +129,8 @@ class ImStoreImage{
 		//add water mark		
 		if( $opts['watermark'] ){
 		
+			$local = get_option( 'ims_wlocal' );
+			 
 			//text watermark
 			if( $opts['watermark'] == 1 ){
 				
@@ -142,16 +149,53 @@ class ImStoreImage{
 				$info = getimagesize( $this->image_dir );
 				$tb = imagettfbbox( $font_size, 0, $font, $font_text );
 				
-				$y = $info[1]/1.15;
-				$x = ceil( ( $info[0] - $tb[2] ) / 2 );
-				
+				switch( $local ){
+					case 1:
+						$x = 2;
+						$y = abs($tb[5]) + 2;
+						 break;
+					case 2:
+						$x = ceil( ( $info[0] - $tb[2] ) / 2 );
+						$y = abs($tb[5]) + 2;
+						 break;
+					case 3:
+						$x = ($info[0] - $tb[2] ) - 4;
+						$y = abs($tb[5]) + 2;
+						 break;
+					case 4:
+						$x = 2;
+						$y = $info[1]/2;
+						 break;
+					case 5:
+						$x = ceil( ( $info[0] - $tb[2] ) / 2 );
+						$y = $info[1]/1.7;
+						 break;
+					case 6:
+						$x = ($info[0] - $tb[2] ) - 4;
+						$y = $info[1]/2;
+						 break;
+					case 7:
+						$x = 2;
+						$y = $info[1]/1.03;
+						 break;
+					case 9:
+						$x = ($info[0] - $tb[2] ) - 4;
+						$y = $info[1]/1.03;
+						 break;
+					default:
+					 $x = ceil( ( $info[0] - $tb[2] ) / 2 );
+					 $y = $info[1]/1.03;
+				}
+					 
 				imagettftext( $image, $font_size, 0, $x, $y, $black, $font, $font_text );
 				imagettftext( $image, $font_size, 0, $x, $y, $icolor, $font, $font_text );
 			
+			//die();
 			//image watermark
 			}elseif( $opts['watermark'] == 2 && $opts["watermarkurl"] ){
 				
 				$wmpath	= $opts["watermarkurl"];
+				$option = get_option( 'ims_wlocal' );
 				$wmtype 	= wp_check_filetype( basename( $opts["watermarkurl"] ) );
 
 				if( !preg_match( '/(png|jpg|jpeg|gif )$/i', $wmtype['ext'] ) )
@@ -175,9 +219,43 @@ class ImStoreImage{
 					$info			= getimagesize( $this->image_dir );
 					$wmratio 	= $this->image_ratio( $wminfo[0], $wminfo[1], max( $info[0], $info[1] ) );
 					
-					$x = ( $info[0] - $wmratio['w'])/2; 
-					$y = ( $info[1] - $wmratio['h'])/1.7;
-					
+					switch( $local ){
+						case 1:
+							$x = $y = 2;
+							break;
+						case 2:
+							$x = ( $info[0] - $wmratio['w'] )/2; 
+							$y = 2;
+							break;
+						case 3:
+							$x = ( $info[0] - $wmratio['w'] ) - 4; 
+							$y = 2;
+							break;
+						case 4:
+							$x = 2; 
+							$y = ( $info[1] - $wmratio['h'] )/2;
+							break;
+						case 6:
+							$x = ( $info[0] - $wmratio['w'] ) - 4; 
+							$y = ( $info[1] - $wmratio['h'] )/2;
+							break;
+						case 7:
+							$x = 2;
+							$y = ( $info[1] - $wmratio['h'] ) - 4;
+							break;
+						case 8:
+							$x = ( $info[0] - $wmratio['w'] )/2; 
+							$y = ( $info[1] - $wmratio['h'] ) - 4;
+							break;
+						case 9:
+							$x = ( $info[0] - $wmratio['w'] ) - 4; 
+							$y = ( $info[1] - $wmratio['h'] ) - 4;
+							break;
+						default:
+							$x = ( $info[0] - $wmratio['w'] )/2; 
+							$y = ( $info[1] - $wmratio['h'] )/1.7;
+					}
+	
 					$wmnew = imagecreatetruecolor( $wmratio['w'], $wmratio['h'] );
 					
 					//keep transperancy
@@ -269,8 +347,8 @@ class ImStoreImage{
 	function image_ratio( $w, $h, $immax ){
 		$max		= max( $w, $h );
 		$r			= $max > $immax ? ( $immax / $max ) : 1;
-		$i['w']	= ceil( $w *$r * .7 );
-		$i['h']	= ceil( $h * $r * .7 );
+		$i['w']	= ceil( $w *$r * .8 );
+		$i['h']	= ceil( $h * $r * .8 );
 		return $i;
 	}
 	

@@ -240,6 +240,7 @@ class ImStoreGallery extends ImStoreAdmin{
 			$visits 	= ( empty( $this->meta['_ims_visits'][0] ) ) ? $visits : $this->meta['_ims_visits'][0];
 			$order	= ( empty( $this->meta['_ims_order'][0] ) ) ? $sortby : $this->meta['_ims_order'][0];
 			$sortby	= ( empty( $this->meta['_ims_sortby'][0] ) ) ? $sortby : $this->meta['_ims_sortby'][0];
+			$listid	= ( empty( $this->meta['_ims_price_list'][0] ) ) ? false : $this->meta['_ims_price_list'][0];
 			$tracking= ( empty( $this->meta['_ims_tracking'][0] ) ) ? $tracking : $this->meta['_ims_tracking'][0];
 			$galid	= ( empty( $this->meta['_ims_gallery_id'][0] ) ) ? $this->unique_id( ) : esc_attr( $this->meta['_ims_gallery_id'][0] );
 			$folderfield = '<input type="text" name="_ims_folder_path" id="_ims_folder_path" value="' . esc_attr( $this->galpath ) . '"'. $this->disabled . ' />';
@@ -260,7 +261,7 @@ class ImStoreGallery extends ImStoreAdmin{
 				<td>
 					<select name="_ims_price_list" id="_ims_price_list" >
 						<?php foreach( $this->get_pricelists( ) as $list ) :?>
-						<option value="<?php echo esc_attr( $list->ID )?>" ><?php echo esc_html( $list->post_title ) ?></option>
+						<option value="<?php echo esc_attr( $list->ID )?>" <?php selected( $list->ID, $listid )?> ><?php echo esc_html( $list->post_title ) ?></option>
 						<?php endforeach?>
 					</select>
 				</td>
@@ -716,7 +717,7 @@ class ImStoreGallery extends ImStoreAdmin{
 			
 			update_post_meta( $postid, '_ims_folder_path', $this->galpath );
 			$metakeys = array( '_ims_order', '_ims_customer', '_ims_sortby', '_ims_visits',
-			 '_ims_tracking', '_ims_downloads', '_ims_price_list', '_ims_gallery_id', '_ims_customer' );
+			 '_ims_tracking', '_ims_downloads', '_ims_price_list', '_ims_gallery_id' );
 			
 			foreach( $metakeys as $key ){
 				$val = ( empty($_POST[$key] ) ) ? '' : $_POST[$key];
@@ -729,8 +730,8 @@ class ImStoreGallery extends ImStoreAdmin{
 			//update image information
 			if( isset( $_POST['img_title'] ) ){			
 				foreach( (array)$_POST['img_title'] as $key => $val ){
-					$img['ID'] 						= $key;
-					$img['post_name']			= $_POST['img_title'][$key];
+					$img['ID'] 				= $key;
+					$img['post_name']		= $_POST['img_title'][$key];
 					$img['post_title']		= $_POST['img_title'][$key];
 					$img['menu_order']		= $_POST['menu_order'][$key];
 					$img['post_excerpt']	= $_POST['img_excerpt'][$key];

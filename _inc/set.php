@@ -27,6 +27,7 @@ class ImStoreSet extends ImStoreAdmin{
 		
 		ob_start( );
 		add_action( 'admin_init', array( &$this, 'save_settings' ), 10 );
+		add_action( 'ims_settings', array( &$this, 'watermark_location' ),2, 1 );
 		add_action( 'admin_print_styles', array( &$this, 'register_screen_columns' ), 0 );
 		
 		add_filter( 'paginate_links', array( &$this, 'user_page_links' ), 20,2 ); 
@@ -34,6 +35,38 @@ class ImStoreSet extends ImStoreAdmin{
 		add_filter( 'pre_user_search', array( &$this, 'customer_search_query' ), 20 );
 	}
 	
+	/**
+	* Add watermark location option
+	*
+	*@return void
+	*@since 3.0.3
+	*/
+	function watermark_location( $boxid ){
+		if( $boxid != 'image' )
+			return;
+		
+		$option = get_option( 'ims_wlocal' );
+		$wlocal = empty( $option ) ? 5 : $option;
+		
+		echo '<tr class="row-wlocal" valign="top"><td><label>'. __('Watermark location', $this->domain ) .'</label></td><td>';
+		echo '<div class="row">
+			<label><input name="wlocal" type="radio" value="1" ' . checked( 1, $wlocal , false) . ' /></label>
+			<label><input name="wlocal" type="radio" value="2" ' . checked( 2, $wlocal , false) . '/></label>
+			<label><input name="wlocal" type="radio" value="3" ' . checked( 3, $wlocal , false) . '/></label>
+			</div>';
+		echo '<div class="row">
+			<label><input name="wlocal" type="radio" value="4" ' . checked( 4, $wlocal , false) . '/></label>
+			<label><input name="wlocal" type="radio" value="5" ' . checked( 5, $wlocal , false) . '/></label>
+			<label><input name="wlocal" type="radio" value="6" ' . checked( 6, $wlocal , false) . '/></label>
+			</div>';
+		echo '<div class="row">
+			<label><input name="wlocal" type="radio" value="7" ' . checked( 7, $wlocal , false) . '/></label>
+			<label><input name="wlocal" type="radio" value="8" ' . checked( 8, $wlocal , false) . '/></label>
+			<label><input name="wlocal" type="radio" value="9" ' . checked( 9, $wlocal , false) . '/></label>
+			</div>';
+		echo '</td></tr>';
+	}
+		
 	/**
 	*Get all user except customers
 	*and administrators
@@ -488,8 +521,11 @@ class ImStoreSet extends ImStoreAdmin{
 			
 			//multisite support
 			if( is_multisite( ) && $this->sync == true ) 
-				update_site_option( $this->optionkey, $this->opts );
-			else update_option( $this->optionkey, $this->opts );
+				switch_to_blog( 1 );
+				
+			update_option( $this->optionkey, $this->opts );
+			if( isset( $_POST['wlocal'] ) )
+				update_option( 'ims_wlocal', $_POST['wlocal'] );
 		
 			do_action( 'ims_save_settings', $action, $settings );
 			

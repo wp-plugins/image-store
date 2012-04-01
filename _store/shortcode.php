@@ -45,7 +45,7 @@ class ImStoreShortCode{
 			'linkto'		=> 'file',
 			'orderby' 	=> false,
 			'slideshow' => false,
-			'layout' 		=> 'lightbox',
+			'layout' 	=> 'lightbox',
 		), $atts ));
 		
 		if( empty( $id ) ) return;
