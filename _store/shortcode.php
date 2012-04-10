@@ -45,6 +45,7 @@ class ImStoreShortCode{
 			'linkto'		=> 'file',
 			'orderby' 	=> false,
 			'slideshow' => false,
+			'size'			=> 'thumbnail',
 			'layout' 	=> 'lightbox',
 		), $atts ));
 		
@@ -132,26 +133,28 @@ class ImStoreShortCode{
 		extract($atts); extract( $tags );
 		
 		global $ImStore;
-		$tagatts	= ( $layout == 'lightbox' ) ?  ' class="ims-colorbox" rel="gallery" ' : '';
+		$tagatts	= ( $layout == 'lightbox' ) ?  ' class="ims-colorbox"' : ' class="ims-'.$layout.'"';
 		
 		$output = "<{$gallerytag} class='ims-gallery'>";
 		foreach( $this->attachments as $image ){
 			
 			$title	= get_the_title( $image->ID );
-			$thmb = $image->meta['sizes']['thumbnail'];
+			$thmb = $image->meta['sizes'][$size];
 			
 			$cap = ( $caption && $image->post_excerpt ) ? $image->post_excerpt : $title;
 			
-			$url = $ImStore->get_image_url( $image, 'thumbnail' );
+			$url = $ImStore->get_image_url( $image, $size );
 			$link = ( $linkto == 'attachment' ) ? get_attachment_link( $image->ID )  :
 			$ImStore->get_image_url( $image );
 			
-			$size = ' width="'.$thmb['width'].'" height="'.$thmb['height'].'"';
-			$image = '<img src="' . $url . '" title="' . esc_attr( $cap ) . '" class="colorbox-2" alt="' . esc_attr( $title ) . '"'. $size . ' />'; 
+			$isize = ' width="'.$thmb['width'].'" height="'.$thmb['height'].'"';
+			$img = '<img src="' . $url . '" title="' . esc_attr( $cap ) . '" class="colorbox-2" alt="' . esc_attr( $title ) . '"'. $isize . ' />'; 
 			
 			$output .= "<{$imagetag} class='ims-img'>";
-			$output .= '<a href="' . $link . '"' . $tagatts . ' title="' . esc_attr( $title ) . '">' . $image . '</a>';
+			$output .= '<a href="' . $link . '"' . $tagatts . '  rel="gallery" title="' . esc_attr( $title ) . '">' . $img . '</a>';
 			if( $caption ) $output .= "<{$captiontag} class='gallery-caption'>" . wptexturize( $cap ) . "</{$captiontag}>";
+			
+			$output .= apply_filters( 'ims_shortcode_after_image', '', $image , $atts );
 			$output .= "</{$imagetag}>";
 
 		}

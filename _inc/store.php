@@ -66,6 +66,7 @@ class ImStoreFront extends ImStore{
 		
 		add_filter( 'the_content', array( &$this,'ims_image_content'),10 );
 		add_filter( 'single_template', array( &$this, 'get_image_template' ),10,1 );	
+		add_filter('single_template',array(&$this,'change_gallery_template'),1,50 );
 		
 		add_filter( 'get_next_post_sort', array( &$this, 'adjacent_post_sort' ),20 );
 		add_filter( 'get_previous_post_sort', array( &$this, 'adjacent_post_sort' ),20); 
@@ -1226,8 +1227,11 @@ class ImStoreFront extends ImStore{
 		}else{
 			if( is_front_page( ) ) 
 				$link .= '?page_id=' . $this->page_front;
-			$link .= '&imspage=' . $page;
-			if( $this->success != false) 
+			
+			if( $page == 'logout' ) $link .= '&imslogout=1';
+			elseif( $page ) $link .= '&imspage=' . $page;
+			
+			if( $this->success != false ) 
 				$link .= '&imsmessage='. $this->success; 
 		}
 		
@@ -1244,8 +1248,7 @@ class ImStoreFront extends ImStore{
 	*@return void
 	*@since 0.5.0 
 	*/
-	function display_list_form( ){
-		
+	function display_list_form( ){	
 		$form = 
 		'<form id="ims-pricelist" method="post"> ' . apply_filters( 'ims_before_order_form', '', &$this ) . '
 			<div class="ims-image-count">' . __( 'Selected', $this->domain ) . '</div>
