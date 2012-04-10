@@ -160,6 +160,7 @@ function ims_price_lists( $ims ){
 				if( $sizes = get_post_meta( $list->ID, '_ims_sizes', true) ){
 					unset($sizes['random']); 
 					foreach( $sizes as $size ){
+						if( empty( $size['name'] ) ) continue;
 				?>
 				<tr class="alternate size">
 					<td class="move" title="<?php _e( 'Move to list', $ims->domain )?>">&nbsp;</td>

@@ -18,7 +18,7 @@ class ImStore{
 	*Make sure that new language( .mo ) files have 'ims-' as base name
 	*/
 	public $domain	= 'ims';
-	public $version	= '3.0.3';
+	public $version	= '3.0.4';
 
 	/**
 	*Public variables
@@ -346,6 +346,13 @@ class ImStore{
 			'ims_sepia' => __( 'Sepia ', $this->domain ),
 			'ims_bw' => __( 'B &amp; W', $this->domain ),
 		 );
+		 	
+		if( isset($this->opts['disablebw'] ) )
+			unset( $this->color['ims_bw'] );
+			
+		if( isset($this->opts['disablesepia'] ) )
+			unset( $this->color['ims_sepia'] );
+			
 		$this->color = apply_filters( 'ims_color_opts', $this->color );
 	}
 	
