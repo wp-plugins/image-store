@@ -111,8 +111,8 @@ if ( is_wp_error($id) ){
 $filedata = wp_generate_attachment_metadata( $id, $file );
 $filedata['image_meta'] = $image_meta;
 
-if( wp_update_attachment_metadata( $id, $filedata ) ){
-	echo apply_filters("ims_async_upload", $id, $filedata, $attachment );
+if( update_post_meta( $id, '_wp_attachment_metadata', $filedata ) ){
+	echo apply_filters( "ims_async_upload", $id, $filedata, $attachment );
 	if( !get_post_meta( $post_id, '_ims_folder_path' ) )
 		update_post_meta( $post_id, '_ims_folder_path', "/". trim( $_REQUEST['folderpath'] , "/" ) );
 }

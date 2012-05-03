@@ -14,15 +14,15 @@ class ImStoreGallery extends ImStoreAdmin{
 	/**
 	*Public variables
 	*/
-	public $disabled		= '';
+	public $disabled	= '';
 	public $galpath		= '';
-	public $error			= false;
-	public $is_trash		= false; 
-	public $order			= array( );
-	public $meta			= array( );
+	public $error		= false;
+	public $is_trash	= false; 
+	public $order		= array( );
+	public $meta		= array( );
 	public $gallery		= array( );
 	public $sortby		= array( );
-	public $metaboxes = array( );
+	public $metaboxes	= array( );
 	public $columns		= array( );
 
 	/**
@@ -208,15 +208,12 @@ class ImStoreGallery extends ImStoreAdmin{
 	*@since 3.0.0
 	*/
 	function ims_info_box( ){
-		$visits = 0; $sortby = '';
-		$tracking = ''; $order ="";
-		$expire = ""; $ims_expire =""; 
-		$blogpath = '';
 		
-		if( $this->blog_id )
-			$blogpath = "/blogs.dir/{$this->blog_id}" ;
-				
-		if( $this->pagenow	 == 'post-new.php' ){
+		$blogpath = ( $this->blog_id ) ?  "/blogs.dir/{$this->blog_id}" : '' ;
+		$default = array( '_ims_visits' => 0, '_ims_sortby' => '', '_ims_tracking' => '', '_ims_order' =>'', 'expire' => '',
+			'_dis_store'=> false, '_ims_price_list' => 0, '_to_attach' => $this->opts['attchlink'], '_ims_gallery_id' =>$this->unique_id( ) );
+		
+		if( $this->pagenow == 'post-new.php' ){
 			$galid 				= $this->unique_id( );
 			$this->galpath 	= $blogpath . $this->opts['galleriespath'] . "/gallery-{$this->gallery->ID}";
 			$folderfield		= '<input type="text" name="_ims_folder_path" id="_ims_folder_path" value="'. esc_attr( $this->galpath ) .'" />';
@@ -224,7 +221,10 @@ class ImStoreGallery extends ImStoreAdmin{
 				$time = ( current_time( 'timestamp') ) + ( $this->opts['galleryexpire'] * 86400 );
 				$expire = date_i18n( $this->dformat, $time ); $ims_expire = date_i18n( 'Y-m-d H:i', $time );
 			}
+			extract( $default );
+			
 		}else{
+			
 			if( empty( $this->meta['_ims_folder_path'][0] ) ){
 				$this->galpath = $blogpath . $this->opts['galleriespath'] . "/gallery-{$this->gallery->ID}";
 			}else{
@@ -237,12 +237,11 @@ class ImStoreGallery extends ImStoreAdmin{
 				$ims_expire = date_i18n( 'Y-m-d H:i', strtotime($this->gallery->post_expire ) );
 			}
 			
-			$visits 	= ( empty( $this->meta['_ims_visits'][0] ) ) ? $visits : $this->meta['_ims_visits'][0];
-			$order	= ( empty( $this->meta['_ims_order'][0] ) ) ? $sortby : $this->meta['_ims_order'][0];
-			$sortby	= ( empty( $this->meta['_ims_sortby'][0] ) ) ? $sortby : $this->meta['_ims_sortby'][0];
-			$listid	= ( empty( $this->meta['_ims_price_list'][0] ) ) ? false : $this->meta['_ims_price_list'][0];
-			$tracking= ( empty( $this->meta['_ims_tracking'][0] ) ) ? $tracking : $this->meta['_ims_tracking'][0];
-			$galid	= ( empty( $this->meta['_ims_gallery_id'][0] ) ) ? $this->unique_id( ) : esc_attr( $this->meta['_ims_gallery_id'][0] );
+			foreach( $this->meta as $key => $val ){
+				if( isset( $val[0] ) ) 	$instance[$key] = $val[0];
+			}
+				
+			extract( wp_parse_args( $instance, $default ));
 			$folderfield = '<input type="text" name="_ims_folder_path" id="_ims_folder_path" value="' . esc_attr( $this->galpath ) . '"'. $this->disabled . ' />';
 		}
 		?>
@@ -251,47 +250,53 @@ class ImStoreGallery extends ImStoreAdmin{
 				<td class="short"><label for="_ims_folder_path"><?php _e( 'Folder path', $this->domain )?></label></td>
 				<td class="long"><?php echo $folderfield ?></td>
 				<td><label for="gallery_id"><?php _e( 'Gallery ID', $this->domain )?></label></td>
-				<td><input type="text" name="_ims_gallery_id" id="gallery_id" value="<?php echo esc_attr( $galid ) ?>"/></td>
+				<td><input type="text" name="_ims_gallery_id" id="gallery_id" value="<?php echo esc_attr( $_ims_gallery_id ) ?>"/></td>
 			</tr>
 			<?php if( empty( $this->opts['disablestore'] ) ){ ?>
 			<tr>
 				<td><label for="_ims_tracking"><?php _e( 'Tracking Number', $this->domain )?></label></td>
-				<td class="long"><input type="text" name="_ims_tracking" id="_ims_tracking" value="<?php echo esc_attr( $tracking ) ?>" /></td>
+				<td class="long"><input type="text" name="_ims_tracking" id="_ims_tracking" value="<?php echo esc_attr( $_ims_tracking ) ?>" /></td>
 				<td><label for="_ims_price_list"><?php _e( 'Price List', $this->domain )?></label></td>
 				<td>
 					<select name="_ims_price_list" id="_ims_price_list" >
 						<?php foreach( $this->get_pricelists( ) as $list ) :?>
-						<option value="<?php echo esc_attr( $list->ID )?>" <?php selected( $list->ID, $listid )?> ><?php echo esc_html( $list->post_title ) ?></option>
+						<option value="<?php echo esc_attr( $list->ID )?>" <?php selected( $list->ID, $_ims_price_list )?> ><?php echo esc_html( $list->post_title ) ?></option>
 						<?php endforeach?>
 					</select>
 				</td>
 			</tr>
 			<?php }?>
 			<tr>
-				<td><label for="expire" class="date-icon"><?php _e( 'Expiration Date', $this->domain )?></label></td>
-				<td class="long">
-					<input type="text" name="imsexpire" id="imsexpire" value="<?php echo esc_attr( $expire ) ?>" />
-					<input type="hidden" name="_ims_expire" id="_ims_expire" value="<?php echo esc_attr( $ims_expire ) ?>"/>
-				</td>
-				<td><label for="_ims_visits"><?php _e( 'Visits', $this->domain )?></label></td>
-				<td><input type="text" name="_ims_visits" id="_ims_visits" value="<?php echo esc_attr( $visits ) ?>" /></td>
-			</tr>
-			<tr>
 				<td><label for="sortby"><?php _e( 'Sort Order', $this->domain )?></label></td>
 				<td colspan="3">
 					<select name="_ims_sortby" id="sortby">
 						<option value="0"><?php _e( 'Default', $this->domain )?></option>
 						<?php foreach( $this->sortby as $val => $label ) :?>
-						<option value="<?php echo esc_attr( $val ) ?>" <?php selected($val,$sortby)?>><?php echo esc_html( $label )?></option> 
+						<option value="<?php echo esc_attr( $val ) ?>" <?php selected( $val, $_ims_sortby )?>><?php echo esc_html( $label )?></option> 
 						<?php endforeach?>
 					</select>
 					<select name="_ims_order">
 						<option value="0"><?php _e( 'Default', $this->domain )?></option> 
 						<?php foreach( $this->order as $val => $label ) :?>
-						<option value="<?php echo esc_attr( $val ) ?>" <?php selected($val,$order)?>><?php echo $label?></option> 
+						<option value="<?php echo esc_attr( $val ) ?>" <?php selected( $val, $_ims_order )?>><?php echo $label?></option> 
 						<?php endforeach?>
 					</select>
 				</td>
+			</tr>
+			<tr>
+				<td><label for="imsexpire" class="date-icon"><?php _e( 'Expiration Date', $this->domain )?></label></td>
+				<td class="long">
+					<input type="text" name="imsexpire" id="imsexpire" value="<?php echo esc_attr( $expire ) ?>" />
+					<input type="hidden" name="_ims_expire" id="_ims_expire" value="<?php echo esc_attr( $ims_expire ) ?>"/>
+				</td>
+				<td><label for="_ims_visits"><?php _e( 'Visits', $this->domain )?></label></td>
+				<td><input type="text" name="_ims_visits" id="_ims_visits" value="<?php echo esc_attr( $_ims_visits ) ?>" /></td>
+			</tr>
+			<tr>
+				<td><label for="_dis_store" ><?php _e( 'Disable Store', $this->domain )?></label></td>
+				<td><input type="checkbox" name="_dis_store" id="_dis_store" <?php checked( true, $_dis_store )?> value="1" /></td>
+				<td><label for="_to_attach"><?php _e( 'Link to attachment', $this->domain )?></label></td>
+				<td><input type="checkbox" name="_to_attach" id="_to_attach" <?php checked( true, $_to_attach )?> value="1" /></td>
 			</tr>
 			<?php do_action( 'ims_info_metabox', &$this ) ?>
 		</table>
@@ -408,16 +413,14 @@ class ImStoreGallery extends ImStoreAdmin{
 		
 		$this->pagenow = $pagenow;
 		if( $this->pagenow != "upload-img.php") return $data;
-		
-		$fullurl = ( is_multisite( ) ) ? get_site_url( 1 ) : WP_CONTENT_URL;
 		$this->galpath = ( $this->galpath ) ? $this->galpath : "/". trim( $_REQUEST['folderpath'] , "/" );
 
-		$path['error'] 	= false;
+		$path['error'] 		= false;
 		$path['subdir'] 	= $this->galpath;
-		$path['baseurl'] = $fullurl;
-		$path['url'] 		= $fullurl . $this->galpath ;
-		$path['basedir'] = rtrim(WP_CONTENT_DIR,'/');
-		$path['path'] 		= rtrim(WP_CONTENT_DIR,'/') . $this->galpath ;
+		$path['baseurl']	= $this->content_url ;
+		$path['url'] 		= $this->content_url . '/'. $this->galpath ;
+		$path['basedir'] 	= $this->content_dir;
+		$path['path'] 		= $this->content_dir . $this->galpath ;
 		
 		$path = apply_filters( 'ims_upload_path', $path, $data );
 		return $path;
@@ -500,8 +503,8 @@ class ImStoreGallery extends ImStoreAdmin{
 					break;
 				case 'imthumb':
 					$r .= '<td class="column-' . $column_id . $hide . '">';
-					$r .= '<a href="' . WP_CONTENT_URL . $this->galpath . "/" . basename($data['file']) . '?" class="thickbox" rel="gallery">';
-					$r .= '<img src="' . WP_CONTENT_URL . $this->galpath . "/_resized/" . $data['sizes']['mini']['file'] . '" /></a>';
+					$r .= '<a href="' . $this->content_url  . $this->galpath . "/" . basename($data['file']) . '?" class="thickbox" rel="gallery">';
+					$r .= '<img src="' . $this->content_url  . $this->galpath . "/_resized/" . $data['sizes']['mini']['file'] . '" /></a>';
 					$r .= '</td>';
 					break;
 				case 'immetadata':
@@ -580,9 +583,7 @@ class ImStoreGallery extends ImStoreAdmin{
 		if( empty( $this->galpath ) ) return $postid;
 		
 		global $wpdb;
-		
-		$fullpath = rtrim( WP_CONTENT_DIR, '/' )  . "$this->galpath/";
-		$contenturl = ( is_multisite( ) ) ? get_site_url( 1 ) : WP_CONTENT_URL;
+		$fullpath = $this->content_dir . "/{$this->galpath}/";
 		
 		//upload remote zip
 		if( !empty( $_POST['zipurl']) ){
@@ -669,7 +670,7 @@ class ImStoreGallery extends ImStoreAdmin{
 					$content = '';
 					$name_parts = pathinfo( $filename );
 					$filetype = wp_check_filetype( $filename );
-					$url = str_replace( WP_CONTENT_DIR , $contenturl, $filepath );
+					$url = str_replace( $this->content_dir, $this->content_url, $filepath );
 					$title = trim( substr( $filename, 0, -(1 + strlen($name_parts['extension'])) ) );
 					
 					if ( $image_meta = @wp_read_image_metadata( $filepath ) ){
@@ -716,8 +717,8 @@ class ImStoreGallery extends ImStoreAdmin{
 		if( empty( $_POST['doactions'] ) && empty( $_POST['scannfolder'] ) ){	
 			
 			update_post_meta( $postid, '_ims_folder_path', $this->galpath );
-			$metakeys = array( '_ims_order', '_ims_customer', '_ims_sortby', '_ims_visits',
-			 '_ims_tracking', '_ims_downloads', '_ims_price_list', '_ims_gallery_id' );
+			$metakeys = array( '_ims_order', '_ims_customer', '_ims_sortby', '_ims_visits', '_to_attach',
+			 '_ims_tracking', '_ims_downloads', '_ims_price_list', '_ims_gallery_id', '_dis_store', );
 			
 			foreach( $metakeys as $key ){
 				$val = ( empty($_POST[$key] ) ) ? '' : $_POST[$key];

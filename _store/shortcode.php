@@ -45,6 +45,7 @@ class ImStoreShortCode{
 			'linkto'		=> 'file',
 			'orderby' 	=> false,
 			'slideshow' => false,
+			'size'			=> 'thumbnail',
 			'layout' 	=> 'lightbox',
 		), $atts ));
 		
@@ -64,8 +65,8 @@ class ImStoreShortCode{
 			 AND meta_value = '%s'", $id 
 		));
 		
-		$this->order 	= ( $order ) ? $order : $this->opts['imgsortdirect'];
-		$this->sortby = ( isset($sort[$orderby]) ) ? $sort[$orderby] : $this->opts['imgsortorder'];
+		$this->order 	= ( $order ) ? $order : $this->opts['imgsortorder'];
+		$this->sortby 	= ( isset($sort[$orderby]) ) ? $sort[$orderby] : $this->opts['imgsortdirect'];
 		$this->limit 	= ( empty($number) ||  strtolower($number) == 'all' ) ?  false : $number;
 		$this->get_galleries( );
 		
@@ -99,7 +100,7 @@ class ImStoreShortCode{
 				WHERE post_type = 'ims_image'
 				AND meta_key = '_wp_attachment_metadata'
 				AND post_status = 'publish' AND post_parent = %d
-				ORDER BY $this->sortby $this->order $limit", $this->galid 
+				ORDER BY $this->order $this->sortby $limit", $this->galid 
 			));
 			
 			if( empty( $this->attachments ) )  return;
@@ -132,29 +133,33 @@ class ImStoreShortCode{
 		extract($atts); extract( $tags );
 		
 		global $ImStore;
-		$tagatts	= ( $layout == 'lightbox' ) ?  ' class="ims-colorbox" rel="gallery" ' : '';
-		
-		$output = "<{$gallerytag} class='ims-gallery'>";
+		$tagatts	= ( $layout == 'lightbox' ) ?  ' class="ims-colorbox"' : ' class="ims-'.$layout.'"';
+		$galid 		= wp_get_post_parent_id( $this->attachments[0]->ID ); 
+
+		$output = "<{$gallerytag} id='ims-gallery-".$galid."' class='ims-gallery'>";
 		foreach( $this->attachments as $image ){
 			
 			$title	= get_the_title( $image->ID );
-			$thmb = $image->meta['sizes']['thumbnail'];
+			$thmb = $image->meta['sizes'][$size];
 			
 			$cap = ( $caption && $image->post_excerpt ) ? $image->post_excerpt : $title;
 			
-			$url = $ImStore->get_image_url( $image, 'thumbnail' );
+			$url = $ImStore->get_image_url( $image, $size );
 			$link = ( $linkto == 'attachment' ) ? get_attachment_link( $image->ID )  :
 			$ImStore->get_image_url( $image );
 			
-			$size = ' width="'.$thmb['width'].'" height="'.$thmb['height'].'"';
-			$image = '<img src="' . $url . '" title="' . esc_attr( $cap ) . '" class="colorbox-2" alt="' . esc_attr( $title ) . '"'. $size . ' />'; 
+			$isize = ' width="'.$thmb['width'].'" height="'.$thmb['height'].'"';
+			$img = '<img src="' . $url . '" title="' . esc_attr( $cap ) . '" class="colorbox-2" alt="' . esc_attr( $title ) . '"'. $isize . ' />'; 
 			
 			$output .= "<{$imagetag} class='ims-img'>";
-			$output .= '<a href="' . $link . '"' . $tagatts . ' title="' . esc_attr( $title ) . '">' . $image . '</a>';
+			$output .= '<a href="' . $link . '"' . $tagatts . '  rel="gallery" title="' . esc_attr( $title ) . '">' . $img . '</a>';
 			if( $caption ) $output .= "<{$captiontag} class='gallery-caption'>" . wptexturize( $cap ) . "</{$captiontag}>";
+			
+			$output .= apply_filters( 'ims_shortcode_after_image', '', $image , $atts );
 			$output .= "</{$imagetag}>";
 
 		}
+		$output .= "<div class='ims-cl'></div>";
 		return $output .= "</{$gallerytag}>";
 	
 	}
@@ -173,7 +178,6 @@ class ImStoreShortCode{
 		
 		global $ImStore;
 		$this->baseurl = $ImStore->baseurl;
-		$tagatts	= ' class="ims-colorbox" rel="gallery" ';
 		
 		//navigation
 		$output = '<div class="ims-imgs-nav">';

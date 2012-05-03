@@ -19,7 +19,8 @@ class ImStoreGoogleNotice {
 	 * @since 2.0.0
 	 */	
 	 function ImStoreGoogleNotice( ){
-		
+		$postdata = array();
+                
 		//dont change array order
 		$this->subtitutions = array(
 			$_POST['order-total'], $_POST['financial-order-state'], 
@@ -99,14 +100,15 @@ class ImStoreGoogleNotice {
 			&& !get_post_meta( $cartid , '_ims_email_sent', true ) ){
 				
 			global $ImStore;	
+			$nonce	= '_wpnonce=' . wp_create_nonce( "ims_download_img");
 			$message = make_clickable( wpautop( stripslashes( preg_replace( $this->opts['tags'], $this->subtitutions, $this->opts['thankyoureceipt'] )) ) );
-			
+
 			foreach( $data['images'] as $id => $sizes ){
 				$enc = $ImStore->encrypt_id( $id );	
 				foreach( $sizes as $size => $colors){
 					foreach( $colors as $color => $item){
 						if( isset( $item['download'] ))
-						 $downlinks[] = '<a href="'.IMSTORE_ADMIN_URL."download.php?$nonce&amp;img=".$enc."&amp;sz=$size&amp;c=$color". '" 
+						 $downlinks[] = '<a href="'. IMSTORE_ADMIN_URL . "/download.php?$nonce&amp;img=".$enc."&amp;sz=$size&amp;c=$color". '" 
 						 class="ims-download">'. get_the_title( $id ) ." ". $labels[$color]." </a>";
 					}
 				}
@@ -140,4 +142,4 @@ class ImStoreGoogleNotice {
 	}
 	
 }
-$ImStoreGoogleNotice = new ImStoreGoogleNotice( );
+new ImStoreGoogleNotice( );

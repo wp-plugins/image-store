@@ -14,7 +14,6 @@ if( preg_match( '#'.basename(__FILE__).'#',$_SERVER['PHP_SELF']))
 	die( );
 
 $css = '';
-$counter = 0; 
 $package_sizes = '';
 $meta = get_post_meta( $this->pricelist_id, '_ims_list_opts', true);
 

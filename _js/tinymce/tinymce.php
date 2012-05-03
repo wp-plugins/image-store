@@ -61,7 +61,7 @@ do_action('admin_print_styles');
 		<div id="gal-options"><br>
 			<div>
 				<label><span><?php _e( 'Images', $ImStore->domain  ); ?></span>
-				<input id="number" type="text" tabindex="30" name="number" value="<?php _e( 'All', $ImStore->domain ) ?>" /> 
+				<input id="number" type="text" tabindex="30" name="number" value="all" /> 
 				<small><?php _e( 'How many images to display.', $ImStore->domain  ); ?></small></label>
 			</div>
 						
@@ -72,9 +72,9 @@ do_action('admin_print_styles');
 			
 			<div>
 				<label><span><?php _e( 'Show as', $ImStore->domain ); ?></span></label>
-				<label><input type="radio" name="layout" value="lightbox" id="lightbox" checked="checked"  tabindex="12"  /><?php _e( 'Lightbox', $ImStore->domain  ); ?></label>
-				<label><input type="radio" name="layout" value="slideshow" id="slideshow"  tabindex="11" /><?php _e( 'Slideshow', $ImStore->domain  ); ?></label>
-				<label><input type="radio" name="layout"  value="list" id="list"  tabindex="10"  /><?php _e( 'List', $ImStore->domain  ); ?></label>
+				<label><input type="radio" name="layout" value="lightbox" id="lightbox" checked="checked" /><?php _e( 'Lightbox', $ImStore->domain  ); ?></label>
+				<label><input type="radio" name="layout" value="slideshow" id="slideshow" /><?php _e( 'Slideshow', $ImStore->domain  ); ?></label>
+				<label><input type="radio" name="layout"  value="list" id="list" /><?php _e( 'List', $ImStore->domain  ); ?></label>
 			</div>
 			
 			<div>
@@ -92,7 +92,16 @@ do_action('admin_print_styles');
 					<option value="desc"><?php _e( 'Descending', $ImStore->domain  ); ?></option>
 				</select></label>
 				
-				<label><input id="caption" type="checkbox" tabindex="30" name="href" />
+			</div>	
+			
+			<div>
+				<label><span><?php _e( 'Link to:', $ImStore->domain  ); ?></span></label>
+				<label><input type="radio" name="linkto" value="file" id="file" checked="checked" /><?php _e( 'File', $ImStore->domain  ); ?></label>
+				<label><input type="radio" name="linkto" value="attachment" id="attachment" /><?php _e( 'Attachment', $ImStore->domain  ); ?></label>
+			</div>
+			
+			<div>
+				<label><span>&nbsp;</span><input id="caption" type="checkbox" name="href" />
 				<?php _e( 'Show caption', $ImStore->domain  ); ?></label>
 			</div>
 	

@@ -201,6 +201,7 @@ function ajax_ims_remove_images_from_favorites(){
 		return;
 	}
 	
+	$dec_ids = array();
 	$new = explode( ',',$_GET['imgids'] );	
 	foreach ( $new as $id ) 
 		$dec_ids[] = trim($ImStore->decrypt_id($id));

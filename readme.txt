@@ -4,8 +4,8 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: e-commerce,shop,photo store,picture,image,galleries,imstore,image-store,secure,translate,translatable,watermark,
 slideshow,gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints
 Requires at least: 3.0.0
-Tested up to: 3.3.1
-Stable tag: 3.0.3
+Tested up to: 3.4.0
+Stable tag: 3.0.5
 
 Image Store (ImStore) is a photo gallery and store plugin for WordPress with Paypal and Google Checkout integration.
 
@@ -83,6 +83,29 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+
+= 3.0.5 =
+* Code clean up.
+* WP 3.4.0 compatible.
+* Added: Additional support for multisites.
+* Added: Additional security for secure images.
+* Added: Remove decimal point option.
+* Added: Disable store at gallery level.
+* Added: Option to link to image attachment at gallery level.
+* Fixed: Download links issues.
+* Fixed: Some issues with multisites.
+* Fixed: Single gallery template selection.
+* Fixed: Issue generating image sizes for small images.
+
+= 3.0.4 =
+* Added: additional hooks.
+* Added: additional shortcode options.
+* Fixed: blank price lists.
+* Fixed:disable sepia and b&w.
+* Fixed: gallery template selection.
+* Fixed: colorbox add to cart link on pricelist.
+* Fixed: Exit galleries when permalinks not activated.
+
 = 3.0.3 =
 * Added: watermark location
 * Added: add to cart in lightbox
@@ -159,185 +182,6 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * Added: User information auto fill for Email notification .
 * Fixed: Edit image capability issue.
 * Fixed: No report issue and messages.
-
-= 2.1.0 =
-* WP 3.2 support.
-* Security update.
-* German Translation.
-* Fixed: Image path.
-* Fixed: Broken album feed links.
-* Fixed: Gallery shortcode issue.
-* Fixed: Domain translation issues.
-* Added: Link to gallery to widget images.
-* Added: Allow user to download original image option.
-* Improve image display speed.
-
-= 2.0.9 =
-* Important Security update.
-* Changed: Moved select checkbox and label.
-
-= 2.0.8 =
-* Added: More currencies.
-* Fixed: Searching issue.
-* Fixed: Download PNG issue.
-* Fixed: %category% in permalink issue.
-* Fixed: WP subdirectory installation issue.
-* Fixed: Download images in some paypal accounts.
-* Added: Display image title.
-* Added: Checkout user comment.
-* Added: Shopping cart "total" in navigation.
-* Added: taxonomy(album) template option.
-* Added: Album pagination.
-* Added: Gallery pagination.
-* Added: WPTouch/Mobile css support.
-* Changed: moved select checkbox, added label.
-
-= 2.0.7 =
-* Fixed: Date picker styles.
-* Fixed: Permission settings.
-* Fixed: Save settings issues.
-* Fixed: Checkout email information.
-* Added: Portuguese tranaslation.
-* Added: Search image title and caption option.
-* Improved: dynamic image sorting.
-* Improved: html5 validation.
-
-= 2.0.6 =
-* Fixed: Trash image link broken.
-* Fixed: Save imported image caption.
-* Fixed: Improve image download quality.
-* Fixed: Shortcode image display location.
-* Fixed: Google checkout redirection to searchpage.
-* Added: Preview image quality option.
-
-= 2.0.5 =
-* Fixed: Screen options labels.
-* Fixed: Add to cart redirection.
-* Fixed: Required checkout fields.
-* Fixed: Dynamic image update/upload.
-* Fixed: Email notification email and sale report.
-* Fixed: Page navigation issue with hidden photo link.
-* Added: Image page navigation.
-* Added: Make galleries searchable.
-* Added: Import metadata from image.
-
-= 2.0.4 =
-* Fixed: Shortcode issues.
-* Added: Italian Translation.
-* Fixed: Capabillity Issues with 3.1
-* Fixed: Sales CSV download not working.
-* Added: Single gallery template option.
-* Changed: Removed "Protected" from gallery title.
-* Changed: Image title and caption display (frontend).
-
-= 2.0.3 =
-* Important update: update cart error.
-
-= 2.0.2 =
-* Fixed: Download image error.
-* Fixed: Wrong metadata information backend.
-* Fixed: Not been able to change preview image size.
-
-= 2.0.1 =
-* Fixed: gallery feed 404.
-* Added: Extra image security.
-* Fixed: Price list sort missing.
-* Fixed: Auto password generation on all post.
-* Fixed: Translation redirect problem.
-* Fixed: Translation permalink problem.
-* Fixed: Mini thumbnail not been genarated after image edition.
-* Changed: Custom post type (ims_gallery) capabilities.
-
-= 2.0.0 =
-* Code Cleanup
-* Improved performace.
-* Added: Google Checkout.
-* Added: Gallery Comments.
-* Added: Gallery name to sales reports.
-* Added: Option to remove color options.
-* Added: Option to remove "photos" or "slideshow" link.
-* Added: Integration with custom post types and toxomony.
-* Changed: Gallery logout.
-* Changed: Gallery preview.
-* Changed: Gallery management.
-* Changed: Permalink structure.
-* Changed: Paypal IPN Listener url.
-* Changed: Add/edit gallery interface.
-* Changed: preset all class/styles with "ims_" in the frontend.
-
-= 1.2.5 =
-* Fixed: Paypal issues.
-* Fixed: Propotional discount not been sent to paypal.
-* Front-end: CSS modifications.
-
-= 1.2.4 =
-* Fixed: Typos.
-* Fixed: Flash upload not working.
-* Changed: Gallery status display.
-
-= 1.2.3 =
-* Fixed: shopping cart showing wrong color selection.
-
-= 1.2.2 =
-* Fixed: new installation and capabilities problem.
-* Fixed: settings reset after plugin update.
-
-= 1.2.1 =
-* Unstable
-
-= 1.2.0 =
-* Added: User gallery screen.
-* Added: Option for admin to edit gallery id.
-* Added: Status label on gallery list and edit screen.
-* Added: Allow to move core files to sub directory.
-* Added: feature to allow user keep track of their galleries.
-* Fixed: Image creation date.
-* Fixed: Add images to favorite not working.
-* Fixed: Price list not seving image size unit.
-* Fixed: Issue of not been able to uplaod small images.
-* Changed: Flash image upload notification.
-* Changed: Gallery permissions.
-
-= 1.1.1 =
-* Fixed: Sales CSV download permissions.
-* Fixed: Total price format when using email notification only.
-* Fixed: Serialize data showing on the image-size-dropdown menu when adding images to car.
-* Admin: CSS modifications.
-* Added: Image title on sale reports.
-
-= 1.1.0 =
-* Front-end: CSS modifications.
-* Updates: Spanish translation.
-* Admin: CSS modifications.
-* Admin: HTML clean up.
-* Added: Option not to expire galleries.
-* Added: Feature to use gallery on the home page.
-* Added: Feature use color box on wp galleries.
-* Added: Image size units(in. cm. px.)
-* Added: Settings for the required fields on the checkout page.
-* Added: Feature recreate images after image settings have been changed.
-* Fixed: Image cache after browser's cache is cleared.
-* Changed: create new galleries with pending status instead of publish.
-
-= 1.0.2 =
-* Fixed: Paypal IPN issues.
-* Fixed: Disable image rss.
-* Fixed: Incorrect paypal cart currency type.
-* Fixed: "mini" image size showing instead of preview.
-* Added: Orders by email notification only(disable paypal).
-
-= 1.0.1 =
-* Fixed: Translation issues.
-
-= 1.0.0 =
-* Improved dynamic image cache.
-* Fixed: misspells.
-* Fixed: save gallery settings.
-* Fixed: double slash on permalinks.
-* Removed "add to favorites" link from unsecure galleries.
-* Added: Spanish translation
-* Fixed: WP thumbnail preview conflict.
-* Fixed: file not being deleted from server when image was deleted.
 
 
 == CREDITS ==

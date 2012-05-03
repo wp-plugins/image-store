@@ -38,7 +38,7 @@ $this->data 		= get_post_meta( $this->orderid,'_response_data',true);
 			</tr>
 		</thead>
 		<tbody id="details" class="list:details sales-details">
-		<?php $i=1; 
+		<?php
 			foreach( $this->cart['images'] as $id => $sizes ){
 				
 				$image = get_post_meta( $id, '_wp_attachment_metadata', true );

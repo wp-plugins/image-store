@@ -20,10 +20,6 @@ $_SERVER['PHP_SELF'] = "/wp-admin/download.php";
 //load wp
 require_once '../../../../wp-load.php';
 
-//make sure that the request came from the same domain	
-if(!wp_verify_nonce($_REQUEST["_wpnonce"],"ims_download_img"))
-	die();
-
 class ImStoreDownloadImage{
 	
 	/**
@@ -34,7 +30,7 @@ class ImStoreDownloadImage{
 	 */
 	function ImStoreDownloadImage( ){
 	
-		if( empty($_REQUEST['img']) || 
+		if( empty($_REQUEST['img']) ||  empty( $_REQUEST["_wpnonce"] ) ||
 		!wp_verify_nonce( $_REQUEST["_wpnonce"], "ims_download_img") ) {
 			die( );
 		}
@@ -43,14 +39,14 @@ class ImStoreDownloadImage{
 		
 		$this->clean = false;
 		$this->image_dir = '';
-		$imgsize = $_REQUEST['sz'];
 		$this->id =  (int) $ImStore->decrypt_id( $_REQUEST['img'] );
+		$imgsize = empty( $_REQUEST['sz'] ) ? 'preview' : $_REQUEST['sz'];
 		
 		$dimentions = array();
 		$sizes = get_option( 'ims_sizes', true );
 		
 		foreach( $sizes as $size ){
-			if( $size['name'] == $imgsize){
+			if( $size['name'] == $imgsize ){
 				$dimentions = $size;
 				break;
 			}
@@ -70,7 +66,10 @@ class ImStoreDownloadImage{
 		}elseif( $dimentions['w'] && $dimentions['h'] && empty( $this->store->opts['downloadorig'] ) ){ 
 			
 			$this->clean = true;
-			$this->image_dir = image_resize( WP_CONTENT_URL . "/". $this->attachment['file'], $dimentions['w'], $dimentions['h'], 0, 0, 0, 100 );
+			$this->image_dir = image_resize( 
+				$ImStore->content_dir . "/". $this->attachment['file'], 
+				$dimentions['w'], $dimentions['h'], 0, 0, 0, 100
+			 );
 			
 			if( is_wp_error($this->image_dir)  &&  isset( $this->attachment['sizes']['preview']['url'] ) ){
 				$this->clean = false;
@@ -78,11 +77,11 @@ class ImStoreDownloadImage{
 				
 			}elseif( is_wp_error($this->image_dir) ){
 				$this->clean = false;
-				$this->image_dir = WP_CONTENT_URL . "/". $this->attachment['file'];
+				$this->image_dir = $ImStore->content_dir . "/". $this->attachment['file'];
 				
 			}
 		}elseif( $this->store->opts['downloadorig'] ){
-			$this->image_dir = WP_CONTENT_URL . "/". $this->attachment['file'];
+			$this->image_dir = $ImStore->content_dir . "/". $this->attachment['file'];
 
 		}else{
 			$this->image_dir = $this->attachment['sizes']['preview']['path'];
@@ -101,20 +100,14 @@ class ImStoreDownloadImage{
 	*/
 	function display_image( ){
 		
-		global $wpdb;
+		global $wpdb, $ImStore;
 		$ext = end( explode( '.', basename( $this->image_dir ) ) );
-		$filename 	= $wpdb->get_var("SELECT post_title FROM $wpdb->posts WHERE ID = " . $this->id) ;
+		$filename = $wpdb->get_var("SELECT post_title FROM $wpdb->posts WHERE ID = " . $this->id) ;
 	
 		header( 'Content-Type: image/'.$ext );
-
-		//Optional support for X-Sendfile and X-Accel-Redirect
-		if ( defined( 'WPMU_ACCEL_REDIRECT' ) && WPMU_ACCEL_REDIRECT == true ){
-			header( 'X-Accel-Redirect: ' . str_replace( WP_CONTENT_DIR, '', $this->image_dir ) );
-			die( );
-		} elseif ( defined( 'WPMU_SENDFILE' ) && WPMU_ACCEL_REDIRECT == true ){
-			header( 'X-Sendfile: ' . $this->image_dir );
-			die( );
-		}
+		
+		if ( false === strpos( $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS' ) )
+			header( 'Content-Length: ' . filesize( $this->image_dir ) );
 		
 		$color = isset( $_REQUEST['c'] ) ? $_REQUEST['c'] : false;
 		$modified 	= gmdate( "D, d M Y H:i:s", @filemtime( $this->image_dir ) ); $etag = '"' . md5( $modified . $color ) . '"';
@@ -129,17 +122,10 @@ class ImStoreDownloadImage{
 		header( 'Cache-Control:max-age=' . ( time( ) + 100000000 ).', must-revalidate' );
 		header( 'Content-Disposition: attachment; filename=' . $filename );
 		
-		if( ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) && isset( $_SERVER['HTTP_IF_NONE_MATCH'] )
-		&&( strtotime( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) == filemtime( $this->image_dir ) ) ) || ( $client_etag == $etag ) ){
-			header( 'HTTP/1.1 304 Not Modified' ); 
-			die( );
-		}
-		
 		if( empty( $_REQUEST['c'] ) || $_REQUEST['c'] == 'ims_color' ){
 			readfile( $this->image_dir ); 
 			die();
 		}
-		
 		
 		switch( $ext ){
 			case "jpg":
@@ -174,7 +160,7 @@ class ImStoreDownloadImage{
 		do_action( 'ims_apply_color_filter', &$image );
 		
 		//create new image
-		switch($filetype['ext']) {
+		switch( $ext ) {
 			case "jpg":
 			case "jpeg":
 				imagejpeg($image,NULL,100);
@@ -197,4 +183,4 @@ class ImStoreDownloadImage{
 	
 }
 //do that thing you do 
-$ImStoreImage = new ImStoreDownloadImage();
+new ImStoreDownloadImage();

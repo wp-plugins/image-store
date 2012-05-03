@@ -353,6 +353,12 @@ $settings['payment'] = array(
 		'type' 	=> 'text',
 		'label' => __( 'Currency Symbol', $this->domain ),
 	 ),
+	 'disable_decimal' => array( 
+		'val'	=> 1,
+		'type' 	=> 'checkbox',
+		'label' => __( 'Disable decimal point', $this->domain ),
+		'desc'	=> __( 'Disable auto format prices with a decimal points.', $this->domain ),
+	 ),
 	'clocal' => array( 
 		'type' 	=> 'radio',
 		'label' => __( 'Currency Symbol Location', $this->domain ),
@@ -363,7 +369,7 @@ $settings['payment'] = array(
 			'4' => __( '100 &#036;', $this->domain ),
 		 ),
 	 ),
-	'currency' => array( 
+	'currency' 	=> array( 
 		'type' 	=> 'select',
 		'label' => __( 'Default Currency', $this->domain ),
 		'opts'	=> array( 
