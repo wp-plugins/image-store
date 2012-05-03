@@ -49,13 +49,13 @@ class ImStoreInstaller extends ImStore{
 		global $wpdb;
 				
 		//FRONTEND OPTIONS
-		$ims_ft_opts['numThumbs']			= 8;
-		$ims_ft_opts['maxPagesToShow']	= 5;
+		$ims_ft_opts['numThumbs']				= 8;
+		$ims_ft_opts['maxPagesToShow']			= 5;
 		$ims_ft_opts['transitionTime']			= 1000;
-		$ims_ft_opts['slideshowSpeed']		= 3200;
-		$ims_ft_opts['autoStart']					=  '';
-		$ims_ft_opts['playLinkText']				= __( 'Play', $this->domain );
-		$ims_ft_opts['nextLinkText']				= __( 'Next', $this->domain );
+		$ims_ft_opts['slideshowSpeed']			= 3200;
+		$ims_ft_opts['autoStart']				=  '';
+		$ims_ft_opts['playLinkText']			= __( 'Play', $this->domain );
+		$ims_ft_opts['nextLinkText']			= __( 'Next', $this->domain );
 		$ims_ft_opts['pauseLinkTex']			= __( 'Pause', $this->domain );
 		$ims_ft_opts['closeLinkText']			= __( 'Close', $this->domain );
 		$ims_ft_opts['prevLinkText']			= __( 'Previous', $this->domain );
@@ -64,32 +64,33 @@ class ImStoreInstaller extends ImStore{
 		$ims_ft_opts['galleriespath']			= '/_imsgalleries';
 		$ims_ft_opts['imgsortdirect']			= 'ASC';
 		$ims_ft_opts['imgsortorder']			= 'menu_order';
+		$ims_ft_opts['attchlink']				= false;
 		$ims_ft_opts['taxtype']					= 'percent';
-		$ims_ft_opts['mediarss']					= '1';
-		$ims_ft_opts['colorbox']					= '1';
+		$ims_ft_opts['mediarss']				= '1';
+		$ims_ft_opts['colorbox']				= '1';
 		$ims_ft_opts['swfupload']				= '1';
 		$ims_ft_opts['stylesheet']				= '1';
 		$ims_ft_opts['deletefiles']				= '1';
 		$ims_ft_opts['sameasbilling']			= '1';
 		$ims_ft_opts['securegalleries']			= '1';
 		$ims_ft_opts['watermark']				= '0';
-		$ims_ft_opts['watermark_trans']		= '90'; 
-		$ims_ft_opts['watermark_size']		= '12';
-		$ims_ft_opts['watermark_color']		= 'ffffff';
+		$ims_ft_opts['watermark_trans']			= '90'; 
+		$ims_ft_opts['watermark_size']			= '12';
+		$ims_ft_opts['watermark_color']			= 'ffffff';
 		$ims_ft_opts['galleryexpire']			= '60';
 		$ims_ft_opts['symbol']					= '&#036;';
-		$ims_ft_opts['clocal']						= '1';
-		$ims_ft_opts['emailreceipt']				= '1';
-		$ims_ft_opts['currency']					= 'USD';
-		$ims_ft_opts['gateway_method']		= 'post';		
+		$ims_ft_opts['clocal']					= '1';
+		$ims_ft_opts['emailreceipt']			= '1';
+		$ims_ft_opts['currency']				= 'USD';
+		$ims_ft_opts['gateway_method']			= 'post';		
 		$ims_ft_opts['gateway']					= 'paypalsand';
-		$ims_ft_opts['album_template']		= 'page.php';
-		$ims_ft_opts['paymentname']			= 'Pay by check';
-		$ims_ft_opts['watermark_text']		= get_option( 'blogname' );
+		$ims_ft_opts['album_template']			= 'page.php';
+		$ims_ft_opts['paymentname']				= 'Pay by check';
+		$ims_ft_opts['watermark_text']			= get_option( 'blogname' );
 		$ims_ft_opts['notifyemail']				= get_option( 'admin_email' );
 		$ims_ft_opts['notifysubj']				= __( 'New purchase notification', $this->domain );
 		
-		$ims_ft_opts['thankyoureceipt']		= sprintf( __( "<h2>Thank You, %%customer_first%% %%customer_last%%</h2>\n Save the information bellow for your records. \n\nTotal payment: %%total%%\nTransaction number: %%order_number%%\n\nIf you have any question about your order please contact us at: %s", $this->domain ), get_option( 'admin_email' ) );
+		$ims_ft_opts['thankyoureceipt']			= sprintf( __( "<h2>Thank You, %%customer_first%% %%customer_last%%</h2>\n Save the information bellow for your records. \n\nTotal payment: %%total%%\nTransaction number: %%order_number%%\n\nIf you have any question about your order please contact us at: %s", $this->domain ), get_option( 'admin_email' ) );
 		
 		$ims_ft_opts['notifymssg']				= sprintf( __( "A new order was place at you image store at %s \n\nOrder number: %%order_number%% \nTo view the order details please login to your site at: %s \n\n%%instructions%%", $this->domain ), get_option( 'blogname' ), wp_login_url( ) );	
 		

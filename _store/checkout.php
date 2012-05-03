@@ -19,6 +19,9 @@ $this->subtitutions = array( );
 $fields = array( 'last_name', 'first_name', 'user_email', 'ims_address', 'ims_city', 'ims_state', 'ims_zip', 'ims_phone' );
 if( current_user_can( 'customer') && empty( $_POST['enoticecheckout'] ) ){
 	$userdata = wp_get_current_user( ); 
+	foreach( array( 'ims_address', 'ims_city', 'ims_state', 'ims_zip', 'ims_phone' ) as $field ){
+		if( !isset( $userdata->$field )) $userdata->$field = false;
+	}
 }else{
 	foreach( $fields as $key ){
 		$userdata->$key = '';

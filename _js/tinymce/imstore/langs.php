@@ -3,9 +3,8 @@ global $language;
 $language = ( empty($language) ) ?  'en' : $language;
 
 // escape text only if it needs translating
-function mce_escape($text) {
+function mce_escape( $text ) {
 	global $language;
-
 	if ( 'en' == $language ) return $text;
 	else return esc_js($text);
 }

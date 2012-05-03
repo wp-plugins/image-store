@@ -218,13 +218,13 @@ function ims_price_lists( $ims ){
 					</tr>
 					<tr class="label">
 						<td colspan="6"><label><?php _e( 'BW', $ims->domain )?>
-							<input type="text" name="_ims_bw" value="<?php echo isset( $meta['ims_bw'] ) ? esc_attr( $meta['ims_bw'] ) : '' ?>"/></label>							
+							<input type="text" name="_ims_bw" value="<?php echo $ims->format_price( $meta['ims_bw'] )  ?>"/></label>							
 							<label><?php _e( 'Sepia', $ims->domain )?>
-								<input type="text" name="_ims_sepia" value="<?php echo isset( $meta['ims_sepia'] ) ? esc_attr( $meta['ims_sepia'] ): '' ?>" /></label>						
+								<input type="text" name="_ims_sepia" value="<?php echo $ims->format_price( $meta['ims_sepia'] ) ?>" /></label>						
 							<label><?php _e( 'Local Shipping', $ims->domain )?>
-								<input type="text" name="_ims_ship_local" value="<?php echo isset( $meta['ims_ship_local'] ) ? esc_attr( $meta['ims_ship_local'] ) : '' ?>" /></label>					
+								<input type="text" name="_ims_ship_local" value="<?php echo $ims->format_price($meta['ims_ship_local'] )  ?>" /></label>					
 							<label><?php _e( 'International Shipping', $ims->domain )?>
-								<input type="text" name="_ims_ship_inter" value="<?php echo isset( $meta['ims_ship_inter'] ) ? esc_attr( $meta['ims_ship_inter'] ) : ''?>" /></label>
+								<input type="text" name="_ims_ship_inter" value="<?php echo $ims->format_price( $meta['ims_ship_inter'] ) ?>" /></label>
 						</td>
 					</tr>
 					<?php do_action( 'ims_pricelist_options', $list->ID, &$this )?>
@@ -431,7 +431,8 @@ function ims_new_promotion( $ims ){
 		$_POST['expiration_date'] = date_i18n( 'Y-m-d', $expire );
 		foreach( (array)$meta as $key => $val ) 	$_POST[$key] = $val; 
 	 }
-	 
+	
+        $data = array();
 	foreach( array( 'promo_name', 'promo_code', 'starts', 'startdate', 'expires', 'expiration_date', 'promo_type', 'discount') as $key )
 		$data[$key] = ( isset($_POST[$key]) ) ? esc_attr($_POST[$key] ) : false;
 	extract( $data );

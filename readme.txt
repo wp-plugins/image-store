@@ -4,8 +4,8 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: e-commerce,shop,photo store,picture,image,galleries,imstore,image-store,secure,translate,translatable,watermark,
 slideshow,gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints
 Requires at least: 3.0.0
-Tested up to: 3.3.1
-Stable tag: 3.0.4
+Tested up to: 3.4.0
+Stable tag: 3.0.5
 
 Image Store (ImStore) is a photo gallery and store plugin for WordPress with Paypal and Google Checkout integration.
 
@@ -83,6 +83,19 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+
+= 3.0.5 =
+* Code clean up.
+* WP 3.4.0 compatible.
+* Added: Additional support for multisites.
+* Added: Additional security for secure images.
+* Added: Remove decimal point option.
+* Added: Disable store at gallery level.
+* Added: Option to link to image attachment at gallery level.
+* Fixed: Download links issues.
+* Fixed: Some issues with multisites.
+* Fixed: Single gallery template selection.
+* Fixed: Issue generating image sizes for small images.
 
 = 3.0.4 =
 * Added: additional hooks.

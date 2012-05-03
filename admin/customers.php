@@ -291,7 +291,7 @@ function ims_customers_count_links( $pagenowurl, $user_status ){
 *return array errors
 */
 function ims_create_customer( $pagenowurl ){
-	global $wpdb, $ImStore;
+	global $ImStore;
 	
 	$userid 			= (int) $_POST['userid'];
 	$errors 			= new WP_Error( );

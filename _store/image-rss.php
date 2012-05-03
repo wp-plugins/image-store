@@ -65,7 +65,7 @@ class ImStoreFeeds{
 	*@return void
 	*@since 0.5.3 
 	*/
-	 function dis_feed( $query ){
+	 function dis_feed( ){
 		if( get_query_var( 'feed') !== 'imstore' )
 			return;	
 			

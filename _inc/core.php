@@ -18,14 +18,14 @@ class ImStore{
 	*Make sure that new language( .mo ) files have 'ims-' as base name
 	*/
 	public $domain	= 'ims';
-	public $version	= '3.0.4';
+	public $version	= '3.0.5';
 
 	/**
 	*Public variables
 	*/
 	public $dformat = '';
-	public $sync = false;
-	public $perma= false;
+	public $sync    = false;
+	public $perma   = false;
 	public $blog_id = false;
 	public $color	= array( );
 	public $opts	= array( );
@@ -45,18 +45,24 @@ class ImStore{
 		
 		$this->define_constant( );
 		$this->wp_version = $wp_version;
-		
-		$sync = false;
+
+		$this->content_url = rtrim( WP_CONTENT_URL, '/' );
+		$this->content_dir = rtrim( WP_CONTENT_DIR, '/' );
+
 		if( is_multisite( ) && isset( $GLOBALS['blog_id'] ) ){
 			$this->blog_id = (int) $GLOBALS['blog_id'];
 			$this->sync = get_site_option( 'ims_sync_settings' );
+			$this->content_url  = get_site_url( 1 ) . "/wp-content";
 		}
 		
 		if( empty( $this->opts ) && $this->sync == true )
 			switch_to_blog( 1 );
 		
 		$this->opts = get_option( $this->optionkey );
-		if( is_multisite() ) restore_current_blog( );
+		if( !isset(  $this->opts['attchlink']	) )
+			$this->opts['attchlink'] = false;
+			
+		if( is_multisite( ) ) restore_current_blog( );
 		
 		add_filter( 'posts_orderby', array( &$this, 'posts_orderby' ), 10,3 );
 		add_filter( 'post_type_link', array( &$this, 'gallery_permalink' ), 10,3 );
@@ -67,7 +73,6 @@ class ImStore{
 		add_action( 'imstore_expire', array( &$this, 'expire_galleries' ) );
 		add_action( 'set_current_user', array( &$this, 'set_user_caps' ),10 );
 		add_action( 'generate_rewrite_rules', array( &$this, 'add_rewrite_rules' ),10,1 );
-		
 	}
 	
 	/**
@@ -92,7 +97,7 @@ class ImStore{
 			$this->load_pages( );
 		$this->load_color_opts( );
 		
-		$this->loc 			= $this->opts['clocal'];
+		$this->loc 		= $this->opts['clocal'];
 		$this->sym 		= $this->opts['symbol']; 
 		
 		$this->dformat 	= get_option( 'date_format' );
@@ -167,7 +172,7 @@ class ImStore{
 	*@return string
 	*@since 3.0.0
 	*/
-	function gallery_permalink( $permalink, $post, $leavename ){
+	function gallery_permalink( $permalink, $post ){
 		if( $post->post_type != 'ims_gallery' ) 
 			return $permalink;
 		return trim( str_replace( '%imspage%', '', $permalink ) , '/' ) ;
@@ -294,7 +299,7 @@ class ImStore{
 	*/
 	function load_text_domain( ){
 		$locale 	= get_locale( );
-		$filedir 	= WP_CONTENT_DIR . '/languages/_ims/'. $this->domain . '-' . $locale . '.mo';
+		$filedir 	= $this->content_dir . '/languages/_ims/'. $this->domain . '-' . $locale . '.mo';
 		
 		if( function_exists( 'load_plugin_textdomain' ) )
 			load_plugin_textdomain( $this->domain, false, apply_filters( 'ims_load_textdomain', '../languages/_ims/', $this->domain , $locale ) );
@@ -417,8 +422,8 @@ class ImStore{
 			'hierarchical' 		=> false,
 			'revisions'			=> false,
 			'capability_type' 	=> 'page',
-			'show_in_nav_menus' => false,
 			'query_var'			=> 'ims_gallery',
+			'show_in_nav_menus' => false,
 			'exclude_from_search'=> $searchable,
 			'menu_icon' 		=> IMSTORE_URL.'/_img/imstore.png',
 			'supports' 			=> array( 'title', 'comments', 'author', 'excerpt', 'page-attributes', $texedit ), 
@@ -515,8 +520,12 @@ class ImStore{
 	 *@since 3.0.0
 	 */	
 	function format_price( $price , $before='', $after = '' ){
-		$value = (is_numeric( $price )) ? $price : 0;
-		return sprintf( $before . $this->cformat[$this->loc], number_format( $value, 2 ) . $after );
+		if ( !is_numeric( $price ))  $price = 0 ;
+		
+		if( empty( $this->opts['disable_decimal']  ) ) 
+			$price = number_format( $price, 2 );
+			
+		return sprintf( $before . $this->cformat[$this->loc], $price . $after );
 	}
 		
 	/**

@@ -13,8 +13,6 @@
 if( preg_match( '#'.basename(__FILE__) . '#',$_SERVER['PHP_SELF'])) 
 	die( );
 
-$nonce = '_wpnonce='.wp_create_nonce( 'ims_secure_img' );
-
 $output .= '<div class="ims-imgs-nav">'."\n";
 $output .= '<div id="ims-thumbs">'."\n";
 $output .= '<ul class="thumbs">'."\n";

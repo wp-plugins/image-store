@@ -16,14 +16,14 @@ class ImStoreAdmin extends ImStore{
 	*/
 	public $pageurl 		= '';
 	public $galid			= 0;
-	public $spageid 		= 0;
+	public $spageid 	= 0;
 	public $per_page 	= 20;
 	public $page			= false;
 	public $action 		= false;
-	public $pagenow	= false;
+	public $pagenow 	= false;
 	public $uopts 		= array( );
 	public $screens		= array( );
-	public $user_fields = array( );
+	public $user_fields	= array( );
 	public $user_status = array( );
 	
 	/**
@@ -103,8 +103,7 @@ class ImStoreAdmin extends ImStore{
 	*@since 3.0.0
 	*/
 	function mce_css( $css ){
-		$css .= ', ' . IMSTORE_URL ."/_css/tinymce.css";
-		return $css;
+		return $css . ', ' . IMSTORE_URL ."/_css/tinymce.css";
 	}
 
 	/**
@@ -116,8 +115,8 @@ class ImStoreAdmin extends ImStore{
 	*@since 3.0.0
 	*/
 	function register_ims_button( $buttons ){
-	 array_push( $buttons, "separator", "imstore" );
-	 return $buttons;
+		array_push( $buttons, "separator", "imstore" );
+		return $buttons;
 	}
 	
 	/**
@@ -167,13 +166,15 @@ class ImStoreAdmin extends ImStore{
 	
 	/**
 	*Set settings when the pluigin
-	* is activated in the entire network 
+	*is activated in the entire network 
 	*
 	*@return void
 	*@since 0.5.0 
 	*/
 	function activated_plugin( $plugin, $network_wide ){
-		if( !$network_wide) return;
+		if( !$network_wide || $plugin != IMSTORE_FOLDER ) 
+                    return;
+                
 		global $wpdb;
 		
 		$opts = get_site_option( $this->optionkey );
@@ -181,7 +182,9 @@ class ImStoreAdmin extends ImStore{
 			include_once( IMSTORE_ABSPATH.'/admin/install.php' );
 			ImStoreInstaller::imstore_default_options( );
 		}else{
-			$blogs = $wpdb->get_results( "SELECT blog_id id FROM $wpdb->blogs WHERE public = '1' AND archived = '0' AND deleted = '0'" ); 
+			$blogs = $wpdb->get_results(
+				"SELECT blog_id id FROM $wpdb->blogs WHERE public = '1' AND archived = '0' AND deleted = '0'"
+			 ); 
 			foreach( $blogs as $blog ){
 				switch_to_blog ( $blog->id );
 				$customer = @get_role( 'customer' );
@@ -277,15 +280,11 @@ class ImStoreAdmin extends ImStore{
 		if( 'ims_image' != get_post_type( $postid ) )
 			return $filepath;
 		
-		$fullpath = WP_CONTENT_DIR;
-		if( $this->blog_id )
-			$fullpath = rtrim( WP_CONTENT_DIR ,'/' ) . "/blogs.dir/$this->blog_id" ;
-		
 		$imagedata = get_post_meta( $postid, '_wp_attachment_metadata', true );
 		
 		if( stristr( $imagedata['file'], 'wp-content' ) !== false ) 
 			return str_ireplace( '_resized/', '', $imagedata['file'] );
-		else  return rtrim( $fullpath, '/ ') . "/" . str_ireplace( '_resized/', '', $imagedata['file'] );
+		else  return $this->content_dir . "/" . str_ireplace( '_resized/', '', $imagedata['file'] );
 	}
 
 	/**
@@ -311,7 +310,6 @@ class ImStoreAdmin extends ImStore{
 	*/
 	function move_resized_file( $file ){
 		global $pagenow;
-		
 		if( preg_match( " /(_resized)/i", $file ) )
 			return $file;
 			
@@ -335,45 +333,56 @@ class ImStoreAdmin extends ImStore{
 	*
 	*@param array $metadata
 	*@param unit $attachment_id
-	*@return string
+	*@return array
 	*@since 3.0.0
 	*/	
 	function generate_image_metadata( $metadata, $attachment_id ){
-		if( 'ims_image' != get_post_type( $attachment_id ) )
+		if( 'ims_image' != get_post_type( $attachment_id ) 
+		|| empty( $metadata['file'] ) || !defined( 'DOING_AJAX' ) )
 			return $metadata;
 		
-		$siteurl = ( is_multisite( ) ) ? get_site_url( 1 ) : WP_CONTENT_URL;
-
 		if( stristr( $metadata['file'], 'wp-content' ) !== false )
-		$path = dirname( str_ireplace( WP_CONTENT_DIR, '', $metadata['file'] ) );
+			$path = dirname( str_ireplace( $this->content_dir, '', $metadata['file'] ) );
 		else $path =	dirname( $metadata['file'] );
 		
 		if( !preg_match( " /(_resized)/i", $path ) )
 			$path = "$path/_resized";
-				
-		//generate mini image for thumbnail edit
-		$target = isset( $_REQUEST['target'] ) ?
-		preg_replace( '/[^a-z0-9_-]+/i', '', $_REQUEST['target'] ) : '';
 		
-		if ( 'thumbnail' == $target ){
-			$img = rtrim( WP_CONTENT_DIR, '/' ) . "/$path/".$metadata['sizes']['thumbnail']['file'];
-			$resized_file = image_resize( $img, get_option("mini_size_w" ), get_option("mini_size_h" ), true );
-			
-			if ( !is_wp_error($resized_file) && $resized_file && $info = getimagesize($resized_file) );
+		//generate mini image for thumbnail edit
+		if ( isset( $_REQUEST['target'] ) &&  
+		'thumbnail' == preg_replace( '/[^a-z0-9_-]+/i', '', $_REQUEST['target'] ) ){
+			$resized_file = image_resize( 
+				$this->content_dir . "$path/" . $metadata['sizes']['thumbnail']['file'] , 
+				get_option("mini_size_w" ), get_option("mini_size_h" ), true 
+			);
+			if ( !is_wp_error( $resized_file ) && $resized_file && $info = getimagesize( $resized_file ) )
 				$metadata['sizes']['mini'] = array(
 					'file' => basename( $resized_file ),
 					'width' => $info[0],
 					'height' => $info[1],
 				 );
 		}
-		
-		//add full path information
-		foreach( (array)$metadata['sizes'] as $size => $sizedata ){
-			if( !isset( $sizedata['file'] ) ) continue;
-			$metadata['sizes'][$size]['url'] = rtrim($siteurl,'/') . "/$path/" . $sizedata['file']; 
-			$metadata['sizes'][$size]['path'] = rtrim(WP_CONTENT_DIR,'/') . "/$path/". $sizedata['file'];
+	
+		if( empty( $metadata['sizes']['mini'] ) || empty( $metadata['sizes']['preview'] ) || empty($metadata['sizes']['thumbnail'] ) ){
+			$filename = basename( $metadata['file'] );
+			$orginal_data =  array( 'file' => $filename, 'width' =>$metadata['width'], 'height' => $metadata['height']  );
+			if( !file_exists( $this->content_dir . "/$path/" .$filename  ) )
+				@copy( $this->content_dir . '/' . $metadata['file'],  $this->content_dir . "/$path/" .$filename );
 		}
 		
+		if( empty( $metadata['sizes']['mini']  ) )
+			$metadata['sizes']['mini'] = $orginal_data;
+		
+		if( empty( $metadata['sizes']['preview']  ) )
+			$metadata['sizes']['preview'] = $orginal_data;
+		
+		if( empty( $metadata['sizes']['thumbnail']  ) )
+			$metadata['sizes']['thumbnail'] = $orginal_data;
+		
+		foreach( $metadata['sizes'] as $size => $sizedata ){
+			$metadata['sizes'][$size]['path'] = $this->content_dir . "/$path/". $sizedata['file'];
+			$metadata['sizes'][$size]['url'] = $this->content_url . "/$path/" . $sizedata['file'];
+		}
 		return $metadata;
 	}
 	
@@ -393,7 +402,7 @@ class ImStoreAdmin extends ImStore{
 			wp_enqueue_script( 'jquery-ui-draggable' );
 			
 			wp_enqueue_script( 'ims-gallery', IMSTORE_URL.'/_js/galleries.js', array( 'jquery' ), $this->version, true );
-			wp_enqueue_script( 'datepicker',IMSTORE_URL.'/_js/jquery-ui-datepicker.js', array( 'jquery' ), $this->version );
+			wp_enqueue_script( 'datepicker', IMSTORE_URL.'/_js/jquery-ui-datepicker.js', array( 'jquery' ), $this->version );
 		}
 		
 		$jquery = array( 'dd', 'D', 'd', 'DD', '*', '*', '*', 'o', '*', 'MM', 'mm', 'M', 'm', '*', '*', '*', 'yy', 'y' );
@@ -640,9 +649,6 @@ class ImStoreAdmin extends ImStore{
 				echo( $post->post_expire == '0000-00-00 00:00:00') 
 					? '' : date_i18n( $this->dformat, strtotime($post->post_expire) );
 				break;
-			case 'phone':
-				return $data->ims_phone;
-				break;
 			default:
 		}
 	}
@@ -705,7 +711,7 @@ class ImStoreAdmin extends ImStore{
 	*@return array
 	*@since 0.5.0 
 	*/
-	function insert_post_data( $data, $args ){
+	function insert_post_data( $data ){
 		if( $data['post_type'] == 'ims_gallery' ){
 			if( empty( $data['post_content'] )) 
 				$data['post_content'] = '[ims-gallery-content]';
@@ -745,7 +751,7 @@ class ImStoreAdmin extends ImStore{
 	*@since 3.0.0
 	*return bool
 	*/
-	function count_links( $stati = array( ), $args){
+	function count_links( $stati = array( ), $args = array() ){
 		global $wpdb;
 		
 		$default = array(
@@ -843,13 +849,12 @@ class ImStoreAdmin extends ImStore{
 	 *return void
 	*/
 	function delete_post( $postid ){
-		global $current_user;
 		if( !current_user_can( 'ims_manage_galleries') 
 		|| !$this->opts['deletefiles'] || 'ims_gallery' != get_post_type( $postid ) )
 			return $postid;
 					
 		if( $folderpath = get_post_meta( $postid, '_ims_folder_path', true ))
-			$this->delete_folder( rtrim(WP_CONTENT_DIR,'/') . $folderpath );
+			$this->delete_folder( $this->content_dir . $folderpath );
 		return $postid;
 	}
 	

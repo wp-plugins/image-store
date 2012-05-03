@@ -15,10 +15,13 @@ define( 'DOING_AJAX', true );
 	
 //load wp
 if( isset( $_REQUEST['c'] ) || isset( $_REQUEST['w'] ) )
-	require_once '../../../wp-load.php';
+    require_once '../../../wp-load.php';
 
 class ImStoreImage{
 
+	var $key = false;
+	var $nowatermark = false;
+	
 	/**
 	*Constructor
 	 *
@@ -34,13 +37,15 @@ class ImStoreImage{
 			while( false !== ( $obj = readdir( $dh ) ) ){
 				if( $obj == '.' || $obj == '..' || !preg_match('/\.(txt)$/i', $obj ) ){ 
 					continue;
-				}else{ $this->key = current( explode( '.', $obj ) ); break;}
+				}else{ 
+					$this->key = current( explode( '.', $obj ) ); 
+					break;
+				}
 			}
 			@closedir( $dh );
 		}
-	 	$path = $this->url_decrypt( str_replace( ' ', '+', $_GET['i'] ) );
 		
-		$this->nowatermark = false;
+	 	$path = $this->url_decrypt( str_replace( ' ', '+', $_GET['i'] ) );
 		if( preg_match( '#^([0-9]{1,2})$#', basename( $path ) )){
 			$this->nowatermark = true;
 			$path = dirname( $path );
@@ -49,8 +54,7 @@ class ImStoreImage{
 		$this->root = implode( '/', explode( '/', str_replace( '\\', '/', dirname( __FILE__ ) ), -3 ) )."/";
 		$this->image_dir = "{$this->root}wp-content/$path";
 		
-		if( !file_exists( $this->image_dir ) 
-		|| !preg_match( '/\.(png|jpe?g|gif)$/i', $this->image_dir ))
+		if( !file_exists( $this->image_dir ) || !preg_match( '/\.(png|jpe?g|gif)$/i', $this->image_dir ))
 			die( );
 		
 		$this->display_image();
@@ -67,9 +71,14 @@ class ImStoreImage{
 		$ext = end( explode( '.', basename( $this->image_dir ) ) );
 		header( 'Content-Type: image/'. $ext );
 		
+		//if ( false === strpos( $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS' ) )
+			//header( 'Content-Length: ' . filesize( $this->image_dir ) );
+		
 		$color 		= isset( $_REQUEST['c'] ) ? $_REQUEST['c'] : false;
 		$cache 		= substr( @filemtime( dirname( __FILE__ ) . "/admin/_key/{$this->key}.txt" ) , -4 );
-		$modified 	= gmdate( "D, d M Y H:i:s", ( @filemtime( $this->image_dir ) + $cache ) ); $etag = '"' . md5( $modified . $color ) . '"';
+		$modified 	= gmdate( "D, d M Y H:i:s", ( @filemtime( $this->image_dir ) + $cache ) ); 
+		
+		$etag = '"' . md5( $modified . $color ) . '"';
 		$client_etag = isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) ? stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) : false;
 		
 		header( 'Last-Modified:'.gmdate( 'D,d M Y H:i:s').' GMT' );
@@ -142,7 +151,7 @@ class ImStoreImage{
 		
 				
 				$font 	= dirname( __FILE__ ).'/_fonts/arial.ttf';
-				$rgb 		= $this->HexToRGB( $textcolor );
+				$rgb 	= $this->HexToRGB( $textcolor );
 				$black 	= imagecolorallocatealpha( $image, 0, 0, 0, 90 );
 				$icolor = imagecolorallocatealpha( $image, $rgb['r'], $rgb['g'], $rgb['b'], $trannsperency);
 				
@@ -194,9 +203,8 @@ class ImStoreImage{
 			//image watermark
 			}elseif( $opts['watermark'] == 2 && $opts["watermarkurl"] ){
 				
-				$wmpath	= $opts["watermarkurl"];
-				$option = get_option( 'ims_wlocal' );
-				$wmtype 	= wp_check_filetype( basename( $opts["watermarkurl"] ) );
+				$wmpath = $opts["watermarkurl"];
+				$wmtype = wp_check_filetype( basename( $opts["watermarkurl"] ) );
 
 				if( !preg_match( '/(png|jpg|jpeg|gif )$/i', $wmtype['ext'] ) )
 					die( );
@@ -288,7 +296,7 @@ class ImStoreImage{
 			imagefilter( $image, IMG_FILTER_COLORIZE, 35, 25, 10 );
 		}
 		
-		do_action( 'ims_apply_color_filter', $image );
+		do_action( 'ims_apply_color_filter', &$image );
 		
 		$quality = ( $q = get_option( 'preview_size_q' ) ) ? $q : 85;
 		
@@ -323,9 +331,9 @@ class ImStoreImage{
 		$color = array( );
  
 		if( strlen( $hex ) == 3 ){
-			$color['r'] = hexdec( substr( $hex, 0, 1 ).$r );
-			$color['g'] = hexdec( substr( $hex, 1, 1 ).$g );
-			$color['b'] = hexdec( substr( $hex, 2, 1 ).$b );
+			$color['r'] = hexdec( substr( $hex, 0, 1 ));
+			$color['g'] = hexdec( substr( $hex, 1, 1 ));
+			$color['b'] = hexdec( substr( $hex, 2, 1 ));
 		}
 		else if( strlen( $hex ) == 6 ){
 			$color['r'] = hexdec( substr( $hex, 0, 2 ) );
@@ -345,8 +353,9 @@ class ImStoreImage{
 	*@since 0.5.0 
 	*/
 	function image_ratio( $w, $h, $immax ){
+                $i=array();
 		$max		= max( $w, $h );
-		$r			= $max > $immax ? ( $immax / $max ) : 1;
+		$r		= $max > $immax ? ( $immax / $max ) : 1;
 		$i['w']	= ceil( $w *$r * .8 );
 		$i['h']	= ceil( $h * $r * .8 );
 		return $i;
@@ -373,4 +382,4 @@ class ImStoreImage{
 }
 
 //do that thing you do 
-$ImStoreImage = new ImStoreImage( );
+new ImStoreImage( );

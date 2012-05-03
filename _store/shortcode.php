@@ -65,8 +65,8 @@ class ImStoreShortCode{
 			 AND meta_value = '%s'", $id 
 		));
 		
-		$this->order 	= ( $order ) ? $order : $this->opts['imgsortdirect'];
-		$this->sortby = ( isset($sort[$orderby]) ) ? $sort[$orderby] : $this->opts['imgsortorder'];
+		$this->order 	= ( $order ) ? $order : $this->opts['imgsortorder'];
+		$this->sortby 	= ( isset($sort[$orderby]) ) ? $sort[$orderby] : $this->opts['imgsortdirect'];
 		$this->limit 	= ( empty($number) ||  strtolower($number) == 'all' ) ?  false : $number;
 		$this->get_galleries( );
 		
@@ -100,7 +100,7 @@ class ImStoreShortCode{
 				WHERE post_type = 'ims_image'
 				AND meta_key = '_wp_attachment_metadata'
 				AND post_status = 'publish' AND post_parent = %d
-				ORDER BY $this->sortby $this->order $limit", $this->galid 
+				ORDER BY $this->order $this->sortby $limit", $this->galid 
 			));
 			
 			if( empty( $this->attachments ) )  return;
@@ -134,8 +134,9 @@ class ImStoreShortCode{
 		
 		global $ImStore;
 		$tagatts	= ( $layout == 'lightbox' ) ?  ' class="ims-colorbox"' : ' class="ims-'.$layout.'"';
-		
-		$output = "<{$gallerytag} class='ims-gallery'>";
+		$galid 		= wp_get_post_parent_id( $this->attachments[0]->ID ); 
+
+		$output = "<{$gallerytag} id='ims-gallery-".$galid."' class='ims-gallery'>";
 		foreach( $this->attachments as $image ){
 			
 			$title	= get_the_title( $image->ID );
@@ -158,6 +159,7 @@ class ImStoreShortCode{
 			$output .= "</{$imagetag}>";
 
 		}
+		$output .= "<div class='ims-cl'></div>";
 		return $output .= "</{$gallerytag}>";
 	
 	}
@@ -176,7 +178,6 @@ class ImStoreShortCode{
 		
 		global $ImStore;
 		$this->baseurl = $ImStore->baseurl;
-		$tagatts	= ' class="ims-colorbox" rel="gallery" ';
 		
 		//navigation
 		$output = '<div class="ims-imgs-nav">';

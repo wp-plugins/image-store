@@ -74,7 +74,7 @@ class ImStoreSet extends ImStoreAdmin{
 	*@return void
 	*@since 3.0.0
 	*/
-	function get_users( $selected = '' ){
+	function get_users( ){
 		
 		$users = wp_cache_get( 'ims_users' );
 		
@@ -90,7 +90,7 @@ class ImStoreSet extends ImStoreAdmin{
 		
 		if( empty($users) )
 			return array( '0' => __( 'No users to manage', $this->domain ) );
-		
+		$list = array();
 		$list[0] = __( 'Select user', $this->domain );
 		foreach( $users as $user)
 			$list[$user->ID] = $user->name;
@@ -214,7 +214,7 @@ class ImStoreSet extends ImStoreAdmin{
 	*@since 3.0.0
 	*/
 	function customer_search_query( &$query ){
-		global $pagenow,$wpdb;
+		global $wpdb;
 		
 		if( $this->page != 'ims-customers' ) 
 			return;
@@ -244,9 +244,7 @@ class ImStoreSet extends ImStoreAdmin{
 	*@return array on error
 	*@since 3.0.0
 	*/
-	function create_package( ){
-		global $wpdb;
-		
+	function create_package( ){		
 		$errors = new WP_Error( );
 		if( empty($_POST['package_name']) ){
 			$errors->add( 'empty_name',__( 'A name is required.', $this->domain ) );
@@ -277,7 +275,6 @@ class ImStoreSet extends ImStoreAdmin{
 	*@since 3.0.0
 	*/
 	function create_pricelist( ){
-		global $wpdb;
 		$errors = new WP_Error( );
 		
 		if( empty($_POST['pricelist_name'])){
@@ -308,8 +305,6 @@ class ImStoreSet extends ImStoreAdmin{
 	*@since 3.0.0
 	*/
 	function update_pricelist( ){
-		global $wpdb;
-		
 		if( empty($_POST['listid']) ) 
 			return;
 		
@@ -342,8 +337,6 @@ class ImStoreSet extends ImStoreAdmin{
 	*@since 3.0.0
 	*/
 	function update_package( ){
-		global $wpdb;
-		
 		if( empty($_POST['packageid']) ) 
 			return;
 			
@@ -352,7 +345,7 @@ class ImStoreSet extends ImStoreAdmin{
 			$errors->add( 'empty_name',__( 'A name is required.', $this->domain ) );
 			return $errors;
 		}
-		
+		$sizes = array();
 		foreach($_POST['sizes'] as $size){
 			$sizes[$size['name']]['unit'] = $size['unit'];
 			$sizes[$size['name']]['count'] = $size['count'];
@@ -374,8 +367,6 @@ class ImStoreSet extends ImStoreAdmin{
 	*@since 3.0.0
 	*/
 	function add_promotion( ){
-		global $wpdb;
-		
 		$errors = new WP_Error( );
 		if( empty($_POST['promo_name']))
 			$errors->add( 'empty_name',__( 'A promotion name is required.', $this->domain ) );
@@ -400,7 +391,8 @@ class ImStoreSet extends ImStoreAdmin{
 			$errors->add( 'promo_error',__( 'There was a problem creating the promotion.', $this->domain ) );
 			return $errors;
 		}
-		
+                
+		$data = array();
 		foreach( array( 'promo_code', 'promo_type', 'free-type', 'discount', 'items', 'rules' ) as $key ){
 			if( isset( $_POST[$key] ) ) 	$data[$key] = $_POST[$key];
 		}
@@ -526,6 +518,12 @@ class ImStoreSet extends ImStoreAdmin{
 			update_option( $this->optionkey, $this->opts );
 			if( isset( $_POST['wlocal'] ) )
 				update_option( 'ims_wlocal', $_POST['wlocal'] );
+				
+			if( isset( $_POST['album_template'] ) ){
+				update_option( 'ims_searchable',  
+					( empty( $_POST['ims_searchable'] ) ) ? false : $_POST['ims_searchable']
+				 );  
+			}
 		
 			do_action( 'ims_save_settings', $action, $settings );
 			

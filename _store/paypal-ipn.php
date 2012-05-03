@@ -124,7 +124,7 @@ class ImStorePaypalIPN {
 			$_POST['last_name'], $_POST['first_name'], $_POST['payer_email'],
 		);
 		
-		do_action('ims_after_paypal_ipn', $cartid, $cart, $data );
+		do_action('ims_after_paypal_ipn', $cartid, $cart );
 		
 		$to 		= $this->opts['notifyemail'];
 		$subject 	= $this->opts['notifysubj'];
@@ -142,6 +142,7 @@ class ImStorePaypalIPN {
 			&& !get_post_meta( $cartid , '_ims_email_sent', true ) ){
 			
 			global $ImStore;
+			$nonce	= '_wpnonce=' . wp_create_nonce( "ims_download_img");
 			$message = make_clickable( wpautop( stripslashes( preg_replace( $this->opts['tags'], $this->subtitutions, $this->opts['thankyoureceipt'] )) ) );
 			
 			foreach( $cart['images'] as $id => $sizes ){
@@ -149,7 +150,7 @@ class ImStorePaypalIPN {
 				foreach( $sizes as $size => $colors){
 					foreach( $colors as $color => $item){
 						if( isset( $item['download'] ))
-						 $downlinks[] = '<a href="'.IMSTORE_ADMIN_URL."download.php?$nonce&amp;img=".$enc."&amp;sz=$size&amp;c=$color". '" 
+						 $downlinks[] = '<a href="'. IMSTORE_ADMIN_URL . "/download.php?$nonce&amp;img=" . $enc . "&amp;sz=$size&amp;c=$color" . '" 
 						 class="ims-download">'. get_the_title( $id ) ." ". $labels[$color]." </a>";
 					}
 				}
@@ -182,5 +183,4 @@ class ImStorePaypalIPN {
 	
 	}
 }
-
-$paypalIPN = new ImStorePaypalIPN( );
+new ImStorePaypalIPN( );
