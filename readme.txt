@@ -84,6 +84,11 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 
 == Changelog ==
 
+= 3.0.6 =
+* Fixed: Download links notices.
+* Fixed: issues saving price lists.
+* Fixed: issue processing cart .
+
 = 3.0.5 =
 * Code clean up.
 * WP 3.4.0 compatible.

@@ -18,7 +18,7 @@ class ImStore{
 	*Make sure that new language( .mo ) files have 'ims-' as base name
 	*/
 	public $domain	= 'ims';
-	public $version	= '3.0.5';
+	public $version	= '3.0.6';
 
 	/**
 	*Public variables
@@ -520,11 +520,11 @@ class ImStore{
 	 *@since 3.0.0
 	 */	
 	function format_price( $price , $before='', $after = '' ){
-		if ( !is_numeric( $price ))  $price = 0 ;
-		
+		if( preg_match('/\$(\d+\.\d{1,2}\b|\.\d{1,2}\b|\d+(?!\.))/', $price ) )
+			return $price;
+		if ( !is_numeric( $price )) $price = 0 ;
 		if( empty( $this->opts['disable_decimal']  ) ) 
 			$price = number_format( $price, 2 );
-			
 		return sprintf( $before . $this->cformat[$this->loc], $price . $after );
 	}
 		
