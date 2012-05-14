@@ -1029,7 +1029,7 @@ class ImStoreFront extends ImStore{
 		
 		global $wpdb;
 		$type = ( $album ) ? 
-			"SELECT DISTINCT object_id, post_parent FROM $wpdb->terms AS t 
+			"SELECT DISTINCT object_id FROM $wpdb->terms AS t 
 			INNER JOIN $wpdb->term_taxonomy tt ON t.term_id = tt.term_id 
 			INNER JOIN $wpdb->term_relationships tr ON tt.term_taxonomy_id = tr.term_taxonomy_id 
 			WHERE t.term_id = %d " 

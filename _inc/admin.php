@@ -41,14 +41,28 @@ class ImStoreAdmin extends ImStore{
 		add_filter( 'ims_album_row_actions', array( &$this, 'add_taxonomy_link' ), 1,3 );
 		add_filter( 'intermediate_image_sizes', array( &$this, 'alter_image_sizes' ), 50,1 );
 		add_filter( 'load_image_to_edit_path', array( &$this, 'load_ims_image_path' ), 15,2 );
+		
+		//sort image columns
+		add_filter( 'request', array( &$this, 'galleries_column_orderby') );
+		add_filter( 'posts_join_paged', array( &$this, 'galleries_column_join') );
+		add_filter( 'posts_fields_request', array( &$this, 'posts_fields_request') );
+		add_filter( 'posts_groupby_request', array( &$this, 'posts_groupby_request') );
+		add_filter( 'posts_orderby_request', array( &$this, 'posts_orderby_request'), NULL, 2 );
+		
 		add_filter( 'manage_edit-ims_gallery_columns', array( &$this,"add_columns" ),10 );
+		add_filter( "manage_edit-ims_gallery_sortable_columns", array( &$this, 'add_columns' ), 15,2 );
+		
 		add_filter( 'image_make_intermediate_size', array( &$this, 'move_resized_file' ), 10,3 );
 		add_filter( 'manage_ims_album_custom_column', array( &$this, 'show_cat_id' ), 10,3 );
 		add_filter( 'manage_posts_custom_column', array( &$this, 'add_columns_val_gal' ), 15,2 );
+		
 		add_filter( 'wp_update_attachment_metadata', array( &$this, 'generate_image_metadata' ), 50,2 );
 		add_filter( 'wp_generate_attachment_metadata', array( &$this, 'generate_image_metadata' ), 50,2 );
 		
+		//backwards support
 		add_action( 'delete_post', array( &$this, 'delete_post' ), 1 );
+		
+		add_action( 'before_delete_post', array( &$this, 'delete_post' ), 1 );
 		add_action( 'admin_print_styles', array( &$this, 'register_screen_columns' ), 0 );
 		add_action( 'manage_edit-ims_album_columns', array( &$this, 'add_id_column') );
 		add_action( 'manage_edit-ims_album_sortable_columns', array( &$this, 'add_id_column') );
@@ -552,6 +566,83 @@ class ImStoreAdmin extends ImStore{
 			return $id;
 	}	
 	
+	function if_column( $column  ){
+		global $wp_query;  
+		$query = $wp_query->query;
+		
+		if( empty( $query['orderby'] ) )
+			return false;
+			
+		if( $query['orderby'] == $column  )
+			return true;
+			
+		return false;
+	}
+	
+	function posts_orderby_request( $sortby, $query ){
+		if( empty( $_REQUEST['orderby'] ) )
+			return $sortby;
+		switch( $_REQUEST['orderby'] ){
+			case 'Expires':
+				return  "post_expire " . $query->query['order'];
+			case 'Images':
+				return  "image_count " . $query->query['order'];
+			default: return $sortby;
+		}
+	}
+
+	function posts_fields_request( $distinct ){
+		if( !$this->if_column( 'image_count' ) )
+			return $distinct;
+		return $distinct . ", COUNT(images.ID) image_count";
+	}
+	
+	function galleries_column_join( $join ){
+		if( !$this->if_column( 'image_count' ) )
+			return $join;
+		global $wpdb;
+		return  $join . "LEFT JOIN $wpdb->posts images ON images.post_parent = $wpdb->posts.ID";
+	}
+	function posts_request( $d ){
+		echo $d;
+	}
+	function  posts_groupby_request( $groupby ){
+		if( !$this->if_column( 'image_count' ) )
+			return $groupby;
+		return "images.post_parent";
+	}
+	
+	/**
+	*Add values to sort columns
+	*
+	*param array $vars
+	*@return array
+	*@since 3.0.7
+	*/
+	function galleries_column_orderby( $vars ){
+		if ( empty( $vars['orderby'] ) ) 
+			return $vars;
+		
+		switch( $vars['orderby'] ){
+			case 'Expires':
+				$vars['orderby'] = 'post_expire';
+				break;
+			case 'Images':
+				$vars['orderby'] = 'image_count';
+				break;
+			case 'ID':
+				$vars['orderby'] = 'meta_value';
+				$vars['meta_key'] = '_ims_gallery_id';
+				break;
+			case 'Tracking':
+				$vars['orderby'] = 'meta_value';
+				$vars['meta_key'] = '_ims_tracking';
+				break;
+			default:
+		}
+		return $vars;
+	}
+	
 	/**
 	*Display aditional colums for 
 	*cutomer status
@@ -566,7 +657,7 @@ class ImStoreAdmin extends ImStore{
 			case "edit-ims_gallery":
 				return array(
 					'cb' 		=> '<input type="checkbox">',	
-					'title'		=> __( 'Gallery', $this->domain ), 'galleryid' => __( 'Gallery ID', $this->domain ),
+					'title'		=> __( 'Gallery', $this->domain ), 'galleryid' => __( 'ID', $this->domain ),
 					'visits' 	=> __( 'Visits', $this->domain ), 'tracking'	=> __( 'Tracking', $this->domain ),
 					'images' 	=> __( 'Images', $this->domain ), 'author' => __( 'Author', $this->domain ),
 					'expire' 	=> __( 'Expires', $this->domain ), 'date' => __( 'Date', $this->domain ) 
@@ -852,7 +943,7 @@ class ImStoreAdmin extends ImStore{
 		if( !current_user_can( 'ims_manage_galleries') 
 		|| !$this->opts['deletefiles'] || 'ims_gallery' != get_post_type( $postid ) )
 			return $postid;
-					
+			
 		if( $folderpath = get_post_meta( $postid, '_ims_folder_path', true ))
 			$this->delete_folder( $this->content_dir . $folderpath );
 		return $postid;
