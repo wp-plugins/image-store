@@ -301,11 +301,11 @@ class ImStoreFront extends ImStore{
 		if( $this->in_array( $this->opts['gateway'] , array( 'googlesand', 'googleprod' )) ){
 			$key = 'item_price_'; $qkey = 'item_quantity_';
 		}
-		
+				
 		//validate post data
-		if( isset( $this->cart['discounted'] ) ){
+		if( !empty( $this->cart['discounted'] ) ){
 			$total = $this->cart['discounted'];
-		}elseif( $this->opts['gateway_method'] ==  'get' ){
+		}elseif( $this->opts['gateway_method'] ==  'get' && !empty( $_GET ) ){
 			while( isset( $_GET[$key.$i]) ){
 				$total += ( $_GET[$key.$i] * $_GET[$qkey.$i] );
 				$i++;
@@ -322,7 +322,7 @@ class ImStoreFront extends ImStore{
 			
 		if( isset( $this->cart['tax'] ))
 			$total += $this->cart['tax'];
-			
+		echo "<!--  $total -->";
 		 
 		if( $total != $this->cart['total'] ){
 			$this->error .= __('There was a problem processing the cart.', $this->domain );
@@ -1029,7 +1029,7 @@ class ImStoreFront extends ImStore{
 		
 		global $wpdb;
 		$type = ( $album ) ? 
-			"SELECT DISTINCT object_id, post_parent FROM $wpdb->terms AS t 
+			"SELECT DISTINCT object_id FROM $wpdb->terms AS t 
 			INNER JOIN $wpdb->term_taxonomy tt ON t.term_id = tt.term_id 
 			INNER JOIN $wpdb->term_relationships tr ON tt.term_taxonomy_id = tr.term_taxonomy_id 
 			WHERE t.term_id = %d " 
@@ -1324,7 +1324,7 @@ class ImStoreFront extends ImStore{
 					}
 					$price = sprintf($this->cformat[$this->loc], get_post_meta( $size['ID'], '_ims_price', true ) );
 					$form .= rtrim("$price &mdash; ". $package_sizes, ', ') . " </label>\n"; 
-				}else{ 
+				}elseif( isset( $size['name'] ) ) { 
 					$form .= esc_attr( $size['name'] ).'" /> '.$size['name']." &mdash; " . sprintf( $this->cformat[$this->loc], $size['price'] ) . " </label>\n"; 
 				}
 			} 

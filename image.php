@@ -331,9 +331,9 @@ class ImStoreImage{
 		$color = array( );
  
 		if( strlen( $hex ) == 3 ){
-			$color['r'] = hexdec( substr( $hex, 0, 1 ));
-			$color['g'] = hexdec( substr( $hex, 1, 1 ));
-			$color['b'] = hexdec( substr( $hex, 2, 1 ));
+			$color['r'] = hexdec(str_repeat(substr($hex, 0, 1), 2));
+			$color['g'] = hexdec(str_repeat(substr($hex, 1, 1), 2));
+			$color['b'] = hexdec(str_repeat(substr($hex, 2, 1), 2));
 		}
 		else if( strlen( $hex ) == 6 ){
 			$color['r'] = hexdec( substr( $hex, 0, 2 ) );

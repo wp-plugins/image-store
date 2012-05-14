@@ -175,7 +175,7 @@ function ims_price_lists( $ims ){
 								echo rtrim( $package_sizes, ', ' );
 							}else {
 								echo $size['name'];	
-								if( isset($size['download']) ) 
+								if( isset( $size['download']) ) 
 									echo " <em>".__( 'downloadable.', $ims->domain )."</em>";
 							}
 						?>
@@ -202,7 +202,7 @@ function ims_price_lists( $ims ){
 					</td>
 					<td title="<?php _e( 'Check to make size downloadable', $ims->domain ) ?>" class="download">
 					<?php 
-						echo '<input type="checkbox" name="sizes[',$x, '][download]" ' . checked( true , isset( $size['download'] ) ) . ' class="downloadable" value="1" title="', __( 'Check to make size downloadable', $ims->domain ) , '" />'?></td>
+						echo '<input type="checkbox" name="sizes[',$x, '][download]" ' . checked( true , isset( $size['download'] ), false ) . ' class="downloadable" value="1" title="', __( 'Check to make size downloadable', $ims->domain ) , '" />'?></td>
 					<td class="x" title="<?php _e( 'Delete', $ims->domain )?>">x</td>
 				</tr>
 				<?php $x++; 
