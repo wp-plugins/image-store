@@ -18,7 +18,7 @@ class ImStore{
 	*Make sure that new language( .mo ) files have 'ims-' as base name
 	*/
 	public $domain	= 'ims';
-	public $version	= '3.0.7';
+	public $version	= '3.0.8';
 
 	/**
 	*Public variables
@@ -48,20 +48,22 @@ class ImStore{
 
 		$this->content_url = rtrim( WP_CONTENT_URL, '/' );
 		$this->content_dir = rtrim( WP_CONTENT_DIR, '/' );
+		
+		$this->load_text_domain( );
 
 		if( is_multisite( ) && isset( $GLOBALS['blog_id'] ) ){
 			$this->blog_id = (int) $GLOBALS['blog_id'];
 			$this->sync = get_site_option( 'ims_sync_settings' );
 			$this->content_url  = get_site_url( 1 ) . "/wp-content";
 		}
-		
 		if( empty( $this->opts ) && $this->sync == true )
 			switch_to_blog( 1 );
 		
-		$this->opts = get_option( $this->optionkey );
-		if( !isset(  $this->opts['attchlink']	) )
-			$this->opts['attchlink'] = false;
-			
+		$this->opts['attchlink'] 		= false;
+		$this->opts['receiptname']	= 'Image Store';
+		$this->opts['receiptemail']	= 'imstore@'.$_SERVER['HTTP_HOST'];
+		$this->opts = wp_parse_args( get_option( $this->optionkey ), $this->opts );
+
 		if( is_multisite( ) ) restore_current_blog( );
 		
 		add_filter( 'posts_orderby', array( &$this, 'posts_orderby' ), 10,3 );
@@ -83,7 +85,6 @@ class ImStore{
 	*/
 	function int_actions( ){
 		
-		$this->load_text_domain( );
 		$this->register_post_types( );
 		
 		if( isset( $this->opts['imswidget'] ) && $this->opts['imswidget'] == true ) 

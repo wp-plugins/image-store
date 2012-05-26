@@ -518,9 +518,21 @@ $settings['checkout'] = array(
 		'label' => __( 'Email receipt', $this->domain ),
 		'desc'	=> __( 'Email purchase reciept to customers if they provide an email.', $this->domain ),
 	 ),
+	  'receiptname' => array( 
+		'val'		=> 'Image Store',
+		'type' 	=> 'text',
+		'label' 	=> __( 'Receipt From', $this->domain ),
+		'desc' 	=> __( 'Display name where the receipt comes from', $this->domain ),
+	 ),
+	 'receiptemail' => array( 
+		'val'		=> 'imstore@'.$_SERVER['HTTP_HOST'],
+		'type' 	=> 'text',
+		'label'	 => __( 'Receipt From email', $this->domain ),
+		'desc'	 => __( 'This is the email address that will be display to the user in the "From" field', $this->domain ),
+	 ),
 	'thankyoureceipt' => array( 
 		'type' 	=> 'textarea',
-		'label' => __( 'Purchase Receipt', $this->domain ),
+		'label'	 => __( 'Purchase Receipt', $this->domain ),
 		'desc'	=> __( 'Thank you message and receipt information', $this->domain ),
 	 ), 
 	'termsconds' => array( 

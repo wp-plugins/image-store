@@ -68,7 +68,9 @@ class ImStoreImage{
 	*/
 	function display_image( ){
 		
-		$ext = end( explode( '.', basename( $this->image_dir ) ) );
+		$extarray = explode( '.', basename( $this->image_dir ) );
+		$ext = end( $extarray );
+		
 		header( 'Content-Type: image/'. $ext );
 		
 		//if ( false === strpos( $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS' ) )
@@ -296,7 +298,7 @@ class ImStoreImage{
 			imagefilter( $image, IMG_FILTER_COLORIZE, 35, 25, 10 );
 		}
 		
-		do_action( 'ims_apply_color_filter', &$image );
+		do_action( 'ims_apply_color_filter', $image );
 		
 		$quality = ( $q = get_option( 'preview_size_q' ) ) ? $q : 85;
 		
