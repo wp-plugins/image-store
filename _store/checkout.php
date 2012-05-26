@@ -49,19 +49,19 @@ $output .= '<input type="text" name="user_email" id="user_email" value="' . esc_
 $output .= '</div><!--.email-info-->';
 
 $output .= '<div class="ims-p adress-info">';
-$output .= '<label for="ims_address">' . __( 'Address', $this->domain ) . ( isset( $this->opts['required_ims_address'] ) ? ' <span class="req">*</span>' : '' ) . ' </label>';
+$output .= '<label for="ims_address">' . __( 'Address', $this->domain ) . ( isset( $this->opts['required_address_street'] ) ? ' <span class="req">*</span>' : '' ) . ' </label>';
 $output .= '<input type="text" name="ims_address" id="ims_address" value="' . esc_attr( $userdata->ims_address ) . '" class="ims-input" />';
 $output .= '<span class="ims-break"></span>';
 
-$output .= '<label for="ims_city">' . __( 'City', $this->domain ) . ( isset( $this->opts['required_ims_city'] ) ? ' <span class="req">*</span>' : '' ) . ' </label>';
+$output .= '<label for="ims_city">' . __( 'City', $this->domain ) . ( isset( $this->opts['required_address_city'] ) ? ' <span class="req">*</span>' : '' ) . ' </label>';
 $output .= '<input type="text" name="ims_city" id="ims_city" value="' . esc_attr( $userdata->ims_city ) . '" class="ims-input" />';
 $output .= '<span class="ims-break"></span>';
 
-$output .= '<label for="ims_state">' . __( 'State', $this->domain ) . ( isset( $this->opts['required_ims_state'] ) ? ' <span class="req">*</span>' : '' ) . ' </label>';
+$output .= '<label for="ims_state">' . __( 'State', $this->domain ) . ( isset( $this->opts['required_address_state'] ) ? ' <span class="req">*</span>' : '' ) . ' </label>';
 $output .= '<input type="text" name="ims_state" id="ims_state" value="' . esc_attr( $userdata->ims_state ) . '" class="ims-input" />';
 $output .= '<span class="ims-break"></span>';
 
-$output .= '<label for="ims_zip">' . __( 'Zip', $this->domain ) . ( isset( $this->opts['required_ims_zip'] ) ? ' <span class="req">*</span>' : '' ) . ' </label>';
+$output .= '<label for="ims_zip">' . __( 'Zip', $this->domain ) . ( isset( $this->opts['required_address_zip'] ) ? ' <span class="req">*</span>' : '' ) . ' </label>';
 $output .= '<input type="text" name="ims_zip" id="ims_zip" value="' . esc_attr( $userdata->ims_zip ) . '" class="ims-input" />';
 $output .= '<span class="ims-break"></span>';
 

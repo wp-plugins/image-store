@@ -67,7 +67,7 @@ class ImStoreGoogleNotice {
 		$_POST['payer_email']		= $_POST['buyer-billing-address_email'];
 		$_POST['address_city'] 		= $_POST['buyer-shipping-address_city'];
 		$_POST['ims_phone']		 	= $_POST['buyer-shipping-address_phone'];
-		$_POST['address_state'] 	= $_POST['buyer-shipping-address_region'];
+		$_POST['address_state'] 		= $_POST['buyer-shipping-address_region'];
 		$_POST['address_street'] 	= $_POST['buyer-shipping-address_address1'];
 		$_POST['address_zip'] 		= $_POST['buyer-shipping-address_postal-code'];
 		$_POST['first_name'] 			= $_POST['buyer-billing-address_contact-name'];
@@ -82,14 +82,12 @@ class ImStoreGoogleNotice {
 		update_post_meta( $cartid , '_response_data', $_POST );
 		$this->subtitutions[] = $data['instructions'];
 		
-		do_action('ims_after_google_notice', $cartid, $data );
+		do_action( 'ims_after_google_notice', $cartid, $data );
 		
-		$to 			= $this->opts['notifyemail'];
-		$subject 	= $this->opts['notifysubj'];
-		$message 	= preg_replace($this->opts['tags'],$this->subtitutions,$this->opts['notifymssg']);
-		$headers 	= 'From: "Image Store" <imstore@'.$_SERVER['HTTP_HOST'].">\r\n";
+		$message 	= preg_replace($this->opts['tags'], $this->subtitutions, $this->opts['notifymssg'] );
+		$headers 	= 'From: "' . $this->opts['receiptname'] . '" <'. $this->opts['receiptemail'] . ">\r\n";
 		
-		wp_mail( $to, $subject, $message, $headers );
+		wp_mail( $this->opts['notifyemail'], $this->opts['notifysubj'], $message, $headers );
 		setcookie( 'ims_orderid_' . COOKIEHASH,  false, (time()-315360000), COOKIEPATH, COOKIE_DOMAIN );
 
 		if( empty( $this->opts['emailreceipt']) )
@@ -123,7 +121,6 @@ class ImStoreGoogleNotice {
 				$message .= $output .= "</ul>\n</div>";
 			}
 				
-			$headers = 'From: "Image Store" <imstore@' . $_SERVER['HTTP_HOST'] .">\r\n";
 			$headers .= "Content-type: text/html; charset=utf8\r\n";
 			wp_mail( $_POST['buyer-billing-address_email'], sprintf( __('%s receipt.', $this->domain ),  get_bloginfo( 'blogname' )), $message , $headers );
 			update_post_meta( $cartid, '_ims_email_sent', 1 );

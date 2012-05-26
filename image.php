@@ -68,7 +68,9 @@ class ImStoreImage{
 	*/
 	function display_image( ){
 		
-		$ext = end( explode( '.', basename( $this->image_dir ) ) );
+		$extarray = explode( '.', basename( $this->image_dir ) );
+		$ext = end( $extarray );
+		
 		header( 'Content-Type: image/'. $ext );
 		
 		//if ( false === strpos( $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS' ) )
@@ -296,7 +298,7 @@ class ImStoreImage{
 			imagefilter( $image, IMG_FILTER_COLORIZE, 35, 25, 10 );
 		}
 		
-		do_action( 'ims_apply_color_filter', &$image );
+		do_action( 'ims_apply_color_filter', $image );
 		
 		$quality = ( $q = get_option( 'preview_size_q' ) ) ? $q : 85;
 		
@@ -331,9 +333,9 @@ class ImStoreImage{
 		$color = array( );
  
 		if( strlen( $hex ) == 3 ){
-			$color['r'] = hexdec( substr( $hex, 0, 1 ));
-			$color['g'] = hexdec( substr( $hex, 1, 1 ));
-			$color['b'] = hexdec( substr( $hex, 2, 1 ));
+			$color['r'] = hexdec(str_repeat(substr($hex, 0, 1), 2));
+			$color['g'] = hexdec(str_repeat(substr($hex, 1, 1), 2));
+			$color['b'] = hexdec(str_repeat(substr($hex, 2, 1), 2));
 		}
 		else if( strlen( $hex ) == 6 ){
 			$color['r'] = hexdec( substr( $hex, 0, 2 ) );

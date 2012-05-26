@@ -286,7 +286,6 @@ class ImStoreFront extends ImStore{
 	 * @since 0.5.0 
 	 */
 	function redirect_form_post_data( ){
-		
 		if( !wp_verify_nonce( $_REQUEST["_wpnonce"], "ims_submit_order") ) {
 			wp_redirect( $this->get_permalink( 'shopping-cart', false ) );	
 			die( );
@@ -301,11 +300,11 @@ class ImStoreFront extends ImStore{
 		if( $this->in_array( $this->opts['gateway'] , array( 'googlesand', 'googleprod' )) ){
 			$key = 'item_price_'; $qkey = 'item_quantity_';
 		}
-		
+				
 		//validate post data
-		if( isset( $this->cart['discounted'] ) ){
+		if( !empty( $this->cart['discounted'] ) ){
 			$total = $this->cart['discounted'];
-		}elseif( $this->opts['gateway_method'] ==  'get' ){
+		}elseif( $this->opts['gateway_method'] ==  'get' && !empty( $_GET ) ){
 			while( isset( $_GET[$key.$i]) ){
 				$total += ( $_GET[$key.$i] * $_GET[$qkey.$i] );
 				$i++;
@@ -316,19 +315,18 @@ class ImStoreFront extends ImStore{
 				$i++;
 			}
 		}
-		
+				
 		if( empty( $this->cart['discounted'] ) )
 			$total += $this->cart['shipping'];
 			
 		if( isset( $this->cart['tax'] ))
 			$total += $this->cart['tax'];
-			
-		 
-		if( $total != $this->cart['total'] ){
+		
+		if( trim($total) != trim($this->cart['total'])){
 			$this->error .= __('There was a problem processing the cart.', $this->domain );
 			return;
 		}
-		
+				
 		foreach( $_GET as $k => $v ){
 			if(!is_array($v)) $req .= "&$k=" . urlencode($v);
 		}
@@ -346,7 +344,7 @@ class ImStoreFront extends ImStore{
 		header( "Content-Length: ". strlen($req) ."\r\n");
 		header( "Location: " . $url . "\r\n", true, 307 );
 		header( "Content-Type: application/x-www-form-urlencoded\r\n" );
-		exit( );
+		exit( );	   
 	}
 	
 	/**
@@ -405,10 +403,10 @@ class ImStoreFront extends ImStore{
 		do_action( 'ims_after_checkout', $this->cart );
 		
 		//create/update customer
-		if( is_user_logged_in( ) && current_user_can('customer') ){
+		if( is_user_logged_in( ) && current_user_can( 'customer' ) ){
 			global $user_ID;
 			$new_user = array(
-				'ID' 					=> $user_ID,
+				'ID' 				=> $user_ID,
 				'user_email' 	=> $_POST['user_email'],
 				'first_name' 	=> $_POST['first_name'],
 				'last_name' 	=> $_POST['last_name'],
@@ -420,11 +418,15 @@ class ImStoreFront extends ImStore{
 			}
 		}
 		
-		$to 			= $this->opts['notifyemail'];
-		$subject 	= $this->opts['notifysubj'];
 		$message 	= preg_replace( $this->opts['tags'] , $this->subtitutions, $this->opts['notifymssg'] );
-		$headers 	= 'From: "Image Store" <imstore@'.$_SERVER['HTTP_HOST'].">\r\n";
-		wp_mail( $to, $subject, $message, $headers );
+		$headers 	= 'From: "' . $this->opts['receiptname'] . '" <'. $this->opts['receiptemail'] . ">\r\n";
+		wp_mail( $this->opts['notifyemail'], $this->opts['notifysubj'], $message, $headers );
+		
+		if(  $this->opts['emailreceipt'] ){
+			$headers .= "Content-type: text/html; charset=utf8\r\n";
+			$message = make_clickable( wpautop( stripslashes( preg_replace( $this->opts['tags'], $this->subtitutions, $this->opts['thankyoureceipt'] )) ) );
+			wp_mail( $_POST['user_email'], sprintf( __('%s receipt.', $this->domain ),  get_bloginfo( 'blogname' )), $message , $headers );
+		}
 		
 		$this->imspage = 'receipt';
 	}
@@ -1029,7 +1031,7 @@ class ImStoreFront extends ImStore{
 		
 		global $wpdb;
 		$type = ( $album ) ? 
-			"SELECT DISTINCT object_id, post_parent FROM $wpdb->terms AS t 
+			"SELECT DISTINCT object_id FROM $wpdb->terms AS t 
 			INNER JOIN $wpdb->term_taxonomy tt ON t.term_id = tt.term_id 
 			INNER JOIN $wpdb->term_relationships tr ON tt.term_taxonomy_id = tr.term_taxonomy_id 
 			WHERE t.term_id = %d " 
@@ -1324,7 +1326,7 @@ class ImStoreFront extends ImStore{
 					}
 					$price = sprintf($this->cformat[$this->loc], get_post_meta( $size['ID'], '_ims_price', true ) );
 					$form .= rtrim("$price &mdash; ". $package_sizes, ', ') . " </label>\n"; 
-				}else{ 
+				}elseif( isset( $size['name'] ) ) { 
 					$form .= esc_attr( $size['name'] ).'" /> '.$size['name']." &mdash; " . sprintf( $this->cformat[$this->loc], $size['price'] ) . " </label>\n"; 
 				}
 			} 

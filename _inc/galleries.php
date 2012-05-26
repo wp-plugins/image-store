@@ -210,7 +210,7 @@ class ImStoreGallery extends ImStoreAdmin{
 	function ims_info_box( ){
 		
 		$blogpath = ( $this->blog_id ) ?  "/blogs.dir/{$this->blog_id}" : '' ;
-		$default = array( '_ims_visits' => 0, '_ims_sortby' => '', '_ims_tracking' => '', '_ims_order' =>'', 'expire' => '',
+		$default = array( '_ims_visits' => 0, '_ims_sortby' => '', '_ims_tracking' => '', '_ims_order' =>'', 'expire' => '', 'ims_expire'=> '',
 			'_dis_store'=> false, '_ims_price_list' => 0, '_to_attach' => $this->opts['attchlink'], '_ims_gallery_id' =>$this->unique_id( ) );
 		
 		if( $this->pagenow == 'post-new.php' ){

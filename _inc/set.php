@@ -293,6 +293,9 @@ class ImStoreSet extends ImStoreAdmin{
 			return $errors;
 		}
 		
+		add_post_meta( $list_id, '_ims_list_opts', 
+			 array( 'ims_bw' => 0, 'ims_sepia' => 0, 'ims_ship_local' => 0, 'ims_ship_inter' => 0 ) 
+		);
 		wp_redirect( $this->pageurl . "&ms=38" );
 		die( );
 	}
@@ -322,8 +325,9 @@ class ImStoreSet extends ImStoreAdmin{
 			'ims_ship_inter' => $_POST['_ims_ship_inter']
 		 );
 		
-		update_post_meta( $_POST['listid'], '_ims_list_opts',$options );
-		update_post_meta( $_POST['listid'], '_ims_sizes',$_POST['sizes'] );
+		//print_r(  $_POST['sizes'] ); die();
+		update_post_meta( $_POST['listid'], '_ims_list_opts', $options );
+		update_post_meta( $_POST['listid'], '_ims_sizes', $_POST['sizes'] );
 		
 		wp_update_post( array( 'ID' => $_POST['listid'], 'post_title' => $_POST['list_name']) );
 		wp_redirect($this->pageurl."&ms=34" );
