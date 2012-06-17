@@ -19,6 +19,7 @@ class ImStoreFront extends ImStore{
 	public $error = false;
 	public $orderid = false;
 	public $success = false;
+	public $imspage = false;
 	public $message = false;
 	public $query_id = false;
 	public $is_secure = false;
@@ -52,7 +53,6 @@ class ImStoreFront extends ImStore{
 		$this->page_front	= get_option( 'page_on_front' );
 		$this->baseurl = apply_filters( 'ims_base_image_url', IMSTORE_URL .  '/image.php?i='  );
 	
-		//more speed up actions
 		add_action( 'wp', array( &$this, 'init_hooks' ),0 );		
 		add_shortcode( 'image-store', array( &$this, 'imstore_shortcode') );
 		
@@ -73,7 +73,7 @@ class ImStoreFront extends ImStore{
 		add_filter( 'get_previous_post_sort', array( &$this, 'adjacent_post_sort' ),20); 
 		add_filter( 'get_next_post_where', array( &$this, 'adjacent_post_where' ),20); 
 		add_filter( 'get_previous_post_where', array( &$this, 'adjacent_post_where' ),20); 
-		
+				
 		if( version_compare( $this->wp_version , '3.2', '<' ) )
 			add_filter( 'pre_get_posts', array( &$this, 'custom_types' ),1,30 ); 
 		
@@ -87,7 +87,7 @@ class ImStoreFront extends ImStore{
 		if( !empty( $this->opts['mediarss'] ) )
 			require_once( IMSTORE_ABSPATH . '/_store/image-rss.php' );
 	}
-
+	
 	/**
 	 *Initiate actions
 	 *
@@ -97,7 +97,6 @@ class ImStoreFront extends ImStore{
 	function init_hooks( ){
 			
 		if( !is_feed( ) && !is_tag( ) ) {
-			
 			$allow = apply_filters ( 'ims_activate_gallery_hooks', false );
 			add_action( 'wp_enqueue_scripts', array( &$this, 'load_scripts_styles' ) );
 			
@@ -110,12 +109,26 @@ class ImStoreFront extends ImStore{
 			if( is_singular( 'ims_gallery') || $allow || isset( $_POST['google-order-number'] ) ){
 				add_action( 'get_header', array( &$this, 'ims_init') );
 				add_filter( 'query_vars', array( &$this, 'add_var_for_rewrites' ),1, 10 );
+				add_filter( 'ims_after_pricelist_page', array( &$this, 'after_pricelist'), 10, 2 );
 				add_shortcode( 'ims-gallery-content', array( &$this, 'ims_gallery_shortcode') );
 			}
 		}
 		require_once( IMSTORE_ABSPATH . '/_store/shortcode.php' );
 	}
 
+	/**
+	 *Display list notes
+	 *
+	 *@return string
+	 *@since 3.0.9
+	 */
+	function after_pricelist( $output, $list_id ){
+		$post = get_post( $list_id );
+		if( isset( $post->post_excerpt ) )
+			$output .= '<div class="ims-list-notes">' . $post->post_excerpt . '</div>';
+		return $output;
+	}
+	
 	/**
 	 *Populate object variables
 	 *
@@ -243,22 +256,32 @@ class ImStoreFront extends ImStore{
 	*@since 3.0.5
 	*/
 	function secure_images(  ){
-		global $post;
+			
+		if( !is_singular( 'ims_image' ) )
+			return; 
+			
+		global $post, $wp_version;
 
-		if( is_singular('ims_gallery') && get_query_var( 'imspage')
+		if( get_query_var( 'imspage' )
 		&& get_post_meta( $post->ID, '_dis_store', true )  ){
 			global $wp_query;
 			$wp_query->set_404();
 			status_header( 404 );	 
 		}
 		
-		if( 	!is_singular( 'ims_image' ) )
-			return; 
-		
 		$this->gal = get_post( $post->post_parent );
+		$denied = $this->gal->post_password !== $_COOKIE['wp-postpass_'.COOKIEHASH];
 		
-		if( !empty( $this->gal->post_password ) && ( empty( $_COOKIE['wp-postpass_'.COOKIEHASH] )
-		|| $this->gal->post_password !=  $_COOKIE['wp-postpass_'.COOKIEHASH] )){
+		if ( version_compare( $wp_version, '3.4', '>=' )) {
+			global $wp_hasher;
+			if ( empty( $wp_hasher ) ) {
+				require_once( ABSPATH . 'wp-includes/class-phpass.php');
+				$wp_hasher = new PasswordHash(8, true);
+			}
+			$denied = !$wp_hasher->CheckPassword( $this->gal->post_password, $_COOKIE['wp-postpass_'.COOKIEHASH] );
+		}
+		
+		if( !empty( $this->gal->post_password ) && ( empty( $_COOKIE['wp-postpass_'.COOKIEHASH] ) || $denied ) ){
 			global $wp_query;
 			$wp_query->set_404();
 			status_header( 404 );
@@ -326,11 +349,7 @@ class ImStoreFront extends ImStore{
 			$this->error .= __('There was a problem processing the cart.', $this->domain );
 			return;
 		}
-				
-		foreach( $_GET as $k => $v ){
-			if(!is_array($v)) $req .= "&$k=" . urlencode($v);
-		}
-		
+
 		if( $this->opts['gateway'] == 'custom' && empty( $this->opts['gateway_url']  ) )
 			return;
 		
@@ -339,8 +358,14 @@ class ImStoreFront extends ImStore{
 		$this->cart['instructions'] = isset($_POST['instructions']) ? $_POST['instructions'] : '';
 		
 		update_post_meta( $this->orderid, '_ims_order_data', $this->cart );
-		$url =  ( $this->opts['gateway'] == 'custom'  ) ?  $this->opts['gateway_url'] . "?$req" : $this->gateway[$this->opts['gateway']];
 		
+		if(  $this->opts['gateway'] == 'custom' ){
+			foreach( $_REQUEST as $k => $v )
+				if(!is_array($v)) $req .= "&$k=" . urlencode($v);
+			$url = $this->opts['gateway_url'] . "?$req";
+		} else $url = $this->gateway[$this->opts['gateway']];
+
+		header( "Location: " . $url . "?$req\r\n" );
 		header( "Content-Length: ". strlen($req) ."\r\n");
 		header( "Location: " . $url . "\r\n", true, 307 );
 		header( "Content-Type: application/x-www-form-urlencoded\r\n" );
@@ -890,12 +915,23 @@ class ImStoreFront extends ImStore{
 			$errors->add( 'nomatch', __( 'Gallery ID or password is incorrect. Please try again. ', $this->domain ) );
 			return $errors;
 			
-		}elseif( $gal->post_password === $pass ){
+		}elseif( $gal->post_password === stripslashes( $pass ) ){
+			
+			global $wp_version;
+			$cookie_val  = $gal->post_password;
+			if ( version_compare( $wp_version, '3.4', '>=' )) {
+				global $wp_hasher;
+				if ( empty( $wp_hasher ) ) {
+					require_once( ABSPATH . 'wp-includes/class-phpass.php');
+					$wp_hasher = new PasswordHash(8, true);
+				}
+				$cookie_val =  $wp_hasher->HashPassword( stripslashes($gal->post_password) );
+			}
 			
 			setcookie( 'ims_galid_' . COOKIEHASH, $gal->ID, 0, COOKIEPATH, COOKIE_DOMAIN );
-			setcookie( 'wp-postpass_' . COOKIEHASH, $gal->post_password, 0, COOKIEPATH, COOKIE_DOMAIN );
-			update_post_meta( $gal->post_id, '_ims_visits', get_post_meta( $gal->ID, '_ims_visits', true ) +1 );
+			setcookie( 'wp-postpass_' . COOKIEHASH, $cookie_val, 0, COOKIEPATH, COOKIE_DOMAIN );
 			
+			update_post_meta( $gal->post_id, '_ims_visits', get_post_meta( $gal->ID, '_ims_visits', true ) +1 );
 			wp_redirect( get_permalink( $gal->ID ) );
 			die( );
 		}
@@ -909,6 +945,7 @@ class ImStoreFront extends ImStore{
 	*/
 	function get_price_list( ){
 		
+		$sizes = array();
 		$sizedata = wp_cache_get( 'ims_pricelist_' . $this->galid );
 		
 		if ( false == $sizedata ){

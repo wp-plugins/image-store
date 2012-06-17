@@ -31,7 +31,7 @@ if( $this->opts['gateway'] == 'custom' ){
 if( isset( $this->opts['gateway_method'] ) && $this->opts['gateway'] == 'custom' )
 	$method = $this->opts['gateway_method'];
 
-$output .= '<form method="'. esc_attr($method) .'" class="ims-cart-form" >';
+$output .= '<form method="'. esc_attr($method) .'" class="ims-cart-form" action="'. apply_filters( 'ims_cart_action', '', $this ) .'" >';
 
 if( empty($this->cart['images']) && apply_filters( 'ims_empty_car', true, $this->cart ) ){
 	
@@ -206,7 +206,7 @@ if( empty($this->cart['images']) && apply_filters( 'ims_empty_car', true, $this-
 			value="' . "&lt;p&gt;" . esc_attr__("downloads:", $this->domain ) . "&lt;/p&gt; $downlinks" . '" />';
 		
 		if( isset( $this->cart['discounted'] )){
-			'<input type="hidden" name="item_quantity_' . $i . '" value="1" />
+			$output .=	 '<input type="hidden" name="item_quantity_' . $i . '" value="1" />
 			<input type="hidden" name="item_name_' . $i . '" value="' . esc_attr__("discount", $this->domain ) . '" />
 			<input type="hidden" name="item_currency_' . $i . '" value="' . esc_attr( $this->opts['currency'] ) . '" />
 			<input type="hidden" name="item_merchant_id_' . $i . '" value="' . esc_attr( $this->cart['promo']['code'] ) . '" />

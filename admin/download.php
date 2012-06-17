@@ -164,7 +164,7 @@ class ImStoreDownloadImage{
 			imagefilter( $image, IMG_FILTER_COLORIZE, 35, 25, 10 );
 		}
 		
-		do_action( 'ims_apply_color_filter', &$image );
+		do_action( 'ims_apply_color_filter', $image );
 		
 		//create new image
 		switch( $ext ) {

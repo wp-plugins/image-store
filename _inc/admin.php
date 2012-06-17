@@ -91,6 +91,8 @@ class ImStoreAdmin extends ImStore{
 		add_action( 'admin_print_styles', array( &$this, 'load_styles' ),1 );
 		add_action( 'admin_print_scripts', array( &$this, 'load_admin_scripts' ),1 );
 	
+		add_action( 'ims_pricelist_options', array( &$this, 'ims_pricelist_options' ), 10 );
+	
 		if( is_multisite( ) ){
 			add_action( 'wpmu_options', array( &$this, 'wpmu_options' ) );
 			add_action( 'activated_plugin', array( &$this, 'activated_plugin' ),1, 2 );
@@ -971,6 +973,21 @@ class ImStoreAdmin extends ImStore{
 				break;
 			default:
 		}
+	}
+	
+	/**
+	*Add aditional options to the price lists
+	*
+	*@return void
+	*@since 3.0.9
+	*/
+	function ims_pricelist_options( $list_id ){
+		 $data = '';
+		 $post = get_post( $list_id );
+		 if( isset( $post->post_excerpt ) )
+				$data = ( function_exists('esc_texarea') ) ? esc_texarea(  $post->post_excerpt ) : esc_attr( $post->post_excerpt );
+		echo '<tr class="label"><td colspan="6"><label for="list_post_excerpt">' . __( 'Notes' , $this->domain ) .  '</label>
+		<textarea id="list_post_excerpt" name="post_excerpt">'.$data.'</textarea> </td></tr>';
 	}
 	
 	/**

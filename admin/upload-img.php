@@ -108,6 +108,8 @@ if ( is_wp_error($id) ){
 	exit;
 }
 
+do_action( 'ims_before_attachment_metadata', $id, $file );
+
 $filedata = wp_generate_attachment_metadata( $id, $file );
 $filedata['image_meta'] = $image_meta;
 

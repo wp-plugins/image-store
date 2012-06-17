@@ -10,7 +10,7 @@
 */
 
 //define constants
-define( 'SHORTINIT', true );
+//define( 'SHORTINIT', true );
 define( 'DOING_AJAX', true );
 	
 //load wp
@@ -299,7 +299,6 @@ class ImStoreImage{
 		}
 		
 		do_action( 'ims_apply_color_filter', $image );
-		
 		$quality = ( $q = get_option( 'preview_size_q' ) ) ? $q : 85;
 		
 		//create new image

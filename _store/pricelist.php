@@ -17,6 +17,8 @@ $css = '';
 $package_sizes = '';
 $meta = get_post_meta( $this->pricelist_id, '_ims_list_opts', true);
 
+$output =	apply_filters( 'ims_before_pricelist_page', $output, $this->pricelist_id );
+
 $output .= '
 	<table class="ims-table">
 		<thead>
@@ -80,6 +82,8 @@ $output .=
 				<td>' . ( empty($this->opts['disablebw']) ? $this->format_price( $meta['ims_bw'] ) : '' ) . '&nbsp;</td>
 			</tr>';
 
-//$output .=	apply_filters( 'ims_pricelist_page', $this->pricelist_id );
+$output =	apply_filters( 'ims_pricelist_page', $output, $this->pricelist_id );
 
 $output .= '</tfoot></table>';
+
+$output =	apply_filters( 'ims_after_pricelist_page', $output, $this->pricelist_id );
