@@ -5,7 +5,7 @@ Tags: e-commerce,shop,photo store,picture,image,galleries,imstore,image-store,se
 slideshow,gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints
 Requires at least: 3.0.0
 Tested up to: 3.4.0
-Stable tag: 3.0.5
+Stable tag: 3.0.9
 
 Image Store (ImStore) is a photo gallery and store plugin for WordPress with Paypal and Google Checkout integration.
 
@@ -83,6 +83,35 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+
+= 3.0.9 =
+* Fixed: Gallery login for WP 3.4.
+* Fixed: IE slideshow CSS issues.
+* Fixed: Required fields asterisk.
+* Fixed: Variable references errors.
+* Fixed: Google checkout promotion code.
+* Changed: Settings page, trying to fix get_user() error some servers.
+* Added: Additional hooks.
+* Added: Price list notes.
+
+= 3.0.8 =
+* Change: Tranlation files load sequence
+* Added: Receipt email options.
+* Added: Email receipt to email notification only checkout.
+* Fixed: Image checkout limit. 
+* Fixed: Required fields indicator not displaying. 
+
+= 3.0.7 =
+* Code clean up.
+* Added: Admin sort columns
+* Fixed: Image display errors on some servers. 
+* Fixed: Fix short-code issue with albums.
+* Fixed: Image Hex to RGB color.
+
+= 3.0.6 =
+* Fixed: Download links notices.
+* Fixed: issues saving price lists.
+* Fixed: issue processing cart .
 
 = 3.0.5 =
 * Code clean up.

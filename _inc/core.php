@@ -18,7 +18,7 @@ class ImStore{
 	*Make sure that new language( .mo ) files have 'ims-' as base name
 	*/
 	public $domain	= 'ims';
-	public $version	= '3.0.5';
+	public $version	= '3.0.9';
 
 	/**
 	*Public variables
@@ -48,31 +48,52 @@ class ImStore{
 
 		$this->content_url = rtrim( WP_CONTENT_URL, '/' );
 		$this->content_dir = rtrim( WP_CONTENT_DIR, '/' );
-
+		
 		if( is_multisite( ) && isset( $GLOBALS['blog_id'] ) ){
 			$this->blog_id = (int) $GLOBALS['blog_id'];
 			$this->sync = get_site_option( 'ims_sync_settings' );
 			$this->content_url  = get_site_url( 1 ) . "/wp-content";
 		}
-		
 		if( empty( $this->opts ) && $this->sync == true )
 			switch_to_blog( 1 );
 		
-		$this->opts = get_option( $this->optionkey );
-		if( !isset(  $this->opts['attchlink']	) )
-			$this->opts['attchlink'] = false;
-			
+		$this->opts['attchlink'] 		= false;
+		$this->opts['receiptname']	= 'Image Store';
+		$this->opts['receiptemail']	= 'imstore@'.$_SERVER['HTTP_HOST'];
+		$this->opts = wp_parse_args( get_option( $this->optionkey ), $this->opts );
+
 		if( is_multisite( ) ) restore_current_blog( );
 		
 		add_filter( 'posts_orderby', array( &$this, 'posts_orderby' ), 10,3 );
 		add_filter( 'post_type_link', array( &$this, 'gallery_permalink' ), 10,3 );
 		
 		add_action( 'init', array( &$this, 'int_actions' ),0 );
-		add_action( 'wp_loaded', array( &$this, 'flush_rules') );
+		add_action( 'wp_loaded', array( &$this, 'flush_rules' ) );
 		add_action( 'wp_logout', array( &$this, 'logout_ims_user' ),10 );
 		add_action( 'imstore_expire', array( &$this, 'expire_galleries' ) );
 		add_action( 'set_current_user', array( &$this, 'set_user_caps' ),10 );
+		add_action( 'plugins_loaded', array( &$this, 'image_store_init' ), 100 );
 		add_action( 'generate_rewrite_rules', array( &$this, 'add_rewrite_rules' ),10,1 );
+	}
+	
+	/**
+	*inital plugin actions
+	*
+	*@return void
+	*@since 0.3.1 
+	*/
+	function image_store_init( ){
+		$locale 	= get_locale( );
+		
+		if( $locale == 'en_US' || is_textdomain_loaded( $this->domain ) )
+			 return;
+		
+		$filedir 	= $this->content_dir . '/languages/_ims/'. $this->domain . '-' . $locale . '.mo';
+		
+		if( function_exists( 'load_plugin_textdomain' ) )
+			load_plugin_textdomain( $this->domain, false, apply_filters( 'ims_load_textdomain', '../languages/_ims/', $this->domain , $locale ) );
+		elseif( function_exists( 'load_textdomain' ) )
+			load_textdomain( $this->domain, apply_filters( 'ims_load_textdomain', $filedir, $this->domain , $locale ) );
 	}
 	
 	/**
@@ -83,7 +104,6 @@ class ImStore{
 	*/
 	function int_actions( ){
 		
-		$this->load_text_domain( );
 		$this->register_post_types( );
 		
 		if( isset( $this->opts['imswidget'] ) && $this->opts['imswidget'] == true ) 
@@ -95,6 +115,7 @@ class ImStore{
 		
 		if( empty( $this->pages ) )
 			$this->load_pages( );
+			
 		$this->load_color_opts( );
 		
 		$this->loc 		= $this->opts['clocal'];
@@ -274,14 +295,18 @@ class ImStore{
 	*@since 0.5.0 
 	*/
 	function define_constant( ){
+		
 		do_action( 'ims_define_constants', IMSTORE_ABSPATH );
 		
 		define( 'IMSTORE_URL', WP_PLUGIN_URL . "/" . IMSTORE_FOLDER );
 		define( 'IMSTORE_ADMIN_URL', IMSTORE_URL . '/admin' );
 		
-		if( !defined( 'WP_SITE_URL' ) ) define( 'WP_SITE_URL', get_bloginfo( 'url' ) );
-		if( !defined( 'WP_CONTENT_URL' ) ) define( 'WP_CONTENT_URL', get_bloginfo( 'wpurl') . '/wp-content' );
-		if( !defined( 'WP_TEMPLATE_DIR' ) ) define( 'WP_TEMPLATE_DIR',get_template_directory( ) );
+		if( !defined( 'WP_SITE_URL' ) ) 
+			define( 'WP_SITE_URL', get_bloginfo( 'url' ) );
+		if( !defined( 'WP_CONTENT_URL' ) ) 
+			define( 'WP_CONTENT_URL', get_bloginfo( 'wpurl') . '/wp-content' );
+		if( !defined( 'WP_TEMPLATE_DIR' ) )
+			 define( 'WP_TEMPLATE_DIR',get_template_directory( ) );
 
 		$this->key = apply_filters( 'ims_image_key', substr( preg_replace( "([^a-zA-Z0-9])", '', NONCE_KEY ),0,15 ) );
 		
@@ -289,22 +314,6 @@ class ImStore{
 			$fh = @fopen(IMSTORE_ABSPATH."/admin/_key/{$this->key}.txt", 'w');  
 			@fclose($fh); @chmod(IMSTORE_ABSPATH."/admin/_key/{$this->key}.txt", 0640 );
 		}
-	}
-		
-	/**
-	*Register localization/language file
-	*
-	*@return void
-	*@since 0.5.0 
-	*/
-	function load_text_domain( ){
-		$locale 	= get_locale( );
-		$filedir 	= $this->content_dir . '/languages/_ims/'. $this->domain . '-' . $locale . '.mo';
-		
-		if( function_exists( 'load_plugin_textdomain' ) )
-			load_plugin_textdomain( $this->domain, false, apply_filters( 'ims_load_textdomain', '../languages/_ims/', $this->domain , $locale ) );
-		elseif( function_exists( 'load_textdomain' ) )
-			load_textdomain( $this->domain, apply_filters( 'ims_load_textdomain', $filedir, $this->domain , $locale ) );
 	}
 	
 	/**
@@ -371,7 +380,7 @@ class ImStore{
 		global $current_user;
 		
 		if ( !isset($current_user->ID) || 
-		isset($current_user->caps['administrator']) )
+		isset( $current_user->caps['administrator'] ) )
 			return;
 
 		if( !empty( $current_user->ims_user_caps ) )
@@ -508,7 +517,7 @@ class ImStore{
 		$md5_8 = substr($id, 0, 8 );
 		$real_id = hexdec(substr($id, 8) );
 		return ($md5_8==substr(md5($real_id ), 0, 8)) ? $real_id : 0;
- }
+ 	}
 	
 	/**
 	 *Format price
@@ -520,11 +529,13 @@ class ImStore{
 	 *@since 3.0.0
 	 */	
 	function format_price( $price , $before='', $after = '' ){
-		if ( !is_numeric( $price ))  $price = 0 ;
-		
-		if( empty( $this->opts['disable_decimal']  ) ) 
-			$price = number_format( $price, 2 );
+		if( stripos( $price, $this->sym ) !== false )
+			return $price;
 			
+		if( isset( $this->opts['disable_decimal'] ) )
+			$price = number_format_i18n( (double)$price );	
+		else $price = number_format( (double)$price, 2 );
+		
 		return sprintf( $before . $this->cformat[$this->loc], $price . $after );
 	}
 		

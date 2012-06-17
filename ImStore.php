@@ -4,9 +4,9 @@ Plugin Name: Image Store
 Plugin URI: http://imstore.xparkmedia.com
 Description: Your very own image store within wordpress "ImStore"
 Author: Hafid R. Trujillo Huizar
-Version: 3.0.5
+Version: 3.0.9
 Author URI:http://www.xparkmedia.com
-Requires at least: 3.1.0
+Requires at least: 3.0.0
 Tested up to: 3.4.0
 
 Copyright 2010-2012 by Hafid Trujillo http://www.xparkmedia.com
@@ -48,6 +48,8 @@ if( !class_exists( 'ImStore') && !defined( 'IMSTORE_ABSPATH') ){
 
 		if ( empty(  $pagenow ) )  
 			$pagenow = basename( $_SERVER['SCRIPT_NAME'] );
+			
+		$page = isset( $_GET['page'] ) ? $_GET['page'] : false;	
 		$post_type = isset( $_GET['post_type'] ) ? $_GET['post_type'] : false;		
 
 		//load what is needed where is needed
@@ -59,7 +61,7 @@ if( !class_exists( 'ImStore') && !defined( 'IMSTORE_ABSPATH') ){
 			//galleries
 			include( IMSTORE_ABSPATH . "/_inc/galleries.php" ); 
 			$ImStore = new ImStoreGallery( );
-		}elseif( $post_type == 'ims_gallery' ){
+		}elseif( $post_type == 'ims_gallery' || $page == 'ims-settings' ){
 			 //settings
 			include( IMSTORE_ABSPATH . "/_inc/set.php" );
 			$ImStore = new ImStoreSet( );

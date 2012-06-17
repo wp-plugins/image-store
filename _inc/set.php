@@ -293,6 +293,9 @@ class ImStoreSet extends ImStoreAdmin{
 			return $errors;
 		}
 		
+		add_post_meta( $list_id, '_ims_list_opts', 
+			 array( 'ims_bw' => 0, 'ims_sepia' => 0, 'ims_ship_local' => 0, 'ims_ship_inter' => 0 ) 
+		);
 		wp_redirect( $this->pageurl . "&ms=38" );
 		die( );
 	}
@@ -322,10 +325,17 @@ class ImStoreSet extends ImStoreAdmin{
 			'ims_ship_inter' => $_POST['_ims_ship_inter']
 		 );
 		
-		update_post_meta( $_POST['listid'], '_ims_list_opts',$options );
-		update_post_meta( $_POST['listid'], '_ims_sizes',$_POST['sizes'] );
+		update_post_meta( $_POST['listid'], '_ims_list_opts', $options );
+		update_post_meta( $_POST['listid'], '_ims_sizes', $_POST['sizes'] );
 		
-		wp_update_post( array( 'ID' => $_POST['listid'], 'post_title' => $_POST['list_name']) );
+		$updated = wp_update_post( array( 
+			'ID' => $_POST['listid'], 
+			'post_title' => $_POST['list_name'],
+			'post_excerpt' => $_POST['post_excerpt']
+		));
+		
+		do_action( 'ims_update_pricelist' , $updated );
+		
 		wp_redirect($this->pageurl."&ms=34" );
 		die( );
 	}
@@ -354,7 +364,9 @@ class ImStoreSet extends ImStoreAdmin{
 		$id = intval($_POST['packageid'] );
 		update_post_meta($id, '_ims_sizes',$sizes );
 		update_post_meta($id, '_ims_price',$_POST['packageprice'] );
-		wp_update_post(array( 'ID' => $id, 'post_title' => $_POST['packagename']) );
+		$updated = wp_update_post(array( 'ID' => $id, 'post_title' => $_POST['packagename']) );
+		
+		do_action( 'ims_update_package', $updated );
 		
 		wp_redirect($this->pageurl."&ms=33#packages" );
 		die( );

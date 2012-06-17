@@ -210,12 +210,12 @@ class ImStoreGallery extends ImStoreAdmin{
 	function ims_info_box( ){
 		
 		$blogpath = ( $this->blog_id ) ?  "/blogs.dir/{$this->blog_id}" : '' ;
-		$default = array( '_ims_visits' => 0, '_ims_sortby' => '', '_ims_tracking' => '', '_ims_order' =>'', 'expire' => '',
+		$default = array( '_ims_visits' => 0, '_ims_sortby' => '', '_ims_tracking' => '', '_ims_order' =>'', 'expire' => '', 'ims_expire'=> '',
 			'_dis_store'=> false, '_ims_price_list' => 0, '_to_attach' => $this->opts['attchlink'], '_ims_gallery_id' =>$this->unique_id( ) );
 		
 		if( $this->pagenow == 'post-new.php' ){
 			$galid 				= $this->unique_id( );
-			$this->galpath 	= $blogpath . $this->opts['galleriespath'] . "/gallery-{$this->gallery->ID}";
+			$this->galpath		= $blogpath . $this->opts['galleriespath'] . "/gallery-{$this->gallery->ID}";
 			$folderfield		= '<input type="text" name="_ims_folder_path" id="_ims_folder_path" value="'. esc_attr( $this->galpath ) .'" />';
 			if( $this->opts['galleryexpire'] ){
 				$time = ( current_time( 'timestamp') ) + ( $this->opts['galleryexpire'] * 86400 );
@@ -237,6 +237,7 @@ class ImStoreGallery extends ImStoreAdmin{
 				$ims_expire = date_i18n( 'Y-m-d H:i', strtotime($this->gallery->post_expire ) );
 			}
 			
+			$instance = array();
 			foreach( $this->meta as $key => $val ){
 				if( isset( $val[0] ) ) 	$instance[$key] = $val[0];
 			}
@@ -522,7 +523,7 @@ class ImStoreGallery extends ImStoreAdmin{
 						$r .= '<a href="#' . $id . '" rel="update" class="imsupdate">' . __( 'Update', $this->domain ) . '</a> | ';
 						$r .= '<a href="#' . $id . '" rel="trash" class="imstrash">' . __( 'Trash', $this->domain ) . '</a>';
 					}
-					$r .= apply_filters( 'ims_image_row_actions', '', $id, $data, $attch );
+					$r .= apply_filters( 'ims_image_row_actions_metadata', '', $id, $data, $attch );
 					$r .= '</div>';
 					$r .= '</td>';
 					break;
@@ -530,6 +531,7 @@ class ImStoreGallery extends ImStoreAdmin{
 					$r .= '<td class="column-' . $column_id . $hide . '">';
 					$r .= '<input type="text" name="img_title['.$id.']" value="'. esc_attr( $attch['post_title'] ).'" class="inputxl"' . $disabled . '/>';
 					$r .= '<textarea name="img_excerpt['.$id.']" rows="3" class="inputxl" '. $disabled .'>' . esc_textarea( $attch['post_excerpt'] ) . '</textarea>';
+					$r .= apply_filters( 'ims_image_row_actions_title', '', $id, $data, $attch );
 					$r .= '</td>';
 					break;
 				case 'imauthor':

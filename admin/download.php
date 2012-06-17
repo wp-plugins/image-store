@@ -54,11 +54,18 @@ class ImStoreDownloadImage{
 		
 		if( empty($dimentions['w']) || empty( $dimentions['h'] )  ){
 			$size = explode( 'x', strtolower( $imgsize ) );
-			$dimentions['w'] = $size[0] ;
-			$dimentions['h'] = $size[1] ;
+			if( count( $size ) == 2 && is_numeric( $size[0] ) ){
+				$dimentions['w'] = $size[0] ;
+				$dimentions['h'] = $size[1] ;
+			}else{
+				$dimentions['w'] = $dimentions['h'] = false;
+			}
 		}
 		
 		$this->attachment = get_post_meta( $this->id, '_wp_attachment_metadata', true );
+		
+		if( empty( $this->attachment  ) )
+			wp_die( __('Sorry, we could find the image') );
 		
 		if( isset( $this->attachment['sizes'][$imgsize]['path'] ) ){
 			$this->image_dir = $this->attachment['sizes'][$imgsize]['url'];
@@ -80,7 +87,7 @@ class ImStoreDownloadImage{
 				$this->image_dir = $ImStore->content_dir . "/". $this->attachment['file'];
 				
 			}
-		}elseif( $this->store->opts['downloadorig'] ){
+		}elseif( !empty( $this->store->opts['downloadorig'] ) ){
 			$this->image_dir = $ImStore->content_dir . "/". $this->attachment['file'];
 
 		}else{
@@ -157,7 +164,7 @@ class ImStoreDownloadImage{
 			imagefilter( $image, IMG_FILTER_COLORIZE, 35, 25, 10 );
 		}
 		
-		do_action( 'ims_apply_color_filter', &$image );
+		do_action( 'ims_apply_color_filter', $image );
 		
 		//create new image
 		switch( $ext ) {

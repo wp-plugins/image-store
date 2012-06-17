@@ -31,7 +31,7 @@ class ImStorePaypalIPN {
 		$postdata .= 'cmd=_notify-validate';
 		
 		$web = parse_url($url);
-		if($web['scheme'] == 'https' || 
+		if( $web['scheme'] == 'https' || 
 		strpos( $url ,'sandbox') !== false ) { 
 			$web['port'] = 443; 
 			$ssl = 'ssl://'; 
@@ -126,12 +126,10 @@ class ImStorePaypalIPN {
 		
 		do_action('ims_after_paypal_ipn', $cartid, $cart );
 		
-		$to 		= $this->opts['notifyemail'];
-		$subject 	= $this->opts['notifysubj'];
 		$message 	= preg_replace($this->opts['tags'],$this->subtitutions,$this->opts['notifymssg']);
-		$headers 	= 'From: "Image Store" <imstore@'.$_SERVER['HTTP_HOST'].">\r\n";
+		$headers 	= 'From: "' . $this->opts['receiptname'] . '" <'. $this->opts['receiptemail'] . ">\r\n";
 		
-		wp_mail( $to ,$subject, $message, $headers );
+		wp_mail( $this->opts['notifyemail'], $this->opts['notifysubj'], $message, $headers );
 		setcookie( 'ims_orderid_' . COOKIEHASH,  false, (time()-315360000), COOKIEPATH, COOKIE_DOMAIN );
 
 		if( empty( $this->opts['emailreceipt']) )
@@ -165,7 +163,6 @@ class ImStorePaypalIPN {
 				$message .= $output .= "</ul>\n</div>";
 			}
 				
-			$headers = 'From: "Image Store" <imstore@' . $_SERVER['HTTP_HOST'] .">\r\n";
 			$headers .= "Content-type: text/html; charset=utf8\r\n";
 			wp_mail( $_POST['payer_email'], sprintf( __('%s receipt.', $ImStore->domain ),  get_bloginfo( 'blogname' )), $message , $headers );
 			update_post_meta( $cartid, '_ims_email_sent', 1 );
