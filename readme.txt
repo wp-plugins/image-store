@@ -101,20 +101,17 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * Added: Tools Widget
 * Added: Admin menu
 * Added: Slideshow navigation location
-* Added: Follow me on Twiiter for updates
-* Added: Automatinc language download
+* Added: Automatic language download
 * Removed: bw and sepia options.
 * Changed: image security link
 * Changed: slideshow display
 * Changed: sale order number display
 * Improved: payment security.
-* Improved: tool-bar button
 * Improved: images security and image load
 * Fixed: HTML5 validation. (front-end)
 * Fixed: expiration date display
 * Fixed: download image for loged in users
 * Fixed: Tax / shipping calculation
-* Fixed: Firefox redirect message
 * Fixed: Firefox redirect message
 * Fixed: Gallery folder delete issue.
 * Fixed: Image image upload in some servers
