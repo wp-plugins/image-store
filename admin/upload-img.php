@@ -12,8 +12,8 @@
 //define constants
 define( 'WP_ADMIN',true);
 define( 'DOING_AJAX',true);
-$_SERVER['PHP_SELF'] = "/wp-admin/upload-img.php";
 
+$_SERVER['PHP_SELF'] = "/wp-admin/upload-img.php";
 require_once '../../../../wp-load.php';
  
 // Flash often fails to send cookies with the POST or upload, so we need to pass it in GET or POST instead
@@ -33,13 +33,12 @@ if ( !current_user_can( 'ims_add_galleries') )
 
 check_admin_referer( 'media-form' );
 
-$file_id 		= 'async-upload';
 $post_id	= $_REQUEST['post_id'];
-$name 		= $_FILES[$file_id]['name'];
 $cols			= (int)$_REQUEST['cols'];
+$name 		= $_FILES['async-upload']['name'];
 
 require_once ABSPATH . 'wp-admin/includes/file.php';
-$file = wp_handle_upload( $_FILES[$file_id] , array( 'test_form' => false) );
+$file = wp_handle_upload( $_FILES['async-upload'] , array( 'test_form' => false) );
 
 if ( isset($file['error']) )
 	$file = new WP_Error( 'upload_error', $file['error'] );
@@ -61,8 +60,9 @@ $type = $file['type'];
 $file = $file['file'];
 $title = $name;
 
-global $current_user;
+global $current_user,$ImStore;
 require_once ABSPATH . 'wp-admin/includes/image.php';
+
 if ( $image_meta = @wp_read_image_metadata($file) ){
 	if ( trim( $image_meta['title'] ) && ! is_numeric( sanitize_title( $image_meta['title'] ) ) )
 		$title = $image_meta['title'];
@@ -71,8 +71,6 @@ if ( $image_meta = @wp_read_image_metadata($file) ){
 	if ( !trim( $image_meta['credit'] ) )
 		$image_meta['credit'] = $current_user->display_name;
 }
-
-global $ImStore;
 
 $orininfo = @getimagesize( $file );
 $image_meta['color'] = __( 'Unknown', $ImStore->domain );
@@ -108,7 +106,10 @@ if ( is_wp_error($id) ){
 	exit;
 }
 
+//memory limit
+set_time_limit( 0 );
 do_action( 'ims_before_attachment_metadata', $id, $file );
+ini_set( 'memory_limit', $ImStore->get_memory_limit());
 
 $filedata = wp_generate_attachment_metadata( $id, $file );
 $filedata['image_meta'] = $image_meta;
@@ -117,4 +118,4 @@ if( update_post_meta( $id, '_wp_attachment_metadata', $filedata ) ){
 	echo apply_filters( "ims_async_upload", $id, $filedata, $attachment );
 	if( !get_post_meta( $post_id, '_ims_folder_path' ) )
 		update_post_meta( $post_id, '_ims_folder_path', "/". trim( $_REQUEST['folderpath'] , "/" ) );
-}
+} echo 'error';

@@ -10,10 +10,7 @@
 */
 
 // Stop direct access of the file
-if( preg_match( '#'.basename(__FILE__).'#',$_SERVER['PHP_SELF']) ) 
-	die( );
-
-if( !current_user_can( 'ims_read_galleries' ) ) 
+if( !defined('ABSPATH') || !current_user_can( 'ims_read_galleries' ) ) 
 	die( );
 
 global $user_ID; 

@@ -3,6 +3,7 @@
 if( !current_user_can( 'ims_read_sales') ) 
 	die( );
 
+$integrety	= '';
 $css			= ' alternate';
 $cdate		= isset( $_GET['m'] ) ? $_GET['m'] : 0;
 $page		= empty( $_GET['p'] ) ? 1 : (int)$_GET['p'];
@@ -47,7 +48,7 @@ $args = array(
 	'paged' => $page,
 	'post_status' => $status,
 	'post_type' => 'ims_order',
-	'meta_key' => '_response_data',
+	//'meta_key' => '_response_data',
 	'posts_per_page' => $this->per_page,
 );
 
@@ -55,6 +56,7 @@ add_filter( 'posts_where', 'ims_filter_order_status');
 
 $args = apply_filters( 'ims_pre_get_sales', $args);
 $sales = new WP_Query( $args );
+
 
 $start = ($page - 1) * $this->per_page;
 $page_links = paginate_links( array(
@@ -138,11 +140,14 @@ $payment_status = apply_filters( 'ims_payment_status', $payment_status , $status
 		<tbody id="sales" class="list:sales sales-list">
 			<?php 
 			foreach( $sales->posts as $sale ){
-				$css = ( ' alternate' == $css ) ? '' : ' alternate';
-				$data = get_post_meta( $sale->ID, '_response_data', true ); 
-				$payment = ( isset( $data['payment_status'] )) ? trim( strtolower($data['payment_status']) ) : 'pending' ;
 				
-				$r = "<tr id='order-$sale->ID' class='order-edit{$css}'>";
+				$css = ( ' alternate' == $css ) ? '' : ' alternate';
+				$data = get_post_meta( $sale->ID, '_response_data', true );
+				 
+				$payment = ( isset( $data['payment_status'] )) ? trim( strtolower($data['payment_status']) ) : 'pending' ;
+				$integrety =  ( empty( $data['data_integrity'] ) && $sale->post_status == 'pending' ) ? '  not-verified': '';
+				
+				$r = "<tr id='order-$sale->ID' class='order-edit{$css}{$integrety}'>";
 				foreach ( $columns as $column_id => $column_name ){
 					
 					$hide = ( $this->in_array($column_id, $hidden) ) ? ' hidden':'' ;

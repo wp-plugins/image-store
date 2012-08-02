@@ -27,6 +27,17 @@ if( !current_user_can( "ims_manage_galleries")
 global $ImStore;
 $wpjs_url =  site_url( "/wp-includes/js/" );
 $admin_body_class = ' admin-color-' . sanitize_html_class( get_user_option( 'admin_color' ), 'fresh' );
+
+$defaults = array(
+	'id' => '',
+	'caption' => false,
+	'layout' => 'lightbox',
+	'sort' => 0,
+	'sortby' => 0,
+	'number' => 'all',
+	'linkto' => 'file',
+);
+extract( wp_parse_args( $_GET, $defaults ) );
 ?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
@@ -61,47 +72,47 @@ do_action('admin_print_styles');
 		<div id="gal-options"><br>
 			<div>
 				<label><span><?php _e( 'Images', $ImStore->domain  ); ?></span>
-				<input id="number" type="text" tabindex="30" name="number" value="all" /> 
+				<input id="number" type="text" tabindex="30" name="number" value="<?php echo esc_attr( $number )?>" /> 
 				<small><?php _e( 'How many images to display.', $ImStore->domain  ); ?></small></label>
 			</div>
 						
 			<div>
 				<label><span><?php _e( 'Gallery id', $ImStore->domain  ); ?></span> 
-				<input id="galid" type="text" tabindex="20" class="regular-text" name="galid" /></label>
+				<input id="galid" type="text" tabindex="20" class="regular-text" name="galid" value="<?php echo esc_attr( $id )?>" /></label>
 			</div>
 			
 			<div>
 				<label><span><?php _e( 'Show as', $ImStore->domain ); ?></span></label>
-				<label><input type="radio" name="layout" value="lightbox" id="lightbox" checked="checked" /><?php _e( 'Lightbox', $ImStore->domain  ); ?></label>
-				<label><input type="radio" name="layout" value="slideshow" id="slideshow" /><?php _e( 'Slideshow', $ImStore->domain  ); ?></label>
-				<label><input type="radio" name="layout"  value="list" id="list" /><?php _e( 'List', $ImStore->domain  ); ?></label>
+				<label><input type="radio" name="layout" value="lightbox" id="lightbox" <?php checked( $layout , 'lightbox' )?>/><?php _e( 'Lightbox', $ImStore->domain  ); ?></label>
+				<label><input type="radio" name="layout" value="slideshow" id="slideshow" <?php checked( $layout, 'slideshow' )?> /><?php _e( 'Slideshow', $ImStore->domain  ); ?></label>
+				<label><input type="radio" name="layout"  value="list" id="list" <?php checked( $layout, 'list' )?> /><?php _e( 'List', $ImStore->domain  ); ?></label>
 			</div>
 			
 			<div>
 				<label><span><?php _e( 'Sort by', $ImStore->domain  ); ?></span> <select name="orderby" id="order">
 					<option value="0"><?php _e( 'Default', $ImStore->domain  ); ?></option>
-					<option value="date"><?php _e( 'Date', $ImStore->domain  ); ?></option>
-					<option value="title"><?php _e( 'Title', $ImStore->domain  ); ?></option>
-					<option value="custom"><?php _e( 'Custom', $ImStore->domain  ); ?></option>
-					<option value="caption"><?php _e( 'Caption', $ImStore->domain  ); ?></option>
+					<option value="date" <?php selected( $sortby, 'date' )?>><?php _e( 'Date', $ImStore->domain  ); ?></option>
+					<option value="title" <?php selected( $sortby, 'title' )?>><?php _e( 'Title', $ImStore->domain  ); ?></option>
+					<option value="custom" <?php selected( $sortby, 'custom' )?>><?php _e( 'Custom', $ImStore->domain  ); ?></option>
+					<option value="caption" <?php selected( $sortby, 'caption' )?>><?php _e( 'Caption', $ImStore->domain  ); ?></option>
 				</select></label>
 				
 				<label><?php _e( 'Order', $ImStore->domain  ); ?> <select name="orderby" id="orderby">
 					<option value="0"><?php _e( 'Default', $ImStore->domain  ); ?></option>
-					<option value="asc"><?php _e( 'Ascending', $ImStore->domain  ); ?></option>
-					<option value="desc"><?php _e( 'Descending', $ImStore->domain  ); ?></option>
+					<option value="asc" <?php selected( $sort, 'asc' )?>><?php _e( 'Ascending', $ImStore->domain  ); ?></option>
+					<option value="desc" <?php selected( $sort, 'desc' )?>><?php _e( 'Descending', $ImStore->domain  ); ?></option>
 				</select></label>
 				
 			</div>	
 			
 			<div>
 				<label><span><?php _e( 'Link to:', $ImStore->domain  ); ?></span></label>
-				<label><input type="radio" name="linkto" value="file" id="file" checked="checked" /><?php _e( 'File', $ImStore->domain  ); ?></label>
-				<label><input type="radio" name="linkto" value="attachment" id="attachment" /><?php _e( 'Attachment', $ImStore->domain  ); ?></label>
+				<label><input type="radio" name="linkto" value="file" id="file" <?php checked( $linkto, 'file' )?> /><?php _e( 'File', $ImStore->domain  ); ?></label>
+				<label><input type="radio" name="linkto" value="attachment" id="attachment" <?php checked( $linkto, 'attachment' )?> /><?php _e( 'Attachment', $ImStore->domain  ); ?></label>
 			</div>
 			
 			<div>
-				<label><span>&nbsp;</span><input id="caption" type="checkbox" name="href" />
+				<label><span>&nbsp;</span><input id="caption" type="checkbox" name="caption" <?php checked( $caption, 1 )?> />
 				<?php _e( 'Show caption', $ImStore->domain  ); ?></label>
 			</div>
 	

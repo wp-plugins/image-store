@@ -10,7 +10,7 @@
 				
 				<div class="ims-gallery">
 				<?php while ( have_posts( ) ) : the_post(); ?>
-					<figure class="ims-img"><?php
+					<figure class="hmedia ims-img"><?php
 						$images = get_children( array(
 							'numberposts' => 1,
 							'post_type'=>'ims_image', 
@@ -22,9 +22,9 @@
 							$data = wp_get_attachment_metadata( $image->ID ); 
 											
 						$size = ' width="'. $data['sizes']['thumbnail']['width'] .'" height="'.$data['sizes']['thumbnail']['height'].'"';
-						echo '<a href="'. get_permalink() . '" title="View &quot;'. get_the_title( $post->ID ).'&quot; gallery" rel="gallery">
-						<img src="'. $ImStore->get_image_url( $data,  'thumbnail') .'" class="colorbox-2" alt="'.get_the_title( $post->ID ).'"'.$size.' /></a>'; 
-						echo '<figcaption class="gallery-caption">'.get_the_title( $post->ID ).'</figcaption>';
+						echo '<a href="'. get_permalink() . '" title="View &quot;'. get_the_title( $post->ID ).'&quot; gallery" rel="enclosure">
+						<img src="'. $ImStore->get_image_url($image->ID, 2 ) .'" class="colorbox-2" alt="'.get_the_title( $post->ID ).'"'.$size.' /></a>'; 
+						echo '<figcaption class="gallery-caption"><span class="fn ims-img-name">'.get_the_title( $post->ID ).'</span></figcaption>';
 					?></figure>
 
 				<?php endwhile; ?>
