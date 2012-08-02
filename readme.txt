@@ -1,11 +1,11 @@
 === Image Store ===
 Contributors: Hax
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8SJEQXK5NK4ES
-Tags: e-commerce,shop,photo store,picture,image,galleries,imstore,image-store,secure,translate,translatable,watermark,
-slideshow,gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints
+Tags: e-commerce,shop,photo store,picture,image,galleries,imstore,image-store,secure,translate,translatable,watermark,slideshow,
+gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints,nextgen alternative
 Requires at least: 3.0.0
 Tested up to: 3.4.0
-Stable tag: 3.0.9
+Stable tag: 3.1.0
 
 Image Store (ImStore) is a photo gallery and store plugin for WordPress with Paypal and Google Checkout integration.
 
@@ -83,6 +83,38 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+
+= 3.1.0 =
+* Added: Gallery tags.
+* Added: Multiple checkout options.
+* Added: Load images by dragging and dropping.
+* Added: View and edit image IPTC metadata.
+* Added: Image Store tools widget
+* Added: Custom color
+* Added: Custom shipping
+* Added: Zero charge ( free images ) using promotions
+* Added: Additional shortcode options
+* Added: Cart page
+* Added: microformats
+* Added: Photo Finishes
+* Added: Color filter options
+* Added: Tools Widget
+* Added: Admin menu
+* Added: Slideshow navigation location
+* Added: Automatic language download
+* Removed: bw and sepia options.
+* Changed: image security link
+* Changed: slideshow display
+* Changed: sale order number display
+* Improved: payment security.
+* Improved: images security and image load
+* Fixed: HTML5 validation. (front-end)
+* Fixed: expiration date display
+* Fixed: download image for loged in users
+* Fixed: Tax / shipping calculation
+* Fixed: Firefox redirect message
+* Fixed: Gallery folder delete issue.
+* Fixed: Image image upload in some servers
 
 = 3.0.9 =
 * Fixed: Gallery login for WP 3.4.
@@ -164,54 +196,8 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * Fixed: Delete packages issue.
 * Fixed: Not being able to save image sizes.
 
-= 3.0.0 =
-* Added: hooks
-* Added: Gallery embed feature.
-* Added: Favorite link feature without store.
-* Added: Template examples.
-* Changed: ImStore class structure.
-* Changed: Full integration with wp media upload.
-* Fixed: Shortcode display.
-* Fixed: Permalink Issues.
-* Fixed: Image display issues.
-* Fixed: Sale information page.
-
-= 2.2.1 =
-* Fixed: RSS sql error.
-* Fixed: Shortcode image link.
-
-= 2.2.0 =
-* Security update
-* Revised: PayPal IPN.
-* Revised: Shopping cart.
-* Revised: Image watermark.
-* Fixed: No comments issue.
-* Fixed: Slideshow unable to save to cart
-* Fixed: Not being able to delete price list.
-* Fixed: Canonical redirect for custom permalinks.
-* Fixed: Customer information not showing  under the WP user menu.
-* Added: Twenty Eleven theme support.
-* Added: Multisite support.
-* Added: jQuery Colorbox support.
-* Added: Dynamic image download.
-* Added: Print-friendly report.
-
-= 2.1.2 =
-* Security update.
-* Fixed: front-end errors for some servers.
-
-= 2.1.1 =
-* Security update.
-* Uploadify update.
-* French Translation.
-* Added: Album ID column.
-* Added: Gallery autosave.
-* Added: Gallery excerpt support.
-* Added: Twenty Eleven theme support.
-* Added: User information auto fill for Email notification .
-* Fixed: Edit image capability issue.
-* Fixed: No report issue and messages.
-
+= Full change log =
+* http://xparkmedia.com/image-store/changelog/
 
 == CREDITS ==
 
@@ -223,6 +209,7 @@ Jack Moore,Alex Gregory(http://colorpowered.com/colorbox/)
 
 
 == Upgrade Notice ==
+* Upgrade to 3.1.0 update image and taxonomy templates image-store/theme, deactivate/activate plugin.
 * Upgrade to 3.0.3 please update permalink.
 * Upgrade from 2.0.0 will change your permalinks. 
 * Upgrade from 1.0.2 and previous price lists need to bee updated to use the image unit. 
@@ -240,3 +227,4 @@ Jack Moore,Alex Gregory(http://colorpowered.com/colorbox/)
 7. Screenshot Pricelist
 8. Screenshot Shopping Cart
 9. Screenshot Gallery embed
+10. Users

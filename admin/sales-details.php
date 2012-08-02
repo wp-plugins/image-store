@@ -52,7 +52,7 @@ $this->data 		= get_post_meta( $this->orderid,'_response_data',true);
 						$r .= '<div class="clear-row">';
 						$r .= '<span class="quantity">' .  $item['quantity'] . '</span>';
 						$r .= '<span class="size">' .  $size . '</span>';
-						$r .= '<span class="color">' .  $this->color[$color] . $this->format_price( $item['color'], ' + ' ) . '</span>';
+						$r .= '<span class="color">' .  $this->color[$color] . $this->format_price( $item['color'], true, ' + ' ) . '</span>';
 						$r .= '<span class="price">' . $this->format_price( $item['price'] ) . '</span>';
 						$r .= '<span class="subtotal">' . $this->format_price( $item['subtotal'] ) . '</span>';
 						$r .= '<span class="title">' .  get_the_title($id) . '</span>';
@@ -67,6 +67,25 @@ $this->data 		= get_post_meta( $this->orderid,'_response_data',true);
 				
 			}
 		?>
+		<?php 
+		if( empty( $this->data['data_integrity'] ) && $this->order->post_status == 'pending' ): ?>
+		<tr class="not-verified">
+				<td colspan="7"><strong>
+				<?php _e( "Review payment information for this order before shipping items,
+				 the data provided by the gateway couldn't be verified. To remove message change the order status" , $this->domain )?>
+				</strong></td>
+		</tr>
+		<?php endif ?>
+		
+		<tr>
+				<td class="column-thumb" scope="row">&nbsp;</td>
+				<td><?php _e('Method', $this->domain)?></td>
+				<td scope="row" ><?php if( isset( $this->data['method'] ) ) echo strip_tags( $this->data['method'] ) ?></td>
+				<td>&nbsp;</td>
+				<td><?php _e('Payment Status', $this->domain)?></td>
+				<td scope="row"><?php if( isset( $this->data['payment_status'] ) ) echo strip_tags( $this->data['payment_status'] ) ?></td>
+				<td>&nbsp;</td>
+		</tr>
 		<tr>
 				<td class="column-thumb" scope="row">&nbsp;</td>
 				<td><?php _e('Date', $this->domain)?></td>
@@ -116,7 +135,7 @@ $this->data 		= get_post_meta( $this->orderid,'_response_data',true);
 				</td>
 				<td><?php _e('Tax', $this->domain)?></td>
 	
-				<td><?php if( isset( $this->cart['tax'] ) ) echo $this->format_price( $this->cart['tax'] , ' + ' ) ?></td>
+				<td><?php if( isset( $this->cart['tax'] ) ) echo $this->format_price( $this->cart['tax'] , true, ' + ' ) ?></td>
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
@@ -134,7 +153,6 @@ $this->data 		= get_post_meta( $this->orderid,'_response_data',true);
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
             </tr>
-
               <tr>
                 <td scope="row">&nbsp;</td>
                 <td><?php _e('Phone', $this->domain)?></td>

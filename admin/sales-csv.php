@@ -10,13 +10,8 @@ $_SERVER['PHP_SELF'] = "/wp-admin/sales-csv.php";
 require_once '../../../../wp-admin/admin.php';
 
 //check that a user is logged in
-if ( !is_user_logged_in() )
-	die();
-
-//check that a user is logged in
 if ( !current_user_can( 'ims_read_sales' ) )
 	die( );
-
 
 //dont cache file
 $enco = get_bloginfo( 'charset' );
@@ -31,9 +26,6 @@ header( 'Content-Description:File Transfer' );
 header( 'Content-Transfer-Encoding: binary' ); 
 header( 'Content-type: application/csv;  charset=' . "$enco; encoding=$enco" );
 header( 'Content-Disposition:attachment; filename=image-store-sales.csv' );
-
-set_time_limit( 5000 );
-ini_set( 'memory_limit', '215M' );
 
 $query = apply_filters( 'ims_sales_csv_query', 
 	"SELECT ID, post_title, 

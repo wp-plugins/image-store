@@ -10,8 +10,8 @@
 */
 
 // Stop direct access of the file
-if( preg_match( '#'.basename(__FILE__).'#',$_SERVER['PHP_SELF'])) 
-	die( );
+if (!defined('ABSPATH'))
+	die();
 
 $count = (isset($_GET['c'])) ? $_GET['c'] : false;
 $msnum	= (!empty($_GET['ms'])) ? $_GET['ms'] : false;
@@ -62,25 +62,31 @@ $message[39] = sprintf(__( '%d promotions deleted.', $this->domain ),$count);
 $message[40] = __( 'Options saved.', $this->domain );
 $message[41] = __( "You do not have sufficient permissions to access this page.", $this->domain );
 
+$message[42] = __( 'Color option list was updated.', $this->domain);
+$message[43] = __( 'Shipping option list was updated.', $this->domain);
+$message[44] = __( 'Finish list was updated.', $this->domain);
+$message[45] = __( 'Filter list was updated.', $this->domain);
+
 ?>
 <div class="wrap imstore">
+
+
 	<?php screen_icon($screens[$this->page][0])?>
 	<h2><?php echo $screens[$this->page][1]?></h2>
 
 	<?php if( $this->page == 'ims-settings'): //display ads?>
+	<div class="ims-social-box">
+		<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=8SJEQXK5NK4ES" class="ims-donate" title="Like the plugin? Please Donate"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" alt="donate" height="20"></a>
+	<a href="https://twitter.com/xparkmedia" class="twitter-follow-button" data-show-count="false">Follow @xparkmedia</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
+
 		<div class="adunitbox postbox">
-			<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=8SJEQXK5NK4ES" class="donate" title="Like the plugin? Please Donate">
-				<img src="<?php echo IMSTORE_URL ?>/_img/donate.jpg" alt="donate">
-			</a>
-			
 			<script type="text/javascript">
 			/* <![CDATA[ */
     		(function() {  var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];  s.type = 'text/javascript';  s.async = true; s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto'; t.parentNode.insertBefore(s, t); })();
 			/* ]]> */</script>
 			<a class="FlattrButton" style="display:none;" href="http://imstore.xparkmedia.com"></a>
-<noscript><a href="http://flattr.com/thing/329337/Image-Store-Plugin-for-WordPress" target="_blank">
-<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
-			
+
 			<div id="adunit">
 				<iframe allowtransparency="true" src="http://xparkmedia.com/_rsc/ad.html" frameborder="0" marginheight="0" marginwidth="0" scrolling="no" height="60" width="468"></iframe>
 			</div>

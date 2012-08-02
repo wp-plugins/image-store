@@ -25,10 +25,6 @@ header( 'Content-Description:File Transfer' );
 header( 'Content-Transfer-Encoding: binary' ); 
 header( 'Content-type: application/vnd.ms-excel;  charset=' . "$enco; encoding=$enco" );
 header( 'Content-Disposition:attachment; filename=image-store-customers.csv' );
-
-//give script resources
-set_time_limit(8000);
-ini_set( 'memory_limit', '215M' );
 			
 $query = apply_filters( 'ims_customers_csv_query', 
 	"SELECT DISTINCT ID FROM $wpdb->users AS u
