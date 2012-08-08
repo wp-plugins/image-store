@@ -18,7 +18,7 @@ class ImStore {
 	 * Make sure that new language( .mo ) files have 'ims-' as base name
 	 */
 	public $domain = 'ims';
-	public $version = '3.1.0';
+	public $version = '3.1.1';
 
 	/**
 	 * Public variables
