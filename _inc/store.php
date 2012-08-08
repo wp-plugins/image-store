@@ -609,7 +609,7 @@ class ImStoreFront extends ImStore {
 		do_action('ims_gallery_init', &$this);
 
 		//process paypal IPN
-		if (isset($_POST['txn_id']) && isset($_POST['custom']) && $this->imspage == 'photos')
+		if (isset($_POST['txn_id']) && isset($_POST['custom']))
 			include_once( IMSTORE_ABSPATH . '/_store/paypal-ipn.php' );
 
 		//process google notification
@@ -931,6 +931,7 @@ class ImStoreFront extends ImStore {
 			'imagetag' => 'figure',
 			'captiontag' => 'figcaption'
 		), &$this);
+		
 		extract($tags);
 
 		//allow plugins to overwrite output
@@ -954,6 +955,7 @@ class ImStoreFront extends ImStore {
 			$tagatts = ' class="ims-image"';
 
 			if (!empty($image->post_parent)) {
+				$title = get_the_title($image->post_parent);
 				$link = get_permalink($image->post_parent);
 			} elseif ($attach) {
 				$link = get_permalink($image->ID);
@@ -1588,17 +1590,14 @@ class ImStoreFront extends ImStore {
 	 */
 	function get_galleries($atts) {
 
-		$album = false;
-
-		if (is_array($atts))
-			extract($atts);
-
 		global $wpdb, $paged;
-		$order = (empty($order)) ? "DESC" : $order;
-		$orderby = (empty($sortby)) ? "post_date" : $sortby;
-		$per_page = (!isset($count)) ? get_query_var('posts_per_page') : (int) $count;
-		$offset = (empty($paged)) ? 0 : (($per_page) * $paged) - $per_page;
-		$limit = ( $per_page < 1 ) ? '' : "LIMIT %d, %d";
+		extract( wp_parse_args( $atts, array(
+			'order'=>'DESC','orderby'=>'post_date','offset' =>0,
+			'album'=>false,'count'=>get_query_var('posts_per_page'))
+		));
+	
+		$limit = ( $count < 1 ) ? '' : "LIMIT %d, %d";
+		$offset = (empty($paged)) ? 0 : (($count) * $paged) - $count;
 
 		$type = ( $album ) ?
 			"SELECT DISTINCT object_id FROM $wpdb->terms AS t
@@ -1619,7 +1618,7 @@ class ImStoreFront extends ImStore {
 			WHERE im.post_type = 'ims_image' AND pm.meta_key = '_wp_attachment_metadata'
 			AND im.post_status = 'publish' AND p.post_status = 'publish' AND im.post_parent IN ( $type )
 			GROUP BY im.post_parent ORDER BY p.{$orderby} $order, p.post_date DESC $limit
-		", $album, $offset, $per_page));
+		", $album, $offset, $count));
 
 		if (empty($this->attachments))
 			return;
@@ -1627,7 +1626,7 @@ class ImStoreFront extends ImStore {
 		if (is_singular("ims_gallery") || is_tax("ims_album")) {
 			$wp_query->post_count = count($this->attachments);
 			$wp_query->found_posts = $wpdb->get_var('SELECT FOUND_ROWS( )');
-			$wp_query->max_num_pages = ceil($wp_query->found_posts / $per_page);
+			$wp_query->max_num_pages = ceil($wp_query->found_posts / $count);
 		}
 
 		foreach ($this->attachments as $post) {
@@ -1769,8 +1768,10 @@ class ImStoreFront extends ImStore {
 		}
 
 		$data = get_post_meta($promo_id, '_ims_promo_data', true);
-		$this->cart['promo']['discount'] = $data['discount'];
 		$this->cart['promo']['promo_type'] = $data['promo_type'];
+	
+		if(isset($data['discount'])) 
+			$this->cart['promo']['discount'] = $data['discount'];
 
 		switch ($data['rules']['logic']) {
 			case 'equal':
@@ -1934,7 +1935,7 @@ class ImStoreFront extends ImStore {
 			}
 			$this->cart['total'] = $this->cart['subtotal'] - $this->cart['promo']['discount'];
 		}
-
+		
 		//add shipping cost
 		if ($this->cart['shippingcost'] && isset($this->cart['shipping_type']))
 			$this->cart['shipping'] = $this->shipping_opts[$this->cart['shipping_type']]['price'];
@@ -1974,7 +1975,10 @@ class ImStoreFront extends ImStore {
 			update_post_meta($this->orderid, '_ims_order_data', $this->cart);
 
 		do_action('ims_after_add_to_cart', &$this->cart);
-
+		
+		if (!empty($this->error))
+			return;
+			
 		global $paged;
 		$this->success = '1';
 		wp_redirect(html_entity_decode($this->get_permalink($this->imspage, false, $paged)));
@@ -2027,36 +2031,43 @@ class ImStoreFront extends ImStore {
 		$this->cart['promo']['discount'] = false;
 		$this->cart['shipping_type'] = $_POST['shipping'];
 		$this->cart['promo']['code'] = $_POST['promocode'];
+		
 
 		//recalculate values
 		foreach ($this->cart['images'] as $id => $sizes) {
 			foreach ($sizes as $size => $colors) {
 				foreach ($colors as $color => $values) {
 					$enc = $this->url_encrypt($id);
-					$this->cart['items'] += $_POST['ims-quantity'][$enc][$size][$color];
+					
+					if( $_POST['ims-quantity'][$enc][$size][$color]['quantity'] < 1){
+						unset( $this->cart['images'][$id] );
+						continue;
+					}
+						
+					$this->cart['items'] += $_POST['ims-quantity'][$enc][$size][$color]['quantity'];
 
 					//get cart subtotal
 					$this->cart['subtotal'] += ((
 							$this->cart['images'][$id][$size][$color]['price'] +
 							$this->cart['images'][$id][$size][$color]['color'] +
 							$this->cart['images'][$id][$size][$color]['finish'] ) *
-							$_POST['ims-quantity'][$enc][$size][$color]
-							);
+							$_POST['ims-quantity'][$enc][$size][$color]['quantity']
+					);
 
 					//get image subtotal
 					$this->cart['images'][$id][$size][$color]['subtotal'] = ((
 							$this->cart['images'][$id][$size][$color]['price'] +
 							$this->cart['images'][$id][$size][$color]['color'] +
 							$this->cart['images'][$id][$size][$color]['finish']) *
-							$_POST['ims-quantity'][$enc][$size][$color]
-							);
+							$_POST['ims-quantity'][$enc][$size][$color]['quantity']
+					);
 
 					//check for downloadable images
 					if (empty($colors[$color]['download']))
 						$this->cart['shippingcost'] = true;
 
 					//update image quantity
-					$this->cart['images'][$id][$size][$color]['quantity'] = $_POST['ims-quantity'][$enc][$size][$color];
+					$this->cart['images'][$id][$size][$color]['quantity'] = $_POST['ims-quantity'][$enc][$size][$color]['quantity'];
 				}
 			}
 		}
@@ -2097,7 +2108,10 @@ class ImStoreFront extends ImStore {
 
 		do_action('ims_after_update_cart', &$this);
 		update_post_meta($this->orderid, '_ims_order_data', $this->cart);
-
+		
+		if (!empty($this->error))
+			return;
+			
 		$this->success = '2';
 		wp_redirect(html_entity_decode($this->get_permalink($this->imspage)));
 		die();

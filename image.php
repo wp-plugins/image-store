@@ -53,13 +53,15 @@ class ImStoreImage {
 
 		if (empty($this->data->meta))
 			die();
+			
 		$this->metadata = maybe_unserialize($this->data->meta);
 
-		if (!defined('WP_CONTENT_URL'))
-			define('WP_CONTENT_URL', get_option('ims_site_url') . '/wp-content/');
+		if( ini_get('allow_url_fopen') )
+			$image_path = get_option('ims_site_url') . '/wp-content/';
+		else $image_path = rtrim(WP_CONTENT_DIR,'/') . '/';
 
 		$this->metadata = maybe_unserialize($this->data->meta);
-		$this->path = WP_CONTENT_URL . trim(dirname($this->metadata['file']), '/');
+		$this->path = $image_path . trim(dirname($this->metadata['file']), '/');
 
 		if (!preg_match('/_resized/i', $this->path))
 			$this->path .= "/_resized";
@@ -78,6 +80,7 @@ class ImStoreImage {
 				$this->image_dir = rtrim(WP_CONTENT_URL, '/') . "/" . $this->metadata['file'];
 				break;
 		}
+		
 		$this->display_image();
 	}
 
@@ -232,7 +235,7 @@ class ImStoreImage {
 				if (!preg_match('/(png|jpg|jpeg|gif )$/i', $wmtype['ext']))
 					die();
 
-				if (file_get_contents($wmpath)) {
+				if (@file_get_contents($wmpath)) {
 					switch ($wmtype['ext']) {
 						case "jpg":
 						case "jpeg":
