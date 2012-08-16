@@ -55,10 +55,7 @@ class ImStoreImage {
 			die();
 			
 		$this->metadata = maybe_unserialize($this->data->meta);
-
-		if( ini_get('allow_url_fopen') )
-			$image_path = get_option('ims_site_url') . '/wp-content/';
-		else $image_path = rtrim(WP_CONTENT_DIR,'/') . '/';
+		$image_path = rtrim(WP_CONTENT_DIR,'/') . '/';
 
 		$this->metadata = maybe_unserialize($this->data->meta);
 		$this->path = $image_path . trim(dirname($this->metadata['file']), '/');
@@ -361,11 +358,11 @@ class ImStoreImage {
 	 * @since 3.1.0
 	 */
 	function get_memory_limit(){
-		if(!defined('WP_MEMORY_LIMIT') )
+		if(!defined('WP_MAX_MEMORY_LIMIT') )
 			return '256M';
-		elseif(WP_MEMORY_LIMIT == false || WP_MEMORY_LIMIT == '')
+		elseif(WP_MAX_MEMORY_LIMIT == false || WP_MAX_MEMORY_LIMIT == '')
 			return '256M';
-		else return WP_MEMORY_LIMIT;
+		else return WP_MAX_MEMORY_LIMIT;
 	}
 	
 	/**
