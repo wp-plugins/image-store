@@ -84,7 +84,7 @@ function ajax_imstore_delete_post() {
 	check_ajax_referer("ims_ajax");
 	if (empty($_GET['postid']))
 		die();
-
+		
 	if (current_user_can("ims_manage_galleries")
 	|| current_user_can("ims_change_pricing")) {
 		$postid = (int) $_GET['postid'];

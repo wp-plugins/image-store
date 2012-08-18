@@ -71,8 +71,10 @@ class ImStoreDownloadImage {
 			wp_die(__('Sorry, we could find the image'));
 
 		if (isset($this->attachment['sizes'][$imgsize]['path'])) {
+			
 			$this->image_dir = $this->attachment['sizes'][$imgsize]['url'];
-		} elseif ($dimentions['w'] && $dimentions['h'] && empty($this->store->opts['downloadorig'])) {
+			
+		} elseif ($dimentions['w'] && $dimentions['h'] && empty($ImStore->opts['downloadorig'])) {
 
 			$this->clean = true;
 			$this->image_dir = image_resize(
@@ -86,13 +88,15 @@ class ImStoreDownloadImage {
 				$this->clean = false;
 				$this->image_dir = $ImStore->content_dir . "/" . $this->attachment['file'];
 			}
-		} elseif (!empty($this->store->opts['downloadorig'])) {
+		} elseif (!empty($ImStore->opts['downloadorig'])) {
+			
 			$this->image_dir = $ImStore->content_dir . "/" . $this->attachment['file'];
+		
 		} else {
 
 			$this->image_dir = apply_filters('ims_download_image_preview', $this->attachment['sizes']['preview']['path'], $this->id);
 		}
-		$this->display_image();
+		//$this->display_image();
 	}
 
 	/**

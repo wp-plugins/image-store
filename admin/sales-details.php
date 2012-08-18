@@ -49,10 +49,11 @@ $this->data 		= get_post_meta( $this->orderid,'_response_data',true);
 				
 				foreach( $sizes as $size => $colors ){
 					foreach( $colors as $color => $item){
+						$colorname = isset( $this->color[$color] ) ? $this->color[$color] : '';
 						$r .= '<div class="clear-row">';
 						$r .= '<span class="quantity">' .  $item['quantity'] . '</span>';
 						$r .= '<span class="size">' .  $size . '</span>';
-						$r .= '<span class="color">' .  $this->color[$color] . $this->format_price( $item['color'], true, ' + ' ) . '</span>';
+						$r .= '<span class="color">' . $colorname . $this->format_price( $item['color'], true, ' + ' ) . '</span>';
 						$r .= '<span class="price">' . $this->format_price( $item['price'] ) . '</span>';
 						$r .= '<span class="subtotal">' . $this->format_price( $item['subtotal'] ) . '</span>';
 						$r .= '<span class="title">' .  get_the_title($id) . '</span>';
