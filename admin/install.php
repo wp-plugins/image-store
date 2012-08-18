@@ -207,9 +207,10 @@ class ImStoreInstaller extends ImStore {
 	 * @since 2.0.0 
 	 */
 	function update() {
-		global $wpdb;
+		global $wpdb, $wp_rewrite;
 
 		wp_cache_flush();
+		$wp_rewrite->flush_rules();
 
 		//update database if updating before 2.0.0
 		if ($this->ver < "2.0.0") {
@@ -572,7 +573,7 @@ class ImStoreInstaller extends ImStore {
 	 * @since 0.5.0 
 	 */
 	function imstore_uninstall() {
-		global $wpdb,$wp_rewrite;
+		global $wpdb;
 
 		if (!current_user_can('edit_plugins') || !current_user_can('ims_change_settings'))
 			return;

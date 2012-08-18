@@ -465,6 +465,7 @@ class ImStoreFront extends ImStore {
 			$this->orderid = $_COOKIE['ims_orderid_' . COOKIEHASH];
 
 		$this->cart_status = get_post_status($this->orderid);
+		
 		if ($this->cart_status == "draft" && $this->orderid)
 			$this->cart = get_post_meta($this->orderid, '_ims_order_data', true);
 
@@ -609,7 +610,7 @@ class ImStoreFront extends ImStore {
 		do_action('ims_gallery_init', &$this);
 
 		//process paypal IPN
-		if (isset($_POST['txn_id']) && isset($_POST['custom']))
+		if (isset($_POST['txn_id']) && isset($_POST['custom']) && empty($_SERVER['HTTP_USER_AGENT']))
 			include_once( IMSTORE_ABSPATH . '/_store/paypal-ipn.php' );
 
 		//process google notification
@@ -676,8 +677,10 @@ class ImStoreFront extends ImStore {
 			return $output;
 
 		elseif (isset($atts['cart']) && $atts['cart'] == true): //cart
-
-			if (empty($this->imspage))
+		
+			if(isset($_POST['txn_id']))
+				$this->imspage = 'receipt';
+			elseif (empty($this->imspage))
 				$this->imspage = 'shopping-cart';
 			return $this->gallery_shortcode();
 
@@ -1068,7 +1071,6 @@ class ImStoreFront extends ImStore {
 	 * @since 3.0.0
 	 */
 	function shipping_options() {
-
 		if (empty($this->shipping_opts))
 			return;
 
@@ -1153,7 +1155,6 @@ class ImStoreFront extends ImStore {
 			unset($pages['add-to-favorite']);
 			unset($pages['remove-from-favorite']);
 		}
-
 		return $pages;
 	}
 
@@ -1508,17 +1509,20 @@ class ImStoreFront extends ImStore {
 		$link = '';
 		if ($this->permalinks && !is_preview()) {
 
-			$link = (!isset($this->pages[$page])
-					|| preg_match('/[^\\p{Common}\\p{Latin}]/u', $this->pages[$page])) ? '/' . $page : '/' . sanitize_title($this->pages[$page]);
+			if( isset($this->pages[$page]) && preg_match('/[^\\p{Common}\\p{Latin}]/u', $this->pages[$page]) ) 
+				$link =  '/' . $page;
+			elseif( isset( $this->pages[$page] ) ) 
+				$link =  '/' . sanitize_title($this->pages[$page]);
 
-			if ($link == '/')
-				$link .= $page;
+			if ($page == 'logout')
+				$link .= "/".$page;
 
 			if ($paged)
 				$link .= '/page/' . $paged;
 
 			if ($this->success != false)
 				$link .= '/ms/' . $this->success;
+				
 		}else {
 
 			if (is_front_page())
@@ -1537,10 +1541,10 @@ class ImStoreFront extends ImStore {
 		}
 
 		if ($encode)
-			$link = get_permalink() . htmlspecialchars($link);
+			$link = trim(get_permalink(),'/') . htmlspecialchars($link);
 		else
-			$link = get_permalink() . $link;
-
+			$link = trim(get_permalink(),'/') . $link;
+			
 		return apply_filters('ims_permalink', $link, $page, $encode);
 	}
 

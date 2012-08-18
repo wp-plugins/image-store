@@ -43,7 +43,10 @@ if (empty($this->cart['images']) && apply_filters('ims_empty_car', true, $this->
 	$output .= $this->error_message($error, true);
 
 else: //else show table
-
+	
+	if(!is_singular('ims_gallery'))
+		$this->imspage = false;
+		
 	$output .=
 	'<noscript><div class="ims-message ims-error">' . __('Please enable Javascript, it is required to submit payment. ') . '</div></noscript>
 		<table class="ims-table" role="grid">
@@ -216,7 +219,7 @@ else: //else show table
 		<input type="hidden" name="tax_rate"  data-value-ims="' . ( isset($this->opts['taxamount']) ? esc_attr($this->opts['taxamount'] / 100) : 0 ) . '" />
 		<input type="hidden" name="shopping-cart.merchant-private-data"  data-value-ims="' . esc_attr($this->orderid) . '" />';
 
-		$output .= '<input type="hidden" name="checkout-flow-support.merchant-checkout-flow-support.edit-cart-url"  data-value-ims="' . esc_attr($this->get_permalink('shopping-cart')) . '" />
+		$output .= '<input type="hidden" name="checkout-flow-support.merchant-checkout-flow-support.edit-cart-url"  data-value-ims="' . esc_attr($this->get_permalink($this->imspage)) . '" />
 		<input type="hidden" name="checkout-flow-support.merchant-checkout-flow-support.continue-shopping-url"  data-value-ims="' . esc_attr($this->get_permalink('receipt')) . '" />
 		<input type="hidden" name="checkout-flow-support.merchant-checkout-flow-support.tax-tables.default-tax-table.tax-rules.default-tax-rule-1.shipping-taxed" data-value-ims="true"/>';
 
@@ -255,9 +258,9 @@ else: //else show table
 		<input type="hidden" name="return" data-value-ims="' . $this->get_permalink('receipt') . '" />
 		<input type="hidden" name="page_style" data-value-ims="' . get_bloginfo('name') . '" />
 		<input type="hidden" name="custom" data-value-ims="' . esc_attr($this->orderid) . '" />
-		<input type="hidden" name="notify_url" data-value-ims="' . $this->get_permalink('photos') . '" />
+		<input type="hidden" name="notify_url" data-value-ims="' . $this->get_permalink($this->imspage) . '" />
 		<input type="hidden" name="currency_code" data-value-ims="' . esc_attr($this->opts['currency']) . '" />
-		<input type="hidden" name="cancel_return" data-value-ims="' . $this->get_permalink('shopping-cart') . '" />
+		<input type="hidden" name="cancel_return" data-value-ims="' . $this->get_permalink($this->imspage) . '" />
 		<input type="hidden" name="shipping_1" data-value-ims="' . $this->cart['shipping'] . '" />
 		<input type="hidden" name="business" data-value-ims="' . ( isset($this->opts['paypalname']) ? esc_attr($this->opts['paypalname']) : '' ) . '" />
 		<input type="hidden" name="discount_amount_cart" data-value-ims="' . ( isset($this->cart['promo']['discount']) ? esc_attr($this->cart['promo']['discount']) : '' ) . '" />

@@ -171,6 +171,8 @@ class ImStoreAdmin extends ImStore {
 	 * @since 0.5.0 
 	 */
 	function deactivate() {
+		global $wp_rewrite;
+		$wp_rewrite->flush_rules();
 		wp_clear_scheduled_hook('imstore_expire');
 	}
 

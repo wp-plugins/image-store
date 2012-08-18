@@ -18,7 +18,7 @@ class ImStore {
 	 * Make sure that new language( .mo ) files have 'ims-' as base name
 	 */
 	public $domain = 'ims';
-	public $version = '3.1.2';
+	public $version = '3.1.3';
 
 	/**
 	 * Public variables
@@ -326,6 +326,11 @@ class ImStore {
 
 			$new_rules[$galleries . "/([^/]+)/$slug/?$"] =
 			"index.php?ims_gallery=" . $wp_rewrite->preg_index(1) . "&imspage=$id";
+						
+			if( $id == 'receipt' ){
+				$new_rules["(.?.+?)/$slug/?$"] =
+				"index.php?pagename=" . $wp_rewrite->preg_index(1) .  "&imspage=$id";
+			}
 		}
 
 		$new_rules["(.?.+?)/ms/?([0-9]+)/?$"] =
