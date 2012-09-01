@@ -111,7 +111,7 @@ class ImStoreGallery extends ImStoreAdmin {
 			add_meta_box($key, $label, array(&$this, $key), "ims_gallery", "normal");
 		add_meta_box("ims_customers_box", __('Customers', $this->domain), array(&$this, "customers_metabox"), "ims_gallery", "side", "low");
 
-		do_action('ims_gallery_init', &$this);
+		do_action('ims_gallery_init', $this);
 	}
 
 	/**
@@ -339,7 +339,7 @@ class ImStoreGallery extends ImStoreAdmin {
 				<td><label for="_to_attach"><?php _e('Link to attachment', $this->domain) ?></label></td>
 				<td><input type="checkbox" name="_to_attach" id="_to_attach" <?php checked(true, $_to_attach) ?> value="1" /></td>
 			</tr>
-		<?php do_action('ims_info_metabox', &$this) ?>
+		<?php do_action('ims_info_metabox', $this) ?>
 		</table>
 		<?php
 	}

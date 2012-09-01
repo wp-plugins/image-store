@@ -84,7 +84,7 @@ else: //else show table
 		$output .= '<td role="gridcell" class="ims-subrows" colspan="2">';
 		foreach ($sizes as $size => $colors):
 			foreach ($colors as $color => $item):
-
+				
 				$enc = $this->url_encrypt($id);
 				$output .= '<div class="ims-clear-row">';
 				$output .= '<span class="ims-quantity"><input type="text" name="ims-quantity'."[$enc][$size][$color]" . '" value="'.esc_attr($item['quantity']).'" class="input" /></span>';

@@ -99,7 +99,7 @@ class ImStoreFront extends ImStore {
 	 */
 	function add_title($title, $sep, $seplocation) {
 		global $paged;
-		if ($seplocation = 'right') {
+		if ($seplocation == 'right') {
 			if ($paged)
 				$sep .= " " . $paged . " $sep";
 			return $this->pages[$this->imspage] . " $sep " . get_the_title() . " $sep ";
@@ -592,7 +592,7 @@ class ImStoreFront extends ImStore {
 			$this->sizes = $this->get_price_list();
 			$this->listmeta = get_post_meta($this->pricelist_id, '_ims_list_opts', true);
 		}
-
+		
 		if (is_singular('ims_gallery'))
 			$this->imspage = ($page = get_query_var('imspage')) ? $page : 'photos';
 		$this->order = empty($this->meta['_ims_order'][0]) ? $this->opts['imgsortdirect'] : $this->meta['_ims_order'][0];
@@ -606,11 +606,12 @@ class ImStoreFront extends ImStore {
 			else
 				$this->sortby = "post_" . $this->meta['_ims_sortby'][0];
 		}
-
-		do_action('ims_gallery_init', &$this);
-
+				
+		do_action('ims_gallery_init', $this);
+		
 		//process paypal IPN
-		if (isset($_POST['txn_id']) && isset($_POST['custom']) && empty($_SERVER['HTTP_USER_AGENT']))
+		if (isset($_POST['txn_id']) && isset($_POST['custom']) 
+		&& ($this->imspage != 'receipt' || $this->opts['gateway']['paypalsand'] ))
 			include_once( IMSTORE_ABSPATH . '/_store/paypal-ipn.php' );
 
 		//process google notification
@@ -975,7 +976,7 @@ class ImStoreFront extends ImStore {
 			$imgattr = ' role="img" class="photo colorbox-2" alt="' . esc_attr($title) . '"' . $size;
 			$imgtag = '<img src="' . IMSTORE_URL . '/_img/1x1.trans.gif" data-ims-src="' . $this->get_image_url($image->ID, 2) . '" ' . $imgattr . '/>';
 
-			$output .= "<{$imagetag} class='hmedia ims-img imgid-{$image->ID}'>";
+			$output .= "<{$imagetag} class='hmedia ims-img imgid-{$enc}'>";
 			$output .= '<a id="' . $enc . '" href="' . $link . '"' . $tagatts . ' rel="enclosure" title="' . esc_attr($title) . '">' . $imgtag . '</a>';
 			$output .= "<{$captiontag} class='gallery-caption'><span class='fn ims-img-name'>" . wptexturize($title) . "</span>";
 
@@ -984,6 +985,7 @@ class ImStoreFront extends ImStore {
 				$output .= ' <label><input name="imgs[]" type="checkbox" value="' . $enc . '" />';
 				$output .= '<span class="ims-label"> ' . __('Select', $this->domain) . '</span> </label>';
 			}
+			$output .= apply_filters('ims_image_tag', '', $image);
 			$output .= "</{$captiontag}></{$imagetag}><!--.hmedia-->";
 		}
 
@@ -1328,12 +1330,12 @@ class ImStoreFront extends ImStore {
 
 		if ($this->cart['promo']['discount'])
 			$this->integrity = true;
-		elseif ($this->cart['items'] && $this->cart['subtotal'] == $this->cart['total'])
+		elseif($this->cart['items'] && $this->cart['subtotal'] == $this->cart['total'])
 			$this->integrity = true;
 
 		//send emails 
 		$message = preg_replace($this->opts['tags'], $this->subtitutions, $this->opts['notifymssg']);
-		$message .= $this->get_download_links($this->cart, $data['mc_gross'], $integrity);
+		$message .= $this->get_download_links($this->cart, $data['mc_gross'], $this->integrity);
 
 		$headers = 'From: "' . $this->opts['receiptname'] . '" <' . $this->opts['receiptemail'] . ">\r\n";
 		$headers .= "Content-type: text/html; charset=utf8\r\n";
@@ -1342,7 +1344,7 @@ class ImStoreFront extends ImStore {
 
 		if ($this->opts['emailreceipt'] && !get_post_meta($this->orderid, '_ims_email_sent', true)) {
 			$message = make_clickable(wpautop(stripslashes(preg_replace($this->opts['tags'], $this->subtitutions, $this->opts['thankyoureceipt']))));
-			$message .= $this->get_download_links($this->cart, $data['mc_gross'], $integrity);
+			$message .= $this->get_download_links($this->cart, $data['mc_gross'], $this->integrity);
 
 			wp_mail($_POST['user_email'], sprintf(__('%s receipt.', $this->domain), get_bloginfo('blogname')), $message, $headers);
 		}
@@ -1361,7 +1363,7 @@ class ImStoreFront extends ImStore {
 	 */
 	function get_download_links($cart, $total, $integrity = false) {
 
-		if (empty($cart) || $total === false || $cart['data_integrity'] || $cart['total'] != $total)
+		if (empty($cart) || $total === false || !$integrity || $cart['total'] != $total)
 			return false;
 
 		if ($this->download_links !== false)
@@ -1416,7 +1418,7 @@ class ImStoreFront extends ImStore {
 			'add-to-favorite' => __("Add to favorites", $this->domain),
 			'remove-from-favorite' => __("Remove", $this->domain),
 			'add-images-to-cart' => __("Add to cart", $this->domain)
-				));
+		));
 
 		$nav = '<div class="ims-toolbar"><ul class="ims-tools-nav">';
 		foreach ($this->subnav as $key => $label) {
@@ -1579,8 +1581,10 @@ class ImStoreFront extends ImStore {
 		$data = maybe_unserialize($sizedata[0]->meta);
 		unset($data['random']);
 
-		foreach ($data as $size)
-			$sizes[$size['name']] = $size;
+		foreach ($data as $size){
+			$key = str_replace(array('|','\\','.',' '),'',$size['name']);
+			$sizes[$key] = $size;
+		}
 
 		return $sizes;
 	}
@@ -1650,20 +1654,21 @@ class ImStoreFront extends ImStore {
 
 		$per_page = ( empty($this->opts['imgs_per_page']) ) ? get_query_var('posts_per_page') : $this->opts['imgs_per_page'];
 		$offset = (empty($paged)) ? 0 : (($per_page) * $paged) - $per_page;
-
-		$this->attachments = $wpdb->get_results($wpdb->prepare(
-			"SELECT SQL_CALC_FOUND_ROWS ID, post_title, guid, post_author,
-			meta_value meta, post_excerpt, post_expire FROM $wpdb->posts AS p
-			LEFT JOIN $wpdb->postmeta AS pm ON p.ID = pm.post_id
-			WHERE post_type = 'ims_image'
-			AND meta_key = '_wp_attachment_metadata'
-			AND post_status = 'publish' AND post_parent = %d
-			ORDER BY $this->sortby $this->order
-			LIMIT $offset, $per_page", $this->galid
-		));
-
-		if (empty($this->attachments))
-			return false;
+		
+		do_action('ims_get_gallery_images', $this, $per_page, $offset);
+		
+		if(empty($this->attachments)){
+			$this->attachments = $wpdb->get_results($wpdb->prepare(
+				"SELECT SQL_CALC_FOUND_ROWS ID, p.post_title, p.guid, p.post_author,
+				pm.meta_value meta, p.post_excerpt, p.post_expire FROM $wpdb->posts AS p
+				LEFT JOIN $wpdb->postmeta AS pm ON p.ID = pm.post_id
+				WHERE p.post_type = 'ims_image'
+				AND pm.meta_key = '_wp_attachment_metadata'
+				AND p.post_status = 'publish' AND p.post_parent = %d
+				ORDER BY $this->sortby $this->order
+				LIMIT $offset, $per_page", $this->galid
+			));
+		}
 
 		if ($this->imspage == 'photos' && is_singular("ims_gallery")) {
 			$wp_query->post_count = count($this->attachments);
@@ -1675,6 +1680,7 @@ class ImStoreFront extends ImStore {
 			$post->meta = maybe_unserialize($post->meta);
 			$images[] = $post;
 		} $this->attachments = $images;
+		
 	}
 
 	/**
@@ -1843,7 +1849,7 @@ class ImStoreFront extends ImStore {
 		if (empty($_POST['ims-to-cart-ids']))
 			$this->error = __('There was a problem adding the images to the cart.', $this->domain);
 
-		do_action('ims_berofe_add_to_cart', &$this->cart);
+		do_action('ims_berofe_add_to_cart', $this->cart);
 
 		if (!empty($this->error))
 			return;
@@ -1853,6 +1859,8 @@ class ImStoreFront extends ImStore {
 		$this->cart['items'] = 0;
 		$this->cart['tax'] = false;
 		$this->cart['shipping'] = 0;
+		$this->cart['tracking'] = false;
+		$this->cart['gallery_id'] = false;
 		$this->cart['instructions'] = false;
 		$this->cart['shipping_type'] = 0;
 		$this->cart['shippingcost'] = false;
@@ -1875,7 +1883,8 @@ class ImStoreFront extends ImStore {
 			$id = $this->url_decrypt($id);
 
 			foreach ($_POST['ims-image-size'] as $size) {
-
+				
+				$size = str_replace(array('|','\\','.',' '),'',$size);
 				$this->cart['images'][$id][$size][$color]['quantity'] =
 				isset($this->cart['images'][$id][$size][$color]['quantity']) ?
 				$this->cart['images'][$id][$size][$color]['quantity'] += $_POST['ims-quantity'] : $_POST['ims-quantity'];
@@ -1956,7 +1965,7 @@ class ImStoreFront extends ImStore {
 			$this->cart['total'] += $this->cart['tax'];
 		}
 
-		do_action('ims_before_save_cart', &$this->cart);
+		do_action('ims_before_save_cart', $this->cart);
 
 		if (empty($_COOKIE['ims_orderid_' . COOKIEHASH])
 				|| empty($this->cart_stat) || $this->cart_stat != 'draft') {
@@ -1978,7 +1987,7 @@ class ImStoreFront extends ImStore {
 		}else
 			update_post_meta($this->orderid, '_ims_order_data', $this->cart);
 
-		do_action('ims_after_add_to_cart', &$this->cart);
+		do_action('ims_after_add_to_cart', $this->cart);
 		
 		if (!empty($this->error))
 			return;
@@ -2000,12 +2009,12 @@ class ImStoreFront extends ImStore {
 		if (!wp_verify_nonce($_REQUEST["_wpnonce"], "ims_submit_order"))
 			wp_die('Security check failed. Try refreshing the page.');
 
-		do_action('ims_before_update_cart', &$this);
+		do_action('ims_before_update_cart', $this);
 
 		//remove images
 		if (isset($_POST['ims-remove']) && is_array($_POST['ims-remove'])) {
 			foreach ($_POST['ims-remove'] as $delete) {
-				$values = explode('|', $delete);
+				$values = explode('|', $delete,3);
 				$values[0] = $this->url_decrypt($values[0]);
 
 				unset($this->cart['images'][$values[0]][$values[1]][$values[2]]);
@@ -2110,7 +2119,7 @@ class ImStoreFront extends ImStore {
 		if (isset($_POST['instructions']))
 			$this->cart['instructions'] = trim($_POST['instructions']);
 
-		do_action('ims_after_update_cart', &$this);
+		do_action('ims_after_update_cart', $this);
 		update_post_meta($this->orderid, '_ims_order_data', $this->cart);
 		
 		if (!empty($this->error))

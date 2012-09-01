@@ -227,7 +227,7 @@ class ImStoreImage {
 			} elseif ($opts['watermark'] == 2 && $opts["watermarkurl"]) {
 
 				$wmpath = $opts["watermarkurl"];
-				$wmtype = wp_check_filetype(basename($opts["watermarkurl"]));
+				$wmtype = wp_check_filetype(basename($wmpath));
 
 				if (!preg_match('/(png|jpg|jpeg|gif )$/i', $wmtype['ext']))
 					die();

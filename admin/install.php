@@ -207,10 +207,9 @@ class ImStoreInstaller extends ImStore {
 	 * @since 2.0.0 
 	 */
 	function update() {
-		global $wpdb, $wp_rewrite;
+		global $wpdb;
 
 		wp_cache_flush();
-		$wp_rewrite->flush_rules();
 
 		//update database if updating before 2.0.0
 		if ($this->ver < "2.0.0") {

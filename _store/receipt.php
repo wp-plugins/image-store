@@ -25,6 +25,8 @@ $this->subtitutions = array(
 	$this->format_price($data['payment_status']), 
 	get_the_title( $this->orderid ),
 	$this->format_price($cart['shipping']), 
+	$cart['tracking'], 
+	$cart['gallery_id'],
 	$data['txn_id'],
 	$data['last_name'], 
 	$data['first_name'], 
@@ -44,7 +46,7 @@ if( !empty($this->cart['promo']['discount']) )
 elseif( isset($this->cart['items']) && $this->cart['subtotal'] == $this->cart['total'])
 	$validated = true;
 			
-$output .= $this->get_download_links($this->cart, $data['mc_gross'], $this->integrity );
+$output .= $this->get_download_links($this->cart, $data['mc_gross'], $validated );
 
 setcookie( 'ims_orderid_' . COOKIEHASH,  false, (time()-315360000), COOKIEPATH, COOKIE_DOMAIN );
 $output .= '<div class="cl"></div>';

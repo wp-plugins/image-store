@@ -570,7 +570,8 @@ class ImStoreAdmin extends ImStore {
 			'ims_gallery_page_ims-settings', 
 			'ims_gallery_page_ims-customers', 
 		);
-		do_action('ims_admin_init', &$this);
+		
+		do_action('ims_admin_init', $this);
 	}
 
 	/**
