@@ -135,7 +135,7 @@ add_meta_box('new_promo', __('Promotion', $this->domain), 'ims_new_promotion', '
 <?php
 foreach ($tabs as $tabid => $tabname) {
 	echo '<div id="' . $tabid . '" class="ims-box pricing" >';
-	do_action( "ims_pricing_{$tabid}_tab", &$this);
+	do_action( "ims_pricing_{$tabid}_tab", $this);
 	echo '</div>';
 }
 
@@ -656,6 +656,7 @@ function ims_image_sizes($ims,$args) {
 				<?php 
 				foreach((array)get_option( 'ims_sizes') as $key => $size ): 
 					$sizedata = array( );
+					$key = str_replace('|','',$key);
 					$price = isset( $size['price'] ) ? $size['price'] : false;
 					$sizedata = isset( $size['w'] ) ? array( $size['w'], $size['h'] ) : explode("x",strtolower($size['name']));
 				?>

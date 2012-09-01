@@ -71,8 +71,10 @@ class ImStoreDownloadImage {
 			wp_die(__('Sorry, we could find the image'));
 
 		if (isset($this->attachment['sizes'][$imgsize]['path'])) {
+			
 			$this->image_dir = $this->attachment['sizes'][$imgsize]['url'];
-		} elseif ($dimentions['w'] && $dimentions['h'] && empty($this->store->opts['downloadorig'])) {
+			
+		} elseif ($dimentions['w'] && $dimentions['h'] && empty($ImStore->opts['downloadorig'])) {
 
 			$this->clean = true;
 			$this->image_dir = image_resize(
@@ -86,12 +88,15 @@ class ImStoreDownloadImage {
 				$this->clean = false;
 				$this->image_dir = $ImStore->content_dir . "/" . $this->attachment['file'];
 			}
-		} elseif (!empty($this->store->opts['downloadorig'])) {
+		} elseif (!empty($ImStore->opts['downloadorig'])) {
+			
 			$this->image_dir = $ImStore->content_dir . "/" . $this->attachment['file'];
+		
 		} else {
 
 			$this->image_dir = apply_filters('ims_download_image_preview', $this->attachment['sizes']['preview']['path'], $this->id);
 		}
+		
 		$this->display_image();
 	}
 
@@ -103,7 +108,7 @@ class ImStoreDownloadImage {
 	 */
 	function display_image() {
 
-		global $wpdb, $ImStore;
+		global $wpdb;
 		$type = wp_check_filetype(basename($this->image_dir));
 		$ext = $type['ext'];
 		$filename = $wpdb->get_var("SELECT post_title FROM $wpdb->posts WHERE ID = " . $this->id);
@@ -116,7 +121,7 @@ class ImStoreDownloadImage {
 		$color = isset($_REQUEST['c']) ? $_REQUEST['c'] : false;
 		$modified = gmdate("D, d M Y H:i:s", @filemtime($this->image_dir));
 		$etag = '"' . md5($modified . $color) . '"';
-		$client_etag = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) : false;
+		//$client_etag = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) : false;
 
 		header('ETag: ' . $etag);
 		header('Cache-control: private');

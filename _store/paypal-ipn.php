@@ -21,8 +21,11 @@ class ImStorePaypalIPN {
 
 		$postdata = '';
 		$this->opts = $ImStore->opts;
-
-		$url = 'https://www.sandbox.paypal.com/cgi-bin/webscr'; //$ImStore->gateway[$this->opts['gateway']];
+		
+		if( $this->opts['gateway']['paypalsand'] )
+		$url =  $ImStore->gateway['paypalsand']['url'] ;
+		else  $url = $ImStore->gateway['paypalprod']['url'] ;
+		
 		$log = array('REQUEST_TIME', 'REMOTE_ADDR', 'REQUEST_METHOD', 'HTTP_USER_AGENT', 'REMOTE_PORT');
 
 		foreach ($_POST as $i => $v)
@@ -41,7 +44,9 @@ class ImStorePaypalIPN {
 		$fp = fsockopen($ssl . $web['host'], $web['port'], $errnum, $errstr, 30);
 
 		if (!$fp) {
-			die();
+			
+			return;
+			
 		} else {
 			fputs($fp, "POST " . $web['path'] . " HTTP/1.1\r\n");
 			fputs($fp, "Host: " . $web['host'] . "\r\n");
@@ -62,17 +67,25 @@ class ImStorePaypalIPN {
 
 				// information was verified
 				$this->process_paypal_IPN();
-				die();
+				return;
+				
 			} else {
+				
 				$logtext = '';
 				$file = IMSTORE_ABSPATH . "/ipn_log.txt";
 				$hd = fopen($file, 'a');
+				
+				foreach($_POST as $i => $v)
+					$logtext .= $i.'='.$v."\n";
+			
 				foreach ($log as $key)
 					$logtext .= $key . '=' . $_SERVER[$key] . ',';
-
-				fwrite($hd, $web['host'] . "," . $logtext . "\n");
+					
+				$logtext .= "\n$url\n_________________\n";
+				
+				fwrite($hd, $web['host'] . "," . $logtext);
 				fclose($hd);
-				die();
+				return;
 			}
 		}
 	}
@@ -86,7 +99,6 @@ class ImStorePaypalIPN {
 	function process_paypal_IPN() {
 		global $ImStore;
 
-
 		$cartid = (int) $_POST['custom'];
 		$cart = get_post_meta($cartid, '_ims_order_data', true);
 		$total = (isset($cart['discounted'])) ? $cart['discounted'] : $cart['total'];
@@ -98,10 +110,9 @@ class ImStorePaypalIPN {
 		abs($_POST['mc_gross'] - $ImStore->format_price($total, false)) < 0.00001)
 			$_POST['data_integrity'] = true;
 
-
 		wp_update_post(array(
-			'post_expire' => '0',
 			'ID' => $cartid,
+			'post_expire' => '0',
 			'post_status' => 'pending',
 			'post_date' => current_time('timestamp')
 		));
@@ -128,7 +139,7 @@ class ImStorePaypalIPN {
 		setcookie('ims_orderid_' . COOKIEHASH, false, (time() - 315360000), COOKIEPATH, COOKIE_DOMAIN);
 
 		if (empty($this->opts['emailreceipt']))
-			die();
+			return;
 
 		//notify buyers
 		if (isset($_POST['payer_email']) && is_email($_POST['payer_email'])
@@ -141,7 +152,7 @@ class ImStorePaypalIPN {
 			wp_mail($_POST['payer_email'], sprintf(__('%s receipt.', $ImStore->domain), get_bloginfo('blogname')), $message, $headers);
 			update_post_meta($cartid, '_ims_email_sent', 1);
 		}
-		die();
+		return;
 	}
 }
 

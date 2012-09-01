@@ -277,14 +277,12 @@ function ims_customers_count_links($pagenowurl, $user_status) {
 		FROM $wpdb->usermeta WHERE meta_key = 'ims_status' GROUP by meta_value"
 	);
 	
-	print_r( $r );
-
 	if (empty($r)) return;
 	$status = ( isset($_GET['status']) ) ? $_GET['status'] : 'active';
 
 	foreach ($r as $obj) {
 		$current = ($status == $obj->status) ? ' class="current"' : '';
-		//$links[] = '<li><a href="' . $pagenowurl . '&amp;status=' . $obj->status . '"' . $current . '>' . $user_status[$obj->status] . ' <span class="count">( ' . $obj->count . ')</span></a></li>';
+		$links[] = '<li><a href="' . $pagenowurl . '&amp;status=' . $obj->status . '"' . $current . '>' . $user_status[$obj->status] . ' <span class="count">( ' . $obj->count . ')</span></a></li>';
 	}
 
 	$links = apply_filters("ims_user_status_links", $links, $r, $pagenowurl);

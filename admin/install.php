@@ -572,7 +572,7 @@ class ImStoreInstaller extends ImStore {
 	 * @since 0.5.0 
 	 */
 	function imstore_uninstall() {
-		global $wpdb,$wp_rewrite;
+		global $wpdb;
 
 		if (!current_user_can('edit_plugins') || !current_user_can('ims_change_settings'))
 			return;

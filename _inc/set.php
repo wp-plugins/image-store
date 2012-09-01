@@ -483,14 +483,14 @@ class ImStoreSet extends ImStoreAdmin {
 			wp_redirect($this->pageurl . '&ms=3');
 			die();
 
-			//uninstall
+		//uninstall
 		} elseif (isset($_POST['uninstall'])) {
 
 			check_admin_referer('ims_settings');
 			include( IMSTORE_ABSPATH . '/admin/install.php' );
 			ImStoreInstaller::imstore_uninstall();
 
-			//save options
+		//save options
 		} elseif (isset($_POST['ims-action'])) {
 			$action = $_POST['ims-action'];
 
@@ -503,7 +503,7 @@ class ImStoreSet extends ImStoreAdmin {
 			}
 
 			//clear image cache data
-			update_post_meta('ims_cache_time', time());
+			update_option('ims_cache_time', time());
 
 			if ('permissions' == $action) {
 				if (!is_numeric($_POST['userid'])) {
@@ -535,7 +535,7 @@ class ImStoreSet extends ImStoreAdmin {
 					foreach ($val['opts'] as $k2 => $v2) {
 						if (get_option($key . $k2))
 							update_option($key . $k2, $_POST[$key][$k2]);
-						elseif (is_array($this->opts[$key]))
+						elseif (isset($this->opts[$key]) && is_array($this->opts[$key]))
 							$this->opts[$key][$k2] = $_POST[$key][$k2];
 						elseif (!empty($_POST[$key][$k2]))
 							$this->opts[$key . $k2] = $_POST[$key][$k2];

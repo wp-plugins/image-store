@@ -109,7 +109,6 @@ if ( is_wp_error($id) ){
 //memory limit
 set_time_limit( 0 );
 do_action( 'ims_before_attachment_metadata', $id, $file );
-ini_set( 'memory_limit', $ImStore->get_memory_limit());
 
 $filedata = wp_generate_attachment_metadata( $id, $file );
 $filedata['image_meta'] = $image_meta;

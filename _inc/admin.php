@@ -171,6 +171,8 @@ class ImStoreAdmin extends ImStore {
 	 * @since 0.5.0 
 	 */
 	function deactivate() {
+		global $wp_rewrite;
+		$wp_rewrite->flush_rules();
 		wp_clear_scheduled_hook('imstore_expire');
 	}
 
@@ -394,10 +396,9 @@ class ImStoreAdmin extends ImStore {
 			$path = "$path/_resized";
 
 		//generate mini image for thumbnail edit
-		if (isset($_REQUEST['target']) &&
-				'thumbnail' == preg_replace('/[^a-z0-9_-]+/i', '', $_REQUEST['target'])) {
+		if (isset($_REQUEST['target']) && 'thumbnail' == preg_replace('/[^a-z0-9_-]+/i', '', $_REQUEST['target'])) {
 			$resized_file = image_resize(
-					$this->content_dir . "$path/" . $metadata['sizes']['thumbnail']['file'], get_option("mini_size_w"), get_option("mini_size_h"), true
+				$this->content_dir . "$path/" . $metadata['sizes']['thumbnail']['file'], get_option("mini_size_w"), get_option("mini_size_h"), true
 			);
 			if (!is_wp_error($resized_file) && $resized_file && $info = getimagesize($resized_file))
 				$metadata['sizes']['mini'] = array(
@@ -569,7 +570,8 @@ class ImStoreAdmin extends ImStore {
 			'ims_gallery_page_ims-settings', 
 			'ims_gallery_page_ims-customers', 
 		);
-		do_action('ims_admin_init', &$this);
+		
+		do_action('ims_admin_init', $this);
 	}
 
 	/**
@@ -1095,7 +1097,7 @@ class ImStoreAdmin extends ImStore {
 	 */
 	function delete_post($postid) {
 		if (!current_user_can('ims_manage_galleries')
-				|| !$this->opts['deletefiles'] || 'ims_gallery' != get_post_type($postid))
+		|| !$this->opts['deletefiles'] || 'ims_gallery' != get_post_type($postid))
 			return $postid;
 
 		if ($folderpath = get_post_meta($postid, '_ims_folder_path', true))

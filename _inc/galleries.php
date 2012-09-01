@@ -111,7 +111,7 @@ class ImStoreGallery extends ImStoreAdmin {
 			add_meta_box($key, $label, array(&$this, $key), "ims_gallery", "normal");
 		add_meta_box("ims_customers_box", __('Customers', $this->domain), array(&$this, "customers_metabox"), "ims_gallery", "side", "low");
 
-		do_action('ims_gallery_init', &$this);
+		do_action('ims_gallery_init', $this);
 	}
 
 	/**
@@ -339,7 +339,7 @@ class ImStoreGallery extends ImStoreAdmin {
 				<td><label for="_to_attach"><?php _e('Link to attachment', $this->domain) ?></label></td>
 				<td><input type="checkbox" name="_to_attach" id="_to_attach" <?php checked(true, $_to_attach) ?> value="1" /></td>
 			</tr>
-		<?php do_action('ims_info_metabox', &$this) ?>
+		<?php do_action('ims_info_metabox', $this) ?>
 		</table>
 		<?php
 	}
@@ -574,7 +574,7 @@ class ImStoreGallery extends ImStoreAdmin {
 
 		if (empty($this->columns))
 			$this->gallery_screen_columns(false);
-
+				
 		$r = "";
 		foreach ($this->columns as $column_id => $column_name) {
 			$hide = ( $this->in_array($column_id, $this->hidden) ) ? ' hidden' : '';
@@ -583,10 +583,11 @@ class ImStoreGallery extends ImStoreAdmin {
 					$r .= '<th class="column-' . $column_id . ' check-column"><input type="checkbox" name="galleries[]" value="' . esc_attr($id) . '" /></th>';
 					break;
 				case 'imthumb':
-					$r .= '<td class="column-' . $column_id . $hide . '">';
-					$r .= '<a href="' . $this->content_url . $this->galpath . "/" . basename($data['file']) . '?" class="thickbox" >';
-					$r .= '<img src="' . $this->content_url . $this->galpath . "/_resized/" . $data['sizes']['mini']['file'] . '" /></a>';
-					$r .= '</td>';
+					$mr = '<td class="column-' . $column_id . $hide . '">';
+					$mr .= '<a href="' . $this->content_url . $this->galpath . "/" . basename($data['file']) . '?" class="thickbox" >';
+					$mr .= '<img src="' . $this->content_url . $this->galpath . "/_resized/" . $data['sizes']['mini']['file'] . '" /></a>';
+					$mr .= '</td>';
+					$r .= apply_filters('ims_image_row_image', $mr, $id, $data, $attch);
 					break;
 				case 'immetadata':
 					$r .= '<td class="column-' . $column_id . $hide . '">';
@@ -632,6 +633,8 @@ class ImStoreGallery extends ImStoreAdmin {
 					break;
 			}
 		}
+		
+
 		echo $r;
 	}
 

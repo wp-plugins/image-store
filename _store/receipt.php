@@ -17,28 +17,36 @@ if (!defined('ABSPATH'))
 wp_set_current_user( 0 );
  
 $this->orderid = isset( $_POST['custom'] ) ?  $_POST['custom'] : $this->orderid;
-$cart = get_post_meta( $this->orderid, '_ims_order_data', true );
 $data = get_post_meta( $this->orderid, '_response_data', true);
- 
+$cart = get_post_meta( $this->orderid, '_ims_order_data', true );
+
 $this->subtitutions = array(
-	$data['mc_gross'], $this->format_price($data['payment_status']), get_the_title( $this->orderid ),
-	$this->format_price($cart['shipping']), $data['txn_id'],$data['last_name'], $data['first_name'], $data['payer_email'],
+	$data['mc_gross'], 
+	$this->format_price($data['payment_status']), 
+	get_the_title( $this->orderid ),
+	$this->format_price($cart['shipping']), 
+	$cart['tracking'], 
+	$cart['gallery_id'],
+	$data['txn_id'],
+	$data['last_name'], 
+	$data['first_name'], 
+	$data['payer_email'],
 );
-		
+
+$this->integrity = false;		
 $output .= '<div class="ims-innerbox">
 	 <div class="thank-you-message">' .
 		(  make_clickable( wpautop( stripslashes( preg_replace( $this->opts['tags'], $this->subtitutions, $this->opts['thankyoureceipt'] )) ) ) )
 	 . '</div>
 </div>';
 
-
 $validated = false;
-if( $this->cart['promo']['discount'] )
+if( !empty($this->cart['promo']['discount']) )
 	$validated = true;
-elseif( $this->cart['items'] && $this->cart['subtotal'] == $this->cart['total'])
+elseif( isset($this->cart['items']) && $this->cart['subtotal'] == $this->cart['total'])
 	$validated = true;
 			
-$output .= $this->get_download_links($this->cart, $data['mc_gross'], 	$this->integrity );
+$output .= $this->get_download_links($this->cart, $data['mc_gross'], $validated );
 
 setcookie( 'ims_orderid_' . COOKIEHASH,  false, (time()-315360000), COOKIEPATH, COOKIE_DOMAIN );
 $output .= '<div class="cl"></div>';
