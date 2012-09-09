@@ -86,7 +86,7 @@ $output .= '<tr role="row" class="divider-row"><td role="gridcell" colspan="6">&
 $output .= '<tr role="row" class="subhead-row">';
 $output .=	 '<td role="gridcell" colspan="2" class="subhead">'. __( 'Shipping', $this->domain ).'</td>';
 $output .=	 '<td role="gridcell" colspan="2" class="subhead">'.__( 'Color Options', $this->domain ).'</td>';
-$output .=	 '<td role="gridcell" colspan="2" class="subhead">'. __( 'Fisnishes', $this->domain ).'</td>';
+$output .=	 '<td role="gridcell" colspan="2" class="subhead">'. __( 'Finishes', $this->domain ).'</td>';
 $output .= '</tr>';
 
 $max = max( count($meta['finishes']), count($meta['colors']), count($this->shipping_opts) );

@@ -13,13 +13,13 @@ $url = isset( $_REQUEST['url'] ) ? rtrim( $_REQUEST['url'] ) : '';
  !! Important Note: AlphaImageLoader src paths are relative to the HTML document,
  while regular CSS background images are relative to the CSS document.
 */
-.cboxIE div#cboxTopLeft { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $url?>_css/colorbox/images/borderTopLeft.png);}
-.cboxIE div#cboxTopCenter { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $url?>_css/colorbox/images/borderTopCenter.png);}
-.cboxIE div#cboxTopRight { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $url?>_css/colorbox/images/borderTopRight.png);}
-.cboxIE div#cboxBottomLeft { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $url?>_css/colorbox/images/borderBottomLeft.png);}
-.cboxIE div#cboxBottomCenter { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $url?>_css/colorbox/images/borderBottomCenter.png);}
-.cboxIE div#cboxBottomRight { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $url?>_css/colorbox/images/borderBottomRight.png);}
-.cboxIE div#cboxMiddleLeft { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $url?>_css/colorbox/images/borderMiddleLeft.png);}
-.cboxIE div#cboxMiddleRight { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $url?>_css/colorbox/images/borderMiddleRight.png);}
+.cboxIE div#cboxTopLeft { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $url?>/_img/borderTopLeft.png);}
+.cboxIE div#cboxTopCenter { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $url?>/_img/borderTopCenter.png);}
+.cboxIE div#cboxTopRight { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $url?>/_img/borderTopRight.png);}
+.cboxIE div#cboxBottomLeft { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $url?>/_img/borderBottomLeft.png);}
+.cboxIE div#cboxBottomCenter { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $url?>/_img/borderBottomCenter.png);}
+.cboxIE div#cboxBottomRight { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $url?>/_img/borderBottomRight.png);}
+.cboxIE div#cboxMiddleLeft { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $url?>/_img/borderMiddleLeft.png);}
+.cboxIE div#cboxMiddleRight { background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true,sizingMethod='scale',src=<?php echo $url?>/_img/borderMiddleRight.png);}
 div#ims-mainbox div#ims-slideshow img{ max-width:340px; border:none; padding:0; margin:0}
 div.ims-slideshow-box .ims-slideshow{ padding:5px 0 0 0}

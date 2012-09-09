@@ -31,6 +31,11 @@ class ImStorePaypalIPN {
 		foreach ($_POST as $i => $v)
 			$postdata .= $i . '=' . urlencode($v) . '&';
 		$postdata .= 'cmd=_notify-validate';
+		
+		/*$file = IMSTORE_ABSPATH . "/mytext.txt"; 
+		$hd = fopen($file,'w');
+		fwrite($hd,$postdata."\n"); 
+		fclose($hd);*/
 
 		$web = parse_url($url);
 		if ($web['scheme'] == 'https' ||
@@ -127,7 +132,7 @@ class ImStorePaypalIPN {
 		//dont change array order
 		$this->subtitutions = array(
 			$_POST['mc_gross'], $_POST['payment_status'], get_the_title($cartid),
-			$cart['shipping'], $_POST['txn_id'],$_POST['last_name'], $_POST['first_name'], $_POST['payer_email'],
+			$ImStore->format_price($cart['shipping']), $_POST['txn_id'],$_POST['last_name'], $_POST['first_name'], $_POST['payer_email'],
 		);
 
 		do_action('ims_after_paypal_ipn', $cartid, $cart);

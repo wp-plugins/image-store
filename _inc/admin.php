@@ -206,7 +206,7 @@ class ImStoreAdmin extends ImStore {
 	 * @return void
 	 * @since 0.5.0 
 	 */
-	function activated_plugin($plugin, $network_wide) {
+	function activated_plugin($plugin, $network_wide =false) {
 		if (!$network_wide || $plugin != IMSTORE_FOLDER)
 			return;
 
@@ -387,18 +387,17 @@ class ImStoreAdmin extends ImStore {
 		if ('ims_image' != get_post_type($attachment_id) || empty($metadata['file']))
 			return $metadata;
 
-		if (stristr($metadata['file'], 'wp-content') !== false)
-			$path = dirname(str_ireplace($this->content_dir, '', $metadata['file']));
-		else
-			$path = dirname($metadata['file']);
-
+		$filename = basename($metadata['file']);
+		$path =  ltrim(dirname(str_ireplace($this->content_dir, '', $metadata['file'])),'/');
+		
+		$metadata['file'] = "$path/$filename";
 		if (!preg_match(" /(_resized)/i", $path))
 			$path = "$path/_resized";
-
+	
 		//generate mini image for thumbnail edit
 		if (isset($_REQUEST['target']) && 'thumbnail' == preg_replace('/[^a-z0-9_-]+/i', '', $_REQUEST['target'])) {
 			$resized_file = image_resize(
-				$this->content_dir . "$path/" . $metadata['sizes']['thumbnail']['file'], get_option("mini_size_w"), get_option("mini_size_h"), true
+				$this->content_dir . "/$path/" . $metadata['sizes']['thumbnail']['file'], get_option("mini_size_w"), get_option("mini_size_h"), true
 			);
 			if (!is_wp_error($resized_file) && $resized_file && $info = getimagesize($resized_file))
 				$metadata['sizes']['mini'] = array(
@@ -409,7 +408,6 @@ class ImStoreAdmin extends ImStore {
 		}
 
 		if (empty($metadata['sizes']['mini']) || empty($metadata['sizes']['preview']) || empty($metadata['sizes']['thumbnail'])) {
-			$filename = basename($metadata['file']);
 			$orginal_data = array('file' => $filename, 'width' => $metadata['width'], 'height' => $metadata['height']);
 			if (!file_exists($this->content_dir . "/$path/" . $filename))
 				@copy($this->content_dir . '/' . $metadata['file'], $this->content_dir . "/$path/" . $filename);
@@ -423,11 +421,12 @@ class ImStoreAdmin extends ImStore {
 
 		if (empty($metadata['sizes']['thumbnail']))
 			$metadata['sizes']['thumbnail'] = $orginal_data;
-
+		
 		foreach ($metadata['sizes'] as $size => $sizedata) {
-			$metadata['sizes'][$size]['path'] = $this->content_dir . "/$path/" . $sizedata['file'];
 			$metadata['sizes'][$size]['url'] = $this->content_url . "/$path/" . $sizedata['file'];
+			$metadata['sizes'][$size]['path'] = $this->content_dir . "/$path/" . $sizedata['file'];
 		}
+	
 		return $metadata;
 	}
 

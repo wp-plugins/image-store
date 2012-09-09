@@ -25,8 +25,6 @@ $this->subtitutions = array(
 	$this->format_price($data['payment_status']), 
 	get_the_title( $this->orderid ),
 	$this->format_price($cart['shipping']), 
-	$cart['tracking'], 
-	$cart['gallery_id'],
 	$data['txn_id'],
 	$data['last_name'], 
 	$data['first_name'], 
@@ -40,13 +38,12 @@ $output .= '<div class="ims-innerbox">
 	 . '</div>
 </div>';
 
-$validated = false;
-if( !empty($this->cart['promo']['discount']) )
-	$validated = true;
-elseif( isset($this->cart['items']) && $this->cart['subtotal'] == $this->cart['total'])
-	$validated = true;
-			
-$output .= $this->get_download_links($this->cart, $data['mc_gross'], $validated );
+if( !empty($cart['promo']['discount']) )
+	$this->integrity = true;
+elseif( isset($cart['items']) && $cart['subtotal'] == $cart['total'] )
+	$this->integrity= true;
+	
+$output .= $this->get_download_links($cart, $data['mc_gross'], $this->integrity);
 
 setcookie( 'ims_orderid_' . COOKIEHASH,  false, (time()-315360000), COOKIEPATH, COOKIE_DOMAIN );
 $output .= '<div class="cl"></div>';

@@ -229,7 +229,7 @@ class ImStoreImage {
 				$wmpath = $opts["watermarkurl"];
 				$wmtype = wp_check_filetype(basename($wmpath));
 
-				if (!preg_match('/(png|jpg|jpeg|gif )$/i', $wmtype['ext']))
+				if (!preg_match('/(png|jpg|jpeg|gif)$/i', $wmtype['ext']))
 					die();
 
 				if (@file_get_contents($wmpath)) {

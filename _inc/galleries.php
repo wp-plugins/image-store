@@ -191,7 +191,7 @@ class ImStoreGallery extends ImStoreAdmin {
 		else
 			wp_enqueue_script('ims-swupload', IMSTORE_URL . '/_js/swupload.js', array('jquery'), $this->version, true);
 
-		wp_localize_script('ims-gallery', 'imsgal', array('adminurl' => admin_url(), 'trash' => __('Trash', $this->domain),
+		wp_localize_script('ims-gallery', 'imsgal', array('adminurl' => rtrim(admin_url(),'/'), 'trash' => __('Trash', $this->domain),
 			'deletefile' => $this->opts['deletefiles'], 'imsajax' => IMSTORE_ADMIN_URL . '/ajax.php',
 		));
 	}

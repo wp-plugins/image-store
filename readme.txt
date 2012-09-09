@@ -1,11 +1,11 @@
 === Image Store ===
 Contributors: Hax
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8SJEQXK5NK4ES
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YM9GXCFBND89E
 Tags: e-commerce,shop,photo store,picture,image,galleries,imstore,image-store,secure,translate,translatable,watermark,slideshow,
 gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints,nextgen alternative
 Requires at least: 3.0.0
-Tested up to: 3.4.1
-Stable tag: 3.1.4
+Tested up to: 3.4.2
+Stable tag: 3.1.5
 
 Image Store (ImStore) is a photo gallery and store plugin for WordPress with Paypal and Google Checkout integration.
 
@@ -84,6 +84,15 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 
 == Changelog ==
 
+= 3.1.5=
+* Fixed: IE issues.
+* Fixed: Empty gallery error.
+* Fixed: Sales reports.
+* Fixed: Image Edit.
+* Fixed: Cart tax PayPal.
+* Fixed: Receipt issues.
+* Added: WP 3.4.2 support.
+
 = 3.1.4=
 * Fixed: PHP notices.
 * Fixed: Issues with image download.
@@ -142,86 +151,6 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * Fixed: Gallery folder delete issue.
 * Fixed: Image image upload in some servers
 
-= 3.0.9 =
-* Fixed: Gallery login for WP 3.4.
-* Fixed: IE slideshow CSS issues.
-* Fixed: Required fields asterisk.
-* Fixed: Variable references errors.
-* Fixed: Google checkout promotion code.
-* Changed: Settings page, trying to fix get_user() error some servers.
-* Added: Additional hooks.
-* Added: Price list notes.
-
-= 3.0.8 =
-* Change: Tranlation files load sequence
-* Added: Receipt email options.
-* Added: Email receipt to email notification only checkout.
-* Fixed: Image checkout limit. 
-* Fixed: Required fields indicator not displaying. 
-
-= 3.0.7 =
-* Code clean up.
-* Added: Admin sort columns
-* Fixed: Image display errors on some servers. 
-* Fixed: Fix short-code issue with albums.
-* Fixed: Image Hex to RGB color.
-
-= 3.0.6 =
-* Fixed: Download links notices.
-* Fixed: issues saving price lists.
-* Fixed: issue processing cart .
-
-= 3.0.5 =
-* Code clean up.
-* WP 3.4.0 compatible.
-* Added: Additional support for multisites.
-* Added: Additional security for secure images.
-* Added: Remove decimal point option.
-* Added: Disable store at gallery level.
-* Added: Option to link to image attachment at gallery level.
-* Fixed: Download links issues.
-* Fixed: Some issues with multisites.
-* Fixed: Single gallery template selection.
-* Fixed: Issue generating image sizes for small images.
-
-= 3.0.4 =
-* Added: additional hooks.
-* Added: additional shortcode options.
-* Fixed: blank price lists.
-* Fixed:disable sepia and b&w.
-* Fixed: gallery template selection.
-* Fixed: colorbox add to cart link on pricelist.
-* Fixed: Exit galleries when permalinks not activated.
-
-= 3.0.3 =
-* Added: watermark location
-* Added: add to cart in lightbox
-* Chaged: shortcode "count"
-* Fixed: add to cart redirect.
-* Fixed: price lists issues.
-* Fixed: promotion code error.
-* Fixed: Multisite option issues.
-* Fixed: download links
-
-= 3.0.2 =
-* Added: Additional multisite support.
-* Changed: Default settings.
-* Changed: Load text domain function.
-* Changed: Theme load order.
-* Fixed: Important cart fixed.
-* Fixed: Gallery pagination.
-* Fixed: Widget image display.
-* Fixed: Scan folder time out.
-* Fixed: Multisite bugs.
-* Fixed: Customer role Multisite.
-* Fixed: possible fix for "Internal Server Error" bug.
-
-= 3.0.1 =
-* Fixed: Colorbox.
-* Fixed: Logout galleries.
-* Fixed: Delete packages issue.
-* Fixed: Not being able to save image sizes.
-
 = Full change log =
 * http://xparkmedia.com/image-store/changelog/
 
@@ -232,7 +161,6 @@ Trent Foley(http://www.twospy.com/galleriffic/)
 
 = Colorbox =
 Jack Moore,Alex Gregory(http://colorpowered.com/colorbox/)
-
 
 == Upgrade Notice ==
 * Upgrade to 3.1.0 update image and taxonomy templates image-store/theme, deactivate/activate plugin.

@@ -222,7 +222,7 @@ class ImStoreInstaller extends ImStore {
 
 		$ims_ft_opts = get_option($this->optionkey);
 
-		//update options if updating from 2.0.8 and prior
+		//update options if updating from 2.0.8
 		if ($this->ver <= "2.0.8") {
 			$ims_ft_opts['album_template'] = 'page . php';
 			$ims_ft_opts['tags'][] = __('/%instructions%/', $this->domain);
@@ -250,21 +250,8 @@ class ImStoreInstaller extends ImStore {
 				__('%cart_discount_code%', $this->domain),
 				__('%cart_total_items%', $this->domain),
 			);
-			
-			$ims_ft_opts['tags'] = array(
-				__('/%total%/', $this->domain),
-				__('/%status%/', $this->domain),
-				__('/%gallery%/', $this->domain),
-				__('/%shipping%/', $this->domain),
-				__('/%order_number%/', $this->domain),
-				__('/%customer_last%/', $this->domain),
-				__('/%customer_first%/', $this->domain),
-				__('/%customer_email%/', $this->domain),
-				__('/%instructions%/', $this->domain),
-			);
-			update_option($this->optionkey, $ims_ft_opts);
 		}
-		
+			
 		//add finish options
 		if ($this->ver <= "3.1.0"){
 			$ims_ft_opts['googleid'] =  '';
@@ -306,6 +293,22 @@ class ImStoreInstaller extends ImStore {
 			
 			$this->ims_xtra_pricing_opts();
 			update_option('ims_site_url',get_option('siteurl'));
+			update_option($this->optionkey, $ims_ft_opts);
+		}
+		
+		//add finish options
+		if ($this->ver <= "3.1.5"){	
+			$ims_ft_opts['tags'] = array(
+				__('/%total%/', $this->domain),
+				__('/%status%/', $this->domain),
+				__('/%gallery%/', $this->domain),
+				__('/%shipping%/', $this->domain),
+				__('/%order_number%/', $this->domain),
+				__('/%customer_last%/', $this->domain),
+				__('/%customer_first%/', $this->domain),
+				__('/%customer_email%/', $this->domain),
+				__('/%instructions%/', $this->domain),
+			);
 			update_option($this->optionkey, $ims_ft_opts);
 		}
 
