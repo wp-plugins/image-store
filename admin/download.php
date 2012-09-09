@@ -130,7 +130,7 @@ class ImStoreDownloadImage {
 		header("Content-Transfer-Encoding: binary");
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 100000000) . ' GMT');
 		header('Cache-Control:max-age=' . ( time() + 100000000 ) . ', must-revalidate');
-		header('Content-Disposition: attachment; filename=' . apply_filters('ims_download_filename', $filename, $this->image_dir, $type, $this->id));
+		header('Content-Disposition: attachment; filename="' . apply_filters('ims_download_filename', $filename.".$ext", $this->image_dir, $type, $this->id).'"');
 
 		if (empty($_REQUEST['c']) || $_REQUEST['c'] == 'ims_color') {
 			readfile($this->image_dir);
