@@ -41,6 +41,7 @@ $this->data 		= get_post_meta( $this->orderid,'_response_data',true);
 		<?php
 			foreach( $this->cart['images'] as $id => $sizes ){
 				
+				$parentid = wp_get_post_parent_id($id);
 				$image = get_post_meta( $id, '_wp_attachment_metadata', true );
 				$mini = $image['sizes']['mini'];
 				
@@ -52,14 +53,14 @@ $this->data 		= get_post_meta( $this->orderid,'_response_data',true);
 						$colorname = isset( $this->color[$color] ) ? $this->color[$color] : '';
 						$r .= '<div class="clear-row">';
 						$r .= '<span class="quantity">' .  $item['quantity'] . '</span>';
-						$r .= '<span class="size">' .  $size . '</span>';
+						$r .= '<span class="size">' . ( isset($item['size']) ?$item['size']:$size). '</span>';
 						$r .= '<span class="color">' . $colorname . $this->format_price( $item['color'], true, ' + ' ) . '</span>';
 						$r .= '<span class="price">' . $this->format_price( $item['price'] ) . '</span>';
 						$r .= '<span class="subtotal">' . $this->format_price( $item['subtotal'] ) . '</span>';
 						$r .= '<span class="title">' .  get_the_title($id) . '</span>';
 						$r .= '<span class="imageid">' .  sprintf( "%05d", $id ) . '</span>';
-						$r .= '<span class="gallery"><a href="' .  get_edit_post_link( $item['gallery'] )  . '">';
-						$r .= '' .  get_the_title($item['gallery']) . '</a></span>';
+						$r .= '<span class="gallery"><a href="' . get_edit_post_link($parentid) . '">';
+						$r .= '' .  get_the_title( $parentid ) . '</a></span>';
 						$r .= '</div>';	
 					}
 				}

@@ -22,6 +22,7 @@ wp_set_current_user(0);
 $nonce = wp_create_nonce("ims_download_img");
 wp_set_current_user($userid);
 
+
 //custom cart data
 if ($this->opts['gateway']['custom'] && !empty($this->opts['data_pair'])) {
 	$data_pair = array();
@@ -46,7 +47,7 @@ else: //else show table
 	
 	if(!is_singular('ims_gallery'))
 		$this->imspage = false;
-		
+	
 	$output .=
 	'<noscript><div class="ims-message ims-error">' . __('Please enable Javascript, it is required to submit payment. ') . '</div></noscript>
 		<table class="ims-table" role="grid">
@@ -88,7 +89,7 @@ else: //else show table
 				$enc = $this->url_encrypt($id);
 				$output .= '<div class="ims-clear-row">';
 				$output .= '<span class="ims-quantity"><input type="text" name="ims-quantity'."[$enc][$size][$color]" . '" value="'.esc_attr($item['quantity']).'" class="input" /></span>';
-				$output .= '<span class="ims-size">' . $size . ' <span class="ims-unit">' . $item['unit'] . '</span></span>';
+				$output .= '<span class="ims-size">' . $item['size'] . ' <span class="ims-unit">' . $item['unit'] . '</span></span>';
 				$output .= '<span class="ims-color">' . $item['color_name'] . ' ' . $this->format_price($item['color']) . '</span>';
 				$output .= '<span class="ims-fisnish">' . $item['finish_name'] . ' ' . $this->format_price($item['finish'])  . '</span>';
 				$output .= '<span class="ims-price">' . $this->format_price($item['price']) . '</span>';
@@ -180,7 +181,7 @@ else: //else show table
 	//display tax fields
 	if ($this->cart['tax']) 
 		$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell">' . __('Tax', $this->domain) . '</td><td role="gridcell" class="tax">' .
-		$this->format_price($this->cart['tax'], true, ' + ') . '<input type="hidden" name="tax_cart" value="' . $this->cart['tax'] . '"/></td></tr>';
+		$this->format_price($this->cart['tax'], true, ' + ') . '<input type="hidden" name="tax_cart" data-value-ims="' . $this->format_price($this->cart['tax'],false) . '"/> </td></tr>';
 
 	//display total
 	$output .= '<tr role="row"><td role="gridcell">&nbsp;</td> <td role="gridcell"><label>' . __('Total', $this->domain) . '</label></td>

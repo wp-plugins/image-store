@@ -87,19 +87,21 @@ function ajax_imstore_delete_post() {
 		
 	if (current_user_can("ims_manage_galleries")
 	|| current_user_can("ims_change_pricing")) {
+		
+		global $ImStore;
 		$postid = (int) $_GET['postid'];
+		
 		//delete file from server
 		if (!empty($_GET['parent']) && isset($_GET['deletefile']) && $_GET['deletefile'] == true) {
 			$data = get_post_meta($postid, '_wp_attachment_metadata', true);
 			if ($data && is_array($data['sizes'])) {
-				$imgpath = WP_CONTENT_DIR . '/' . dirname($data['file']);
+				$imgpath = $ImStore->content_dir . '/' . dirname($data['file']);
 				foreach ($data['sizes'] as $size) {
 					if (file_exists($imgpath . "/_resized/" . $size['file']))
-						@unlink($imgpath . "/_resized/" . $size['file']);
-					else
-						@unlink($imgpath . "/" . $size['file']);
+						unlink($imgpath . "/_resized/" . $size['file']);
+					else @unlink($imgpath . "/" . $size['file']);
 				}
-				@unlink(WP_CONTENT_DIR . "/" . $data['file']);
+				@unlink($ImStore->content_dir . '/' . $data['file']);
 			}
 		}
 		wp_delete_post($postid, true);
@@ -222,8 +224,7 @@ function ajax_ims_remove_images_from_favorites() {
 		if (empty($_GET['count']))
 			setcookie('ims_favorites_' . COOKIEHASH, 0, 0, COOKIEPATH, COOKIE_DOMAIN);
 		else {
-			$join = array_flip(explode(',', trim($_COOKIE['ims_favorites_' . COOKIEHASH], ',')
-					));
+			$join = array_flip(explode(',', trim($_COOKIE['ims_favorites_' . COOKIEHASH], ',')));
 
 			foreach ($dec_ids as $remove)
 				unset($join[$remove]);
@@ -257,18 +258,20 @@ function ajax_ims_edit_image_mini() {
 		die();
 
 	$meta = wp_get_attachment_metadata($post_id);
+	
 	if (empty($meta['file']))
 		die();
 
+	global $ImStore;
 	if (stristr($meta['file'], 'wp-content') !== false)
-		$path = dirname(str_ireplace(WP_CONTENT_DIR, '', $meta['file']));
+		$path = dirname(str_ireplace($ImStore->content_dir,'', $meta['file']));
 	else
 		$path = dirname($meta['file']);
 
 	if (!preg_match(" /(_resized)/i", $path))
 		$path = "$path/_resized";
 
-	$img = rtrim(WP_CONTENT_DIR, '/') . "/$path/" . $meta['sizes']['thumbnail']['file'];
+	$img = $ImStore->content_dir . "/$path/" . $meta['sizes']['thumbnail']['file'];
 
 	include_once( ABSPATH . 'wp-admin/includes/image-edit.php' );
 	$resized_file = image_resize($img, get_option("mini_size_w"), get_option("mini_size_h"), true);

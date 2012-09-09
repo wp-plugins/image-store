@@ -52,7 +52,6 @@ class ImStoreFront extends ImStore {
 		parent::ImStore();
 
 		$this->page_front = get_option('page_on_front');
-		$this->baseurl = apply_filters('ims_base_image_url', IMSTORE_URL . '/image.php?i=');
 
 		add_action('wp', array(&$this, 'init_hooks'), 0);
 		add_shortcode('image-store', array(&$this, 'imstore_shortcode'));
@@ -427,7 +426,7 @@ class ImStoreFront extends ImStore {
 	function init_hooks() {
 		if (is_feed())
 			return;
-
+		
 		$this->gateway = array(
 			'paypalprod' => array(
 				'name' => __('PayPal', $this->domain),
@@ -457,6 +456,7 @@ class ImStoreFront extends ImStore {
 
 		$this->shipping_opts = get_option('ims_shipping_options');
 		$allow = apply_filters('ims_activate_gallery_hooks', false);
+		$this->baseurl = apply_filters('ims_base_image_url', IMSTORE_URL . '/image.php?i=');
 
 		add_action('wp_enqueue_scripts', array(&$this, 'load_scripts_styles'));
 		add_filter('protected_title_format', array(&$this, 'remove_protected'));
@@ -610,8 +610,7 @@ class ImStoreFront extends ImStore {
 		do_action('ims_gallery_init', $this);
 		
 		//process paypal IPN
-		if (isset($_POST['txn_id']) && isset($_POST['custom']) 
-		&& ($this->imspage != 'receipt' || $this->opts['gateway']['paypalsand'] ))
+		if (isset($_POST['txn_id']) && isset($_POST['custom']) && $this->imspage != 'receipt')
 			include_once( IMSTORE_ABSPATH . '/_store/paypal-ipn.php' );
 
 		//process google notification
@@ -784,7 +783,9 @@ class ImStoreFront extends ImStore {
 			default:
 				$this->get_gallery_images();
 				$output .= $this->store_subnav();
-				$output .= $this->display_galleries();
+				
+				if($this->attachments)
+					$output .= $this->display_galleries();
 		}
 
 		$output .= apply_filters('ims_after_page', '', $this->imspage);
@@ -1303,7 +1304,7 @@ class ImStoreFront extends ImStore {
 		//dont change array order
 		$this->subtitutions = array(
 			$data['mc_gross'], $data['payment_status'], get_the_title($this->orderid),
-			$this->cart['shipping'], $data['txn_id'], $_POST['last_name'], $_POST['first_name'], $_POST['user_email'],
+			$this->format_price($this->cart['shipping']), $data['txn_id'], $_POST['last_name'], $_POST['first_name'], $_POST['user_email'],
 		);
 
 		do_action('ims_after_checkout', $this->cart);
@@ -1471,7 +1472,7 @@ class ImStoreFront extends ImStore {
 		|| ( $this->opts['widgettools'] && $return ))
 			return;
 
-		$nav = "\n" . '<div class="imstore-nav"><ul  class="imstore-nav" role="navigation" >' . "\n";
+		$nav = "\n" . '<div class="imstore-nav"><ul  class="imstore-nav-inner" role="navigation" >' . "\n";
 
 		foreach ($this->pages as $key => $page) {
 			if ($key == 'receipt'
@@ -1675,7 +1676,10 @@ class ImStoreFront extends ImStore {
 			$wp_query->found_posts = $wpdb->get_var('SELECT FOUND_ROWS( )');
 			$wp_query->max_num_pages = ceil($wp_query->found_posts / $per_page);
 		}
-
+		
+		if(empty($this->attachments))
+			return false;
+			
 		foreach ($this->attachments as $post) {
 			$post->meta = maybe_unserialize($post->meta);
 			$images[] = $post;
@@ -1700,7 +1704,7 @@ class ImStoreFront extends ImStore {
 			"SELECT DISTINCT ID, guid, meta_value meta, post_excerpt, post_author
 			FROM $wpdb->posts AS p LEFT JOIN $wpdb->postmeta AS pm
 			ON p.ID = pm.post_id WHERE post_type = 'ims_image'
-			AND meta_value !='' AND p.ID IN ( $ids ) GROUP BY ID
+			AND meta_key = '_wp_attachment_metadata' AND p.ID IN ( $ids ) GROUP BY ID
 			ORDER BY " . $this->opts['imgsortorder'] . " " . $this->opts['imgsortdirect']
 		);
 
@@ -1862,9 +1866,15 @@ class ImStoreFront extends ImStore {
 		$this->cart['tracking'] = false;
 		$this->cart['gallery_id'] = false;
 		$this->cart['instructions'] = false;
-		$this->cart['shipping_type'] = 0;
-		$this->cart['shippingcost'] = false;
-		$this->cart['promo']['discount'] = false;
+		
+		if (empty($this->cart['promo']['discount']))
+			$this->cart['promo']['discount'] = false;
+		
+		if (empty($this->cart['shipping_type']))
+			$this->cart['shipping_type'] = 0;
+		
+		if (empty($this->cart['shippingcost']))
+			$this->cart['shippingcost'] = false;
 
 		if (empty($this->cart['subtotal']))
 			$this->cart['subtotal'] = 0;
@@ -1882,27 +1892,28 @@ class ImStoreFront extends ImStore {
 
 			$id = $this->url_decrypt($id);
 
-			foreach ($_POST['ims-image-size'] as $size) {
+			foreach ($_POST['ims-image-size'] as $sizename) {
 				
-				$size = str_replace(array('|','\\','.',' '),'',$size);
+				$size = str_replace(array('|','\\','.',' '),'',$sizename);
 				$this->cart['images'][$id][$size][$color]['quantity'] =
 				isset($this->cart['images'][$id][$size][$color]['quantity']) ?
 				$this->cart['images'][$id][$size][$color]['quantity'] += $_POST['ims-quantity'] : $_POST['ims-quantity'];
-
+				
+				$this->cart['images'][$id][$size][$color]['size'] = $sizename;
 				$this->cart['images'][$id][$size][$color]['gallery'] = $this->galid;
 				$this->cart['images'][$id][$size][$color]['unit'] = $this->sizes[$size]['unit'];
 
 				//size prices
 				if (isset($this->sizes[$size]['ID']))
 					$this->cart['images'][$id][$size][$color]['price'] = get_post_meta($this->sizes[$size]['ID'], '_ims_price', true);
-				else
-					$this->cart['images'][$id][$size][$color]['price'] = $this->sizes[$size]['price'];
+				else $this->cart['images'][$id][$size][$color]['price'] = str_replace($this->sym, '',$this->sizes[$size]['price']);
 
 				//finishes
 				$this->cart['images'][$id][$size][$color]['finish_name'] = $this->listmeta['finishes'][$finish]['name'];
 				$this->cart['images'][$id][$size][$color]['finish'] =
 						( $this->listmeta['finishes'][$finish]['type'] == 'percent' ) ?
-						( $this->cart['images'][$id][$size][$color]['price'] * ($this->listmeta['finishes'][$finish]['price'] / 100)) : $this->listmeta['finishes'][$finish]['price'];
+						( $this->cart['images'][$id][$size][$color]['price'] * ($this->listmeta['finishes'][$finish]['price'] / 100)) : 
+						$this->listmeta['finishes'][$finish]['price'];
 
 				//color price
 				$this->cart['images'][$id][$size][$color]['color'] =
@@ -1913,8 +1924,7 @@ class ImStoreFront extends ImStore {
 				//is downloadable
 				if (isset($this->sizes[$size]['download']))
 					$this->cart['images'][$id][$size][$color]['download'] = $this->sizes[$size]['download'];
-				else
-					$this->cart['shippingcost'] = 1;
+				else $this->cart['shippingcost'] = 1;
 
 				$this->cart['images'][$id][$size][$color]['subtotal'] =
 						(($this->cart['images'][$id][$size][$color]['price'] +

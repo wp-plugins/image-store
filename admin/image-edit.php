@@ -109,7 +109,7 @@ jQuery(document).ready(function($){
 				if( '' == history)
 					return false;
 					data = {
-					imgid		:postid,
+					imgid			:postid,
 					history		:history,
 					action		:'edit-mini-image',
 					_wpnonce	:'<?php echo $nonce?>'

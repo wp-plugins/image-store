@@ -480,6 +480,7 @@ if ($this->opts['gateway']['custom']) {
 		<strong>Tags:</strong> ', $this->domain) . str_replace('/', '', implode(', ', $this->opts['carttags'])),
 	);
 }
+
 //notification
 if ($this->opts['gateway']['enotification']) {
 
