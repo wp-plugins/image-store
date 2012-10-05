@@ -44,7 +44,7 @@ extract( wp_parse_args( $_GET, $defaults ) );
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width" />
-<title><?php _e( 'Attach Gallery',  $ImStore->domain )?></title>
+<title><?php _e( 'Attach Gallery',  'ims')?></title>
 <meta name="robots" content="index,follow,noodp,noydir" />
 
 <?php 
@@ -71,55 +71,55 @@ do_action('admin_print_styles');
 	<div id="gal-selector">
 		<div id="gal-options"><br>
 			<div>
-				<label><span><?php _e( 'Images', $ImStore->domain  ); ?></span>
+				<label><span><?php _e( 'Images', 'ims'); ?></span>
 				<input id="number" type="text" tabindex="30" name="number" value="<?php echo esc_attr( $number )?>" /> 
-				<small><?php _e( 'How many images to display.', $ImStore->domain  ); ?></small></label>
+				<small><?php _e( 'How many images to display.', 'ims'); ?></small></label>
 			</div>
 						
 			<div>
-				<label><span><?php _e( 'Gallery id', $ImStore->domain  ); ?></span> 
+				<label><span><?php _e( 'Gallery id', 'ims'); ?></span> 
 				<input id="galid" type="text" tabindex="20" class="regular-text" name="galid" value="<?php echo esc_attr( $id )?>" /></label>
 			</div>
 			
 			<div>
-				<label><span><?php _e( 'Show as', $ImStore->domain ); ?></span></label>
-				<label><input type="radio" name="layout" value="lightbox" id="lightbox" <?php checked( $layout , 'lightbox' )?>/><?php _e( 'Lightbox', $ImStore->domain  ); ?></label>
-				<label><input type="radio" name="layout" value="slideshow" id="slideshow" <?php checked( $layout, 'slideshow' )?> /><?php _e( 'Slideshow', $ImStore->domain  ); ?></label>
-				<label><input type="radio" name="layout"  value="list" id="list" <?php checked( $layout, 'list' )?> /><?php _e( 'List', $ImStore->domain  ); ?></label>
+				<label><span><?php _e( 'Show as', 'ims'); ?></span></label>
+				<label><input type="radio" name="layout" value="lightbox" id="lightbox" <?php checked( $layout , 'lightbox' )?>/><?php _e( 'Lightbox', 'ims'); ?></label>
+				<label><input type="radio" name="layout" value="slideshow" id="slideshow" <?php checked( $layout, 'slideshow' )?> /><?php _e( 'Slideshow', 'ims'); ?></label>
+				<label><input type="radio" name="layout"  value="list" id="list" <?php checked( $layout, 'list' )?> /><?php _e( 'List', 'ims'); ?></label>
 			</div>
 			
 			<div>
-				<label><span><?php _e( 'Sort by', $ImStore->domain  ); ?></span> <select name="orderby" id="order">
-					<option value="0"><?php _e( 'Default', $ImStore->domain  ); ?></option>
-					<option value="date" <?php selected( $sortby, 'date' )?>><?php _e( 'Date', $ImStore->domain  ); ?></option>
-					<option value="title" <?php selected( $sortby, 'title' )?>><?php _e( 'Title', $ImStore->domain  ); ?></option>
-					<option value="custom" <?php selected( $sortby, 'custom' )?>><?php _e( 'Custom', $ImStore->domain  ); ?></option>
-					<option value="caption" <?php selected( $sortby, 'caption' )?>><?php _e( 'Caption', $ImStore->domain  ); ?></option>
+				<label><span><?php _e( 'Sort by', 'ims'); ?></span> <select name="orderby" id="order">
+					<option value="0"><?php _e( 'Default', 'ims'); ?></option>
+					<option value="date" <?php selected( $sortby, 'date' )?>><?php _e( 'Date', 'ims'); ?></option>
+					<option value="title" <?php selected( $sortby, 'title' )?>><?php _e( 'Title', 'ims'); ?></option>
+					<option value="custom" <?php selected( $sortby, 'custom' )?>><?php _e( 'Custom', 'ims'); ?></option>
+					<option value="caption" <?php selected( $sortby, 'caption' )?>><?php _e( 'Caption', 'ims'); ?></option>
 				</select></label>
 				
-				<label><?php _e( 'Order', $ImStore->domain  ); ?> <select name="orderby" id="orderby">
-					<option value="0"><?php _e( 'Default', $ImStore->domain  ); ?></option>
-					<option value="asc" <?php selected( $sort, 'asc' )?>><?php _e( 'Ascending', $ImStore->domain  ); ?></option>
-					<option value="desc" <?php selected( $sort, 'desc' )?>><?php _e( 'Descending', $ImStore->domain  ); ?></option>
+				<label><?php _e( 'Order', 'ims'); ?> <select name="orderby" id="orderby">
+					<option value="0"><?php _e( 'Default', 'ims'); ?></option>
+					<option value="asc" <?php selected( $sort, 'asc' )?>><?php _e( 'Ascending', 'ims'); ?></option>
+					<option value="desc" <?php selected( $sort, 'desc' )?>><?php _e( 'Descending', 'ims'); ?></option>
 				</select></label>
 				
 			</div>	
 			
 			<div>
-				<label><span><?php _e( 'Link to:', $ImStore->domain  ); ?></span></label>
-				<label><input type="radio" name="linkto" value="file" id="file" <?php checked( $linkto, 'file' )?> /><?php _e( 'File', $ImStore->domain  ); ?></label>
-				<label><input type="radio" name="linkto" value="attachment" id="attachment" <?php checked( $linkto, 'attachment' )?> /><?php _e( 'Attachment', $ImStore->domain  ); ?></label>
+				<label><span><?php _e( 'Link to:', 'ims'); ?></span></label>
+				<label><input type="radio" name="linkto" value="file" id="file" <?php checked( $linkto, 'file' )?> /><?php _e( 'File', 'ims'); ?></label>
+				<label><input type="radio" name="linkto" value="attachment" id="attachment" <?php checked( $linkto, 'attachment' )?> /><?php _e( 'Attachment', 'ims'); ?></label>
 			</div>
 			
 			<div>
 				<label><span>&nbsp;</span><input id="caption" type="checkbox" name="caption" <?php checked( $caption, 1 )?> />
-				<?php _e( 'Show caption', $ImStore->domain  ); ?></label>
+				<?php _e( 'Show caption', 'ims'); ?></label>
 			</div>
 	
 		</div>
 		<?php $show_internal = '1' == get_user_setting( 'imsattach', '0' ); ?>
 		<p class="howto toggle-arrow <?php if ( $show_internal ) echo 'toggle-arrow-active'; ?>" id="internal-toggle">
-		<?php _e( 'or search galleries', $ImStore->domain ); ?></p>
+		<?php _e( 'or search galleries', 'ims'); ?></p>
 		<div id="search-panel"<?php if ( !$show_internal ) echo ' class="hide"'; ?>>
 			<div class="link-search-wrapper">
 				<label>
@@ -139,11 +139,11 @@ do_action('admin_print_styles');
 	
 	<div class="submitbox mceActionPanel">
 		<div id="ims-link-cancel" style="float:left">
-			<input type="button" id="cancel" name="cancel" value="<?php esc_attr_e( 'Cancel', $ImStore->domain )?>" class="button" />
+			<input type="button" id="cancel" name="cancel" value="<?php esc_attr_e( 'Cancel', 'ims')?>" class="button" />
 		</div>
 	
 		<div id="ims-link-insert" style="float:right">
-			<input type="submit" id="insert" name="insert" value="<?php esc_attr_e( 'Insert', $ImStore->domain )?>" class="button-primary" />
+			<input type="submit" id="insert" name="insert" value="<?php esc_attr_e( 'Insert', 'ims')?>" class="button-primary" />
 		</div>
 	</div>
 	

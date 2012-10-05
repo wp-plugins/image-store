@@ -39,15 +39,15 @@ if( empty( $results ) ) die( );
 global $ImStore;
 $columns = apply_filters( 'ims_customers_csv_columns',
 	array(
-		'first_name'	=> __( 'First Name', $ImStore->domain ),
-		'last_name'	=> __( 'Last Name', $ImStore->domain ),
-		'user_email'	=> __( 'E-mail', $ImStore->domain ),
-		'ims_address'	=> __( 'Address', $ImStore->domain ),
-		'ims_city'		=> __( 'City', $ImStore->domain ),
-		'ims_state'		=> __( 'State', $ImStore->domain ),
-		'ims_zip'		=> __( 'Zip', $ImStore->domain ),
-		'ims_phone' 	=> __( 'Phone', $ImStore->domain ),
-		'ims_status' 	=> __( 'Status', $ImStore->domain ),
+		'first_name'	=> __( 'First Name', 'ims'),
+		'last_name'	=> __( 'Last Name', 'ims'),
+		'user_email'	=> __( 'E-mail', 'ims'),
+		'ims_address'	=> __( 'Address', 'ims'),
+		'ims_city'		=> __( 'City', 'ims'),
+		'ims_state'		=> __( 'State', 'ims'),
+		'ims_zip'		=> __( 'Zip', 'ims'),
+		'ims_phone' 	=> __( 'Phone', 'ims'),
+		'ims_status' 	=> __( 'Status', 'ims'),
 	)
 );
 

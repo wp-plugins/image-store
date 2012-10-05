@@ -17,8 +17,7 @@ class ImStore {
 	 * @param $domain plugin Gallery IDentifier
 	 * Make sure that new language( .mo ) files have 'ims-' as base name
 	 */
-	public $domain = 'ims';
-	public $version = '3.1.5';
+	public $version = '3.1.6';
 
 	/**
 	 * Public variables
@@ -86,10 +85,10 @@ class ImStore {
 	function image_store_init() {
 		$this->locale = get_locale();
 		
-		if ($this->locale == 'en_US' || is_textdomain_loaded($this->domain))
+		if ($this->locale == 'en_US' || is_textdomain_loaded('ims'))
 			return;
 
-		$filedir = $this->content_dir . '/languages/_ims/' . $this->domain . '-' . $this->locale . '.mo';
+		$filedir = $this->content_dir . '/languages/_ims/' . 'ims' . '-' . $this->locale . '.mo';
 		if (!file_exists($filedir) && is_admin() && current_user_can('activate_plugins')) {
 			$time = get_option('_ims_no_lan_file');
 			if ($time + (86400 * 2) <= current_time('timestamp'))
@@ -97,9 +96,9 @@ class ImStore {
 		}
 
 		if (function_exists('load_plugin_textdomain'))
-			load_plugin_textdomain($this->domain, false, apply_filters('ims_load_textdomain', '../languages/_ims/', $this->domain, $this->locale));
+			load_plugin_textdomain('ims', false, apply_filters('ims_load_textdomain', '../languages/_ims/', 'ims', $this->locale));
 		elseif (function_exists('load_textdomain'))
-			load_textdomain($this->domain, apply_filters('ims_load_textdomain', $filedir, $this->domain, $this->locale));
+			load_textdomain('ims', apply_filters('ims_load_textdomain', $filedir, 'ims', $this->locale));
 	}
 
 	/**
@@ -118,7 +117,10 @@ class ImStore {
 
 		if (!file_exists($path = dirname($filedir)))
 			@mkdir($path, 0755, true);
-
+		
+		if(!is_writable($path))
+			return;
+			
 		$temp = $path . '/temp.zip';
 		@file_put_contents($temp, $data);
 
@@ -127,9 +129,9 @@ class ImStore {
 
 		if (false == ( $archive = $PclZip->extract(PCLZIP_OPT_EXTRACT_AS_STRING)))
 			return;
-
+		
 		foreach ($archive as $file)
-			file_put_contents($path . "/" . $file['filename'], $file['content']);
+			@file_put_contents($path . "/" . $file['filename'], $file['content']);
 
 		@unlink($temp);
 	}
@@ -172,25 +174,25 @@ class ImStore {
 
 		$this->cformat = array('', "$this->sym%s", "$this->sym %s", "%s$this->sym", "%s $this->sym");
 		$this->units = apply_filters('ims_units', array(
-			'in' => __('in', $this->domain), 'cm' => __('cm', $this->domain), 'px' => __('px', $this->domain)
+			'in' => __('in', 'ims'), 'cm' => __('cm', 'ims'), 'px' => __('px', 'ims')
 		));
 
 		$this->promo_types = apply_filters('ims_promo_types', array(
-			'1' => __('Percent', $this->domain),
-			'2' => __('Amount', $this->domain),
-			'3' => __('Free Shipping', $this->domain),
+			'1' => __('Percent', 'ims'),
+			'2' => __('Amount', 'ims'),
+			'3' => __('Free Shipping', 'ims'),
 		));
 
 		$this->rules_property = apply_filters('ims_rules_property', array(
-			'items' => __('Item quantity', $this->domain),
-			'total' => __('Total amount', $this->domain),
-			'subtotal' => __('Subtotal amount', $this->domain),
+			'items' => __('Item quantity', 'ims'),
+			'total' => __('Total amount', 'ims'),
+			'subtotal' => __('Subtotal amount', 'ims'),
 		));
 
 		$this->rules_logic = apply_filters('ims_rules_logic', array(
-			'equal' => __('Is equal to', $this->domain),
-			'more' => __('Is greater than', $this->domain),
-			'less' => __('Is less than', $this->domain),
+			'equal' => __('Is equal to', 'ims'),
+			'more' => __('Is greater than', 'ims'),
+			'less' => __('Is less than', 'ims'),
 		));
 	}
 
@@ -202,7 +204,7 @@ class ImStore {
 	 */
 	function flush_rules() {
 		$rules = get_option('rewrite_rules');
-		$galleries = preg_match('/[^\\p{Common}\\p{Latin}]/u', __('galleries', $this->domain)) ? 'galleries' : __('galleries', $this->domain);
+		$galleries = preg_match('/[^\\p{Common}\\p{Latin}]/u', __('galleries', 'ims')) ? 'galleries' : __('galleries', 'ims');
 
 		if (!isset($rules[$galleries . "/([^/]+)/feed/(imstore)/?$"])) {
 			global $wp_rewrite;
@@ -295,8 +297,8 @@ class ImStore {
 		$wp_rewrite->add_rewrite_tag('%paypalipn%', '([^/]+)', 'paypalipn=');
 		$wp_rewrite->add_rewrite_tag('%imslogout%', '([^/]+)', 'imslogout=');
 		$wp_rewrite->add_rewrite_tag('%imsmessage%', '([0-9]+)', 'imsmessage=');
-		$wp_rewrite->add_permastruct('ims_gallery', __('galleries', $this->domain) . '/%ims_gallery%/%imspage%/?$', false);
-		$galleries = preg_match('/[^\\p{Common}\\p{Latin}]/u', __('galleries', $this->domain)) ? 'galleries' : __('galleries', $this->domain);
+		$wp_rewrite->add_permastruct('ims_gallery', __('galleries', 'ims') . '/%ims_gallery%/%imspage%/', false);
+		$galleries = preg_match('/[^\\p{Common}\\p{Latin}]/u', __('galleries', 'ims')) ? 'galleries' : __('galleries', 'ims');
 
 		$new_rules[$galleries . "/([^/]+)/feed/(imstore)/?$"] =
 		"index.php?ims_gallery=" . $wp_rewrite->preg_index(1) . "&feed=" . $wp_rewrite->preg_index(2);
@@ -307,20 +309,20 @@ class ImStore {
 			$slug = ( preg_match('/[^\\p{Common}\\p{Latin}]/u', $page)) ? $id : sanitize_title($page);
 
 			if ($id == 'photos') {
-				$new_rules[$galleries . "/([^/]+)/page/?([0-9]+)/?$"] =
+				$new_rules[$galleries . "/([^/]+)/page/([0-9]+)/?$"] =
 				"index.php?ims_gallery=" . $wp_rewrite->preg_index(1) . "&imspage=$id" .
 				'&paged=' . $wp_rewrite->preg_index(2);
 
-				$new_rules[$galleries . "/([^/]+)/$slug/page/?([0-9]+)/?$"] =
+				$new_rules[$galleries . "/([^/]+)/$slug/page/([0-9]+)/?$"] =
 				"index.php?ims_gallery=" . $wp_rewrite->preg_index(1) . "&imspage=$id" .
 				'&paged=' . $wp_rewrite->preg_index(2);
 
-				$new_rules[$galleries . "/([^/]+)/$slug/page/?([0-9]+)/ms/?([0-9]+)/?$"] =
+				$new_rules[$galleries . "/([^/]+)/$slug/page/([0-9]+)/ms/?([0-9]+)/?$"] =
 				"index.php?ims_gallery=" . $wp_rewrite->preg_index(1) . "&imspage=$id" .
 				'&paged=' . $wp_rewrite->preg_index(2) . '&imsmessage=' . $wp_rewrite->preg_index(3);
 			}
 
-			$new_rules[$galleries . "/([^/]+)/$slug/ms/?([0-9]+)/?$"] =
+			$new_rules[$galleries . "/([^/]+)/$slug/ms/([0-9]+)/?$"] =
 			"index.php?ims_gallery=" . $wp_rewrite->preg_index(1) . "&imspage=$id" .
 			'&imsmessage=' . $wp_rewrite->preg_index(2);
 
@@ -384,15 +386,15 @@ class ImStore {
 	 * @since 0.5.0
 	 */
 	function load_pages() {
-		$this->pages['photos'] = __('Photos', $this->domain);
-		$this->pages['slideshow'] = __('Slideshow', $this->domain);
-		$this->pages['favorites'] = __('Favorites', $this->domain);
+		$this->pages['photos'] = __('Photos', 'ims');
+		$this->pages['slideshow'] = __('Slideshow', 'ims');
+		$this->pages['favorites'] = __('Favorites', 'ims');
 
 		if (empty($this->opts['disablestore'])) {
-			$this->pages['price-list'] = __('Price List', $this->domain);
-			$this->pages['shopping-cart'] = __('Shopping Cart', $this->domain);
-			$this->pages['receipt'] = __('Receipt', $this->domain);
-			$this->pages['checkout'] = __('Checkout', $this->domain);
+			$this->pages['price-list'] = __('Price List', 'ims');
+			$this->pages['shopping-cart'] = __('Shopping Cart', 'ims');
+			$this->pages['receipt'] = __('Receipt', 'ims');
+			$this->pages['checkout'] = __('Checkout', 'ims');
 		}
 		$this->pages = apply_filters('ims_load_pages', $this->pages);
 	}
@@ -405,9 +407,9 @@ class ImStore {
 	 */
 	function load_color_opts() {
 		$this->color = array(
-			'ims_color' => __('Full Color', $this->domain),
-			'ims_sepia' => __('Sepia ', $this->domain),
-			'ims_bw' => __('B &amp; W', $this->domain),
+			'ims_color' => __('Full Color', 'ims'),
+			'ims_sepia' => __('Sepia ', 'ims'),
+			'ims_bw' => __('B &amp; W', 'ims'),
 		);
 
 		if (isset($this->opts['disablebw']))
@@ -458,16 +460,16 @@ class ImStore {
 		//register gallery post type assign ims_album taxonomy
 		$posttype = apply_filters('ims_gallery_post_type', array(
 			'labels' => array(
-				'name' => _x('Galleries', 'post type general name', $this->domain),
-				'singular_name' => _x('Gallery', 'post type singular name', $this->domain),
-				'add_new' => _x('Add New', 'Gallery', $this->domain),
-				'add_new_item' => __('Add New Gallery', $this->domain),
-				'edit_item' => __('Edit Gallery', $this->domain),
-				'new_item' => __('New Gallery', $this->domain),
-				'view_item' => __('View Gallery', $this->domain),
-				'search_items' => __('Search galleries', $this->domain),
-				'not_found' => __('No galleries found', $this->domain),
-				'not_found_in_trash' => __('No galleries found in Trash', $this->domain),
+				'name' => _x('Galleries', 'post type general name', 'ims'),
+				'singular_name' => _x('Gallery', 'post type singular name', 'ims'),
+				'add_new' => _x('Add New', 'Gallery', 'ims'),
+				'add_new_item' => __('Add New Gallery', 'ims'),
+				'edit_item' => __('Edit Gallery', 'ims'),
+				'new_item' => __('New Gallery', 'ims'),
+				'view_item' => __('View Gallery', 'ims'),
+				'search_items' => __('Search galleries', 'ims'),
+				'not_found' => __('No galleries found', 'ims'),
+				'not_found_in_trash' => __('No galleries found in Trash', 'ims'),
 			),
 			'public' => true,
 			'show_ui' => true,
@@ -481,17 +483,17 @@ class ImStore {
 			'exclude_from_search' => $searchable,
 			'menu_icon' => IMSTORE_URL . '/_img/imstore.png',
 			'supports' => array('title', 'comments', 'author', 'excerpt', 'page-attributes', $texedit),
-			'rewrite' => array('slug' => __('galleries', $this->domain), 'with_front' => false),
+			'rewrite' => array('slug' => __('galleries', 'ims'), 'with_front' => false),
 			'taxonomies' => array('ims_album')
 		));
 
 		register_post_type('ims_gallery', $posttype);
 
 		$statuses = array(
-			'expire' => __('Expired', $this->domain),
-			'closed' => __('Closed', $this->domain),
-			'shipped' => __('Shipped', $this->domain),
-			'cancelled' => __('Cancelled', $this->domain),
+			'expire' => __('Expired', 'ims'),
+			'closed' => __('Closed', 'ims'),
+			'shipped' => __('Shipped', 'ims'),
+			'cancelled' => __('Cancelled', 'ims'),
 		);
 
 		foreach ($statuses as $status => $label) {
@@ -505,42 +507,42 @@ class ImStore {
 		//register taxomomy albums
 		register_taxonomy('ims_album', array('ims_gallery'), array(
 			'labels' => array(
-				'name' => _x('Albums', 'taxonomy general name', $this->domain),
-				'singular_name' => _x('Album', 'taxonomy singular name', $this->domain),
-				'search_items' => __('Search Albums', $this->domain),
-				'all_items' => __('All Albums', $this->domain),
-				'parent_item' => __('Parent Album', $this->domain),
-				'parent_item_colon' => __('Parent Album:', $this->domain),
-				'edit_item' => __('Edit Album', $this->domain),
-				'update_item' => __('Update Album', $this->domain),
-				'add_new_item' => __('Add New Album', $this->domain),
-				'new_item_name' => __('New Album Name', $this->domain),
-				'menu_name' => __('Album', $this->domain),
+				'name' => _x('Albums', 'taxonomy general name', 'ims'),
+				'singular_name' => _x('Album', 'taxonomy singular name', 'ims'),
+				'search_items' => __('Search Albums', 'ims'),
+				'all_items' => __('All Albums', 'ims'),
+				'parent_item' => __('Parent Album', 'ims'),
+				'parent_item_colon' => __('Parent Album:', 'ims'),
+				'edit_item' => __('Edit Album', 'ims'),
+				'update_item' => __('Update Album', 'ims'),
+				'add_new_item' => __('Add New Album', 'ims'),
+				'new_item_name' => __('New Album Name', 'ims'),
+				'menu_name' => __('Album', 'ims'),
 			),
 			'show_ui' => true,
 			'query_var' => true,
 			'hierarchical' => true,
 			'show_in_nav_menus' => true,
-			'rewrite' => array('slug' => __('albums', $this->domain)),
+			'rewrite' => array('slug' => __('albums', 'ims')),
 		));
 
 		//register taxomomy tags
 		register_taxonomy('ims_tags', array('ims_gallery'), array(
 			'labels' => array(
-				'name' => _x('Tags', 'taxonomy general name', $this->domain),
-				'singular_name' => _x('Tag', 'taxonomy singular name', $this->domain),
-				'search_items' => __('Search Tags', $this->domain),
-				'all_items' => __('All Tags', $this->domain),
-				'edit_item' => __('Edit Tag', $this->domain),
-				'update_item' => __('Update Tag', $this->domain),
-				'add_new_item' => __('Add New Tag', $this->domain),
-				'new_item_name' => __('New Tag Name', $this->domain),
-				'menu_name' => __('Tags', $this->domain),
+				'name' => _x('Tags', 'taxonomy general name', 'ims'),
+				'singular_name' => _x('Tag', 'taxonomy singular name', 'ims'),
+				'search_items' => __('Search Tags', 'ims'),
+				'all_items' => __('All Tags', 'ims'),
+				'edit_item' => __('Edit Tag', 'ims'),
+				'update_item' => __('Update Tag', 'ims'),
+				'add_new_item' => __('Add New Tag', 'ims'),
+				'new_item_name' => __('New Tag Name', 'ims'),
+				'menu_name' => __('Tags', 'ims'),
 			),
 			'show_ui' => true,
 			'query_var' => true,
 			'hierarchical' => false,
-			'rewrite' => array('slug' => __('ims_tag', $this->domain)),
+			'rewrite' => array('slug' => __('ims_tag', 'ims')),
 		));
 	}
 

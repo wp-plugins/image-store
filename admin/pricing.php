@@ -95,9 +95,9 @@ if (isset($_POST['updatefinishes'])) {
 }
 
 $tabs = apply_filters('ims_pricing_tabs', array(
-	'price-list' => __('Price lists', $this->domain),
-	'packages' => __('Packages', $this->domain),
-	'promotions' => __('Promotions', $this->domain),
+	'price-list' => __('Price lists', 'ims'),
+	'packages' => __('Packages', 'ims'),
+	'promotions' => __('Promotions', 'ims'),
 ));
 
 //display error message
@@ -108,21 +108,21 @@ add_action('ims_pricing_price-list_tab', 'ims_pricelist_tab', 1, 2);
 add_action('ims_pricing_packages_tab', 'ims_packages_tab', 1, 2);
 add_action('ims_pricing_promotions_tab', 'ims_promotions_tab', 1, 2);
 
-add_meta_box('image_sizes', __('Image sizes', $this->domain), 'ims_image_sizes', 'ims_pricelists', 'side', 'default', array('tabid'=>'price-list'));
-add_meta_box('image_sizes', __('Image sizes', $this->domain), 'ims_image_sizes', 'ims_packages', 'side', 'default', array('tabid'=>'packages'));
+add_meta_box('image_sizes', __('Image sizes', 'ims'), 'ims_image_sizes', 'ims_pricelists', 'side', 'default', array('tabid'=>'price-list'));
+add_meta_box('image_sizes', __('Image sizes', 'ims'), 'ims_image_sizes', 'ims_packages', 'side', 'default', array('tabid'=>'packages'));
 
-add_meta_box('color_options', __('Color options', $this->domain), 'ims_color_options', 'ims_pricelists', 'side');
-add_meta_box('shipping_options', __('Shipping options', $this->domain), 'ims_shipping_options', 'ims_pricelists', 'side');
+add_meta_box('color_options', __('Color options', 'ims'), 'ims_color_options', 'ims_pricelists', 'side');
+add_meta_box('shipping_options', __('Shipping options', 'ims'), 'ims_shipping_options', 'ims_pricelists', 'side');
 
-add_meta_box('price-list-new', __('New pricelist', $this->domain), 'ims_new_pricelist', 'ims_pricelists', 'normal');
-add_meta_box('price-list-box', __('Price lists', $this->domain), 'ims_price_lists', 'ims_pricelists', 'normal');
-add_meta_box('print-finishes-box', __('Print finishes', $this->domain), 'ims_print_finishes', 'ims_pricelists', 'normal');
-add_meta_box('price-list-package', __('Packages', $this->domain), 'ims_price_lists_packages', 'ims_pricelists', 'normal');
-add_meta_box('color_filters', __('Color filters', $this->domain), 'ims_color_filters', 'ims_pricelists', 'normal');
+add_meta_box('price-list-new', __('New pricelist', 'ims'), 'ims_new_pricelist', 'ims_pricelists', 'normal');
+add_meta_box('price-list-box', __('Price lists', 'ims'), 'ims_price_lists', 'ims_pricelists', 'normal');
+add_meta_box('print-finishes-box', __('Print finishes', 'ims'), 'ims_print_finishes', 'ims_pricelists', 'normal');
+add_meta_box('price-list-package', __('Packages', 'ims'), 'ims_price_lists_packages', 'ims_pricelists', 'normal');
+add_meta_box('color_filters', __('Color filters', 'ims'), 'ims_color_filters', 'ims_pricelists', 'normal');
 
-add_meta_box('new_package', __('New Package', $this->domain), 'ims_new_package', 'ims_packages', 'normal');
-add_meta_box('packages-list', __('Packages', $this->domain), 'ims_package_list', 'ims_packages', 'normal');
-add_meta_box('new_promo', __('Promotion', $this->domain), 'ims_new_promotion', 'ims_promotions', 'normal');
+add_meta_box('new_package', __('New Package', 'ims'), 'ims_new_package', 'ims_packages', 'normal');
+add_meta_box('packages-list', __('Packages', 'ims'), 'ims_package_list', 'ims_packages', 'normal');
+add_meta_box('new_promo', __('Promotion', 'ims'), 'ims_new_promotion', 'ims_promotions', 'normal');
 
 ?>
 <ul class="ims-tabs add-menu-item-tabs">
@@ -178,8 +178,8 @@ function ims_packages_tab($ims) {
  */
 function ims_new_pricelist($ims) {
 	echo '<form method="post" action="#price-list" >
-		<p><label>' . __('Name', $ims->domain) . ' <input type="text" name="pricelist_name" class="regular-text" /></label>
-		<input type="submit" name="newpricelist" value="' . esc_attr__('Add List', $ims->domain) . '" class="button" /></p>';
+		<p><label>' . __('Name', 'ims') . ' <input type="text" name="pricelist_name" class="regular-text" /></label>
+		<input type="submit" name="newpricelist" value="' . esc_attr__('Add List', 'ims') . '" class="button" /></p>';
 	wp_nonce_field('ims_new_pricelist');
 	echo '</form>';
 }
@@ -193,8 +193,8 @@ function ims_new_pricelist($ims) {
  */
 function ims_new_package($ims) {
 	echo '<form method="post" action="#packages" >
-		<p><label>' . __('Name', $ims->domain) . ' <input type="text" name="package_name" class="regular-text" /></label>
-		<input type="submit" name="newpackage" value="' . esc_attr__('Add Package', $ims->domain) . '" class="button" /></p>';
+		<p><label>' . __('Name', 'ims') . ' <input type="text" name="package_name" class="regular-text" /></label>
+		<input type="submit" name="newpackage" value="' . esc_attr__('Add Package', 'ims') . '" class="button" /></p>';
 	wp_nonce_field('ims_new_packages');
 	echo '</form>';
 }
@@ -212,8 +212,8 @@ function ims_price_lists($ims) {
 
 	<p>
 		<small>	
-			<?php _e('Add options by dragging image sizes or packages into the desired list.', $ims->domain) ?>
-	<?php _e('Check the box next to the price to make size downloadable, or image will have to be shipped.', $ims->domain) ?>
+			<?php _e('Add options by dragging image sizes or packages into the desired list.', 'ims') ?>
+	<?php _e('Check the box next to the price to make size downloadable, or image will have to be shipped.', 'ims') ?>
 		</small>
 	</p>
 
@@ -260,7 +260,7 @@ function ims_price_lists($ims) {
 							<?php foreach ($sizes as $key => $size): ?>
 								<?php if (empty($size['name'])) continue; ?>
 							<tr class="size row alternate">
-								<td class="move" title="<?php _e('Move', $ims->domain) ?>">&nbsp;</td>
+								<td class="move" title="<?php _e('Move', 'ims') ?>">&nbsp;</td>
 								<td colspan="3" class="name" >
 									<?php
 									if (isset($size['ID'])) {
@@ -278,7 +278,7 @@ function ims_price_lists($ims) {
 										if (isset($size['unit']) && isset($ims->units[$size['unit']]))
 											echo ' ' . $ims->units[$size['unit']];
 										if (isset($size['download']))
-											echo " <em>" . __('Downloadable.', $ims->domain) . "</em>";
+											echo " <em>" . __('Downloadable.', 'ims') . "</em>";
 									}
 									?>
 								</td>
@@ -302,21 +302,21 @@ function ims_price_lists($ims) {
 									<input type="hidden" class="unit" name="sizes[<?php echo $key ?>][unit]" value="<?php echo esc_attr($size['unit']) ?>" />
 								<?php endif ?>
 								</td>
-								<td title="<?php _e('Check to make size downloadable', $ims->domain) ?>" class="download">
+								<td title="<?php _e('Check to make size downloadable', 'ims') ?>" class="download">
 									<input type="checkbox" name="sizes[<?php echo $key ?>][download]" class="downloadable" value="1" <?php checked(true, isset($size['download'])) ?> />
 								</td>
-								<td class="x" title="<?php _e('Delete', $ims->domain) ?>">x</td>
+								<td class="x" title="<?php _e('Delete', 'ims') ?>">x</td>
 							</tr>
 						<?php endforeach ?>
 					<?php endif ?>
-					<tr class="filler alternate"><td colspan="8"><?php _e('Add options by dragging image sizes here', $ims->domain) ?></td></tr>
+					<tr class="filler alternate"><td colspan="8"><?php _e('Add options by dragging image sizes here', 'ims') ?></td></tr>
 				</tbody>
 
 				<tbody class="colors content">
-					<tr class="header"> <th colspan="8"><?php _e('Colors', $ims->domain) ?></td> </tr>
+					<tr class="header"> <th colspan="8"><?php _e('Colors', 'ims') ?></td> </tr>
 					<?php foreach ((array) $meta['colors'] as $key => $color): ?>
 						<tr class="color row alternate"> 
-							<td class="move" title="<?php _e('Move', $ims->domain) ?>">&nbsp;</td>
+							<td class="move" title="<?php _e('Move', 'ims') ?>">&nbsp;</td>
 							<td colspan="3">
 								<?php echo $color['name'] ?>
 								<input type="text" name="colors[<?php echo $key ?>][name]" value="<?php echo $color['name'] ?>" class="name" />
@@ -326,21 +326,23 @@ function ims_price_lists($ims) {
 								<input type="text" name="colors[<?php echo $key ?>][price]" value="<?php echo $color['price'] ?>" class="price" />
 							</td>
 							<td colspan="2">
-								<?php echo $color['code'] ?>
+								<?php if(isset($color['code'])):
+									 echo $color['code'] ?>
 								<input type="text" name="colors[<?php echo $key ?>][code]" value="<?php echo $color['code'] ?>" class="code" />
+								<?php endif;?>
 							</td>
-							<td class="x" title="<?php _e('Delete', $ims->domain) ?>">x</td>
+							<td class="x" title="<?php _e('Delete', 'ims') ?>">x</td>
 						</tr>
 					<?php endforeach; ?>
-					<tr class="filler alternate"><td colspan="8"><?php _e('Add options by dragging colors here', $ims->domain) ?></td></tr>
+					<tr class="filler alternate"><td colspan="8"><?php _e('Add options by dragging colors here', 'ims') ?></td></tr>
 				</tbody><!--.colors-->
 
 
 				<tbody class="finishes content">
-					<tr class="header"> <th colspan="8"><?php _e('Finishes', $ims->domain) ?></td> </tr>
+					<tr class="header"> <th colspan="8"><?php _e('Finishes', 'ims') ?></td> </tr>
 					<?php foreach ((array) $meta['finishes'] as $key => $finish): ?>
 						<tr class="finish row alternate">
-							<td class="move" title="<?php _e('Move', $ims->domain) ?>">&nbsp;</td>
+							<td class="move" title="<?php _e('Move', 'ims') ?>">&nbsp;</td>
 							<td colspan="3" class="name">
 								<span class="hidden"><?php echo $finish['name'] ?></span>
 								<input type="text" name="finishes[<?php echo $key ?>][name]" value="<?php echo esc_attr($finish['name']) ?>" class="name" />
@@ -352,20 +354,20 @@ function ims_price_lists($ims) {
 							<td class="type">
 								<span class="hidden"><?php echo $finish['type'] ?></span>
 								<select name="finishes[<?php echo $key ?>][type]" class="type">
-									<option value="amount" <?php selected('amount', $finish['type']) ?>><?php _e('Amount', $ims->domain) ?></option>
-									<option value="percent" <?php selected('percent', $finish['type']) ?>><?php _e('Percent', $ims->domain) ?></option>
+									<option value="amount" <?php selected('amount', $finish['type']) ?>><?php _e('Amount', 'ims') ?></option>
+									<option value="percent" <?php selected('percent', $finish['type']) ?>><?php _e('Percent', 'ims') ?></option>
 								</select>
 							</td>
-							<td class="x" title="<?php _e('Delete', $ims->domain) ?>">x</td>
+							<td class="x" title="<?php _e('Delete', 'ims') ?>">x</td>
 						</tr>
 					<?php endforeach; ?>
-					<tr class="filler alternate"><td colspan="8"><?php _e('Add options by dragging finishes here', $ims->domain) ?></td></tr>
+					<tr class="filler alternate"><td colspan="8"><?php _e('Add options by dragging finishes here', 'ims') ?></td></tr>
 				</tbody><!--finishes-->
 
 				<tfoot class="content">
 					<tr><td colspan="8" align="right">
 						<input type="hidden" name="size[random]" value="<?php echo rand(0,3000)?>"/>
-						<input type="submit" name="updatelist" value="<?php esc_attr_e( 'Update', $ims->domain )?>" class="button-primary" />
+						<input type="submit" name="updatelist" value="<?php esc_attr_e( 'Update', 'ims' )?>" class="button-primary" />
 					</td></tr>
 				</tfoot>
 
@@ -392,7 +394,7 @@ function ims_print_finishes($ims) {
 			<tbody>
 			<?php foreach ((array)get_option('ims_print_finishes') as $key => $finish) : ?>
 					<tr class="finish row alternate">
-						<td class="move" title="<?php _e('Move to list', $ims->domain) ?>">&nbsp;</td>
+						<td class="move" title="<?php _e('Move to list', 'ims') ?>">&nbsp;</td>
 						<td colspan="3" class="name">
 							<span class="hidden"><?php echo $finish['name'] ?></span>
 							<input type="text" name="finishes[<?php echo $key ?>][name]" value="<?php echo esc_attr($finish['name']) ?>" class="name" />
@@ -408,11 +410,11 @@ function ims_print_finishes($ims) {
 						<td class="type">
 							<span class="hidden"><?php echo $finish['type'] ?></span>
 							<select name="finishes[<?php echo $key ?>][type]" class="type">
-								<option value="amount" <?php selected('amount', $finish['type']) ?>><?php _e('Amount', $ims->domain) ?></option>
-								<option value="percent" <?php selected('percent', $finish['type']) ?>><?php _e('Percent', $ims->domain) ?></option>
+								<option value="amount" <?php selected('amount', $finish['type']) ?>><?php _e('Amount', 'ims') ?></option>
+								<option value="percent" <?php selected('percent', $finish['type']) ?>><?php _e('Percent', 'ims') ?></option>
 							</select>
 						</td>
-						<td class="x" title="<?php _e('Delete', $ims->domain) ?>">x</td>
+						<td class="x" title="<?php _e('Delete', 'ims') ?>">x</td>
 					</tr><!--.row-->
 			<?php endforeach; ?>
 			</tbody><!--.finish-->
@@ -423,18 +425,18 @@ function ims_print_finishes($ims) {
 					<td colspan="3"><input type="text" class="name" /></td>
 					<td colspan="2"><input type="text" class="price" /></td>
 					<td><select  class="type">
-							<option value="amount" <?php selected('amount', $finish['type']) ?>><?php _e('Amount', $ims->domain) ?></option>
-							<option value="percent" <?php selected('percent', $finish['type']) ?>><?php _e('Percent', $ims->domain) ?></option>
+							<option value="amount" <?php selected('amount', $finish['type']) ?>><?php _e('Amount', 'ims') ?></option>
+							<option value="percent" <?php selected('percent', $finish['type']) ?>><?php _e('Percent', 'ims') ?></option>
 						</select></td>
-					<td class="x" title="<?php _e('Delete', $ims->domain) ?>">x</td>
+					<td class="x" title="<?php _e('Delete', 'ims') ?>">x</td>
 				</tr><!--.copyrow-->
 				
 				<tr class="inforow"><td colspan="5"></td>&nbsp;</tr>
 				<tr>
 					<td>&nbsp;</td>
-					<td><a class="button addfinish"><?php _e('Add finish', $ims->domain) ?></a></td>
+					<td><a class="button addfinish"><?php _e('Add finish', 'ims') ?></a></td>
 					<td colspan="6" align="right">
-						<input type="submit" name="updatefinishes" value="<?php esc_attr_e('Update', $ims->domain) ?>" class="button-primary" />
+						<input type="submit" name="updatefinishes" value="<?php esc_attr_e('Update', 'ims') ?>" class="button-primary" />
 					</td>
 				</tr>
 			</tfoot>
@@ -459,9 +461,9 @@ function ims_color_options($ims){
 			<thead>
 				<tr class="alternate">
 					<td>&nbsp;</td>
-					<td colspan="3" class="name"><?php _e( 'Name', $ims->domain )?></td>
-					<td colspan="2" class="price"><?php _e( 'Price', $ims->domain )?></td>
-					<td><?php _e( 'Code', $ims->domain )?></td>
+					<td colspan="3" class="name"><?php _e( 'Name', 'ims' )?></td>
+					<td colspan="2" class="price"><?php _e( 'Price', 'ims' )?></td>
+					<td><?php _e( 'Code', 'ims' )?></td>
 					<td>&nbsp;</td>
 				</tr>
 			</thead>
@@ -469,7 +471,7 @@ function ims_color_options($ims){
 			<tbody>
 			<?php foreach ((array)get_option('ims_color_options') as $key => $color) : ?>
 				<tr class="color row alternate">
-					<td class="move" title="<?php _e('Move to list', $ims->domain) ?>">&nbsp;</td>
+					<td class="move" title="<?php _e('Move to list', 'ims') ?>">&nbsp;</td>
 					<td colspan="3" class="name">
 						<span class="hidden"><?php echo $color['name'] ?></span>
 						<input type="text" name="colors[<?php echo $key ?>][name]" value="<?php echo esc_attr($color['name']) ?>"  class="name" />
@@ -482,7 +484,7 @@ function ims_color_options($ims){
 						<span class="hidden"><?php echo $color['code'] ?></span>
 						<input type="text" name="colors[<?php echo $key ?>][code]" value="<?php echo esc_attr($color['code']) ?>" class="code" />
 					</td>
-					<td class="x" title="<?php _e('Delete', $ims->domain) ?>">x</td>
+					<td class="x" title="<?php _e('Delete', 'ims') ?>">x</td>
 				</tr><!--.row-->
 			<?php endforeach; ?>
 			</tbody>
@@ -493,13 +495,13 @@ function ims_color_options($ims){
 					<td colspan="3" class="name"><input type="text" class="name"/></td>
 					<td colspan="2" class="price"><input type="text" class="price" /></td>
 					<td class="code"><input type="text" class="code" /></td>
-					<td class="x" title="<?php _e( 'Delete', $ims->domain )?>">x</td>
+					<td class="x" title="<?php _e( 'Delete', 'ims' )?>">x</td>
 				</tr><!--.copyrow-->
 				
 				<tr class="addrow">
-					<td colspan="4" align="left"><a href="#" class="addcoloropt"><?php _e( 'Add color option', $ims->domain )?></a></td>
+					<td colspan="4" align="left"><a href="#" class="addcoloropt"><?php _e( 'Add color option', 'ims' )?></a></td>
 					<td colspan="4" align="right">
-						<input type="submit" name="updatecolors" value="<?php esc_attr_e( 'Update', $ims->domain )?>" class="button-primary" />
+						<input type="submit" name="updatecolors" value="<?php esc_attr_e( 'Update', 'ims' )?>" class="button-primary" />
 					</td>
 				</tr>
 			</tfoot>
@@ -516,12 +518,12 @@ function ims_color_filters($ims){
 			
 			<thead>
 				<tr class="alternate">
-					<td class="name"><?php _e( 'Name', $ims->domain )?></td>
-					<td class="code"><?php _e( 'Code', $ims->domain )?></td>
-					<td class="grayscale"><?php _e( 'Grayscale', $ims->domain )?></td>
-					<td class="contrast"><?php _e( 'Contrast', $ims->domain )?></td>
-					<td class="brightness"><?php _e( 'Brightness', $ims->domain )?></td>
-					<td class="colorize"><?php _e( 'Colorize(r,g,b,a)', $ims->domain )?></td>
+					<td class="name"><?php _e( 'Name', 'ims' )?></td>
+					<td class="code"><?php _e( 'Code', 'ims' )?></td>
+					<td class="grayscale"><?php _e( 'Grayscale', 'ims' )?></td>
+					<td class="contrast"><?php _e( 'Contrast', 'ims' )?></td>
+					<td class="brightness"><?php _e( 'Brightness', 'ims' )?></td>
+					<td class="colorize"><?php _e( 'Colorize(r,g,b,a)', 'ims' )?></td>
 					<td>&nbsp;</td>
 				</tr>
 			</thead>
@@ -547,7 +549,7 @@ function ims_color_filters($ims){
 				<td class="colorize">
 					<input type="text" name="filters[<?php echo $code ?>][colorize]" value="<?php echo esc_attr($filter['colorize']) ?>" class="colorize" />
 				</td>
-				<td class="x" title="<?php _e( 'Delete', $ims->domain )?>">x</td>
+				<td class="x" title="<?php _e( 'Delete', 'ims' )?>">x</td>
 			</tr><!--.row-->
 			<?php endforeach; ?>
 			</tbody>
@@ -560,13 +562,13 @@ function ims_color_filters($ims){
 					<td class="contrast"><input type="text" class="contrast" /></td>
 					<td class="brightness"><input type="text" class="brightness" /></td>
 					<td class="colorize"><input type="text" class="colorize" /></td>
-					<td class="x" title="<?php _e( 'Delete', $ims->domain )?>">x</td>
+					<td class="x" title="<?php _e( 'Delete', 'ims' )?>">x</td>
 				</tr><!--.copyrow-->
 				
 				<tr class="addrow">
-					<td colspan="4" align="left"><a href="#" class="addcolorfilter"><?php _e( 'Add a filter', $ims->domain )?></a></td>
+					<td colspan="4" align="left"><a href="#" class="addcolorfilter"><?php _e( 'Add a filter', 'ims' )?></a></td>
 					<td colspan="4" align="right">
-						<input type="submit" name="updatefilters" value="<?php esc_attr_e( 'Update', $ims->domain )?>" class="button-primary" />
+						<input type="submit" name="updatefilters" value="<?php esc_attr_e( 'Update', 'ims' )?>" class="button-primary" />
 					</td>
 				</tr>
 			</tfoot>
@@ -600,7 +602,7 @@ function ims_shipping_options($ims){
 						<span class="hidden"><?php echo $ims->format_price($option['price']) ?></span>
 						<input type="text" name="shipping[<?php echo $key ?>][price]" value="<?php echo esc_attr($option['price']) ?>" class="price" />
 					</td>
-					<td class="x" title="<?php _e('Delete', $ims->domain) ?>">x</td>
+					<td class="x" title="<?php _e('Delete', 'ims') ?>">x</td>
 				</tr><!--.row-->
 			<?php endforeach; ?>
 			</tbody>
@@ -609,13 +611,13 @@ function ims_shipping_options($ims){
 				<tr class="copyrow" title="shipping">
 					<td colspan="3" class="name"><input type="text" class="name"/></td>
 					<td colspan="3" class="price"><input type="text" class="price" /></td>
-					<td class="x" title="<?php _e( 'Delete', $ims->domain )?>">x</td>
+					<td class="x" title="<?php _e( 'Delete', 'ims' )?>">x</td>
 				</tr><!--.copyrow-->
 				
 				<tr class="addrow">
-					<td colspan="3" align="left"><a href="#" class="addshipping"><?php _e( 'Add shipping option', $ims->domain )?></a></td>
+					<td colspan="3" align="left"><a href="#" class="addshipping"><?php _e( 'Add shipping option', 'ims' )?></a></td>
 					<td colspan="4" align="right">
-						<input type="submit" name="updateshipping" value="<?php esc_attr_e( 'Update', $ims->domain )?>" class="button-primary" />
+						<input type="submit" name="updateshipping" value="<?php esc_attr_e( 'Update', 'ims' )?>" class="button-primary" />
 					</td>
 				</tr>
 			</tfoot>
@@ -642,11 +644,11 @@ function ims_image_sizes($ims,$args) {
 			<thead>
 				<tr class="alternate">
 					<td>&nbsp;</td>
-					<td colspan="3" class="name"><?php _e( 'Name', $ims->domain )?></td>
-					<td class="price"><?php _e( 'Price', $ims->domain )?></td>
-					<td><?php _e( 'Width', $ims->domain )?></td>
-					<td><?php _e( 'Height', $ims->domain )?></td>
-					<td><?php _e( 'Unit', $ims->domain )?></td>
+					<td colspan="3" class="name"><?php _e( 'Name', 'ims' )?></td>
+					<td class="price"><?php _e( 'Price', 'ims' )?></td>
+					<td><?php _e( 'Width', 'ims' )?></td>
+					<td><?php _e( 'Height', 'ims' )?></td>
+					<td><?php _e( 'Unit', 'ims' )?></td>
 					<td class="download">&nbsp;</td>
 					<td>&nbsp;</td>
 				</tr>
@@ -661,7 +663,7 @@ function ims_image_sizes($ims,$args) {
 					$sizedata = isset( $size['w'] ) ? array( $size['w'], $size['h'] ) : explode("x",strtolower($size['name']));
 				?>
 				<tr class="size row alternate">
-					<td class="move" title="<?php _e( 'Move to list', $ims->domain )?>">&nbsp;</td>
+					<td class="move" title="<?php _e( 'Move to list', 'ims' )?>">&nbsp;</td>
 					<td colspan="3" class="name"><span class="hidden"><?php echo $size['name']?></span>
 					<span class="hidden"><?php echo $ims->units[$size['unit']]?></span>
 					<input type="text" name="sizes[<?php echo $key ?>][name]" class="name" value="<?php echo esc_attr( $size['name'] )?>" />
@@ -678,11 +680,11 @@ function ims_image_sizes($ims,$args) {
 					
 					<td><?php $ims->dropdown_units( "sizes[$key][unit]", $size['unit'] )?></td>
 					
-					<td title="<?php _e('Check to make size downloadable', $ims->domain) ?>" class="download">
+					<td title="<?php _e('Check to make size downloadable', 'ims') ?>" class="download">
 						<input type="checkbox" name="sizes[<?php echo $key ?>][download]" class="downloadable" value="1"  />
 					</td>
 		
-					<td class="x" title="<?php _e( 'Delete', $ims->domain )?>">x</td>
+					<td class="x" title="<?php _e( 'Delete', 'ims' )?>">x</td>
 				</tr><!--.row-->
 				<?php endforeach?>
 			</tbody>
@@ -696,15 +698,15 @@ function ims_image_sizes($ims,$args) {
 					<td><input type="text" class="height" /></td>
 					<td><?php $ims->dropdown_units( '', '')?></td>
 					<td class="download"></td>
-					<td class="x" title="<?php _e( 'Delete', $ims->domain )?>">x</td>
+					<td class="x" title="<?php _e( 'Delete', 'ims' )?>">x</td>
 				</tr>
 				<tr>
-					<td colspan="9"><small><?php _e( 'in:inches &bull; cm:centimeters &bull; px:pixels', $ims->domain )?></small></td>
+					<td colspan="9"><small><?php _e( 'in:inches &bull; cm:centimeters &bull; px:pixels', 'ims' )?></small></td>
 				</tr>
 				<tr class="addrow">
-					<td colspan="5" align="left"><a href="#" class="addimagesize"><?php _e( 'Add image size', $ims->domain ) ?></a></td>
+					<td colspan="5" align="left"><a href="#" class="addimagesize"><?php _e( 'Add image size', 'ims' ) ?></a></td>
 					<td colspan="4" align="right">
-						<input type="submit" name="updateimglist" value="<?php esc_attr_e( 'Update', $ims->domain )?>" class="button-primary" />
+						<input type="submit" name="updateimglist" value="<?php esc_attr_e( 'Update', 'ims' )?>" class="button-primary" />
 					</td>
 				</tr>
 			</tfoot>
@@ -728,7 +730,7 @@ function ims_price_lists_packages($ims) {
 			<tbody>
 			<?php foreach( $ims->get_packages( ) as $key => $package ):?>
 				<tr class="packages row alternate">
-					<td class="move" title="<?php _e( 'Move to list', $ims->domain )?>">&nbsp;</td>
+					<td class="move" title="<?php _e( 'Move to list', 'ims' )?>">&nbsp;</td>
 					<td colspan="3" class="name"><?php echo $package->post_title?>: 
 					<?php $sizes = ''; 
 						foreach((array) get_post_meta( $package->ID, '_ims_sizes', true) as $size => $count){
@@ -743,10 +745,10 @@ function ims_price_lists_packages($ims) {
 						<input type="hidden" name="packages[][name]" class="name" value="<?php echo esc_attr( $package->post_title )?>"/>
 					</td>
 					<td class="hidden">&nbsp;</td>
-					<td title="<?php _e('Check to make size downloadable', $ims->domain) ?>" class="download">
+					<td title="<?php _e('Check to make size downloadable', 'ims') ?>" class="download">
 						<input type="checkbox" name="packages[<?php echo $key ?>][download]" class="downloadable" value="1"  />
 					</td>
-					<td class="x" title="<?php _e( 'Delete', $ims->domain )?>">x</td>
+					<td class="x" title="<?php _e( 'Delete', 'ims' )?>">x</td>
 				</tr>
 			<?php endforeach?>
 			</tbody>
@@ -764,7 +766,7 @@ function ims_price_lists_packages($ims) {
  */
 function ims_package_list($ims,$tabid) {
 	?>
-	<p><small><?php _e( 'Add options by dragging image sizes into the desired package.', $ims->domain )?></small></p>
+	<p><small><?php _e( 'Add options by dragging image sizes into the desired package.', 'ims' )?></small></p>
 	
 	<?php foreach( $ims->get_packages( ) as $key => $package ): ?>
 	<?php $price = get_post_meta( $package->ID, '_ims_price', true ) ?>
@@ -779,7 +781,7 @@ function ims_package_list($ims,$tabid) {
 					<th colspan="3" class="itemtop inactive">
 						<input type="text" name="packagename" value="<?php echo esc_attr( $package->post_title )?>" class="regular-text" />
 					</th>
-					<th><label><?php _e( 'Price', $ims->domain )?>
+					<th><label><?php _e( 'Price', 'ims' )?>
 						<input type="text" name="packageprice" value="<?php echo esc_attr( $price )?>" class="inputsm" /></label></th>
 					<th>&nbsp;</th>
 					<th class="itemtop toggle"><a href="#">[+]</a></th>
@@ -797,20 +799,20 @@ function ims_package_list($ims,$tabid) {
 					<td class="price">
 					<?php $count_val = ( is_array( $count) ) ?  $count['count'] : $count ?>
 					<input type="hidden" name="packages[<?php echo $size ?>][name]" class="name" value="<?php echo esc_attr( $size )?>" />
-					<input type="text" name="packages[<?php echo $size ?>][count]" value="<?php echo esc_attr( $count_val )?>" class="count" title="<?php _e( 'Quantity', $ims->domain )?>" />
+					<input type="text" name="packages[<?php echo $size ?>][count]" value="<?php echo esc_attr( $count_val )?>" class="count" title="<?php _e( 'Quantity', 'ims' )?>" />
 					</td>
 					<td><input type="hidden" name="packages[<?php echo $size ?>][unit]" class="unit" value="<?php echo esc_attr( $count['unit'] )?>" /></td>
-					<td class="x" title="<?php _e( 'Delete', $ims->domain )?>">x</td>
+					<td class="x" title="<?php _e( 'Delete', 'ims' )?>">x</td>
 				</tr><!--.row-->
 			<?php endforeach ?>
 			<?php endif ?>
-				<tr class="filler"><td colspan="7"><?php _e( 'Add options by dragging image sizes here', $ims->domain )?></td></tr>
+				<tr class="filler"><td colspan="7"><?php _e( 'Add options by dragging image sizes here', 'ims' )?></td></tr>
 			</tbody>
 			<tfoot class="content">
 				<tr>
 					<td colspan="7" align="right">
 						<input type="hidden" vname="packages[random]" alue="<?php echo rand(0,3000)?>"/>
-						<input type="submit" name="updatepackage" value="<?php esc_attr_e( 'Update', $ims->domain )?>" class="button-primary" />
+						<input type="submit" name="updatepackage" value="<?php esc_attr_e( 'Update', 'ims' )?>" class="button-primary" />
 					</td>
 				</tr>
 			</tfoot>
@@ -857,7 +859,7 @@ function ims_new_promotion($ims) {
 		<table class="ims-table">
 			<tbody><tr>
 				<td colspan="5">
-					<label><?php _e( 'Type', $ims->domain )?>
+					<label><?php _e( 'Type', 'ims' )?>
 						<select name="promo_type" id="promo_type">
 							<?php foreach( $ims->promo_types as $key => $label ){?>
 							<option value="<?php echo esc_attr( $key ) ?>"<?php selected( $promo_type, $key )?>><?php echo $label?></option>
@@ -868,21 +870,21 @@ function ims_new_promotion($ims) {
 			</tr>
 			<tr>
 				<td>
-					<label><?php _e( 'Name',$ims->domain )?> <input name="promo_name" type="text" class="regular-text" value="<?php echo esc_attr( $promo_name ) ?>"/></label>
+					<label><?php _e( 'Name','ims' )?> <input name="promo_name" type="text" class="regular-text" value="<?php echo esc_attr( $promo_name ) ?>"/></label>
 				</td>
 				<td>
-					<label> <?php _e( 'Code',$ims->domain )?>	 <input name="promo_code" type="text" class="regular-text" value="<?php echo esc_attr( $promo_code ) ?>" /></label>
+					<label> <?php _e( 'Code','ims' )?>	 <input name="promo_code" type="text" class="regular-text" value="<?php echo esc_attr( $promo_code ) ?>" /></label>
 				</td>
 				<td>
-					<label><?php _e( 'Starts',$ims->domain )?> <input type="text" name="starts" id="starts" class="regular-text" value="<?php echo esc_attr( $starts )?>" /></label>
+					<label><?php _e( 'Starts','ims' )?> <input type="text" name="starts" id="starts" class="regular-text" value="<?php echo esc_attr( $starts )?>" /></label>
 					<input type="hidden" name="start_date" id="start_date" value="<?php echo $startdate?>" />
 				</td>
 				<td>
-					<label><?php _e( 'Expire',$ims->domain )?> <input type="text" name="expires" id="expires" class="regular-text" value="<?php echo esc_attr( $expires )?>" /></label>
+					<label><?php _e( 'Expire','ims' )?> <input type="text" name="expires" id="expires" class="regular-text" value="<?php echo esc_attr( $expires )?>" /></label>
 					<input type="hidden" name="expiration_date" id="expiration_date" value="<?php echo esc_attr( $expiration_date ) ?>" />
 				</td>
 				<td>
-					<label class="hide-free"> <?php _e( 'Discount', $ims->domain )?>
+					<label class="hide-free"> <?php _e( 'Discount', 'ims' )?>
 						<input type="text" name="discount" class="regular-text" value="<?php echo esc_attr( $discount ) ?>" <?php if( $promo_type == 3) echo ' disabled="disabled"' ?> /> 
 					</label>
 				</td>
@@ -893,7 +895,7 @@ function ims_new_promotion($ims) {
 					$logic = ( isset( $_POST['rules']['logic'] ) ) ? $_POST['rules']['logic'] : false ;
 					$property = ( isset( $_POST['rules']['property'] ) ) ? $_POST['rules']['property'] : false;
 					?>
-					<?php _e( 'Conditions', $ims->domain )?> 
+					<?php _e( 'Conditions', 'ims' )?> 
 					<select name="rules[property]">
 						<?php foreach( $ims->rules_property as $val => $label ) 
 							echo '<option value="', esc_attr( $val ), '"', selected( $property, $val, false ), '>',$label, '</option>';
@@ -907,8 +909,8 @@ function ims_new_promotion($ims) {
 					<input name="rules[value]" type="text" class="inpsm" value="<?php if( isset($_POST['rules']['value']) ) echo esc_attr( $_POST['rules']['value'] ) ?>"/>
 				</td>
 				<td width="25%" align="right">
-					<?php $action = ( $_GET['action'] == 'new' ) ? __( 'Add promotion', $ims->domain ) : __( 'Update', $ims->domain ) ?>
-					<input type="submit" name="cancel" value="<?php esc_attr_e( 'Cancel', $ims->domain )?>" class="button" />
+					<?php $action = ( $_GET['action'] == 'new' ) ? __( 'Add promotion', 'ims' ) : __( 'Update', 'ims' ) ?>
+					<input type="submit" name="cancel" value="<?php esc_attr_e( 'Cancel', 'ims' )?>" class="button" />
 					<input type="hidden" name="promotion_id" value="<?php if( $_GET['action'] != 'new' ) echo esc_attr($_GET['action'])?>"/>
 					<input type="submit" name="promotion" value="<?php echo esc_attr( $action )?>" class="button-primary" />
 				</td>
@@ -957,11 +959,11 @@ function ims_promotions_tab($ims) {
 		<div class="tablenav">
 			<div class="alignleft actions">
 			<select name="action">
-				<option value="" selected="selected"><?php _e( 'Bulk Actions', $ims->domain )?></option>
-				<option value="delete"><?php _e( 'Delete', $ims->domain )?></option>
+				<option value="" selected="selected"><?php _e( 'Bulk Actions', 'ims' )?></option>
+				<option value="delete"><?php _e( 'Delete', 'ims' )?></option>
 			</select>
-			<input type="submit" value="<?php esc_attr_e( 'Apply', $ims->domain );?>" name="doaction" class="button-secondary" /> |
-			<a href="<?php echo $ims->pageurl ."&amp;$nonce&amp;action=new#promotions"?>" class="button"><?php _e( 'New Promotion', $ims->domain )?></a>
+			<input type="submit" value="<?php esc_attr_e( 'Apply', 'ims' );?>" name="doaction" class="button-secondary" /> |
+			<a href="<?php echo $ims->pageurl ."&amp;$nonce&amp;action=new#promotions"?>" class="button"><?php _e( 'New Promotion', 'ims' )?></a>
 			</div><!--.actions-->
 		</div><!--.tablenav-->
 		
@@ -981,8 +983,8 @@ function ims_promotions_tab($ims) {
 							break;
 						case 'name':
 							$r .= '<td class="column-' . $column_id . '" > ' . $promo->post_title . '<div class="row-actions">' ;
-							$r .= '<span><a href="' . $ims->pageurl . "&amp;$nonce&amp;action=$promo->ID#promotions" . '">' . __( "Edit", $ims->domain ) . '</a></span> |';
-							$r .= '<span class="delete"><a href="' . $ims->pageurl . "&amp;$nonce&amp;delete=$promo->ID#promotions" . '"> ' . __( "Delete", $ims->domain ) . '</a></span>';
+							$r .= '<span><a href="' . $ims->pageurl . "&amp;$nonce&amp;action=$promo->ID#promotions" . '">' . __( "Edit", 'ims' ) . '</a></span> |';
+							$r .= '<span class="delete"><a href="' . $ims->pageurl . "&amp;$nonce&amp;delete=$promo->ID#promotions" . '"> ' . __( "Delete", 'ims' ) . '</a></span>';
 							$r .= '</div></td>';
 							break;
 						case 'code':

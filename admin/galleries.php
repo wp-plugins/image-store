@@ -10,16 +10,16 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
 $order = empty($this->meta['_ims_order'][0]) ? $this->opts['imgsortdirect'] : $this->meta['_ims_order'][0];
 $orderby = empty($this->meta['_ims_sortby'][0]) ? $this->opts['imgsortorder'] : $this->meta['_ims_sortby'][0];
 
-$errors[1] = __('Upload failed.', $this->domain);
-$errors[2] = __('Not a valid URL path', $this->domain);
-$errors[3] = __('This is not a zip file.', $this->domain);
-$errors[4] = __('Please enter a folder path.', $this->domain);
-$errors[5] = __('There was an error extracting the images.', $this->domain);
-$errors[6] = __('The folder doesn&#8217;t exist,please check your folder path.', $this->domain);
+$errors[1] = __('Upload failed.', 'ims');
+$errors[2] = __('Not a valid URL path', 'ims');
+$errors[3] = __('This is not a zip file.', 'ims');
+$errors[4] = __('Please enter a folder path.', 'ims');
+$errors[5] = __('There was an error extracting the images.', 'ims');
+$errors[6] = __('The folder doesn&#8217;t exist,please check your folder path.', 'ims');
 
 $status_labels = array(
-	'trash' => __('Trash', $this->domain),
-	'publish' => __('Published', $this->domain),
+	'trash' => __('Trash', 'ims'),
+	'publish' => __('Published', 'ims'),
 );
 
 global $post;
@@ -29,25 +29,25 @@ $this->is_trash = (isset($_GET['status'])) && ($_GET['status'] == 'trash' );
 $args = array(
 	'paged' => $page,
 	'order' => $order,
-	'orderby' => $orderby,
 	'post_status' => $status,
 	'post_type' => 'ims_image',
 	'post_parent' => $this->galid,
 	'posts_per_page' => $this->per_page,
+	'orderby' => str_replace('post_', '', $orderby),
 );
 
-$args = apply_filters('ims_pre_get_images', $args);
+$args = apply_filters('ims_pre_get_images', $args, $this);
 $images = new WP_Query($args);
 
 $start = ($page - 1) * $this->per_page;
 $page_links = paginate_links(array(
 	'base' => $this->pageurl . '%_%#ims_images_box',
 	'format' => '&p=%#%',
-	'prev_text' => __('&laquo;', $this->domain),
-	'next_text' => __('&raquo;', $this->domain),
+	'prev_text' => __('&laquo;', 'ims'),
+	'next_text' => __('&raquo;', 'ims'),
 	'total' => $images->max_num_pages,
 	'current' => $page,
-		));
+));
 
 
 //save iptc metadata
@@ -70,15 +70,15 @@ if (isset($_POST['save-metadata']) && isset($_POST['imageid'])) {
 	</ul>
 	<div class="alignright actions">
 		<select name="actions">
-			<option value="0" selected="selected"><?php _e('Actions', $this->domain) ?></option>
+			<option value="0" selected="selected"><?php _e('Actions', 'ims') ?></option>
 <?php if ($this->is_trash) { ?>
-				<option value="publish"><?php _e('Restore', $this->domain) ?></option> 
-				<option value="delete"><?php _e('Delete Permanently', $this->domain) ?></option>
+				<option value="publish"><?php _e('Restore', 'ims') ?></option> 
+				<option value="delete"><?php _e('Delete Permanently', 'ims') ?></option>
 <?php } else { ?>
-				<option value="trash"><?php _e('Move to Trash', $this->domain) ?></option>
+				<option value="trash"><?php _e('Move to Trash', 'ims') ?></option>
 			<?php } ?>
 		</select>
-		<input type="submit" value="<?php _e('Apply', $this->domain) ?>" name="doactions" class="button action" />
+		<input type="submit" value="<?php _e('Apply', 'ims') ?>" name="doactions" class="button action" />
 	</div>
 </div>
 

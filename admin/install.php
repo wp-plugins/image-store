@@ -56,7 +56,7 @@ class ImStoreInstaller extends ImStore {
 		$ims_ft_opts['bottommenu'] = false;
 		
 		$ims_ft_opts['clocal'] = '1';
-		$ims_ft_opts['closeLinkText'] = __('Close', $this->domain);
+		$ims_ft_opts['closeLinkText'] = __('Close', 'ims');
 		$ims_ft_opts['colorbox'] = '1';
 		$ims_ft_opts['currency'] = 'USD';
 		
@@ -85,18 +85,18 @@ class ImStoreInstaller extends ImStore {
 		$ims_ft_opts['maxPagesToShow'] = 5;
 		$ims_ft_opts['mediarss'] = '1';
 		
-		$ims_ft_opts['nextLinkText'] = __('Next', $this->domain);
-		$ims_ft_opts['nextPageLinkText'] = __('Next &rsaquo;', $this->domain);
+		$ims_ft_opts['nextLinkText'] = __('Next', 'ims');
+		$ims_ft_opts['nextPageLinkText'] = __('Next &rsaquo;', 'ims');
 		$ims_ft_opts['notifyemail'] = get_option('admin_email');
-		$ims_ft_opts['notifymssg'] = sprintf(__("A new order was place at you image store at %s \n\nOrder number: %%order_number%% \nTo view the order details please login to your site at: %s \n\n%%instructions%%", $this->domain), get_option('blogname'), wp_login_url());
-		$ims_ft_opts['notifysubj'] = __('New purchase notification', $this->domain);
+		$ims_ft_opts['notifymssg'] = sprintf(__("A new order was place at you image store at %s \n\nOrder number: %%order_number%% \nTo view the order details please login to your site at: %s \n\n%%instructions%%", 'ims'), get_option('blogname'), wp_login_url());
+		$ims_ft_opts['notifysubj'] = __('New purchase notification', 'ims');
 		$ims_ft_opts['numThumbs'] = 8;
 		
-		$ims_ft_opts['pauseLinkTex'] = __('Pause', $this->domain);
+		$ims_ft_opts['pauseLinkTex'] = __('Pause', 'ims');
 		$ims_ft_opts['paymentname'] = 'Pay by check';
-		$ims_ft_opts['playLinkText'] = __('Play', $this->domain);
-		$ims_ft_opts['prevLinkText'] = __('Previous', $this->domain);
-		$ims_ft_opts['prevPageLinkText'] = __('&lsaquo; Prev', $this->domain);
+		$ims_ft_opts['playLinkText'] = __('Play', 'ims');
+		$ims_ft_opts['prevLinkText'] = __('Previous', 'ims');
+		$ims_ft_opts['prevPageLinkText'] = __('&lsaquo; Prev', 'ims');
 		
 		$ims_ft_opts['receiptname'] =  'Image Store';
 		$ims_ft_opts['receiptemail'] =  'imstore@' . $_SERVER['HTTP_HOST'];
@@ -111,7 +111,7 @@ class ImStoreInstaller extends ImStore {
 		
 		$ims_ft_opts['taxtype'] = 'percent';
 		$ims_ft_opts['transitionTime'] = 1000;	
-		$ims_ft_opts['thankyoureceipt'] = sprintf(__("<h2>Thank You, %%customer_first%% %%customer_last%%</h2>\n Save the information bellow for your records. \n\nTotal payment: %%total%%\nTransaction number: %%order_number%%\n\nIf you have any question about your order please contact us at: %s", $this->domain), get_option('admin_email'));
+		$ims_ft_opts['thankyoureceipt'] = sprintf(__("<h2>Thank You, %%customer_first%% %%customer_last%%</h2>\n Save the information bellow for your records. \n\nTotal payment: %%total%%\nTransaction number: %%order_number%%\n\nIf you have any question about your order please contact us at: %s", 'ims'), get_option('admin_email'));
 			
 		$ims_ft_opts['watermark'] = '0';
 		$ims_ft_opts['watermark_color'] = 'ffffff';
@@ -123,15 +123,15 @@ class ImStoreInstaller extends ImStore {
 
 		//dont change array order
 		$ims_ft_opts['tags'] = array(
-			__('/%total%/', $this->domain),
-			__('/%status%/', $this->domain),
-			__('/%gallery%/', $this->domain),
-			__('/%shipping%/', $this->domain),
-			__('/%order_number%/', $this->domain),
-			__('/%customer_last%/', $this->domain),
-			__('/%customer_first%/', $this->domain),
-			__('/%customer_email%/', $this->domain),
-			__('/%instructions%/', $this->domain),
+			__('/%total%/', 'ims'),
+			__('/%status%/', 'ims'),
+			__('/%gallery%/', 'ims'),
+			__('/%shipping%/', 'ims'),
+			__('/%order_number%/', 'ims'),
+			__('/%customer_last%/', 'ims'),
+			__('/%customer_first%/', 'ims'),
+			__('/%customer_email%/', 'ims'),
+			__('/%instructions%/', 'ims'),
 		);
 
 		$ims_ft_opts['required_ims_zip'] = 1;
@@ -139,14 +139,14 @@ class ImStoreInstaller extends ImStore {
 		$ims_ft_opts['required_first_name'] = 1;
 		$ims_ft_opts['required_ims_address'] = 1;
 		$ims_ft_opts['checkoutfields'] = array(
-			'ims_city' => __('City', $this->domain),
-			'ims_state' => __('State', $this->domain),
-			'user_email' => __('Email', $this->domain),
-			'ims_phone' => __('Phone', $this->domain),
-			'ims_address' => __('Address', $this->domain),
-			'ims_zip' => __('Zip Code', $this->domain),
-			'last_name' => __('Last Name', $this->domain),
-			'first_name' => __('First Name', $this->domain),
+			'ims_city' => __('City', 'ims'),
+			'ims_state' => __('State', 'ims'),
+			'user_email' => __('Email', 'ims'),
+			'ims_phone' => __('Phone', 'ims'),
+			'ims_address' => __('Address', 'ims'),
+			'ims_zip' => __('Zip Code', 'ims'),
+			'last_name' => __('Last Name', 'ims'),
+			'first_name' => __('First Name', 'ims'),
 		);
 		
 		//gateway array
@@ -225,7 +225,7 @@ class ImStoreInstaller extends ImStore {
 		//update options if updating from 2.0.8
 		if ($this->ver <= "2.0.8") {
 			$ims_ft_opts['album_template'] = 'page . php';
-			$ims_ft_opts['tags'][] = __('/%instructions%/', $this->domain);
+			$ims_ft_opts['tags'][] = __('/%instructions%/', 'ims');
 			update_option($this->optionkey, $ims_ft_opts);
 		}
 		
@@ -233,22 +233,22 @@ class ImStoreInstaller extends ImStore {
 		if ($this->ver <= "3.0.0" || empty($ims_ft_opts['carttags'])) {
 			$ims_ft_opts['gateway_method'] = 'post';
 			$ims_ft_opts['carttags'] = array(
-				__('%image_id%', $this->domain),
-				__('%image_name%', $this->domain),
-				__('%image_value%', $this->domain),
-				__('%image_color%', $this->domain),
-				__('%image_quantity%', $this->domain),
-				__('%image_download%', $this->domain),
-				__('%cart_id%', $this->domain),
-				__('%cart_tax%', $this->domain),
-				__('%cart_total%', $this->domain),
-				__('%cart_status%', $this->domain),
-				__('%cart_shipping%', $this->domain),
-				__('%cart_currency%', $this->domain),
-				__('%cart_subtotal%', $this->domain),
-				__('%cart_discount%', $this->domain),
-				__('%cart_discount_code%', $this->domain),
-				__('%cart_total_items%', $this->domain),
+				__('%image_id%', 'ims'),
+				__('%image_name%', 'ims'),
+				__('%image_value%', 'ims'),
+				__('%image_color%', 'ims'),
+				__('%image_quantity%', 'ims'),
+				__('%image_download%', 'ims'),
+				__('%cart_id%', 'ims'),
+				__('%cart_tax%', 'ims'),
+				__('%cart_total%', 'ims'),
+				__('%cart_status%', 'ims'),
+				__('%cart_shipping%', 'ims'),
+				__('%cart_currency%', 'ims'),
+				__('%cart_subtotal%', 'ims'),
+				__('%cart_discount%', 'ims'),
+				__('%cart_discount_code%', 'ims'),
+				__('%cart_total_items%', 'ims'),
 			);
 		}
 			
@@ -299,28 +299,28 @@ class ImStoreInstaller extends ImStore {
 		//add finish options
 		if ($this->ver <= "3.1.5"){	
 			$ims_ft_opts['tags'] = array(
-				__('/%total%/', $this->domain),
-				__('/%status%/', $this->domain),
-				__('/%gallery%/', $this->domain),
-				__('/%shipping%/', $this->domain),
-				__('/%order_number%/', $this->domain),
-				__('/%customer_last%/', $this->domain),
-				__('/%customer_first%/', $this->domain),
-				__('/%customer_email%/', $this->domain),
-				__('/%instructions%/', $this->domain),
+				__('/%total%/', 'ims'),
+				__('/%status%/', 'ims'),
+				__('/%gallery%/', 'ims'),
+				__('/%shipping%/', 'ims'),
+				__('/%order_number%/', 'ims'),
+				__('/%customer_last%/', 'ims'),
+				__('/%customer_first%/', 'ims'),
+				__('/%customer_email%/', 'ims'),
+				__('/%instructions%/', 'ims'),
 			);
 			update_option($this->optionkey, $ims_ft_opts);
 		}
 
 		//add imstore capabilities
 		$ims_caps = array(
-			'read_sales' => __('Read sales', $this->domain),
-			'add_galleries' => __('Add galleries', $this->domain),
-			'change_pricing' => __('Change pricing', $this->domain),
-			'change_settings' => __('Change Settings', $this->domain),
-			'manage_galleries' => __('Manage galleries', $this->domain),
-			'manage_customers' => __('Manage Customers', $this->domain),
-			'change_permissions' => __('Change Permissions', $this->domain),
+			'read_sales' => __('Read sales', 'ims'),
+			'add_galleries' => __('Add galleries', 'ims'),
+			'change_pricing' => __('Change pricing', 'ims'),
+			'change_settings' => __('Change Settings', 'ims'),
+			'manage_galleries' => __('Manage galleries', 'ims'),
+			'manage_customers' => __('Manage Customers', 'ims'),
+			'change_permissions' => __('Change Permissions', 'ims'),
 		);
 
 		$ims_caps = apply_filters('ims_user_caps', $ims_caps);
@@ -364,7 +364,7 @@ class ImStoreInstaller extends ImStore {
 				'comment_status' => 'closed',
 				'post_author' => $this->userid,
 				'post_content' => '[image-store secure=1]',
-				'post_title' =>__('Secure Images', $this->domain),
+				'post_title' =>__('Secure Images', 'ims'),
 				'post_excerpt' => ''
 			);
 			$page_secure = wp_insert_post($secure_data);
@@ -382,7 +382,7 @@ class ImStoreInstaller extends ImStore {
 				'post_status' => 'publish',
 				'comment_status' => 'closed',
 				'post_author' => $this->userid,
-				'post_title' => __('Cart', $this->domain),
+				'post_title' => __('Cart', 'ims'),
 				'post_content' => '[image-store cart=1]',
 				'post_excerpt' => ''
 			);
@@ -421,37 +421,37 @@ class ImStoreInstaller extends ImStore {
 	function ims_xtra_pricing_opts(){
 		//finishes
 		$sizes = array(
-			array('name' => __( 'None', $this->domain), 'price' => '0', 'type' => 'amount' ),
-			array('name' => __( 'Matte', $this->domain), 'price' => '2.95', 'type' => 'amount' ),
-			array('name' => __( 'Glossy', $this->domain), 'price' => '3.45', 'type' => 'amount' ),
-			array('name' => __( 'Semi-gloss', $this->domain), 'price' => '3', 'type' => 'percent' ),
-			array('name' => __( 'Metallic', $this->domain), 'price' => '2', 'type' => 'percent' ),
-			array('name' => __( 'Lustre', $this->domain), 'price' => '5', 'type' => 'percent' ),
-			array('name' => __( 'Texture', $this->domain), 'price' => '7', 'type' => 'percent' ),
+			array('name' => __( 'None', 'ims'), 'price' => '0', 'type' => 'amount' ),
+			array('name' => __( 'Matte', 'ims'), 'price' => '2.95', 'type' => 'amount' ),
+			array('name' => __( 'Glossy', 'ims'), 'price' => '3.45', 'type' => 'amount' ),
+			array('name' => __( 'Semi-gloss', 'ims'), 'price' => '3', 'type' => 'percent' ),
+			array('name' => __( 'Metallic', 'ims'), 'price' => '2', 'type' => 'percent' ),
+			array('name' => __( 'Lustre', 'ims'), 'price' => '5', 'type' => 'percent' ),
+			array('name' => __( 'Texture', 'ims'), 'price' => '7', 'type' => 'percent' ),
 		);
 		update_option('ims_print_finishes', $sizes);
 		
 		//colors
 		$colors = array(
-			array( 'price' => '0', 'code' =>false, 'name' => __( 'Color', $this->domain )),
-			array( 'price' => '1.00', 'code' =>'bw','name' => __( 'BW', $this->domain )),
-			array( 'price' => '1.00', 'code' =>'sp','name' => __('Sepia', $this->domain )),
-			array( 'price' => '1.00', 'code' =>'gn','name' => __('Green Tone', $this->domain ))
+			array( 'price' => '0', 'code' =>false, 'name' => __( 'Color', 'ims')),
+			array( 'price' => '1.00', 'code' =>'bw','name' => __( 'BW', 'ims')),
+			array( 'price' => '1.00', 'code' =>'sp','name' => __('Sepia', 'ims')),
+			array( 'price' => '1.00', 'code' =>'gn','name' => __('Green Tone', 'ims'))
 		);
 		update_option('ims_color_options', $colors);
 		
 		//filters
 		$filters = array(
-			'bw' => array( 'code' =>'bw','name' => __('BW', $this->domain ),'grayscale'=>1, 'contrast'=>'', 'brightness'=>'+10','colorize'=>''),
-			'sp' => array( 'code' =>'sp','name' => __('Sepia', $this->domain ),'grayscale'=>1,'contrast'=>'', 'brightness'=>'+5','colorize'=>'35,25,10'),
-			'gn' => array( 'code' =>'gn','name' => __('Green Tone', $this->domain ),'grayscale'=>'', 'contrast'=>'-5','brightness'=>'','colorize'=>'93,111,38,80')
+			'bw' => array( 'code' =>'bw','name' => __('BW', 'ims'),'grayscale'=>1, 'contrast'=>'', 'brightness'=>'+10','colorize'=>''),
+			'sp' => array( 'code' =>'sp','name' => __('Sepia', 'ims'),'grayscale'=>1,'contrast'=>'', 'brightness'=>'+5','colorize'=>'35,25,10'),
+			'gn' => array( 'code' =>'gn','name' => __('Green Tone', 'ims'),'grayscale'=>'', 'contrast'=>'-5','brightness'=>'','colorize'=>'93,111,38,80')
 		);
 		update_option('ims_color_filters', $filters);
 		
 		//shipping
 		$shipping =  array(
-			array( 'price' => '3.00', 'name' => __('Local', $this->domain )),
-			array( 'price' => '20.00', 'name' => __('International', $this->domain )),
+			array( 'price' => '3.00', 'name' => __('Local', 'ims')),
+			array( 'price' => '20.00', 'name' => __('International', 'ims')),
 		);
 		update_option('ims_shipping_options', $shipping);
 	}
@@ -483,7 +483,7 @@ class ImStoreInstaller extends ImStore {
 			'ID' => false,
 			'post_status' => 'publish',
 			'post_type' => 'ims_pricelist',
-			'post_title' => __('Default Price List', $this->domain),
+			'post_title' => __('Default Price List', 'ims'),
 			'sizes' => array(
 				array('name' => '4x6', 'price' => '4.95', 'unit' => 'in', 'type' => 'p'),
 				array('name' => '8x10', 'price' => '15.90', 'unit' => 'in', 'type' => 'p'),
@@ -498,34 +498,34 @@ class ImStoreInstaller extends ImStore {
 				'finishes' => array( ),
 				//colors
 				'colors' =>array(
-					array( 'price' => '0', 'name' => __( 'Color', $this->domain )),
-					array( 'price' => '1.00', 'name' => __( 'BW', $this->domain )),
-					array( 'price' =>  '1.00', 'name' => __('Sepia', $this->domain )),
+					array( 'price' => '0', 'name' => __( 'Color', 'ims')),
+					array( 'price' => '1.00', 'name' => __( 'BW', 'ims')),
+					array( 'price' =>  '1.00', 'name' => __('Sepia', 'ims')),
 				),
 			));
 
 
 		// packages
 		$packages = array(
-			array('ID' => false, 'post_title' => __('Package 1', $this->domain), 'post_type' => 'ims_package', 'post_status' => 'publish',
+			array('ID' => false, 'post_title' => __('Package 1', 'ims'), 'post_type' => 'ims_package', 'post_status' => 'publish',
 				'_ims_price' => '35.00', '_ims_sizes' => array(
 					'8x10' => array('unit' => 'in', 'count' => 1),
 					'5x7' => array('unit' => 'in', 'count' => 1),
 					'2.5x3.5' => array('unit' => 'in', 'count' => '8'))
 			),
-			array('ID' => false, 'post_title' => __('Package 2', $this->domain), 'post_type' => 'ims_package', 'post_status' => 'publish',
+			array('ID' => false, 'post_title' => __('Package 2', 'ims'), 'post_type' => 'ims_package', 'post_status' => 'publish',
 				'_ims_price' => '47.10', '_ims_sizes' => array(
 					'8x10' => array('unit' => 'in', 'count' => 1),
 					'5x7' => array('unit' => 'in', 'count' => 2),
 					'2.5x3.5' => array('unit' => 'in', 'count' => 16))
 			),
-			array('ID' => false, 'post_title' => __('Package 3', $this->domain), 'post_type' => 'ims_package', 'post_status' => 'publish',
+			array('ID' => false, 'post_title' => __('Package 3', 'ims'), 'post_type' => 'ims_package', 'post_status' => 'publish',
 				'_ims_price' => '58.85', '_ims_sizes' => array(
 					'8x10' => array('unit' => 'in', 'count' => 2),
 					'5x7' => array('unit' => 'in', 'count' => 2),
 					'2.5x3.5' => array('unit' => 'in', 'count' => 16))
 			),
-			array('ID' => false, 'post_title' => __('Wallets', $this->domain), 'post_type' => 'ims_package', 'post_status' => 'publish',
+			array('ID' => false, 'post_title' => __('Wallets', 'ims'), 'post_type' => 'ims_package', 'post_status' => 'publish',
 				'_ims_price' => '15.90', '_ims_sizes' => array('2.5x3.5' => array('unit' => 'in', 'count' => 8)))
 		);
 
@@ -575,7 +575,7 @@ class ImStoreInstaller extends ImStore {
 	 * @since 0.5.0 
 	 */
 	function imstore_uninstall() {
-		global $wpdb;
+		global $wpdb, $wp_rewrite;
 
 		if (!current_user_can('edit_plugins') || !current_user_can('ims_change_settings'))
 			return;

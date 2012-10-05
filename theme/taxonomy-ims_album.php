@@ -22,8 +22,10 @@
 							$data = wp_get_attachment_metadata( $image->ID ); 
 											
 						$size = ' width="'. $data['sizes']['thumbnail']['width'] .'" height="'.$data['sizes']['thumbnail']['height'].'"';
+						$imgattr = ' role="img" class="photo colorbox-2" alt="' . get_the_title( $post->ID ) . '"' . $size;
+			
 						echo '<a href="'. get_permalink() . '" title="View &quot;'. get_the_title( $post->ID ).'&quot; gallery" rel="enclosure">
-						<img src="'. $ImStore->get_image_url($image->ID, 2 ) .'" class="colorbox-2" alt="'.get_the_title( $post->ID ).'"'.$size.' /></a>'; 
+						<img src="' . IMSTORE_URL . '/_img/1x1.trans.gif" data-ims-src="' . $this->get_image_url($image->ID, 2) . '" ' . $imgattr . '/></a>'; 
 						echo '<figcaption class="gallery-caption"><span class="fn ims-img-name">'.get_the_title( $post->ID ).'</span></figcaption>';
 					?></figure>
 

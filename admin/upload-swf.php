@@ -7,7 +7,7 @@ if ( !current_user_can( 'ims_manage_galleries') )
 	
 $flash = true;
 if ( false !== stripos($_SERVER['HTTP_USER_AGENT'], 'mac')
-	&& apache_mod_loaded( 'mod_security') )
+&& apache_mod_loaded( 'mod_security') )
 	$flash = false;
 
 global $post;
@@ -16,7 +16,7 @@ $post_id = ( empty( $this->galid ) ) ? $post->ID : $this->galid ;
  
 // Check quota for this blog if multisite
 if ( is_multisite( ) && !is_upload_space_available( ) ){
-	echo '<p>' . sprintf( __( 'Sorry, you have filled your storage quota (%s MB).', $this->domain ), get_space_allowed( ) ) . '</p>';
+	echo '<p>' . sprintf( __( 'Sorry, you have filled your storage quota (%s MB).', 'ims'), get_space_allowed( ) ) . '</p>';
 	return;
 }
 
@@ -82,9 +82,9 @@ SWFUpload.onload = function( ){
 	<?php do_action( 'pre-flash-upload-ui' ); ?>
 	<div>
 		<div id="flash-browse-button"></div>
-		<span><input id="cancel-upload" disabled="disabled" onclick="cancelUpload( )" type="button" value="<?php esc_attr_e( 'Cancel Upload', $this->domain ); ?>" class="button" /></span>
+		<span><input id="cancel-upload" disabled="disabled" onclick="cancelUpload( )" type="button" value="<?php esc_attr_e( 'Cancel Upload', 'ims'); ?>" class="button" /></span>
 	</div>
-	<p class="media-upload-size"><?php printf( __( 'Maximum upload file size: %s', $this->domain ), $this->get_max_file_upload( true ) ); ?></p>
+	<p class="media-upload-size"><?php printf( __( 'Maximum upload file size: %s', 'ims'), $this->get_max_file_upload( true ) ); ?></p>
 	<?php do_action( 'post-flash-upload-ui' ); ?>
 </div>
 
@@ -96,13 +96,13 @@ SWFUpload.onload = function( ){
 		<p id="async-upload-wrap">
 			<label class="screen-reader-text" for="async-upload"><?php _e( 'Upload' ); ?></label>
 			<input type="file" name="async-upload" id="async-upload" />
-			<input type="submit" class="button" name="html-upload" value="<?php esc_attr_e( 'Upload', $this->domain ) ?>">
-			<a href="#" onclick="try{top.tb_remove( );}catch(e){}; return false;"><?php _e( 'Cancel', $this->domain ) ?></a>
+			<input type="submit" class="button" name="html-upload" value="<?php esc_attr_e( 'Upload', 'ims') ?>">
+			<a href="#" onclick="try{top.tb_remove( );}catch(e){}; return false;"><?php _e( 'Cancel', 'ims') ?></a>
 		</p>
 		<div class="clear"></div>
-		<p class="media-upload-size"><?php printf( __( 'Maximum upload file size: %s', $this->domain ), $this->get_max_file_upload( true ) ); ?></p>
+		<p class="media-upload-size"><?php printf( __( 'Maximum upload file size: %s', 'ims'), $this->get_max_file_upload( true ) ); ?></p>
 		<?php if ( is_lighttpd_before_150( ) ): ?>
-		<p><?php _e( 'If you want to use all capabilities of the uploader, like uploading multiple files at once, please update to lighttpd 1.5.', $this->domain ); ?></p>
+		<p><?php _e( 'If you want to use all capabilities of the uploader, like uploading multiple files at once, please update to lighttpd 1.5.', 'ims'); ?></p>
 		<?php endif;?>
 		<?php do_action( 'post-html-upload-ui', true ); ?>
 	</div>
@@ -110,5 +110,4 @@ SWFUpload.onload = function( ){
 	<?php do_action( 'post-upload-ui' ); ?>
 	
 	<input type="hidden" name="post_id" id="post_id" value="0" />
-	<?php //wp_nonce_field( 'media-form' ); ?>
 </form>

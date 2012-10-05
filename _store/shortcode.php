@@ -141,7 +141,7 @@ class ImStoreShortCode {
 			'gallerytag' => 'div',
 			'imagetag' => 'figure',
 			'captiontag' => 'figcaption'
-		), &$this);
+		), $this);
 
 		extract($atts);
 		extract($tags);
@@ -213,15 +213,15 @@ class ImStoreShortCode {
 		
 		$output .= '<form method="post" class="ims-slideshow-tools">' . "\n";
 		$output .= '<div id="ims-player" class="ims-player">' . "\n";
-		$output .= '<a href="#" class="bk" rel="nofollow">' . __('Back', $ImStore->domain) . '</a>';
-		$output .= '<a href="#" class="py" rel="nofollow">' . __('Play', $ImStore->domain) . '</a>';
-		$output .= '<a href="#" class="nx" rel="nofollow">' . __('Next', $ImStore->domain) . '</a>';
+		$output .= '<a href="#" class="bk" rel="nofollow">' . __('Back', 'ims') . '</a>';
+		$output .= '<a href="#" class="py" rel="nofollow">' . __('Play', 'ims') . '</a>';
+		$output .= '<a href="#" class="nx" rel="nofollow">' . __('Next', 'ims') . '</a>';
 		$output .= '</div><!--#ims-player-->' . "\n";
 
 		//color options
 		$output .= '<div class="image-color">' . "\n";
 		if (!empty($ImStore->listmeta['colors']) ){
-			$output .= '<span class="ims-color-label">' . __('Color Options:', $ImStore->domain) . '</span>' . "\n";
+			$output .= '<span class="ims-color-label">' . __('Color Options:', 'ims') . '</span>' . "\n";
 			foreach ($ImStore->listmeta['colors'] as $key => $color){
 				if($color['code'])
 					$output .= '<label><input type="checkbox" name="ims-color[]" value="'.$color['code'].'" class="ims-color ims-color-'.$color['code'].'" /> ' . $color['name'] . '</label>	' . "\n";

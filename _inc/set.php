@@ -48,7 +48,7 @@ class ImStoreSet extends ImStoreAdmin {
 		$option = get_option('ims_wlocal');
 		$wlocal = empty($option) ? 5 : $option;
 
-		echo '<tr class="row-wlocal" valign="top"><td><label>' . __('Watermark location', $this->domain) . '</label></td><td>';
+		echo '<tr class="row-wlocal" valign="top"><td><label>' . __('Watermark location', 'ims') . '</label></td><td>';
 		echo '<div class="row">
 			<label><input name="wlocal" type="radio" value="1" ' . checked(1, $wlocal, false) . ' /></label>
 			<label><input name="wlocal" type="radio" value="2" ' . checked(2, $wlocal, false) . '/></label>
@@ -88,10 +88,10 @@ class ImStoreSet extends ImStoreAdmin {
 		}
 
 		if (empty($users))
-			return array('0' => __('No users to manage', $this->domain));
+			return array('0' => __('No users to manage', 'ims'));
 
 		$list = array();
-		$list[0] = __('Select user', $this->domain);
+		$list[0] = __('Select user', 'ims');
 
 		foreach ($users as $user)
 			$list[$user->ID] = $user->name;
@@ -171,13 +171,13 @@ class ImStoreSet extends ImStoreAdmin {
 		switch ($current_screen->id) {
 			case 'ims_gallery_page_ims-customers':
 				$columns = array(
-					'cb' => '<input type="checkbox">', 'name' => __('First Name', $this->domain),
-					'lastname' => __('Last Name', $this->domain), 'email' => __('E-Mail', $this->domain),
-					'phone' => __('Phone', $this->domain), 'city' => __('City', $this->domain), 'state' => __('State', $this->domain),
+					'cb' => '<input type="checkbox">', 'name' => __('First Name', 'ims'),
+					'lastname' => __('Last Name', 'ims'), 'email' => __('E-Mail', 'ims'),
+					'phone' => __('Phone', 'ims'), 'city' => __('City', 'ims'), 'state' => __('State', 'ims'),
 				);
 
 				if (class_exists('MailPress'))
-					$columns['newsletter'] = __('eNewsletter', $this->domain);
+					$columns['newsletter'] = __('eNewsletter', 'ims');
 
 				register_column_headers('ims_gallery_page_ims-customers', $columns);
 				break;
@@ -185,9 +185,9 @@ class ImStoreSet extends ImStoreAdmin {
 			case 'ims_gallery_page_ims-pricing':
 				register_column_headers('ims_gallery_page_ims-pricing', array(
 					'cb' => '<input type="checkbox">',
-					'name' => __('Name', $this->domain), 'code' => __('Code', $this->domain),
-					'starts' => __('Starts', $this->domain), 'expires' => __('Expires', $this->domain),
-					'type' => __('Type', $this->domain), 'discount' => __('Discount', $this->domain),
+					'name' => __('Name', 'ims'), 'code' => __('Code', 'ims'),
+					'starts' => __('Starts', 'ims'), 'expires' => __('Expires', 'ims'),
+					'type' => __('Type', 'ims'), 'discount' => __('Discount', 'ims'),
 				));
 				break;
 
@@ -197,10 +197,10 @@ class ImStoreSet extends ImStoreAdmin {
 				
 				register_column_headers('ims_gallery_page_ims-sales', array(
 					'cb' => '<input type="checkbox">',
-					'ordernum' => __('Order number', $this->domain), 'orderdate' => __('Date', $this->domain),
-					'amount' => __('Amount', $this->domain), 'customer' => __('Customer', $this->domain),
-					'images' => __('Images', $this->domain), 'paystatus' => __('Payment status', $this->domain),
-					'orderstat' => __('Order Status', $this->domain),
+					'ordernum' => __('Order number', 'ims'), 'orderdate' => __('Date', 'ims'),
+					'amount' => __('Amount', 'ims'), 'customer' => __('Customer', 'ims'),
+					'images' => __('Images', 'ims'), 'paystatus' => __('Payment status', 'ims'),
+					'orderstat' => __('Order Status', 'ims'),
 				));
 				break;
 				
@@ -264,7 +264,7 @@ class ImStoreSet extends ImStoreAdmin {
 		$errors = new WP_Error( );
 		
 		if (empty($_POST['package_name'])) {
-			$errors->add('empty_name', __('A name is required.', $this->domain));
+			$errors->add('empty_name', __('A name is required.', 'ims'));
 			return $errors;
 		}
 
@@ -276,7 +276,7 @@ class ImStoreSet extends ImStoreAdmin {
 
 		$list_id = wp_insert_post($price_list);
 		if (empty($list_id)) {
-			$errors->add('list_error', __('There was a problem creating the package.', $this->domain));
+			$errors->add('list_error', __('There was a problem creating the package.', 'ims'));
 			return $errors;
 		}
 
@@ -294,7 +294,7 @@ class ImStoreSet extends ImStoreAdmin {
 		$errors = new WP_Error( );
 
 		if (empty($_POST['pricelist_name'])) {
-			$errors->add('empty_name', __('A name is required.', $this->domain));
+			$errors->add('empty_name', __('A name is required.', 'ims'));
 			return $errors;
 		}
 
@@ -307,7 +307,7 @@ class ImStoreSet extends ImStoreAdmin {
 		$list_id = wp_insert_post($price_list);
 
 		if (empty($list_id)) {
-			$errors->add('list_error', __('There was a problem creating the list.', $this->domain));
+			$errors->add('list_error', __('There was a problem creating the list.', 'ims'));
 			return $errors;
 		}
 
@@ -328,7 +328,7 @@ class ImStoreSet extends ImStoreAdmin {
 
 		$errors = new WP_Error( );
 		if (empty($_POST['list_name'])) {
-			$errors->add('empty_name', __('A name is required.', $this->domain));
+			$errors->add('empty_name', __('A name is required.', 'ims'));
 			return $errors;
 		}
 
@@ -365,7 +365,7 @@ class ImStoreSet extends ImStoreAdmin {
 
 		$errors = new WP_Error( );
 		if (empty($_POST['packagename'])) {
-			$errors->add('empty_name', __('A name is required.', $this->domain));
+			$errors->add('empty_name', __('A name is required.', 'ims'));
 			return $errors;
 		}
 		
@@ -395,10 +395,10 @@ class ImStoreSet extends ImStoreAdmin {
 	function add_promotion() {
 		$errors = new WP_Error( );
 		if (empty($_POST['promo_name']))
-			$errors->add('empty_name', __('A promotion name is required.', $this->domain));
+			$errors->add('empty_name', __('A promotion name is required.', 'ims'));
 
 		if (empty($_POST['discount']) && $_POST['promo_type'] != 3)
-			$errors->add('discount', __('A discount is required', $this->domain));
+			$errors->add('discount', __('A discount is required', 'ims'));
 
 		if (!empty($errors->errors))
 			return $errors;
@@ -415,7 +415,7 @@ class ImStoreSet extends ImStoreAdmin {
 		$promo_id = ( $promotion['ID'] ) ? wp_update_post($promotion) : wp_insert_post($promotion);
 
 		if (empty($promo_id)) {
-			$errors->add('promo_error', __('There was a problem creating the promotion.', $this->domain));
+			$errors->add('promo_error', __('There was a problem creating the promotion.', 'ims'));
 			return $errors;
 		}
 
@@ -446,7 +446,7 @@ class ImStoreSet extends ImStoreAdmin {
 		$errors = new WP_Error( );
 
 		if (empty($_GET['delete']) && empty($_POST['promo'])) {
-			$errors->add('nothing_checked', __('Please select a promo to be deleted.', $this->domain));
+			$errors->add('nothing_checked', __('Please select a promo to be deleted.', 'ims'));
 			return $errors;
 		}
 
@@ -536,7 +536,7 @@ class ImStoreSet extends ImStoreAdmin {
 						if (get_option($key . $k2))
 							update_option($key . $k2, $_POST[$key][$k2]);
 						elseif (isset($this->opts[$key]) && is_array($this->opts[$key]))
-							$this->opts[$key][$k2] = $_POST[$key][$k2];
+							$this->opts[$key][$k2] = isset($_POST[$key][$k2]) ? $_POST[$key][$k2] : false;
 						elseif (!empty($_POST[$key][$k2]))
 							$this->opts[$key . $k2] = $_POST[$key][$k2];
 						else

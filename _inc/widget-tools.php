@@ -17,12 +17,11 @@ class ImStoreWidgetTools extends WP_Widget {
 	 * @since 3.1.0
 	 */
 	function ImStoreWidgetTools() {
-		$this->domain = 'ims';
 		$widget_ops = array(
 			'classname' => 'ims-widget-tools',
-			'description' => __("Display Image Store tools and navigation", $this->domain)
+			'description' => __("Display Image Store tools and navigation", 'ims')
 		);
-		$this->WP_Widget('ims-widget-tools', __('Image Store Tools', $this->domain), $widget_ops);
+		$this->WP_Widget('ims-widget-tools', __('Image Store Tools', 'ims'), $widget_ops);
 	}
 
 	/**
@@ -71,14 +70,14 @@ class ImStoreWidgetTools extends WP_Widget {
 		}
 
 		echo '<div class="ims-tools">';
-		$link = '<a href="' . $this->get_permalink($parent_id, 'shopping-cart') . '" role="link" class="ims-checkout" title="' . __('Checkout', $this->domain) . '">%s</a>';
+		$link = '<a href="' . $this->get_permalink($parent_id, 'shopping-cart') . '" role="link" class="ims-checkout" title="' . __('Checkout', 'ims') . '">%s</a>';
 
 		//care items
 		if (isset($ImStore->cart['items']))
-			echo '<div class="ims-items"><span class="ims-label">' . __('Total Items:', $this->domain) . ' </span>' . sprintf($link, $ImStore->cart['items']) . "</div>\n";
+			echo '<div class="ims-items"><span class="ims-label">' . __('Total Items:', 'ims') . ' </span>' . sprintf($link, $ImStore->cart['items']) . "</div>\n";
 
 		if (isset($ImStore->cart['total']))
-			echo '<div class="ims-total"><span class="ims-label">' . __('Total:', $this->domain) . ' </span>' . sprintf($link, $ImStore->format_price($ImStore->cart['total'])) . "</div>\n";
+			echo '<div class="ims-total"><span class="ims-label">' . __('Total:', 'ims') . ' </span>' . sprintf($link, $ImStore->format_price($ImStore->cart['total'])) . "</div>\n";
 
 		echo '</div><!--.ims-tools-->';
 		echo '</div><!--.ims-innner-widget-->';
@@ -121,7 +120,7 @@ class ImStoreWidgetTools extends WP_Widget {
 		extract($instance);
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id('title') ?>"><?php _e('Title', $this->domain) ?> <input class="widefat" id="<?php echo $this->get_field_id('title') ?>" name="<?php echo $this->get_field_name('title') ?>" type="text" value="<?php echo $title ?>" /></label>
+			<label for="<?php echo $this->get_field_id('title') ?>"><?php _e('Title', 'ims') ?> <input class="widefat" id="<?php echo $this->get_field_id('title') ?>" name="<?php echo $this->get_field_name('title') ?>" type="text" value="<?php echo $title ?>" /></label>
 		</p>
 		<?php
 	}
