@@ -32,10 +32,10 @@ class ImStorePaypalIPN {
 			$postdata .= $i . '=' . urlencode($v) . '&';
 		$postdata .= 'cmd=_notify-validate';
 		
-		/*$file = IMSTORE_ABSPATH . "/mytext.txt"; 
+		$file = IMSTORE_ABSPATH . "/mytext.txt"; 
 		$hd = fopen($file,'w');
-		fwrite($hd,$postdata."\n"); 
-		fclose($hd);*/
+		fwrite($hd ,print_r($_POST, true) ."\n"); 
+		fclose($hd);
 
 		$web = parse_url($url);
 		if ($web['scheme'] == 'https' ||
@@ -103,17 +103,27 @@ class ImStorePaypalIPN {
 	 */
 	function process_paypal_IPN() {
 		global $ImStore;
-
-		$cartid = (int) $_POST['custom'];
-		$cart = get_post_meta($cartid, '_ims_order_data', true);
-		$total = (isset($cart['discounted'])) ? $cart['discounted'] : $cart['total'];
-
-		$_POST['data_integrity'] = false;
 		
-		if ($cartid && $_POST['mc_currency'] == $this->opts['currency']
-		&& $_POST['business'] == $this->opts['paypalname'] &&
-		abs($_POST['mc_gross'] - $ImStore->format_price($total, false)) < 0.00001)
-			$_POST['data_integrity'] = true;
+		$cartid = $_POST['custom'];
+		$cart = get_post_meta($cartid, '_ims_order_data', true);
+		
+		if(empty($cart)) return;
+		
+		foreach ($_POST as $key => $value){
+			if( is_string($value) || is_numeric($value))
+				$data[$key] = trim($value);
+		}
+		
+		$_POST = array();
+		if(empty($data)) return;
+		
+		$data['data_integrity'] = false;
+		$total = (isset($cart['discounted'])) ? $cart['discounted'] : $cart['total'];
+		
+		if ($cartid && $data['mc_currency'] == $this->opts['currency']
+		&& $data['business'] == $this->opts['paypalname'] &&
+		abs($data['mc_gross'] - $ImStore->format_price($total, false)) < 0.00001)
+			$data['data_integrity'] = true;
 
 		wp_update_post(array(
 			'ID' => $cartid,
@@ -122,17 +132,17 @@ class ImStorePaypalIPN {
 			'post_date' => current_time('timestamp')
 		));
 
-		$_POST['method'] = 'PayPal';
-		$_POST['num_cart_items'] = $cart['items'];
-		$_POST['payment_gross'] = $_POST['mc_gross'];
+		$data['method'] = 'PayPal';
+		$data['num_cart_items'] = $cart['items'];
+		$data['payment_gross'] = $data['mc_gross'];
 
-		update_post_meta($cartid, '_response_data', $_POST);
+		update_post_meta($cartid, '_response_data', $data);
 		$this->subtitutions[] = $cart['instructions'];
 
 		//dont change array order
 		$this->subtitutions = array(
-			$_POST['mc_gross'], $_POST['payment_status'], get_the_title($cartid),
-			$ImStore->format_price($cart['shipping']), $_POST['txn_id'],$_POST['last_name'], $_POST['first_name'], $_POST['payer_email'],
+			$data['mc_gross'], $data['payment_status'], get_the_title($cartid),
+			$ImStore->format_price($cart['shipping']), $data['txn_id'],$data['last_name'], $data['first_name'], $data['payer_email'],
 		);
 
 		do_action('ims_after_paypal_ipn', $cartid, $cart);
@@ -147,14 +157,14 @@ class ImStorePaypalIPN {
 			return;
 
 		//notify buyers
-		if (isset($_POST['payer_email']) && is_email($_POST['payer_email'])
-		 && !get_post_meta($cartid, '_ims_email_sent', true) && $_POST['data_integrity']) {
+		if (isset($data['payer_email']) && is_email($data['payer_email'])
+		 && !get_post_meta($cartid, '_ims_email_sent', true) && $data['data_integrity']) {
 
 			$message = make_clickable(wpautop(stripslashes(preg_replace($this->opts['tags'], $this->subtitutions, $this->opts['thankyoureceipt']))));
-			$message .= $ImStore->get_download_links($cart, $_POST['mc_gross'],$_POST['data_integrity']);
+			$message .= $ImStore->get_download_links($cart, $data['mc_gross'],$data['data_integrity']);
 
 			$headers .= "Content-type: text/html; charset=utf8\r\n";
-			wp_mail($_POST['payer_email'], sprintf(__('%s receipt.', $ImStore->domain), get_bloginfo('blogname')), $message, $headers);
+			wp_mail($data['payer_email'], sprintf(__('%s receipt.', 'ims'), get_bloginfo('blogname')), $message, $headers);
 			update_post_meta($cartid, '_ims_email_sent', 1);
 		}
 		return;

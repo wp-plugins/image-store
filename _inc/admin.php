@@ -268,11 +268,11 @@ class ImStoreAdmin extends ImStore {
 		$sync = get_site_option('ims_sync_settings');
 		echo '<table class="form-table">
 			<tr valign="top">
-				<th scope="row"><label for="ims_settings">' . __('Image Store settings sync', $this->domain) . '</label></td>
+				<th scope="row"><label for="ims_settings">' . __('Image Store settings sync', 'ims') . '</label></td>
 				<td>
 					<label>
 						<input type="checkbox" name="ims_sync_settings" id="ims_settings" value="1" ' . checked(1, $sync, false) . ' />
-						' . __('Check to use the master settings for all the sites', $this->domain) . '
+						' . __('Check to use the master settings for all the sites', 'ims') . '
 					</label>
 				</td>
 			</tr>
@@ -293,7 +293,7 @@ class ImStoreAdmin extends ImStore {
 		//display upgrade message
 		if (get_option('imstore_version') < $this->version) {
 			echo '<div class="error fade"><p>'; 
-			echo sprintf( __('Please, <strong>deactive and active <a href="%s">Image Store plugin</a> to apply updates.</strong>',$this->domain),admin_url('plugins.php')); 
+			echo sprintf( __('Please, <strong>deactive and active <a href="%s">Image Store plugin</a> to apply updates.</strong>','ims'),admin_url('plugins.php')); 
 			echo '</p></div>';
 		}
 
@@ -303,7 +303,7 @@ class ImStoreAdmin extends ImStore {
 		wp_enqueue_style(' adminstyles', IMSTORE_URL . '/_css/admin.css', false, $this->version, 'all');
 
 		if (is_multisite() && empty($this->opts))
-			echo '<div class="error fade"><p>Image Store: '. __("Options not available, please reset all settings under the reset tab.",$this->domain) .'</p></div>';
+			echo '<div class="error fade"><p>Image Store: '. __("Options not available, please reset all settings under the reset tab.",'ims') .'</p></div>';
 
 		if ($current_screen->id == 'ims_gallery_page_ims-sales')
 			wp_enqueue_style('print', IMSTORE_URL . '/_css/print.css', false, $this->version, 'print');
@@ -513,9 +513,9 @@ class ImStoreAdmin extends ImStore {
 			'dateformat' => $format,
 			'nonceajax' => wp_create_nonce('ims_ajax'),
 			'imsajax' => IMSTORE_ADMIN_URL . '/ajax.php', 
-			'download' => __('Downloadable', $this->domain),
-			'deletelist' => __('Are you sure that you want to delete this list?', $this->domain),
-			'deletepackage' => __('Are you sure that you want to delete this package?', $this->domain),
+			'download' => __('Downloadable', 'ims'),
+			'deletelist' => __('Are you sure that you want to delete this list?', 'ims'),
+			'deletepackage' => __('Are you sure that you want to delete this package?', 'ims'),
 		));
 	}
 
@@ -546,15 +546,15 @@ class ImStoreAdmin extends ImStore {
 		$this->pageurl = admin_url($url);
 
 		$user_status = array(
-			'active' => __('Active', $this->domain),
-			'inative' => __('Inative', $this->domain),
+			'active' => __('Active', 'ims'),
+			'inative' => __('Inative', 'ims'),
 		);
 		$user_fields = array(
-			'ims_address' => __('Address', $this->domain),
-			'ims_city' => __('City', $this->domain),
-			'ims_state' => __('State', $this->domain),
-			'ims_zip' => __('Zip', $this->domain),
-			'ims_phone' => __('Phone', $this->domain),
+			'ims_address' => __('Address', 'ims'),
+			'ims_city' => __('City', 'ims'),
+			'ims_state' => __('State', 'ims'),
+			'ims_zip' => __('Zip', 'ims'),
+			'ims_phone' => __('Phone', 'ims'),
 		);
 
 		$this->user_fields = apply_filters('ims_user_fields', $user_fields);
@@ -634,7 +634,7 @@ class ImStoreAdmin extends ImStore {
 			return $actions;
 
 		$actions['view'] = '<a href="' . get_term_link($tag, $tag->taxonomy) . '" title="' .
-		sprintf(__('View %s', $this->domain), $tag->name) . '">' . __('View', $this->domain) . '</a>';
+		sprintf(__('View %s', 'ims'), $tag->name) . '">' . __('View', 'ims') . '</a>';
 		return $actions;
 	}
 
@@ -821,20 +821,20 @@ class ImStoreAdmin extends ImStore {
 			case "edit-ims_gallery":
 				return array(
 					'cb' => '<input type="checkbox">',
-					'title' => __('Gallery', $this->domain), 'galleryid' => __('ID', $this->domain),
-					'visits' => __('Visits', $this->domain), 'tracking' => __('Tracking', $this->domain),
-					'images' => __('Images', $this->domain), 'author' => __('Author', $this->domain),
-					'expire' => __('Expires', $this->domain), 'date' => __('Date', $this->domain)
+					'title' => __('Gallery', 'ims'), 'galleryid' => __('ID', 'ims'),
+					'visits' => __('Visits', 'ims'), 'tracking' => __('Tracking', 'ims'),
+					'images' => __('Images', 'ims'), 'author' => __('Author', 'ims'),
+					'expire' => __('Expires', 'ims'), 'date' => __('Date', 'ims')
 				);
 				break;
 			default:
 				if (!isset($_GET['role']) || $_GET['role'] != 'customer')
 					return $columns;
 				return array(
-					'cb' => '<input type="checkbox">', 'username' => __('Username', $this->domain),
-					'fistname' => __('First Name', $this->domain), 'lastname' => __('Last Name', $this->domain),
-					'email' => __('E-mail', $this->domain), 'city' => __('City', $this->domain),
-					'phone' => __('Phone', $this->domain), 'status' => __('Status', $this->domain)
+					'cb' => '<input type="checkbox">', 'username' => __('Username', 'ims'),
+					'fistname' => __('First Name', 'ims'), 'lastname' => __('Last Name', 'ims'),
+					'email' => __('E-mail', 'ims'), 'city' => __('City', 'ims'),
+					'phone' => __('Phone', 'ims'), 'status' => __('Status', 'ims')
 				);
 		}
 	}
@@ -910,15 +910,15 @@ class ImStoreAdmin extends ImStore {
 	 */
 	function add_menu() {
 		if (empty($this->opts['disablestore'])) {
-			add_submenu_page('edit.php?post_type=ims_gallery', __('Sales', $this->domain), __('Sales', $this->domain), 'ims_read_sales', 'ims-sales', array(&$this, 'show_menu'));
-			add_submenu_page('edit.php?post_type=ims_gallery', __('Pricing', $this->domain), __('Pricing', $this->domain), 'ims_change_pricing', 'ims-pricing', array(&$this, 'show_menu'));
-			add_submenu_page('edit.php?post_type=ims_gallery', __('Customers', $this->domain), __('Customers', $this->domain), 'ims_manage_customers', 'ims-customers', array(&$this, 'show_menu'));
+			add_submenu_page('edit.php?post_type=ims_gallery', __('Sales', 'ims'), __('Sales', 'ims'), 'ims_read_sales', 'ims-sales', array(&$this, 'show_menu'));
+			add_submenu_page('edit.php?post_type=ims_gallery', __('Pricing', 'ims'), __('Pricing', 'ims'), 'ims_change_pricing', 'ims-pricing', array(&$this, 'show_menu'));
+			add_submenu_page('edit.php?post_type=ims_gallery', __('Customers', 'ims'), __('Customers', 'ims'), 'ims_manage_customers', 'ims-customers', array(&$this, 'show_menu'));
 		}
 
-		add_submenu_page('edit.php?post_type=ims_gallery', __('Settings', $this->domain), __('Settings', $this->domain), 'ims_change_settings', 'ims-settings', array(&$this, 'show_menu'));
+		add_submenu_page('edit.php?post_type=ims_gallery', __('Settings', 'ims'), __('Settings', 'ims'), 'ims_change_settings', 'ims-settings', array(&$this, 'show_menu'));
 
 		if (current_user_can('ims_read_galleries'))
-			add_users_page(__('Image Store', $this->domain), __('Galleries', $this->domain), 'ims_read_galleries', 'user-galleries', array(&$this, 'show_menu'));
+			add_users_page(__('Image Store', 'ims'), __('Galleries', 'ims'), 'ims_read_galleries', 'user-galleries', array(&$this, 'show_menu'));
 	}
 
 	/**
@@ -934,7 +934,7 @@ class ImStoreAdmin extends ImStore {
 		if (empty($profileuser->caps['customer']))
 			return;
 
-		echo '<h3>', __('Address Information', $this->domain), '</h3>';
+		echo '<h3>', __('Address Information', 'ims'), '</h3>';
 		echo '<table class="form-table">';
 		foreach ($this->user_fields as $key => $label)
 			echo '<tr>
@@ -1119,11 +1119,11 @@ class ImStoreAdmin extends ImStore {
 		switch ($current_screen->id) {
 			case 'profile_page_user-galleries':
 				register_column_headers('profile_page_user-galleries', array(
-					'gallery' => __('Gallery', $this->domain),
-					'galleryid' => __('Gallery ID', $this->domain),
-					'password' => __('Password', $this->domain),
-					'expire' => __('Expires', $this->domain),
-					'images' => __('Images', $this->domain),
+					'gallery' => __('Gallery', 'ims'),
+					'galleryid' => __('Gallery ID', 'ims'),
+					'password' => __('Password', 'ims'),
+					'expire' => __('Expires', 'ims'),
+					'images' => __('Images', 'ims'),
 				));
 				break;
 			default:
@@ -1141,7 +1141,7 @@ class ImStoreAdmin extends ImStore {
 		$post = get_post($list_id);
 		if (isset($post->post_excerpt))
 			$data = ( function_exists('esc_texarea') ) ? esc_texarea($post->post_excerpt) : esc_attr($post->post_excerpt);
-		echo '<tr class="label"><td colspan="6"><label for="list_post_excerpt">' . __('Notes', $this->domain) . '</label>
+		echo '<tr class="label"><td colspan="6"><label for="list_post_excerpt">' . __('Notes', 'ims') . '</label>
 		<textarea id="list_post_excerpt" name="post_excerpt">' . $data . '</textarea> </td></tr>';
 	}
 
@@ -1158,21 +1158,21 @@ class ImStoreAdmin extends ImStore {
 		$option = array();
 		switch ($current_screen->id) {
 			case 'ims_gallery_page_ims-customers':
-				$option['ims_sales_per_page'] = __('Customers', $this->domain);
+				$option['ims_sales_per_page'] = __('Customers', 'ims');
 				break;
 			case 'ims_gallery':
-				$option['ims_gallery'] = __('Images', $this->domain);
+				$option['ims_gallery'] = __('Images', 'ims');
 				break;
 			case 'ims_gallery_page_ims-pricing':
-				$option['ims_pricing_per_page'] = __('Promotions', $this->domain);
+				$option['ims_pricing_per_page'] = __('Promotions', 'ims');
 				break;
 			case 'profile_page_user-galleries':
-				$option['ims_user_galleries_per_page'] = __('Galleries', $this->domain);
+				$option['ims_user_galleries_per_page'] = __('Galleries', 'ims');
 				break;
 			case 'ims_gallery_page_ims-sales':
 				if (isset($_REQUEST['details']))
 					return;
-				$option['ims_user_sales_per_page'] = __('Sales', $this->domain);
+				$option['ims_user_sales_per_page'] = __('Sales', 'ims');
 				break;
 			default:
 		}
@@ -1183,14 +1183,14 @@ class ImStoreAdmin extends ImStore {
 			if (empty($this->per_page) || $this->per_page < 1)
 				$this->per_page = 20;
 			$out = "<div class='screen-options'>\n";
-			$out .= '<h5>' . __('Show per page', $this->domain) . '</h5>';
+			$out .= '<h5>' . __('Show per page', 'ims') . '</h5>';
 			$out .= '<input type="text" class="screen-per-page" name="ims_screen_options[value]" id="' . $key . '" maxlength="3" value="' . esc_attr($this->per_page) . '" > ';
 			$out .= '<label for="' . $key . '">' . $label . '</label>';
-			$out .= '<input type="submit" class="button" value="' . esc_attr__('Apply', $this->domain) . '">';
+			$out .= '<input type="submit" class="button" value="' . esc_attr__('Apply', 'ims') . '">';
 			$out .= '<input type="hidden" name="ims_screen_options[option]" value="' . esc_attr($key) . '" />';
 			$out .= "</div>\n";
 		}
 		return $out;
 	}
-
+	
 }

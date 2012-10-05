@@ -27,11 +27,11 @@ $output .= '
 	<table class="ims-table" role="grid">
 		<thead>
 			<tr>
-				<th scope="col" colspan="2" class="ims-size">' . __('Image size', $this->domain) . '</th>
+				<th scope="col" colspan="2" class="ims-size">' . __('Image size', 'ims') . '</th>
 				<th class="ims-blank">&nbsp;</th>
-				<th class="ims-price">' . __('Price', $this->domain) . '</th>
+				<th class="ims-price">' . __('Price', 'ims') . '</th>
 				<th class="ims-blank">&nbsp;</th>
-				<th class="ims-download">' . __('Download', $this->domain) . '</th>
+				<th class="ims-download">' . __('Download', 'ims') . '</th>
 			</tr>
 		</thead>';
 
@@ -70,7 +70,7 @@ foreach ($this->sizes as $size) :
 	endif;
 	
 	//downloadable
-	$download = ( isset($size['download']) ) ? __('Included', $this->domain) : '';
+	$download = ( isset($size['download']) ) ? __('Included', 'ims') : '';
 	
 	$output .= '<td role="gridcell" class="blank">&nbsp;</td>';
 	$output .= '<td role="gridcell" class="ims-download">' . $download . '</td>';
@@ -84,9 +84,9 @@ $output .= '<tfoot>';
 $output .= '<tr role="row" class="divider-row"><td role="gridcell" colspan="6">&nbsp;</td></tr>';
 
 $output .= '<tr role="row" class="subhead-row">';
-$output .=	 '<td role="gridcell" colspan="2" class="subhead">'. __( 'Shipping', $this->domain ).'</td>';
-$output .=	 '<td role="gridcell" colspan="2" class="subhead">'.__( 'Color Options', $this->domain ).'</td>';
-$output .=	 '<td role="gridcell" colspan="2" class="subhead">'. __( 'Finishes', $this->domain ).'</td>';
+$output .=	 '<td role="gridcell" colspan="2" class="subhead">'. __( 'Shipping', 'ims').'</td>';
+$output .=	 '<td role="gridcell" colspan="2" class="subhead">'.__( 'Color Options', 'ims').'</td>';
+$output .=	 '<td role="gridcell" colspan="2" class="subhead">'. __( 'Finishes', 'ims').'</td>';
 $output .= '</tr>';
 
 $max = max( count($meta['finishes']), count($meta['colors']), count($this->shipping_opts) );
@@ -96,17 +96,17 @@ for( $x=0; $max > $x; $x++):
 	
 	if( isset( $this->shipping_opts[$x]['name'] ) ){ // shipping
 		$output .=	 '<td role="gridcell" class="ims-shipping-name">'.$this->shipping_opts[$x]['name'].'</td>';
-		$output .=	 '<td role="gridcell"  class="ims-shipping-price">'.$this->shipping_opts[$x]['price'].'</td>';
+		$output .=	 '<td role="gridcell"  class="ims-shipping-price">'.$this->format_price($this->shipping_opts[$x]['price']).'</td>';
 	}else $output .=	 '<td role="gridcell" colspan="2" class="ims-shipping-empty">&nbsp;</td>';
 	
 	if( isset( $meta['colors'][$x]['name'] ) ){ // colors
 		$output .=	 '<td role="gridcell" class="ims-color-name">'.$meta['colors'][$x]['name'].'</td>';
-		$output .=	 '<td role="gridcell"  class="ims-color-price">'.$meta['colors'][$x]['price'].'</td>';
+		$output .=	 '<td role="gridcell"  class="ims-color-price">'.$this->format_price($meta['colors'][$x]['price']).'</td>';
 	}else $output .=	 '<td role="gridcell" colspan="2" class="ims-color-empty">&nbsp;</td>';
 		
 	if( isset( $meta['finishes'][$x]['name'] ) ){ // finishes
 		$output .=	 '<td role="gridcell" class="ims-finish-name">'.$meta['finishes'][$x]['name'].'</td>';
-		$output .=	 '<td role="gridcell"  class="ims-finish-price">'.$meta['finishes'][$x]['price'].'</td>';
+		$output .=	 '<td role="gridcell"  class="ims-finish-price">'.$this->format_price($meta['finishes'][$x]['price']).'</td>';
 	}else $output .=	 '<td role="gridcell" colspan="2" class="ims-finish-empty">&nbsp;</td>';
 
 	$output .= '</tr>';

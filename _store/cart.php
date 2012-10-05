@@ -40,7 +40,7 @@ $output .= '<form method="' . esc_attr($this->opts['gateway_method']) . '" class
 if (empty($this->cart['images']) && apply_filters('ims_empty_car', true, $this->cart)):
 
 	$error = new WP_Error( );
-	$error->add('empty', __('Your shopping cart is empty.', $this->domain));
+	$error->add('empty', __('Your shopping cart is empty.', 'ims'));
 	$output .= $this->error_message($error, true);
 
 else: //else show table
@@ -55,13 +55,13 @@ else: //else show table
 			<tr>
 				<th scope="col" class="ims-preview">&nbsp;</th>
 				<th colspan="2" class="ims-subrows" >
-					<span class="ims-quantity">' . __('Quantity', $this->domain) . '</span>
-					<span class="ims-size">' . __('Size', $this->domain) . '</span>
-					<span class="ims-color">' . __('Color', $this->domain) . '</span>
-					<span class="ims-fisnish">' . __('Finish', $this->domain) . '</span>
-					<span class="ims-price">' . __('Unit Price', $this->domain) . '</span>
-					<span class="ims-subtotal">' . __('Subtotal', $this->domain) . '</span>
-					<span class="ims-delete">' . __('Delete', $this->domain) . '</span>
+					<span class="ims-quantity">' . __('Quantity', 'ims') . '</span>
+					<span class="ims-size">' . __('Size', 'ims') . '</span>
+					<span class="ims-color">' . __('Color', 'ims') . '</span>
+					<span class="ims-fisnish">' . __('Finish', 'ims') . '</span>
+					<span class="ims-price">' . __('Unit Price', 'ims') . '</span>
+					<span class="ims-subtotal">' . __('Subtotal', 'ims') . '</span>
+					<span class="ims-delete">' . __('Delete', 'ims') . '</span>
 				</th>
 			</tr>
 		</thead>';
@@ -87,6 +87,9 @@ else: //else show table
 			foreach ($colors as $color => $item):
 				
 				$enc = $this->url_encrypt($id);
+				$imgtitle = ( $title = get_the_title($id) ) ? $title : $enc;
+				$colorname = !empty($item['color_name']) ? trim($item['color_name'], " + ")  : false;
+				
 				$output .= '<div class="ims-clear-row">';
 				$output .= '<span class="ims-quantity"><input type="text" name="ims-quantity'."[$enc][$size][$color]" . '" value="'.esc_attr($item['quantity']).'" class="input" /></span>';
 				$output .= '<span class="ims-size">' . $item['size'] . ' <span class="ims-unit">' . $item['unit'] . '</span></span>';
@@ -101,24 +104,24 @@ else: //else show table
 				if ($this->opts['gateway']['googlesand'] || $this->opts['gateway']['googleprod']) :
 					$output .= '<input type="hidden" name="item_merchant_id_' . $i . '" data-value-ims="' . esc_attr($enc) . '" />';
 					$output .= '<input type="hidden" name="item_quantity_' . $i . '" data-value-ims="' . esc_attr($item['quantity']) . '" />';
-					$output .= '<input type="hidden" name="item_name_' . $i . '" data-value-ims="' . get_the_title($id) . '" />';
+					$output .= '<input type="hidden" name="item_name_' . $i . '" data-value-ims="' . $imgtitle . '" />';
 					$output .= '<input type="hidden" name="item_currency_' . $i . '" data-value-ims="' . esc_attr($this->opts['currency']) . '" />';
-					$output .= '<input type="hidden" name="item_description_' . $i . '" data-value-ims="' . esc_attr("$size " . $item['unit'] . ' ' . trim($item['color_name'], " + ")) . '" />';
+					$output .= '<input type="hidden" name="item_description_' . $i . '" data-value-ims="' . esc_attr("$size " . $item['unit'] . ' ' . $colorname) . '" />';
 					$output .= '<input type="hidden" name="item_price_' . $i . '" data-value-ims="' . esc_attr($this->format_price($item['price']+$item['color']+$item['finish'], false)) . '"/>';
 
 					if (isset($item['download']))
 						$downlinks .=
 								"&lt;p&gt;&lt;a href='" . IMSTORE_ADMIN_URL . "/download.php?_wpnonce=$nonce&amp;img=$enc&amp;sz=$size&amp;c=".$item['color_code']."' &gt;" .
-								get_the_title($id) . "&lt;/a&gt;: " . trim($item['color_name'], " + ") . "&lt;/p&gt;";
+								$imgtitle . "&lt;/a&gt;: " . trim($item['color_name'], " + ") . "&lt;/p&gt;";
 				endif;
 
 				//load paypal
 				if ($this->opts['gateway']['paypalsand'] || $this->opts['gateway']['paypalprod']) :
+					if( $colorname ) $output .= '<input type="hidden" name="os0_' . $i . '" data-value-ims="' . $colorname . '"/>';
 					$output .= '<input type="hidden" name="on0_' . $i . '" data-value-ims="' . esc_attr("$size " . $item['unit']) . '"/>';
 					$output .= '<input type="hidden" name="item_number_' . $i . '" data-value-ims="' . esc_attr($enc) . '"/>';
 					$output .= '<input type="hidden" name="quantity_' . $i . '" data-value-ims="' . esc_attr($item['quantity']) . '"/>';
-					$output .= '<input type="hidden" name="item_name_' . $i . '" data-value-ims="' . get_the_title($id) . '"/>';
-					$output .= '<input type="hidden" name="os0_' . $i . '" data-value-ims="' . trim($item['color_name'] , " + ") . '"/>';
+					$output .= '<input type="hidden" name="item_name_' . $i . '" data-value-ims="' . esc_attr($imgtitle) . '"/>';
 					$output .= '<input type="hidden" name="amount_' . $i . '" data-value-ims="' . esc_attr($this->format_price($item['price']+$item['color']+$item['finish'], false)) . '" />';
 				endif;
 
@@ -126,15 +129,15 @@ else: //else show table
 				if ($this->opts['gateway']['custom'] && !empty($this->opts['data_pair'])) :
 
 					$item_replace = array($enc,
-						__('%image_id%', $this->domain) => $enc,
-						__('%image_name%', $this->domain) => get_the_title($id),
-						__('%image_value%', $this->domain) => esc_attr($this->format_price($item['price']+$item['color']+$item['finish'], false)),
-						__('%image_color%', $this->domain) => trim($this->color[$color], " + "),
-						__('%image_quantity%', $this->domain) => $item['quantity'],
+						__('%image_id%', 'ims') => $enc,
+						__('%image_name%', 'ims') => get_the_title($id),
+						__('%image_value%', 'ims') => esc_attr($this->format_price($item['price']+$item['color']+$item['finish'], false)),
+						__('%image_color%', 'ims') => trim($this->color[$color], " + "),
+						__('%image_quantity%', 'ims') => $item['quantity'],
 					);
 
 					if (isset($item['download']))
-						$item_replace[__('%image_download%', $this->domain)] = $item['download'];
+						$item_replace[__('%image_download%', 'ims')] = $item['download'];
 
 					foreach ($data_pair as $key => $sub) {
 						if (isset($item_replace[$sub]))
@@ -154,48 +157,49 @@ else: //else show table
 
 	endforeach; //end image list
 
-	$output .= apply_filters('ims_cart_image_list', '', &$this);
+	$output .= apply_filters('ims_cart_image_list', '', $this);
 	$output .= '</tbody><tfoot>'; //end tbody - start tfoot
 	//display subtotal
-	$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell"><label>' . __('Item subtotal', $this->domain) . '</label></td>
+	$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell"><label>' . __('Item subtotal', 'ims') . '</label></td>
 	<td role="gridcell" class="total">' . $this->format_price($this->cart['subtotal']) . '</td></tr>';
 
 	//promotional code
 	$output .= '<tr role="row">
-	<td role="gridcell" >&nbsp;</td><td role="gridcell"><label for="ims-promo-code">' . __('Promotional code', $this->domain) . '</label></td>
+	<td role="gridcell" >&nbsp;</td><td role="gridcell"><label for="ims-promo-code">' . __('Promotional code', 'ims') . '</label></td>
 	<td role="gridcell" class="total promo-code">
 	<input name="promocode" id="ims-promo-code" type="text" value="' . ( isset($this->cart['promo']['code']) ? esc_attr($this->cart['promo']['code']) : '' ) . '" />
-	<span class="ims-break"></span> <small>' . __('Update cart to apply promotional code.', $this->domain) . '</small></td>
+	<span class="ims-break"></span> <small>' . __('Update cart to apply promotional code.', 'ims') . '</small></td>
 	</tr>';
 
 	//display discounted data
 	if ($this->cart['promo']['discount'])
-		$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell">' . __('Discount', $this->domain) . '</td>
+		$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell">' . __('Discount', 'ims') . '</td>
 		<td role="gridcell" class="discount">' . $this->format_price($this->cart['promo']['discount'], true, ' - ') . '</td></tr>';
 	
 	//shipping charge
 	if($this->cart['shippingcost'] )
-		$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell"><label for="shipping">' . __('Shipping', $this->domain) . '</label></td>
+		$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell"><label for="shipping">' . __('Shipping', 'ims') . '</label></td>
 		<td role="gridcell" class="shipping">' .  $this->shipping_options()  . '</td></tr>';
 		
 	//display tax fields
 	if ($this->cart['tax']) 
-		$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell">' . __('Tax', $this->domain) . '</td><td role="gridcell" class="tax">' .
+		$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell">' . __('Tax', 'ims') . '</td><td role="gridcell" class="tax">' .
 		$this->format_price($this->cart['tax'], true, ' + ') . '<input type="hidden" name="tax_cart" data-value-ims="' . $this->format_price($this->cart['tax'],false) . '"/> </td></tr>';
 
 	//display total
-	$output .= '<tr role="row"><td role="gridcell">&nbsp;</td> <td role="gridcell"><label>' . __('Total', $this->domain) . '</label></td>
+	$output .= '<tr role="row"><td role="gridcell">&nbsp;</td> <td role="gridcell"><label>' . __('Total', 'ims') . '</label></td>
 	<td role="gridcell" class="total">' . $this->format_price($this->cart['total']) . ' </td></tr>';
 
 	//display notification
-	$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell" colspan="2"><label>' . __('Additional Instructions', $this->domain) . '<br />
+	$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell" colspan="2"><label>' . __('Additional Instructions', 'ims') . '<br />
 	<textarea name="instructions" class="ims-instructions">' . esc_textarea(isset($this->cart['instructions']) ? $this->cart['instructions'] : '' ) . '</textarea></label></td></tr>';
 
 	$output .= '<tr role="row" class="ims-checkout-fileds"><td role="gridcell">&nbsp;</td><td role="gridcell" colspan="2">';
+	$output .= '<input name="apply-changes" type="submit" value="' . esc_attr__('Update Cart', 'ims') . '" class="secondary" />';
 
-	$output .='<input name="apply-changes" type="submit" value="' . esc_attr__('Update Cart', $this->domain) . '" class="secondary" /><span class="ims-bk"></span>  ';
-
-	$output .= '<span class="ims-checkout-label">' . esc_attr__('Checkout using:', $this->domain) . ' </span>';
+	$output .= '<span class="ims-bk"></span>';
+	
+	$output .= '<div class="ims-cart-actions"> <span class="ims-checkout-label">' . esc_attr__('Checkout using:', 'ims') . ' </span>';
 
 	//render button
 	foreach ((array)$this->opts['gateway'] as $key => $bol){
@@ -204,7 +208,7 @@ else: //else show table
 			'" class="primary ims-google-checkout" data-submit-url="' . esc_attr(urlencode($this->gateway[$key]['url'])) . '" /> ';
 	}
 	
-	$output .= apply_filters('ims_store_cart_actions', '', &$this->cart) . '</td></tr>';
+	$output .= apply_filters('ims_store_cart_actions', '', $this->cart) . '</div></td></tr>';
 
 	$output .= '</tfoot>
 	</table><!--.ims-table-->'; //end table
@@ -225,22 +229,22 @@ else: //else show table
 		<input type="hidden" name="checkout-flow-support.merchant-checkout-flow-support.tax-tables.default-tax-table.tax-rules.default-tax-rule-1.shipping-taxed" data-value-ims="true"/>';
 
 		if ($this->cart['shippingcost']) {
-			$output .= '<input type="hidden" name="ship_method_name_1"  data-value-ims="' . esc_attr__("shipping", $this->domain) . '" />
+			$output .= '<input type="hidden" name="ship_method_name_1"  data-value-ims="' . esc_attr__("shipping", 'ims') . '" />
 			<input type="hidden" name="ship_method_price_1"  data-value-ims="' . esc_attr($this->cart['shipping']) . '" />
 			<input type="hidden" name="ship_method_currency_1"  data-value-ims="' . esc_attr($this->opts['currency']) . '" />';
 		}
 
 		if ($downlinks)
 			$output .= '<input type="hidden" name="shopping-cart.items.item-1.digital-content.description"
-			 data-value-ims="' . "&lt;p&gt;" . esc_attr__("downloads:", $this->domain) . "&lt;/p&gt; $downlinks" . '" />';
+			 data-value-ims="' . "&lt;p&gt;" . esc_attr__("downloads:", 'ims') . "&lt;/p&gt; $downlinks" . '" />';
 
 		if ($this->cart['promo']['discount']) {
 			$output .= '<input type="hidden" name="item_quantity_' . $i . '" data-value-ims="1" />
-			<input type="hidden" name="item_name_' . $i . '"  data-value-ims="' . esc_attr__("discount", $this->domain) . '" />
+			<input type="hidden" name="item_name_' . $i . '"  data-value-ims="' . esc_attr__("discount", 'ims') . '" />
 			<input type="hidden" name="item_currency_' . $i . '"  data-value-ims="' . esc_attr($this->opts['currency']) . '" />
 			<input type="hidden" name="item_merchant_id_' . $i . '"  data-value-ims="' . esc_attr($this->cart['promo']['code']) . '" />
 			<input type="hidden" name="item_price_' . $i . '"  data-value-ims="' . "-" . esc_attr($this->cart['promo']['discount']) . '" />
-			<input type="hidden" name="item_description_' . $i . '"  data-value-ims="' . esc_attr__("promotion code", $this->domain) . '" />';
+			<input type="hidden" name="item_description_' . $i . '"  data-value-ims="' . esc_attr__("promotion code", 'ims') . '" />';
 		}
 
 		$output .= apply_filters('ims_cart_google_hidden_fields', '', $this->cart);
@@ -265,7 +269,7 @@ else: //else show table
 		<input type="hidden" name="shipping_1" data-value-ims="' . $this->cart['shipping'] . '" />
 		<input type="hidden" name="business" data-value-ims="' . ( isset($this->opts['paypalname']) ? esc_attr($this->opts['paypalname']) : '' ) . '" />
 		<input type="hidden" name="discount_amount_cart" data-value-ims="' . ( isset($this->cart['promo']['discount']) ? esc_attr($this->cart['promo']['discount']) : '' ) . '" />
-		<input type="hidden" name="cbt" data-value-ims="' . esc_attr(sprintf(__('Return to %s', $this->domain), get_bloginfo('name'))) . '" />';
+		<input type="hidden" name="cbt" data-value-ims="' . esc_attr(sprintf(__('Return to %s', 'ims'), get_bloginfo('name'))) . '" />';
 
 		$output .= apply_filters('ims_cart_paypal_hidden_fields', '', $this->cart);
 
@@ -284,16 +288,16 @@ else: //else show table
 			$this->cart['promo']['discount'] = '';
 
 		$cart_replace = array(
-			__('%cart_id%', $this->domain) => $this->orderid,
-			__('%cart_tax%', $this->domain) => $this->cart['tax'],
-			__('%cart_total%', $this->domain) => $this->cart['total'],
-			__('%cart_shipping%', $this->domain) => $this->cart['shipping'],
-			__('%cart_currency%', $this->domain) => $this->opts['currency'],
-			__('%cart_subtotal%', $this->domain) => $this->cart['subtotal'],
-			__('%cart_status%', $this->domain) => get_post_status($this->orderid),
-			__('%cart_discount%', $this->domain) => $this->cart['promo']['discount'],
-			__('%cart_discount_code%', $this->domain) => $this->cart['promo']['code'],
-			__('%cart_total_items%', $this->domain) => $this->cart['items'],
+			__('%cart_id%', 'ims') => $this->orderid,
+			__('%cart_tax%', 'ims') => $this->cart['tax'],
+			__('%cart_total%', 'ims') => $this->cart['total'],
+			__('%cart_shipping%', 'ims') => $this->cart['shipping'],
+			__('%cart_currency%', 'ims') => $this->opts['currency'],
+			__('%cart_subtotal%', 'ims') => $this->cart['subtotal'],
+			__('%cart_status%', 'ims') => get_post_status($this->orderid),
+			__('%cart_discount%', 'ims') => $this->cart['promo']['discount'],
+			__('%cart_discount_code%', 'ims') => $this->cart['promo']['code'],
+			__('%cart_total_items%', 'ims') => $this->cart['items'],
 		);
 
 		foreach ($data_pair as $key => $sub) {

@@ -47,13 +47,13 @@ class ImStoreFeeds {
 		if (is_singular("ims_gallery")) {
 			$query = ( empty($this->permalinks) ) ? '&amp;feed=imstore' : '/feed/imstore/';
 			echo '<link rel="alternate" type="application/rss+xml" title="' . get_bloginfo('name') . " &raquo; " .
-			__('Gallery Feed', $ImStore->domain) . '" href="' . trim(get_permalink(), '/') . $query . '" />' . "\n";
+			__('Gallery Feed', 'ims') . '" href="' . trim(get_permalink(), '/') . $query . '" />' . "\n";
 		}
 
 		if (is_tax("ims_album") && $album) {
 			$query = ( empty($this->permalinks) ) ? '&amp;feed=rss' : '/feed/';
 			echo '<link rel="alternate" type="application/rss+xml" title="' . get_bloginfo('name') . " &raquo; " .
-			__('Gallery Feed', $ImStore->domain) . '" href="' . trim(get_term_link($album, "ims_album"), '/') . $query . '" />' . "\n";
+			__('Gallery Feed', 'ims') . '" href="' . trim(get_term_link($album, "ims_album"), '/') . $query . '" />' . "\n";
 		}
 	}
 
@@ -79,7 +79,7 @@ class ImStoreFeeds {
 
 		if (empty($ImStore->attachments)) {
 			header('content-type:text/plain;charset=' . $this->charset);
-			wp_die(__("No images have been added yet.", $ImStore->domain));
+			wp_die(__("No images have been added yet.", 'ims'));
 		} else {
 			$this->display_rss();
 		}
@@ -107,8 +107,7 @@ class ImStoreFeeds {
 			 xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
 			 >
 			<channel>
-				<title><![CDATA[<?php bloginfo_rss('name');
-		_e('image RSS', $ImStore->domain); ?>]]></title>
+				<title><![CDATA[<?php bloginfo_rss('name'); _e('image RSS', 'ims'); ?>]]></title>
 				<atom:link href="<?php self_link(); ?>" rel="self" type="application/rss+xml" />
 				<link><?php bloginfo_rss('url') ?></link>
 				<description><![CDATA[<?php bloginfo_rss("description") ?>]]></description>
@@ -117,17 +116,17 @@ class ImStoreFeeds {
 				<sy:updatePeriod><?php echo apply_filters('rss_update_period', 'hourly'); ?></sy:updatePeriod>
 				<sy:updateFrequency><?php echo apply_filters('rss_update_frequency', '1'); ?></sy:updateFrequency>
 				<?php foreach ($ImStore->attachments as $image) {
-
 					$filetype = wp_check_filetype(basename($image->meta['file']));
 					$author = isset($image->meta['image_meta']['author']) ? $image->meta['image_meta']['author'] : get_the_author_meta('display_name', $image->post_author);
 					?>
 					<item>
-						<title><![CDATA[<?php echo $image->post_title ?>]]></title>
+						<title><?php echo $image->post_title ?></title>
 						<link><?php echo $ImStore->get_image_url($image->ID) ?></link>
+						<pubDate><?php echo date('c', strtotime($image->post_date) )?></pubDate>
 						<media:thumbnail url="<?php echo $ImStore->get_image_url($image->ID, 2) ?>"/>
 						<media:content type="<?php echo $filetype['type'] ?>" url="<?php echo $ImStore->get_image_url($image->ID) ?>"/>
-						<media:text type="plain" lang="<?php bloginfo('language') ?>" ><![CDATA[<?php echo $image->post_excerpt ?>]]></media:text>
-						<media:credit role="photographer" scheme="urn:yvs"><![CDATA[<?php echo $author ?>]]></media:credit>
+						<media:text type="plain" lang="<?php bloginfo('language') ?>" ><![CDATA[<?php echo strip_tags($image->post_excerpt) ?>]]></media:text>
+						<media:credit role="photographer" scheme="urn:yvs"><?php echo $author ?></media:credit>
 					</item>
 				<?php } ?>
 			</channel>

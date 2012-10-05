@@ -85,31 +85,34 @@ class ImStoreGallery extends ImStoreAdmin {
 		}
 
 		$this->metaboxes = array(
-			'ims_info_box' => __('Gallery Information', $this->domain),
-			'ims_import_box' => __('Import Images', $this->domain),
-			'ims_images_box' => __('Images', $this->domain),
+			'ims_info_box' => __('Gallery Information', 'ims'),
+			'ims_import_box' => __('Import Images', 'ims'),
+			'ims_images_box' => __('Images', 'ims'),
 		);
 
 		$this->order = array(
-			'ASC' => __('Ascending', $this->domain),
-			'DESC' => __('Descending', $this->domain),
+			'ASC' => __('Ascending', 'ims'),
+			'DESC' => __('Descending', 'ims'),
 		);
+		
 		$this->sortby = array(
-			'title' => __('Image title', $this->domain),
-			'date' => __('Image date', $this->domain),
-			'excerpt' => __('Caption', $this->domain),
-			'menu_order' => __('Custom order', $this->domain),
+			'title' => __('Image title', 'ims'),
+			'date' => __('Image date', 'ims'),
+			'excerpt' => __('Caption', 'ims'),
+			'menu_order' => __('Custom order', 'ims'),
 		);
 
 		$this->import_tabs = array(
-			'upload_images' => __('Upload Images', $this->domain),
-			'upload_zip' => __('Upload zip file', $this->domain),
-			'import_folder' => __('Scan folder', $this->domain),
+			'upload_images' => __('Upload Images', 'ims'),
+			'upload_zip' => __('Upload zip file', 'ims'),
+			'import_folder' => __('Scan folder', 'ims'),
 		);
+		
+		$this->exts = (array)apply_filters('ims_allowed_extensions', array('jpg','jpeg','gif','png'));
 
 		foreach ($this->metaboxes as $key => $label)
 			add_meta_box($key, $label, array(&$this, $key), "ims_gallery", "normal");
-		add_meta_box("ims_customers_box", __('Customers', $this->domain), array(&$this, "customers_metabox"), "ims_gallery", "side", "low");
+		add_meta_box("ims_customers_box", __('Customers', 'ims'), array(&$this, "customers_metabox"), "ims_gallery", "side", "low");
 
 		do_action('ims_gallery_init', $this);
 	}
@@ -135,7 +138,7 @@ class ImStoreGallery extends ImStoreAdmin {
 	function iptc_data($link, $id, $meta) {
 		if (empty($this->ajaxnonce))
 			$this->ajaxnonce = wp_create_nonce('ims_ajax');
-		return ' | <a href="' . IMSTORE_ADMIN_URL . '/ajax.php?action=imageiptc&id=' . $id . '&_wpnonce=' . $this->ajaxnonce . '" class="thickbox" title="' . __('image metadata') . '">' . __('IPTC', $this->domain) . '</a>';
+		return ' | <a href="' . IMSTORE_ADMIN_URL . '/ajax.php?action=imageiptc&id=' . $id . '&_wpnonce=' . $this->ajaxnonce . '" class="thickbox" title="' . __('image metadata') . '">' . __('IPTC', 'ims') . '</a>';
 	}
 
 	/**
@@ -191,7 +194,7 @@ class ImStoreGallery extends ImStoreAdmin {
 		else
 			wp_enqueue_script('ims-swupload', IMSTORE_URL . '/_js/swupload.js', array('jquery'), $this->version, true);
 
-		wp_localize_script('ims-gallery', 'imsgal', array('adminurl' => rtrim(admin_url(),'/'), 'trash' => __('Trash', $this->domain),
+		wp_localize_script('ims-gallery', 'imsgal', array('adminurl' => rtrim(admin_url(),'/'), 'trash' => __('Trash', 'ims'),
 			'deletefile' => $this->opts['deletefiles'], 'imsajax' => IMSTORE_ADMIN_URL . '/ajax.php',
 		));
 	}
@@ -210,7 +213,7 @@ class ImStoreGallery extends ImStoreAdmin {
 			return $messages;
 
 		$this->gallery = $post;
-		$post->post_title = __('Gallery ', $this->domain) . $post->ID;
+		$post->post_title = __('Gallery ', 'ims') . $post->ID;
 
 		if (empty($this->opts['securegalleries']))
 			return $messages;
@@ -288,16 +291,16 @@ class ImStoreGallery extends ImStoreAdmin {
 		?>
 		<table class="ims-table" >
 			<tr>
-				<td class="short"><label for="_ims_folder_path"><?php _e('Folder path', $this->domain) ?></label></td>
+				<td class="short"><label for="_ims_folder_path"><?php _e('Folder path', 'ims') ?></label></td>
 				<td class="long"><?php echo $folderfield ?></td>
-				<td><label for="gallery_id"><?php _e('Gallery ID', $this->domain) ?></label></td>
+				<td><label for="gallery_id"><?php _e('Gallery ID', 'ims') ?></label></td>
 				<td><input type="text" name="_ims_gallery_id" id="gallery_id" value="<?php echo esc_attr($_ims_gallery_id) ?>"/></td>
 			</tr>
 			<?php if (empty($this->opts['disablestore'])) { ?>
 				<tr>
-					<td><label for="_ims_tracking"><?php _e('Tracking Number', $this->domain) ?></label></td>
+					<td><label for="_ims_tracking"><?php _e('Tracking Number', 'ims') ?></label></td>
 					<td class="long"><input type="text" name="_ims_tracking" id="_ims_tracking" value="<?php echo esc_attr($_ims_tracking) ?>" /></td>
-					<td><label for="_ims_price_list"><?php _e('Price List', $this->domain) ?></label></td>
+					<td><label for="_ims_price_list"><?php _e('Price List', 'ims') ?></label></td>
 					<td>
 						<select name="_ims_price_list" id="_ims_price_list" >
 							<?php foreach ($this->get_pricelists() as $list) : ?>
@@ -308,16 +311,16 @@ class ImStoreGallery extends ImStoreAdmin {
 				</tr>
 			<?php } ?>
 			<tr>
-				<td><label for="sortby"><?php _e('Sort Order', $this->domain) ?></label></td>
+				<td><label for="sortby"><?php _e('Sort Order', 'ims') ?></label></td>
 				<td colspan="3">
 					<select name="_ims_sortby" id="sortby">
-						<option value="0"><?php _e('Default', $this->domain) ?></option>
+						<option value="0"><?php _e('Default', 'ims') ?></option>
 						<?php foreach ($this->sortby as $val => $label) : ?>
 							<option value="<?php echo esc_attr($val) ?>" <?php selected($val, $_ims_sortby) ?>><?php echo esc_html($label) ?></option> 
 						<?php endforeach ?>
 					</select>
 					<select name="_ims_order">
-						<option value="0"><?php _e('Default', $this->domain) ?></option> 
+						<option value="0"><?php _e('Default', 'ims') ?></option> 
 						<?php foreach ($this->order as $val => $label) : ?>
 							<option value="<?php echo esc_attr($val) ?>" <?php selected($val, $_ims_order) ?>><?php echo $label ?></option> 
 						<?php endforeach ?>
@@ -325,18 +328,18 @@ class ImStoreGallery extends ImStoreAdmin {
 				</td>
 			</tr>
 			<tr>
-				<td><label for="imsexpire" class="date-icon"><?php _e('Expiration Date', $this->domain) ?></label></td>
+				<td><label for="imsexpire" class="date-icon"><?php _e('Expiration Date', 'ims') ?></label></td>
 				<td class="long">
 					<input type="text" name="imsexpire" id="imsexpire" value="<?php echo $expire ?>" />
 					<input type="hidden" name="_ims_expire" id="_ims_expire" value="<?php echo $ims_expire ?>"/>
 				</td>
-				<td><label for="_ims_visits"><?php _e('Visits', $this->domain) ?></label></td>
+				<td><label for="_ims_visits"><?php _e('Visits', 'ims') ?></label></td>
 				<td><input type="text" name="_ims_visits" id="_ims_visits" value="<?php echo esc_attr($_ims_visits) ?>" /></td>
 			</tr>
 			<tr>
-				<td><label for="_dis_store" ><?php _e('Disable Store', $this->domain) ?></label></td>
+				<td><label for="_dis_store" ><?php _e('Disable Store', 'ims') ?></label></td>
 				<td><input type="checkbox" name="_dis_store" id="_dis_store" <?php checked(true, $_dis_store) ?> value="1" /></td>
-				<td><label for="_to_attach"><?php _e('Link to attachment', $this->domain) ?></label></td>
+				<td><label for="_to_attach"><?php _e('Link to attachment', 'ims') ?></label></td>
 				<td><input type="checkbox" name="_to_attach" id="_to_attach" <?php checked(true, $_to_attach) ?> value="1" /></td>
 			</tr>
 		<?php do_action('ims_info_metabox', $this) ?>
@@ -411,7 +414,7 @@ class ImStoreGallery extends ImStoreAdmin {
 		$plupload_init['multipart_params']['post_id'] = $post_id;
 		$plupload_init['multipart_params']['folderpath'] = $this->galpath;
 		$plupload_init['url'] = IMSTORE_URL . "/admin/upload-img.php";
-		$plupload_init['filters'] = array(array('title' => __('Allowed Files'), 'extensions' => 'jpg,jpeg,gif,png'));
+		$plupload_init['filters'] = array(array('title' => __('Allowed Files'), 'extensions' =>implode(',',$this->exts)));
 
 		return $plupload_init;
 	}
@@ -456,10 +459,10 @@ class ImStoreGallery extends ImStoreAdmin {
 	 */
 
 	function upload_zip_tab() {
-		echo '<p><label for="zipfile">' . __('Zip file', $this->domain) . '<input type="file" name="zipfile" id="zipfile" /></label></p>';
-		echo '<p><label for="zipurl">' . __('Or enter zip file URL', $this->domain) . '</label><br />';
+		echo '<p><label for="zipfile">' . __('Zip file', 'ims') . '<input type="file" name="zipfile" id="zipfile" /></label></p>';
+		echo '<p><label for="zipurl">' . __('Or enter zip file URL', 'ims') . '</label><br />';
 		echo '<input type="text" name="zipurl" id="zipurl" class="code"/><br />';
-		echo '<small>' . sprintf(__("Import a zip file with images from a url. Your server's maximum file size upload is %s. Publish or update gallery to upload images.", $this->domain), '<strong>' . $this->get_max_file_upload(true) . '</strong>') . '</small></p>';
+		echo '<small>' . sprintf(__("Import a zip file with images from a url. Your server's maximum file size upload is %s. Publish or update gallery to upload images.", 'ims'), '<strong>' . $this->get_max_file_upload(true) . '</strong>') . '</small></p>';
 	}
 
 	/* Import folder tab content
@@ -469,11 +472,11 @@ class ImStoreGallery extends ImStoreAdmin {
 	 */
 
 	function import_folder_tab() {
-		echo '<p><label for="galleryfolder">' . __('Import From Server Path', $this->domain) . '</label></p>';
+		echo '<p><label for="galleryfolder">' . __('Import From Server Path', 'ims') . '</label></p>';
 		echo '<p><input type="text" id="galleryfolder" name="galleryfolder" value="' . esc_attr($this->galpath) . '"' . $this->disabled . '/> ';
-		echo '<input type="submit" name="scannfolder" id="scannfolder" value="' . esc_attr__('Scan', $this->domain) . '" class="button" />';
+		echo '<input type="submit" name="scannfolder" id="scannfolder" value="' . esc_attr__('Scan', 'ims') . '" class="button" />';
 		echo '<img src="' . admin_url("images/wpspin_light.gif") . '" id="ajax-loading" class="loading" alt="loading"> <br />';
-		echo '<small>' . __("Path relative to the wp-content folder.", $this->domain) . '</small></p>';
+		echo '<small>' . __("Path relative to the wp-content folder.", 'ims') . '</small></p>';
 	}
 
 	/* Modify the image upload path
@@ -493,9 +496,9 @@ class ImStoreGallery extends ImStoreAdmin {
 		$path['error'] = false;
 		$path['subdir'] = $this->galpath;
 		$path['baseurl'] = $this->content_url;
-		$path['url'] = $this->content_url . '/' . $this->galpath;
 		$path['basedir'] = $this->content_dir;
 		$path['path'] = $this->content_dir . $this->galpath;
+		$path['url'] = trim($this->content_url,'/') . '/' . $this->galpath;
 
 		$path = apply_filters('ims_upload_path', $path, $data);
 		return $path;
@@ -510,9 +513,9 @@ class ImStoreGallery extends ImStoreAdmin {
 	function gallery_screen_columns($register = true) {
 		$this->columns = array(
 			'cb' => '<input type="checkbox">',
-			'imthumb' => __('Thumbnail', $this->domain), 'immetadata' => __('Metadata', $this->domain),
-			'imtitle' => __('Title/Caption', $this->domain), 'imauthor' => __('Author', $this->domain),
-			'imorder' => __('Order', $this->domain), 'imageid' => __('ID', $this->domain),
+			'imthumb' => __('Thumbnail', 'ims'), 'immetadata' => __('Metadata', 'ims'),
+			'imtitle' => __('Title/Caption', 'ims'), 'imauthor' => __('Author', 'ims'),
+			'imorder' => __('Order', 'ims'), 'imageid' => __('ID', 'ims'),
 		);
 		if ($register)
 			register_column_headers('ims_gallery', $this->columns);
@@ -591,18 +594,18 @@ class ImStoreGallery extends ImStoreAdmin {
 					break;
 				case 'immetadata':
 					$r .= '<td class="column-' . $column_id . $hide . '">';
-					$r .= __('Format: ', $this->domain) . $attch['post_mime_type'] . '<br />';
-					$r .= $data['width'] . ' x ' . $data['height'] . __(' pixels', $this->domain) . '<br />';
-					$r .= __('Color: ', $this->domain) . ( isset($data['color']) ? $data['color'] : $data['image_meta']['color']) . '<br />';
+					$r .= __('Format: ', 'ims') . $attch['post_mime_type'] . '<br />';
+					$r .= $data['width'] . ' x ' . $data['height'] . __(' pixels', 'ims') . '<br />';
+					$r .= __('Color: ', 'ims') . ( isset($data['color']) ? $data['color'] : $data['image_meta']['color']) . '<br />';
 					$r .= '<div class="row-actions" id="media-head-' . $id . '">';
 					if ($this->is_trash) {
-						$r .= '<a href="#' . $id . '" class="imsdelete">' . __('Delete', $this->domain) . '</a> | ';
-						$r .= '<a name="publish" href="#' . $id . '" class="imsrestore">' . __('Restore', $this->domain) . '</a>';
+						$r .= '<a href="#' . $id . '" class="imsdelete">' . __('Delete', 'ims') . '</a> | ';
+						$r .= '<a name="publish" href="#' . $id . '" class="imsrestore">' . __('Restore', 'ims') . '</a>';
 					} else {
 						$r .= '<a href="' . IMSTORE_ADMIN_URL . '/image-edit.php?editimage=' . $id . $this->imgnonce . '" class="thickbox">' .
-								__('Edit', $this->domain) . '</a> | ';
-						$r .= '<a href="#' . $id . '" class="imsupdate">' . __('Update', $this->domain) . '</a> | ';
-						$r .= '<a name="trash" href="#' . $id . '" class="imstrash">' . __('Trash', $this->domain) . '</a>';
+								__('Edit', 'ims') . '</a> | ';
+						$r .= '<a href="#' . $id . '" class="imsupdate">' . __('Update', 'ims') . '</a> | ';
+						$r .= '<a name="trash" href="#' . $id . '" class="imstrash">' . __('Trash', 'ims') . '</a>';
 					}
 					$r .= apply_filters('ims_image_row_actions_metadata', '', $id, $data, $attch);
 					$r .= '</div>';
@@ -634,8 +637,89 @@ class ImStoreGallery extends ImStoreAdmin {
 			}
 		}
 		
-
 		echo $r;
+	}
+	
+	
+	/**
+	 * generate single image metadata
+	 *
+	 * @param $file array: file, url, type, name
+	 * @param $parent_id int
+	 * @param $show_errors bool 
+	 * @return array | bool
+	 * @since 3.1.6
+	 */
+	function generate_ims_metadata( $file, $parent_id, $show_errors = false ){
+		global $current_user;
+		
+		$file = array_merge($file, pathinfo($file['name']));
+		$filepath = apply_filters( 'ims_before_read_image', $file['file'], $file );
+		
+		if(!file_exists($filepath))
+			return false;
+				
+		// Construct the attachment array
+		$attachment = array(
+			'menu_order' => '',
+			'guid' => $file['url'],
+			'post_excerpt' => '',
+			'post_status' => 'publish',
+			'post_type' => 'ims_image',
+			'post_parent' => $parent_id,
+			'post_mime_type' => $file['type'],
+			'post_title' =>trim( substr($file['name'], 0, -(1 + strlen($file['extension'])) ) ),
+		);
+		
+		require_once( ABSPATH . 'wp-admin/includes/image.php' );
+		if ( $image_meta = @wp_read_image_metadata($filepath) ){
+			if ( trim( $image_meta['title'] ) && 
+			! is_numeric( sanitize_title( $image_meta['title'] ) ) )
+				$attachment['post_title'] = $image_meta['title'];
+			if ( trim( $image_meta['caption'] ) )
+				$attachment['post_excerpt'] = $image_meta['caption'];
+			if ( !trim( $image_meta['credit'] ) )
+				$image_meta['credit'] = $current_user->display_name;
+		}
+		
+		$orininfo = getimagesize( $filepath );
+		$image_meta['color'] = __( 'Unknown', 'ims');
+		
+		if( isset($orininfo['channels']) ){
+			switch( $orininfo['channels'] ){ 
+				case 1:$image_meta['color'] = 'BW'; break;
+				case 3:$image_meta['color'] = 'RGB'; break;
+				case 4:$image_meta['color'] = 'CMYK'; break;
+			}
+		} 
+		
+		require_once( ABSPATH . 'wp-admin/includes/post.php' );
+		$attach_id = wp_insert_post( $attachment );
+		
+		if ( is_wp_error($attach_id) && $show_errors){
+			echo '<td colspan="'.$cols.'"><div class="error-div">
+			<a class="dismiss" href="#">' . __( 'Dismiss') . '</a>
+			<strong>' . sprintf(__( '&#8220;%s&#8221; has failed to upload due to an error' ), esc_html( $name ) ) . '</strong><br />' .
+			esc_html( $attach_id->get_error_message( ) ) . '</div></td>';
+			return false;
+		}
+		
+		if (!is_wp_error($attach_id)) {
+			do_action( 'ims_before_attachment_metadata', $attach_id, $filepath, $file );
+			
+			$metadata = wp_generate_attachment_metadata($attach_id, $filepath);
+			$metadata['image_meta'] = $image_meta;
+			
+			if( update_post_meta( $attach_id, '_wp_attachment_metadata', $metadata ) && $show_errors){
+				echo apply_filters( "ims_async_upload", $attach_id, $metadata, $attachment );
+				if( !get_post_meta( $attach_id, '_ims_folder_path' ) )
+					update_post_meta( $attach_id, '_ims_folder_path', "/". trim( $_REQUEST['folderpath'] , "/" ) );
+			}elseif( $show_errors )  echo 'error';
+			
+			return $metadata;
+		}
+		
+		return false;
 	}
 
 	/**
@@ -655,7 +739,7 @@ class ImStoreGallery extends ImStoreAdmin {
 		$archive = false;
 		$download_file = false;
 
-		check_admin_referer('update-' . $post->post_type . '_' . $postid);
+		//check_admin_referer('update-' . $post->post_type . '_' . $postid);
 
 		$this->galpath = ( empty($_POST['_ims_folder_path']) ) ?
 		get_post_meta($postid, '_ims_folder_path', true) : "/" . trim($_POST['_ims_folder_path'], "/");
@@ -713,7 +797,7 @@ class ImStoreGallery extends ImStoreAdmin {
 			if ($dh = @opendir($fullpath)) {
 				$x = 0;
 				while (false !== ($obj = readdir($dh))) {
-					if ($obj{0} == '.' || !preg_match('/(png|jpg|jpeg|gif)$/i', $obj))
+					if ($obj{0} == '.' || !preg_match('/('.implode('|',$this->exts).')$/i', $obj))
 						continue;
 					$archive[$x]['status'] = 'ok';
 					$archive[$x]['filename'] = $obj;
@@ -752,10 +836,11 @@ class ImStoreGallery extends ImStoreAdmin {
 			foreach ($archive as $file) {
 
 				if ('__MACOSX/' === substr($file['filename'], 0, 9) || (isset($file['folder']) && $file['folder'] == true )
-						|| !preg_match('/.(png|jpg|jpeg|gif)$/i', $file['filename']) || $file['status'] != 'ok')
+				|| !preg_match('/.('.implode('|',$this->exts).')$/i', $file['filename']) || $file['status'] != 'ok')
 					continue;
 
 				$filename = basename($file['filename']);
+				
 				if (preg_match('(^._)', $filename))
 					continue;
 
@@ -767,53 +852,16 @@ class ImStoreGallery extends ImStoreAdmin {
 					file_put_contents($filepath, $file['content']);
 					$filename = wp_unique_filename($fullpath, $filename);
 				}
-
+				
 				if (file_exists($filepath)) {
-
-					$content = '';
-					$name_parts = pathinfo($filename);
 					$filetype = wp_check_filetype($filename);
-					$url = str_replace($this->content_dir, $this->content_url, $filepath);
-					$title = trim(substr($filename, 0, -(1 + strlen($name_parts['extension']))));
-
-					if ($image_meta = wp_read_image_metadata($filepath)) {
-						if (trim($image_meta['title']) && !is_numeric(sanitize_title($image_meta['title'])))
-							$title = $image_meta['title'];
-						if (trim($image_meta['caption']))
-							$content = $image_meta['caption'];
-						if (!trim($image_meta['credit']))
-							$image_meta['credit'] = $current_user->display_name;
-					}
-
-					$image_meta['color'] = __('Unknown', $this->domain);
-					if (isset($orininfo['channels'])) {
-						switch ($orininfo['channels']) {
-							case 1:$image_meta['color'] = 'BW';
-								break;
-							case 3:$image_meta['color'] = 'RGB';
-								break;
-							case 4:$image_meta['color'] = 'CMYK';
-								break;
-						}
-					}
-
-					$attachment = array(
-						'guid' => $url,
-						'menu_order' => '',
-						'post_title' => $title,
-						'post_parent' => $postid,
-						'post_status' => 'publish',
-						'post_type' => 'ims_image',
-						'post_excerpt' => $content,
-						'post_mime_type' => $filetype['type'],
+					$filedata = array(
+						'file'=> $filepath ,
+						'name' =>$filename,
+						'type' => $filetype['type'],
+						'url'=> str_replace($this->content_dir, $this->content_url, $filepath),
 					);
-
-					$attach_id = wp_insert_post($attachment);
-					if (!is_wp_error($attach_id)) {
-						$filedata = wp_generate_attachment_metadata($attach_id, $filepath);
-						$filedata['image_meta'] = $image_meta;
-						wp_update_attachment_metadata($attach_id, $filedata);
-					}
+					$this->generate_ims_metadata($filedata, $postid);
 				}
 			}
 		}

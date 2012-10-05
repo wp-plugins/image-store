@@ -113,7 +113,7 @@ class ImStoreDownloadImage {
 		$ext = $type['ext'];
 		$filename = $wpdb->get_var("SELECT post_title FROM $wpdb->posts WHERE ID = " . $this->id);
 
-		header('Content-Type: ' . $type['ext']);
+		header("Content-Type: image/$ext");
 
 		if (false === strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS'))
 			header('Content-Length: ' . filesize($this->image_dir));
@@ -121,6 +121,7 @@ class ImStoreDownloadImage {
 		$color = isset($_REQUEST['c']) ? $_REQUEST['c'] : false;
 		$modified = gmdate("D, d M Y H:i:s", @filemtime($this->image_dir));
 		$etag = '"' . md5($modified . $color) . '"';
+		
 		//$client_etag = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) : false;
 
 		header('ETag: ' . $etag);

@@ -47,20 +47,20 @@ if( empty( $results ) )
 	die( );
 
 $columns = apply_filters( 'ims_sales_csv_columns', array(
-	'txn_id'		=> __( 'Order number', $ImStore->domain ), 
-	'post_date'		=> __( 'Date', $ImStore->domain ), 
-	'payment_gross' => __( 'Amount', $ImStore->domain ), 
-	'tax' 			=> __( 'Tax', $ImStore->domain ), 
-	'first_name' 	=> __( 'Firstname', $ImStore->domain ),
-	'last_name' 	=> __( 'Lastname', $ImStore->domain ), 
-	'num_cart_items'=> __( 'Images', $ImStore->domain ), 
-	'payment_status'=> __( 'Payment status', $ImStore->domain),
-	'post_status' 	=> __( 'Order Status', $ImStore->domain),
-	'address_street'=> __( 'Address', $ImStore->domain ),
-	'address_city'	=> __( 'City', $ImStore->domain ),
-	'address_state'	=> __( 'State', $ImStore->domain ),
-	'address_zip'	=> __( 'Zip', $ImStore->domain ),
-	'address_country'=> __( 'Country', $ImStore->domain ), 
+	'txn_id'		=> __( 'Order number', 'ims'), 
+	'post_date'		=> __( 'Date', 'ims'), 
+	'payment_gross' => __( 'Amount', 'ims'), 
+	'tax' 			=> __( 'Tax', 'ims'), 
+	'first_name' 	=> __( 'Firstname', 'ims'),
+	'last_name' 	=> __( 'Lastname', 'ims'), 
+	'num_cart_items'=> __( 'Images', 'ims'), 
+	'payment_status'=> __( 'Payment status', 'ims'),
+	'post_status' 	=> __( 'Order Status', 'ims'),
+	'address_street'=> __( 'Address', 'ims'),
+	'address_city'	=> __( 'City', 'ims'),
+	'address_state'	=> __( 'State', 'ims'),
+	'address_zip'	=> __( 'Zip', 'ims'),
+	'address_country'=> __( 'Country', 'ims'), 
 ));
 
 $str = '';

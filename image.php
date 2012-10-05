@@ -74,7 +74,7 @@ class ImStoreImage {
 				$this->image_dir = $this->path . '/' . $this->metadata['sizes']['mini']['file'];
 				break;
 			case 4: //original
-				$this->image_dir = rtrim(WP_CONTENT_URL, '/') . "/" . $this->metadata['file'];
+				$this->image_dir = rtrim(WP_CONTENT_DIR, '/') . "/" . $this->metadata['file'];
 				break;
 		}
 		

@@ -131,7 +131,7 @@ function ajax_ims_search_galleries() {
 	AND p.post_type = 'ims_gallery' $qfilter ORDER BY p.post_date DESC LIMIT $limit", $q));
 
 	if (empty($galleries)) {
-		echo '<li class="gal-0"><span class="gtitle"><em>' . __(' Sorry, nothing found.', $ImStore->domain) . '</em></span></li>' . "\n";
+		echo '<li class="gal-0"><span class="gtitle"><em>' . __(' Sorry, nothing found.', 'ims') . '</em></span></li>' . "\n";
 		die();
 	}
 
@@ -155,7 +155,7 @@ function ajax_ims_add_images_to_favorites() {
 
 	$id = (int) $_GET['galid'];
 	if (empty($_GET['imgids']) || empty($id)) {
-		echo __('Please, select an image', $ImStore->domain) . '|ims-error';
+		echo __('Please, select an image', 'ims') . '|ims-error';
 		die();
 	}
 
@@ -176,9 +176,9 @@ function ajax_ims_add_images_to_favorites() {
 	}
 
 	if (count($new) < 2)
-		echo __('Image added to favorites', $ImStore->domain) . '|ims-success|' . count($ids);
+		echo __('Image added to favorites', 'ims') . '|ims-success|' . count($ids);
 	else
-		echo sprintf(__('%d images added to favorites', $ImStore->domain), count($new)) . '|ims-success|' . count($ids);
+		echo sprintf(__('%d images added to favorites', 'ims'), count($new)) . '|ims-success|' . count($ids);
 
 	die();
 }
@@ -197,7 +197,7 @@ function ajax_ims_remove_images_from_favorites() {
 	$id = intval($_GET['galid']);
 
 	if (empty($_GET['imgids']) || empty($id)) {
-		echo __('Please, select an image', $ImStore->domain) . '|ims-error';
+		echo __('Please, select an image', 'ims') . '|ims-error';
 		return;
 	}
 
@@ -235,9 +235,9 @@ function ajax_ims_remove_images_from_favorites() {
 	}
 
 	if (count($new) < 2)
-		echo __('Image removed from favorites', $ImStore->domain) . '|ims-success';
+		echo __('Image removed from favorites', 'ims') . '|ims-success';
 	else
-		echo sprintf(__('%d images removed from favorites', $ImStore->domain), count($new)) . '|ims-success';
+		echo sprintf(__('%d images removed from favorites', 'ims'), count($new)) . '|ims-success';
 
 	die();
 }

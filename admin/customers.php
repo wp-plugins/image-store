@@ -37,13 +37,13 @@ $columns = get_column_headers('ims_gallery_page_ims-customers');
 $hidden = get_hidden_columns('ims_gallery_page_ims-customers');
 
 $user_status = array(
-	'active' => __('Active', $this->domain),
-	'inative' => __('Inative', $this->domain),
+	'active' => __('Active', 'ims'),
+	'inative' => __('Inative', 'ims'),
 );
 
 $user_box_title = array(
-	'new' => __('New Customer', $this->domain),
-	'edit' => __('Edit Customer', $this->domain),
+	'new' => __('New Customer', 'ims'),
+	'edit' => __('Edit Customer', 'ims'),
 );
 
 //search users
@@ -51,7 +51,7 @@ $wp_user_search = new WP_User_Search($usersearch, $userspage, $role);
 cache_users($wp_user_search->get_results());
 
 if ($current_status == 'inative')
-	$user_status['delete'] = __('Delete', $this->domain);
+	$user_status['delete'] = __('Delete', 'ims');
 
 $user_status = apply_filters('ims_user_status', $user_status, $current_status);
 ?>
@@ -84,30 +84,30 @@ if ($user_action):
 			<div class="inside">
 				<table class="ims-table">
 					<tr>
-						<td width="15%"><label for="first_name"><?php _e('First Name', $this->domain) ?></label></td>
+						<td width="15%"><label for="first_name"><?php _e('First Name', 'ims') ?></label></td>
 						<td><input type="text" name="first_name" id="first_name" class="widefat" value="<?php echo esc_attr($first_name) ?>" /></td>
-						<td width="15%"><label for="last_name"><?php _e('Last Name', $this->domain) ?></label></td>
+						<td width="15%"><label for="last_name"><?php _e('Last Name', 'ims') ?></label></td>
 						<td><input type="text" name="last_name" id="last_name" class="widefat" value="<?php echo esc_attr($last_name) ?>" /></td>
 					</tr>
 
 					<tr class="alternate">
-						<td><label for="ims_address"><?php _e('Address', $this->domain) ?></label></td>
+						<td><label for="ims_address"><?php _e('Address', 'ims') ?></label></td>
 						<td><input type="text" name="ims_address" id="ims_address" class="widefat" value="<?php echo esc_attr($ims_address) ?>" /></td>
-						<td><label for="ims_city"><?php _e('City', $this->domain) ?></label></td>
+						<td><label for="ims_city"><?php _e('City', 'ims') ?></label></td>
 						<td><input type="text" name="ims_city" id="ims_city" class="widefat" value="<?php echo esc_attr($ims_city) ?>" /></td>
 					</tr>
 
 					<tr>
-						<td><label for="ims_state"><?php _e('State', $this->domain) ?></label></td>
+						<td><label for="ims_state"><?php _e('State', 'ims') ?></label></td>
 						<td><input type="text" name="ims_state" id="ims_state" class="widefat" value="<?php echo esc_attr($ims_state) ?>" /></td>
-						<td><label for="ims_phone"><?php _e('Phone', $this->domain) ?></label></td>
+						<td><label for="ims_phone"><?php _e('Phone', 'ims') ?></label></td>
 						<td><input type="text" name="ims_phone" id="ims_phone" class="widefat" value="<?php echo esc_attr($ims_phone) ?>"/></td>
 					</tr>
 
 					<tr class="alternate">
-						<td><label for="ims_zip"><?php _e('Zip', $this->domain) ?></label></td>
+						<td><label for="ims_zip"><?php _e('Zip', 'ims') ?></label></td>
 						<td><input type="text" name="ims_zip" id="ims_zip" class="widefat" value="<?php echo esc_attr($ims_zip) ?>" /></td>
-						<td scope="row"><label for="user_email"><?php _e('Email', $this->domain) ?></label></td>
+						<td scope="row"><label for="user_email"><?php _e('Email', 'ims') ?></label></td>
 						<td><input type="text" name="user_email" id="user_email" class="widefat" value="<?php echo esc_attr($user_email) ?>" /></td>
 					</tr>
 
@@ -115,11 +115,11 @@ if ($user_action):
 					<tr>
 						<td colspan="3"><?php if (class_exists('MailPress')) : ?>
 								<input type="checkbox" name="_MailPress_sync_wordpress_user" id="_MailPress_sync_wordpress_user" value="<?php echo $_MailPress_sync_wordpress_user ?>" />
-								<label for="_MailPress_sync_wordpress_user"><?php _e('Include user in the eNewsletters', $this->domain) ?></label> <?php endif ?>
+								<label for="_MailPress_sync_wordpress_user"><?php _e('Include user in the eNewsletters', 'ims') ?></label> <?php endif ?>
 						</td>
 						<td class="textright">
-							<input type="submit" name="cancel" value="<?php esc_attr_e('Cancel', $this->domain) ?>" class="button" />
-							<input type="submit" name="update_customer" value="<?php esc_attr_e('Save', $this->domain) ?>" class="button-primary" />
+							<input type="submit" name="cancel" value="<?php esc_attr_e('Cancel', 'ims') ?>" class="button" />
+							<input type="submit" name="update_customer" value="<?php esc_attr_e('Save', 'ims') ?>" class="button-primary" />
 							<input type="hidden" name="userid" value="<?php echo esc_attr($edit_userid) ?>" />
 							<input type="hidden" name="useraction" value="<?php echo esc_attr($user_action) ?>" />
 							<?php wp_nonce_field('ims_update_customer') ?>
@@ -143,9 +143,9 @@ if ($user_action):
 
 <form class="search-form" action="<?php echo admin_url('edit.php?') ?>" method="get">
 	<p class="search-box">
-		<label class="screen-reader-text" for="user-search-input"><?php _e('Search Users', $this->domain); ?>:</label>
+		<label class="screen-reader-text" for="user-search-input"><?php _e('Search Users', 'ims'); ?>:</label>
 		<input type="text" name="usersearch" id="user-search" value="<?php echo esc_attr($wp_user_search->search_term); ?>" />
-		<input type="submit" value="<?php esc_attr_e('Search Users', $this->domain); ?>" class="button" />
+		<input type="submit" value="<?php esc_attr_e('Search Users', 'ims'); ?>" class="button" />
 		<input type="hidden" name="page" value="<?php echo esc_attr($_GET['page']) ?>" />
 		<input type="hidden" name="post_type" value="<?php echo esc_attr($_GET['post_type']) ?>" />
 		<?php wp_nonce_field('ims_update_customer') ?>
@@ -156,7 +156,7 @@ if ($user_action):
 	<div class="tablenav">
 
 		<select name="action">
-			<option selected="selected"><?php _e('Bulk Actions', $this->domain) ?></option>
+			<option selected="selected"><?php _e('Bulk Actions', 'ims') ?></option>
 			<?php
 			foreach ($user_status as $status => $label) {
 				if ($current_status == $status)
@@ -165,10 +165,10 @@ if ($user_action):
 			}
 			?>
 		</select>
-		<input type="submit" value="<?php esc_attr_e('Apply', $this->domain); ?>" name="doaction" class="button-secondary" /> |
+		<input type="submit" value="<?php esc_attr_e('Apply', 'ims'); ?>" name="doaction" class="button-secondary" /> |
 
-		<a href="<?php echo IMSTORE_ADMIN_URL, "/customers-csv.php?$nonce" ?>" class="button"><?php _e('Download CSV', $this->domain); ?></a> 
-		<a href="<?php echo $this->pageurl . "&amp;$nonce&amp;useraction=new" ?>" class="button"><?php _e('New Customer', $this->domain); ?></a>
+		<a href="<?php echo IMSTORE_ADMIN_URL, "/customers-csv.php?$nonce" ?>" class="button"><?php _e('Download CSV', 'ims'); ?></a> 
+		<a href="<?php echo $this->pageurl . "&amp;$nonce&amp;useraction=new" ?>" class="button"><?php _e('New Customer', 'ims'); ?></a>
 
 		<br class="clear" />
 	</div><!--.tablenav-->
@@ -177,7 +177,7 @@ if ($user_action):
 	<!--User List-->
 	<?php if ($wp_user_search->get_results()) : ?>
 	<?php if ($wp_user_search->is_search()) : ?>
-			<p><a href="<?php echo $this->pageurl ?>"><?php _e('&larr; Back to all customers', $this->domain); ?></a></p>
+			<p><a href="<?php echo $this->pageurl ?>"><?php _e('&larr; Back to all customers', 'ims'); ?></a></p>
 	<?php endif; ?>
 
 		<table class="widefat post fixed imstore-table">
@@ -211,7 +211,7 @@ if ($user_action):
 							case 'name':
 								$r .= "<td class='column-{$column_id}{$hide}'>$user_object->first_name";
 								$r .= "\t<div class='row-actions'>";
-								$r .= "\t\t<a href='$this->pageurl&amp;$nonce&amp;useraction=edit&amp;userid=$userid' title='" . __("Edit information", $this->domain) . "'>" . __("Edit", $this->domain) . "</a> | ";
+								$r .= "\t\t<a href='$this->pageurl&amp;$nonce&amp;useraction=edit&amp;userid=$userid' title='" . __("Edit information", 'ims') . "'>" . __("Edit", 'ims') . "</a> | ";
 								$stat = ($current_status == 'inative') ? 'active' : 'inative';
 								$r .= "<a href='$this->pageurl&amp;$nonce&amp;action={$stat}&amp;customer=$userid' title='" . $user_status[$stat] . "'>" . $user_status[$stat] . "</a>";
 								if ($current_status == 'inative')
@@ -236,7 +236,7 @@ if ($user_action):
 								break;
 							case 'newsletter':
 								$r .= "<td class='column-{$column_id}{$hide}'>" .
-										((class_exists('MailPress') && $customer->_MailPress_sync_wordpress_user) ? __("Yes", $this->domain) : __("no", $this->domain)) . "</td>";
+										((class_exists('MailPress') && $customer->_MailPress_sync_wordpress_user) ? __("Yes", 'ims') : __("no", 'ims')) . "</td>";
 								break;
 							default:
 								$r .= "<td class='column-{$column_id}{$hide}'>" . apply_filters('manage_ims_customers_custom_column', '', $column_name, $customer) . "</td>";
@@ -303,26 +303,26 @@ function ims_create_customer($pagenowurl) {
 	$user_action = empty($_POST['useraction']) ? false : $_POST['useraction'];
 
 	if (empty($_POST['first_name']))
-		$errors->add('empty_first_name', __('The first name is required.', $ImStore->domain));
+		$errors->add('empty_first_name', __('The first name is required.', 'ims'));
 
 	if (empty($_POST['last_name']))
-		$errors->add('empty_last_name', __('The last name is required.', $ImStore->domain));
+		$errors->add('empty_last_name', __('The last name is required.', 'ims'));
 
 	if (empty($_POST['last_name']) || !is_email($_POST['user_email']))
-		$errors->add('valid_email', __('A valid email is required.', $ImStore->domain));
+		$errors->add('valid_email', __('A valid email is required.', 'ims'));
 
 	$user = get_userdata($userid);
 
 	if (( email_exists($_POST['user_email']) && $user_action != 'edit' ) ||
 			( isset($user->user_email) && $user->user_email != $_POST['user_email'] && $user_action == 'edit' && email_exists($_POST['user_email']) ))
-		$errors->add('email_exists', __('This email is already registered, please choose another one.', $ImStore->domain));
+		$errors->add('email_exists', __('This email is already registered, please choose another one.', 'ims'));
 
 	$errors = apply_filters('ims_save_user_errors', $errors, $_POST);
 	$user_name = sanitize_user($_POST['first_name'] . ' ' . $_POST['last_name']);
 
 	if (username_exists($user_name) && $user_action != 'edit' ||
 			( isset($user->user_login) && $user->user_login != $user_name && $user_action == 'edit' && username_exists($user_name) ))
-		$errors->add('customer_exists', __('That customer already exists.', $ImStore->domain));
+		$errors->add('customer_exists', __('That customer already exists.', 'ims'));
 
 	if (!empty($errors->errors))
 		return $errors;

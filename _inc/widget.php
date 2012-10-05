@@ -17,12 +17,11 @@ class ImStoreWidget extends WP_Widget {
 	 * @since 0.5.3
 	 */
 	function ImStoreWidget() {
-		$this->domain = 'ims';
 		$widget_ops = array(
 			'classname' => 'ims-widget',
-			'description' => __("Display images from unsecure galleries", $this->domain)
+			'description' => __("Display images from unsecure galleries", 'ims')
 		);
-		$this->WP_Widget('ims-widget', __('Image Store', $this->domain), $widget_ops);
+		$this->WP_Widget('ims-widget', __('Image Store', 'ims'), $widget_ops);
 	}
 
 	/**
@@ -64,33 +63,33 @@ class ImStoreWidget extends WP_Widget {
 		extract($instance);
 
 		$order_options = array(
-			'post_date' => __('Date', $this->domain),
-			'post_title' => __('Title', $this->domain),
-			'menu_order' => __('Custom', $this->domain),
-			'post_excerpt' => __('Caption', $this->domain),
+			'post_date' => __('Date', 'ims'),
+			'post_title' => __('Title', 'ims'),
+			'menu_order' => __('Custom', 'ims'),
+			'post_excerpt' => __('Caption', 'ims'),
 		);
 
 		$show_options = apply_filters('ims_widget_display_options', array(
-			'gal' => __('Gallery', $this->domain),
-			'ASC' => __('Oldest images', $this->domain),
-			'DESC' => __('Latest images', $this->domain),
-			'rand' => __('Random images', $this->domain),
+			'gal' => __('Gallery', 'ims'),
+			'ASC' => __('Oldest images', 'ims'),
+			'DESC' => __('Latest images', 'ims'),
+			'rand' => __('Random images', 'ims'),
 		));
 		?>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('title') ?>"><?php _e('Title', $this->domain) ?> <input class="widefat" id="<?php echo $this->get_field_id('title') ?>" name="<?php echo $this->get_field_name('title') ?>" type="text" value="<?php echo $title ?>" /></label>
+			<label for="<?php echo $this->get_field_id('title') ?>"><?php _e('Title', 'ims') ?> <input class="widefat" id="<?php echo $this->get_field_id('title') ?>" name="<?php echo $this->get_field_name('title') ?>" type="text" value="<?php echo $title ?>" /></label>
 		</p>
 		
 		<p>
-			<label for="<?php echo $this->get_field_id('filmstrip')?>"> <?php _e( 'Filmstrip mode', $this->domain )?> 
+			<label for="<?php echo $this->get_field_id('filmstrip')?>"> <?php _e( 'Filmstrip mode', 'ims')?> 
 				<input id="<?php echo $this->get_field_id('filmstrip')?>" name="<?php echo $this->get_field_name('filmstrip')?>" type="checkbox" <?php checked( 'on', $filmstrip ) ?> /> 
-				<br /><small><?php _e( 'Display images in film strip mode', $this->domain )?></small>
+				<br /><small><?php _e( 'Display images in film strip mode', 'ims')?></small>
 			</label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('orderby') ?>"><?php _e('Order by', $this->domain) ?></label>
+			<label for="<?php echo $this->get_field_id('orderby') ?>"><?php _e('Order by', 'ims') ?></label>
 			<select id="<?php echo $this->get_field_id('orderby') ?>" name="<?php echo $this->get_field_name('orderby') ?>">
 				<?php foreach ($order_options as $value => $label) { ?>
 					<option value="<?php echo esc_attr($value) ?>" <?php echo selected($value, $orderby) ?> ><?php echo esc_html($label) ?></option> 
@@ -99,7 +98,7 @@ class ImStoreWidget extends WP_Widget {
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('show') ?>"><?php _e('Show', $this->domain) ?></label>
+			<label for="<?php echo $this->get_field_id('show') ?>"><?php _e('Show', 'ims') ?></label>
 			<select id="<?php echo $this->get_field_id('show') ?>" name="<?php echo $this->get_field_name('show') ?>">
 				<?php foreach ($show_options as $value => $label) { ?>
 					<option value="<?php echo esc_attr($value) ?>" <?php echo selected($value, $show) ?> ><?php echo esc_html($label) ?></option> 
@@ -108,12 +107,12 @@ class ImStoreWidget extends WP_Widget {
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('limit'); ?>"><?php _e('How many images', $this->domain); ?> <input id="<?php echo $this->get_field_id('limit'); ?>" name="<?php echo $this->get_field_name('limit'); ?>" size="4" type="text" value="<?php echo esc_attr($limit) ?>"/></label>
+			<label for="<?php echo $this->get_field_id('limit'); ?>"><?php _e('How many images', 'ims'); ?> <input id="<?php echo $this->get_field_id('limit'); ?>" name="<?php echo $this->get_field_name('limit'); ?>" size="4" type="text" value="<?php echo esc_attr($limit) ?>"/></label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('galid'); ?>"><?php _e('Gallery ID', $this->domain); ?><input id="<?php echo $this->get_field_id('galid'); ?>" name="<?php echo $this->get_field_name('galid'); ?>" class="widefat" type="text" value="<?php echo esc_attr($galid) ?>"/></label>
-			<small><?php _e('To be use with "show" gallery option', $this->domain); ?></small>
+			<label for="<?php echo $this->get_field_id('galid'); ?>"><?php _e('Gallery ID', 'ims'); ?><input id="<?php echo $this->get_field_id('galid'); ?>" name="<?php echo $this->get_field_name('galid'); ?>" class="widefat" type="text" value="<?php echo esc_attr($galid) ?>"/></label>
+			<small><?php _e('To be use with "show" gallery option', 'ims'); ?></small>
 		</p>
 		<?php
 	}
@@ -166,13 +165,13 @@ class ImStoreWidget extends WP_Widget {
 		$images = wp_cache_get('ims_widget_' . $this->number);
 		if (false == $images) {
 			$images = $wpdb->get_results($wpdb->prepare(
-							"SELECT ID , post_title, guid, post_parent, post_excerpt, meta_value meta
+				"SELECT ID , post_title, guid, post_parent, post_excerpt, meta_value meta
 				FROM $wpdb->posts p LEFT JOIN $wpdb->postmeta pm
 				ON p.ID = pm.post_id WHERE post_type = 'ims_image' 
 				AND post_status = 'publish' AND post_parent $parent
 				AND pm.meta_key = '_wp_attachment_metadata'
 				ORDER BY $orderby $order $limit "
-					));
+			));
 			wp_cache_set('ims_widget_' . $this->number, $images);
 		}
 
@@ -211,7 +210,7 @@ class ImStoreWidget extends WP_Widget {
 			'itemtag' => 'div',
 			'imagetag' => 'figure',
 			'icontag' => 'figcaption'
-				), &$this);
+		), $this);
 		extract($tags);
 		
 		$css = 'ims-gallery';
@@ -231,12 +230,12 @@ class ImStoreWidget extends WP_Widget {
 			$size = ' width="' . $mini['width'] . '" height="' . $mini['height'] . '"';
 
 			$imgattr = ' role="img" class="photo ims-image" alt="' . esc_attr($image->post_title) . '"' . $size;
-			$imgtag = '<img src="' . IMSTORE_URL . '/_img/1x1.trans.gif" data-ims-src="' . $ImStore->get_image_url($image->ID, 3) . '" ' . $imgattr . '/>';
+			$imgtag = '<img src="' . IMSTORE_URL . '/_img/1x1.trans.gif" itemprop="thumbnail"  data-ims-src="' . $ImStore->get_image_url($image->ID, 3) . '" ' . $imgattr . '/>';
 
-			$output .= "<{$imagetag} class='hmedia ims-img'>";
-			$output .= '<a href="' . $link . '" rel="enclosure">' . $imgtag . '</a>';
+			$output .= "<{$imagetag} class='hmedia ims-img' itemscope itemtype='http://schema.org/ImageObject'>";
+			$output .= '<a href="' . $link . '" rel="enclosure" itemprop="contentURL">' . $imgtag . '</a>';
+			$output .= "<{$icontag} class='gallery-caption'><span class='fn ims-img-name'  itemprop='caption'>" . wptexturize($image->post_excerpt) . "</span></{$icontag}>";
 			$output .= "</{$imagetag}>";
-			$output .= "<{$icontag} class='gallery-caption'><span class='fn ims-img-name'>" . wptexturize($image->post_excerpt) . "</span></{$icontag}>";
 		}
 		$output .= "</div></{$itemtag}><!--.hmedia-->";
 		echo $output .= '<div class="ims-cl"></div>';

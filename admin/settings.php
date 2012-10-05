@@ -14,14 +14,14 @@ if( !current_user_can( 'ims_change_settings'))
 
 //tab navigation
 $settings_tabs = apply_filters( 'ims_settings_tabs', array(
-	'general' 	=> __( 'General', $this->domain ),
-	'gallery' 	=> __( 'Gallery', $this->domain ),
-	'image' 	=> __( 'Image', $this->domain ),
-	'slideshow' => __( 'Slideshow', $this->domain ),
-	'payment' 	=> __( 'Payment', $this->domain ),
-	'checkout' 	=> __( 'Checkout', $this->domain ),
-	'permissions' => __( 'User permissions', $this->domain ),
-	'reset' 	=> __( 'Reset', $this->domain ),
+	'general' 	=> __( 'General', 'ims'),
+	'gallery' 	=> __( 'Gallery', 'ims'),
+	'image' 	=> __( 'Image', 'ims'),
+	'slideshow' => __( 'Slideshow', 'ims'),
+	'payment' 	=> __( 'Payment', 'ims'),
+	'checkout' 	=> __( 'Checkout', 'ims'),
+	'permissions' => __( 'User permissions', 'ims'),
+	'reset' 	=> __( 'Reset', 'ims'),
 ));
 
 //unset store features if they are disable
@@ -136,7 +136,7 @@ include( IMSTORE_ABSPATH . "/admin/settings-fields.php");
 					<td>&nbsp;</td>
 					<td class="submit">
 						<input type="hidden" name="ims-action" value="<?php echo esc_attr( $boxid ) ?>" />
-						<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save', $this->domain )?>" />
+						<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save', 'ims')?>" />
 					</td>
 				</tr>
 				</tbody>

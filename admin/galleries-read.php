@@ -54,8 +54,8 @@ $start = ($page - 1) * $this->per_page;
 $page_links = paginate_links( array(
 	'base' => $this->pageurl . '%_%',
 	'format' => '&p=%#%',
-	'prev_text' => __( '&laquo;', $this->domain ),
-	'next_text' => __( '&raquo;', $this->domain ),
+	'prev_text' => __( '&laquo;', 'ims'),
+	'next_text' => __( '&raquo;', 'ims'),
 	'total' => $galleries->max_num_pages,
 	'current' => $page,
 ));
@@ -68,7 +68,7 @@ $page_links = paginate_links( array(
 			<p class="search-box">
 			<input type="hidden" name="page" value="<?php echo $_GET['page']?>" />
 			<input type="text" id="media-search-input" name="s" value="<?php echo esc_attr( $search )?>" />
-			<input type="submit" value="<?php _e( ' Search Galleries', $this->domain )?>" class="button" />
+			<input type="submit" value="<?php _e( ' Search Galleries', 'ims')?>" class="button" />
 			</p>
 		</div>
 		

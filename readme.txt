@@ -5,7 +5,7 @@ Tags: e-commerce,shop,photo store,picture,image,galleries,imstore,image-store,se
 gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints,nextgen alternative
 Requires at least: 3.0.0
 Tested up to: 3.4.2
-Stable tag: 3.1.5
+Stable tag: 3.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -81,12 +81,25 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 
 == Frequently Asked Questions ==
 
-* http://xparkmedia.com/support/plugin/popular-widget/
+* http://xparkmedia.com/image-store/faq/
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
 
-= 3.1.5=
+= 3.1.6 =
+* Fixed: Slideshow paging.
+* Fixed: Some translation issues.
+* Fixed: Some price formatting.
+* Fixed: Issue uninstalling plugin.
+* Fixed: Issue images w/not titles and PayPal.
+* Added: WP 3.5 support.
+* Added: Disable shipping option.
+* Added: Additional plugin hooks.
+* Added: Additional template hooks.
+* Added: Additional currencies for eNotifications.
+* Added: Polish and Vietnamese translations.
+
+= 3.1.5 =
 * Fixed: IE issues.
 * Fixed: Empty gallery error.
 * Fixed: Sales reports.
@@ -95,7 +108,7 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * Fixed: Receipt issues.
 * Added: WP 3.4.2 support.
 
-= 3.1.4=
+= 3.1.4 =
 * Fixed: PHP notices.
 * Fixed: Issues with image download.
 * Fixed: Issues with PayPal IPN.
@@ -103,23 +116,25 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * Fixed: Issues saving image sizes.
 * Removed: do_action parameters by reference.
 
-= 3.1.3=
+= 3.1.3 =
 * Fixed: customer email.
 * Fixed: Paypal IPN issues.
 * Fixed: page rewrites.
 * Fixed: cart page issues.
 * Fixed: receipt display
 
-= 3.1.2=
+= 3.1.2 =
 * Fixed: image download.
 * Fixed: Delete packages.
 * Added: Additional hooks
 * Changed: From WP_MEMORY_LIMIT to WP_MAX_MEMORY_LIMIT
 
-= 3.1.1=
+= 3.1.1 =
 * Fixed: cart issues.
 * Fixed: shortcode gallery title.
 * Fixed: watermark display issue.
+* Fixed: cart page issues.
+* Fixed: receipt display
 
 = 3.1.0 =
 * Added: Gallery tags.
