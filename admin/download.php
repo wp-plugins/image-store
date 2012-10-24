@@ -78,7 +78,7 @@ class ImStoreDownloadImage {
 
 			$this->clean = true;
 			$this->image_dir = image_resize(
-					$ImStore->content_dir . "/" . $this->attachment['file'], $dimentions['w'], $dimentions['h'], 0, 0, 0, 100
+				$ImStore->content_dir . "/" . $this->attachment['file'], $dimentions['w'], $dimentions['h'], 0, 0, 0, 100
 			);
 
 			if (is_wp_error($this->image_dir) && isset($this->attachment['sizes']['preview']['url'])) {
@@ -97,7 +97,8 @@ class ImStoreDownloadImage {
 			$this->image_dir = apply_filters('ims_download_image_preview', $this->attachment['sizes']['preview']['path'], $this->id);
 		}
 		
-		$this->display_image();
+		if(file_exists($this->image_dir))
+			$this->display_image();
 	}
 
 	/**
@@ -113,7 +114,7 @@ class ImStoreDownloadImage {
 		$ext = $type['ext'];
 		$filename = $wpdb->get_var("SELECT post_title FROM $wpdb->posts WHERE ID = " . $this->id);
 
-		header("Content-Type: image/$ext");
+		//header("Content-Type: image/$ext");
 
 		if (false === strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS'))
 			header('Content-Length: ' . filesize($this->image_dir));

@@ -831,97 +831,100 @@ function ims_package_list($ims,$tabid) {
  * @since 3.1.0
  */
 function ims_new_promotion($ims) {
-	 
-	 if( $_GET['action'] != 'new' ) {
-		$promo = get_post( $_GET['action'] );
-		$date 	= strtotime( $promo->post_date );
-		$expire	= strtotime( $promo->post_expire );
+	
+	$data = $_POST;
+	$action = __( 'Add', 'ims' );
+	$promo_id = is_numeric( $_GET['action'] ) ? trim($_GET['action']) : false;
 		
-		$_POST  = get_post_meta( $_GET['action'] , '_ims_promo_data' , true );
-		
-		$_POST['startdate'] = date_i18n( 'Y-m-d', $date );
-		$_POST['starts'] = date_i18n( $ims->dformat, $date );
-		$_POST['expires'] = date_i18n( $ims->dformat, $expire );
-		$_POST['expiration_date'] = date_i18n( 'Y-m-d', $expire );
-		$_POST['promo_name'] = $promo->post_title;
+	$defaults =  array( 
+		'promo_name' => false, 'promo_code' => false, 'starts' => false, 'startdate' =>false,
+		'expires' => false, 'expiration_date' => false, 'promo_type' => false, 'discount' =>false,
+		'rules' => array( 'logic' => false, 'property' => false, 'value' => false), 'promo_limit' => false,
+	);
+	
+	if( $promo_id ){
+		$action = __( 'Update', 'ims' );
+		if(empty( $_POST )){
+			$promo = get_post( $promo_id );
+			$data = get_post_meta( $promo_id, '_ims_promo_data', true );
+			
+			$date = strtotime( $promo->post_date );
+			$expire	= strtotime( $promo->post_expire );
+			
+			$data['promo_name'] = $promo->post_title;
+			$data['startdate'] = date_i18n( 'Y-m-d', $date );
+			$data['starts'] = date_i18n( $ims->dformat, $date );
+			$data['expires'] = date_i18n( $ims->dformat, $expire );
+			$data['expiration_date'] = date_i18n( 'Y-m-d', $expire );
+		}
 	}
-		
-	 $defaults =  array( 
-	 	'promo_name'=>false, 'promo_code'=>false, 'starts'=>false, 'startdate'=>false, 
-	 	'expires'=>false, 'expiration_date'=>false, 'promo_type'=>false, 'discount'=>false
-	 );
 	 
-	 $data = wp_parse_args($_POST, $defaults );
+	 $data = wp_parse_args( $data, $defaults );
 	 extract( $data );
-	 ?>
 	 
+	 $disabled = ( $promo_type == 3) ? ' disabled="disabled"' : '';
+	?>
 	 <form method="post" class="new-promo" action="#promotions" >
-		<table class="ims-table">
+	 	<table class="ims-table">
 			<tbody><tr>
 				<td colspan="5">
 					<label><?php _e( 'Type', 'ims' )?>
 						<select name="promo_type" id="promo_type">
 							<?php foreach( $ims->promo_types as $key => $label ){?>
-							<option value="<?php echo esc_attr( $key ) ?>"<?php selected( $promo_type, $key )?>><?php echo $label?></option>
+							<option value="<?php echo esc_attr( $key ) ?>"<?php selected( $promo_type, $key )?>><?php echo esc_html($label)?></option>
 							<?php }?>
 						</select>
 					</label>
 				</td>
 			</tr>
 			<tr>
+				<td><label for="promo_name"><?php _e( 'Name','ims' )?></label></td>
+				<td><label for="promo_code"> <?php _e( 'Code','ims' )?></label></td>
+				<td><label for="starts"><?php _e( 'Starts','ims' )?></label></td>
+				<td><label for="expires"><?php _e( 'Expire','ims' )?></label></td>
+				<td><label class="hide-free"> <?php _e( 'Discount', 'ims' )?></label></td>
+				<td><label for="promo_limit"> <?php _e( 'Limit', 'ims' )?></label></td>
+			</tr>
+			<tr>
+				<td><input name="promo_name" type="text" id="promo_name" class="regular-text" value="<?php echo esc_attr( $promo_name ) ?>"/></td>
+				<td><input name="promo_code" type="text" id="promo_code" class="regular-text" value="<?php echo esc_attr( $promo_code ) ?>" /></td>
 				<td>
-					<label><?php _e( 'Name','ims' )?> <input name="promo_name" type="text" class="regular-text" value="<?php echo esc_attr( $promo_name ) ?>"/></label>
+					<input name="starts" type="text" id="starts" class="regular-text" value="<?php echo esc_attr( $starts )?>" />
+					<input name="start_date" type="hidden" id="start_date" value="<?php echo esc_attr($startdate)?>" />
 				</td>
 				<td>
-					<label> <?php _e( 'Code','ims' )?>	 <input name="promo_code" type="text" class="regular-text" value="<?php echo esc_attr( $promo_code ) ?>" /></label>
+					<input name="expires" type="text" id="expires" class="regular-text" value="<?php echo esc_attr( $expires )?>" />
+					<input name="expiration_date" type="hidden" id="expiration_date" value="<?php echo esc_attr( $expiration_date ) ?>" />
 				</td>
-				<td>
-					<label><?php _e( 'Starts','ims' )?> <input type="text" name="starts" id="starts" class="regular-text" value="<?php echo esc_attr( $starts )?>" /></label>
-					<input type="hidden" name="start_date" id="start_date" value="<?php echo $startdate?>" />
-				</td>
-				<td>
-					<label><?php _e( 'Expire','ims' )?> <input type="text" name="expires" id="expires" class="regular-text" value="<?php echo esc_attr( $expires )?>" /></label>
-					<input type="hidden" name="expiration_date" id="expiration_date" value="<?php echo esc_attr( $expiration_date ) ?>" />
-				</td>
-				<td>
-					<label class="hide-free"> <?php _e( 'Discount', 'ims' )?>
-						<input type="text" name="discount" class="regular-text" value="<?php echo esc_attr( $discount ) ?>" <?php if( $promo_type == 3) echo ' disabled="disabled"' ?> /> 
-					</label>
-				</td>
+				<td><input name="discount" type="text" id="discount" class="regular-text hide-free" value="<?php echo esc_attr( $discount ) ?>"<?php echo $disabled ?>/> </td>
+				<td><input name="promo_limit" type="text" id="promo_limit" class="regular-text" value="<?php echo esc_attr( $promo_limit ) ?>" /></td>
 			</tr>
 			<tr>
 				<td colspan="4">
-					<?php 
-					$logic = ( isset( $_POST['rules']['logic'] ) ) ? $_POST['rules']['logic'] : false ;
-					$property = ( isset( $_POST['rules']['property'] ) ) ? $_POST['rules']['property'] : false;
-					?>
 					<?php _e( 'Conditions', 'ims' )?> 
 					<select name="rules[property]">
 						<?php foreach( $ims->rules_property as $val => $label ) 
-							echo '<option value="', esc_attr( $val ), '"', selected( $property, $val, false ), '>',$label, '</option>';
+							echo '<option value="' . esc_attr( $val ) . '"' . selected( $rules['property'], $val, false ) . '>' . esc_html( $label ) . '</option>';
 						?>
 					</select>
 					<select name="rules[logic]">
 							<?php foreach( $ims->rules_logic as $val => $label ) 
-							echo '<option value="', esc_attr( $val ), '"', selected( $logic, $val, false ), '>',$label, '</option>';
+							echo '<option value="' . esc_attr( $val ) . '"' . selected( $rules['logic'], $val, false ) . '>' . esc_html( $label ). '</option>';
 						?>
 					</select>
-					<input name="rules[value]" type="text" class="inpsm" value="<?php if( isset($_POST['rules']['value']) ) echo esc_attr( $_POST['rules']['value'] ) ?>"/>
+					<input name="rules[value]" type="text" class="inpsm" value="<?php echo esc_attr( $rules['value'] ) ?>"/>
 				</td>
-				<td width="25%" align="right">
-					<?php $action = ( $_GET['action'] == 'new' ) ? __( 'Add promotion', 'ims' ) : __( 'Update', 'ims' ) ?>
+				<td colspan="2" align="right">
+					<input type="hidden" name="promotion_id" value="<?php echo esc_attr( $promo_id ) ?>"/>
 					<input type="submit" name="cancel" value="<?php esc_attr_e( 'Cancel', 'ims' )?>" class="button" />
-					<input type="hidden" name="promotion_id" value="<?php if( $_GET['action'] != 'new' ) echo esc_attr($_GET['action'])?>"/>
 					<input type="submit" name="promotion" value="<?php echo esc_attr( $action )?>" class="button-primary" />
 				</td>
 			</tr></tbody>
 		</table>
-		<?php wp_nonce_field( 'ims_promotion' )?>
-	</form>
-	
+	 	<?php wp_nonce_field( 'ims_promotion' )?>
+	 </form>
 	<?php 
 }
-
 
 
 /**
@@ -973,9 +976,9 @@ function ims_promotions_tab($ims) {
 			<?php foreach( $promos->posts as $promo){
 				$css = ( $css == ' alternate') ? '' : ' alternate';
 				$r = '<tr id="item-' . $promo->ID . '" class="iedit' . $css . '">';
+				$meta = get_post_meta( $promo->ID , '_ims_promo_data', true );
 				foreach( $columns as $column_id => $column_name ){
 					$hide = ( $ims->in_array( $column_id, $hidden ) ) ? ' hidden':'' ;
-					$meta = get_post_meta( $promo->ID , '_ims_promo_data', true );
 					switch( $column_id ){
 						case 'cb':
 							$r .= '<th class="column-' . $column_id . ' check-column">';
@@ -1009,6 +1012,16 @@ function ims_promotions_tab($ims) {
 							$r .= '<td class="column-' . $column_id . $hide . '" > ' ;
 							if( isset( $meta['discount'] ) ) $r .= $meta['discount'];
 							if( isset( $meta['items'] ) ) $r .= $meta['items'];
+							$r .= '</td>' ;
+							break;
+						case 'limit':
+							$r .= '<td class="column-' . $column_id . $hide . '" > ' ;
+							if( isset( $meta['promo_limit'] ) ) $r .= $meta['promo_limit'] ;
+							$r .= '</td>' ;
+							break;
+						case 'redeemed':
+							$r .= '<td class="column-' . $column_id . $hide . '" > ' ;
+							$r .= (int)get_post_meta($promo->ID, '_ims_promo_count', true);
 							$r .= '</td>' ;
 							break;
 						}

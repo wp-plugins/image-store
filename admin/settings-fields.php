@@ -87,8 +87,8 @@ $settings['general'] = array(
 	'album_per_page' => array(
 		'val' => '',
 		'type' => 'text',
-		'label' => __('Albums per page', 'ims'),
-		'desc' => __('How many albums to display per page on the front-end.', 'ims'),
+		'label' => __('Galleries per album', 'ims'),
+		'desc' => __('How many galleries to display per page on albums.', 'ims'),
 	),
 );
 
@@ -416,6 +416,8 @@ $settings['payment'] = array(
 			'paypalprod' => array('val' => 1, 'label' => __('Paypal Cart Production (live)', 'ims'), 'type' => 'checkbox'),
 			'googlesand' => array('val' => 1, 'label' => __('Google Checkout Sandbox (test)', 'ims'), 'type' => 'checkbox'),
 			'googleprod' => array('val' => 1, 'label' => __('Google Checkout Production (live)', 'ims'), 'type' => 'checkbox'),
+			'wepaystage' => array('val' => 1, 'label' => __('WePay Stage (test)', 'ims'), 'type' => 'checkbox'),
+			'wepayprod' => array('val' => 1, 'label' => __('WePay Production (live)', 'ims'), 'type' => 'checkbox'),
 			'custom' => array('val' => 1, 'label' => __('Other', 'ims'), 'type' => 'checkbox'),
 		)
 	),
@@ -432,7 +434,7 @@ if ($this->opts['gateway']['enotification']) {
 
 //google
 if ($this->opts['gateway']['googlesand']
-		|| $this->opts['gateway']['googleprod']) {
+	|| $this->opts['gateway']['googleprod']) {
 
 	$settings['payment']['taxcountry'] = array(
 		'val' => '',
@@ -450,16 +452,42 @@ if ($this->opts['gateway']['googlesand']
 		'label' => __('Google Merchant key', 'ims'),
 	);
 }
+
 //paypal
 if ($this->opts['gateway']['paypalsand']
-		|| $this->opts['gateway']['paypalprod']) {
-
+	|| $this->opts['gateway']['paypalprod']) {
 	$settings['payment']['paypalname'] = array(
 		'val' => '',
 		'type' => 'text',
 		'label' => __('PayPal Account E-mail', 'ims'),
 	);
 }
+
+//wepay
+if ($this->opts['gateway']['wepaystage']
+	|| $this->opts['gateway']['wepayprod']) {
+	$settings['payment']['wepayclientid'] = array(
+		'val' => '',
+		'type' => 'text',
+		'label' => __('Client ID', 'ims'),
+	);
+	$settings['payment']['wepayclientsecret'] = array(
+		'val' => '',
+		'type' => 'password',
+		'label' => __('Client Secret', 'ims'),
+	);
+	$settings['payment']['wepayaccesstoken'] = array(
+		'val' => '',
+		'type' => 'text',
+		'label' => __('Access Token', 'ims'),
+	);
+	$settings['payment']['wepayaccountid'] = array(
+		'val' => '',
+		'type' => 'text',
+		'label' => __('Account ID', 'ims'),
+	);
+}
+
 //custom
 if ($this->opts['gateway']['custom']) {
 

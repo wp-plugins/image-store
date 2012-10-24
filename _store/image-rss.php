@@ -125,7 +125,7 @@ class ImStoreFeeds {
 						<pubDate><?php echo date('c', strtotime($image->post_date) )?></pubDate>
 						<media:thumbnail url="<?php echo $ImStore->get_image_url($image->ID, 2) ?>"/>
 						<media:content type="<?php echo $filetype['type'] ?>" url="<?php echo $ImStore->get_image_url($image->ID) ?>"/>
-						<media:text type="plain" lang="<?php bloginfo('language') ?>" ><![CDATA[<?php echo strip_tags($image->post_excerpt) ?>]]></media:text>
+						<media:text type="plain" lang="<?php bloginfo('language') ?>" ><![CDATA[<?php echo wp_strip_all_tags($image->post_excerpt) ?>]]></media:text>
 						<media:credit role="photographer" scheme="urn:yvs"><?php echo $author ?></media:credit>
 					</item>
 				<?php } ?>

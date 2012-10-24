@@ -150,6 +150,7 @@ $payment_status = apply_filters('ims_payment_status', $payment_status, $status);
 
 				$css = ( ' alternate' == $css ) ? '' : ' alternate';
 				$data = get_post_meta($sale->ID, '_response_data', true);
+				$cart = get_post_meta($sale->ID, '_ims_order_data', true);
 
 				$payment = ( isset($data['payment_status'])) ? trim(strtolower($data['payment_status'])) : 'pending';
 				$integrety = ( empty($data['data_integrity']) && $sale->post_status == 'pending' ) ? '  not-verified' : '';
@@ -176,10 +177,10 @@ $payment_status = apply_filters('ims_payment_status', $payment_status, $status);
 							$r .= "<td class='column-{$column_id}{$hide}'>" . (isset($data['last_name']) ? $data['last_name'] : '' ) . ' ' . (isset($data['first_name']) ? $data['first_name'] : '' ) . "</td>";
 							break;
 						case 'images':
-							$r .= "<td class='column-{$column_id}{$hide}'>" . (isset($data['num_cart_items']) ? $data['num_cart_items'] : '' ) . "</td>";
+							$r .= "<td class='column-{$column_id}{$hide}'>" . (isset($cart['items']) ? $cart['items'] : '' ) . "</td>";
 							break;
 						case 'paystatus':
-							$r .= "<td class='column-{$column_id}{$hide}'>" . ( empty($payment) ? '' : $payment_status[$payment] ) . "</td>";
+							$r .= "<td class='column-{$column_id}{$hide}'>" . ( empty($payment_status[$payment]) ? '' : $payment_status[$payment] ) . "</td>";
 							break;
 						case 'orderstat':
 							$r .= "<td class='column-{$column_id}{$hide}'>" . ( isset($sale->post_status) ? $order_status[$sale->post_status] : '' ) . "</td>";

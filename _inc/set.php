@@ -184,10 +184,11 @@ class ImStoreSet extends ImStoreAdmin {
 
 			case 'ims_gallery_page_ims-pricing':
 				register_column_headers('ims_gallery_page_ims-pricing', array(
-					'cb' => '<input type="checkbox">',
-					'name' => __('Name', 'ims'), 'code' => __('Code', 'ims'),
-					'starts' => __('Starts', 'ims'), 'expires' => __('Expires', 'ims'),
-					'type' => __('Type', 'ims'), 'discount' => __('Discount', 'ims'),
+					'cb' => '<input type="checkbox">', 'name' => __('Name', 'ims'), 
+					'code' => __('Code', 'ims'), 'starts' => __('Starts', 'ims'), 
+					'expires' => __('Expires', 'ims'), 'type' => __('Type', 'ims'), 
+					'discount' => __('Discount', 'ims'), 'limit' => __('Limit', 'ims'),  
+					'redeemed' => __('Redeemed', 'ims'),
 				));
 				break;
 
@@ -394,11 +395,20 @@ class ImStoreSet extends ImStoreAdmin {
 	 */
 	function add_promotion() {
 		$errors = new WP_Error( );
+		
 		if (empty($_POST['promo_name']))
 			$errors->add('empty_name', __('A promotion name is required.', 'ims'));
 
 		if (empty($_POST['discount']) && $_POST['promo_type'] != 3)
 			$errors->add('discount', __('A discount is required', 'ims'));
+		
+		if (empty($_POST['promo_code']))
+			$errors->add('promo_code', __('A promotion code is required', 'ims'));
+		
+		global $wpdb;
+		if ( $_POST['promotion_id'] != $wpdb->get_var( $wpdb->prepare(
+		"SELECT post_id FROM $wpdb->postmeta WHERE meta_value = %s AND meta_key = '_ims_promo_code'", $_POST['promo_code'] 
+		))) $errors->add('discount', __('Promotion code is already in use', 'ims'));
 
 		if (!empty($errors->errors))
 			return $errors;
@@ -406,31 +416,34 @@ class ImStoreSet extends ImStoreAdmin {
 		$promotion = array(
 			'post_status' => 'publish',
 			'post_type' => 'ims_promo',
+			'ID' => $_POST['promotion_id'],
 			'post_title' => $_POST['promo_name'],
 			'post_date' => $_POST['start_date'],
 			'post_expire' => $_POST['expiration_date'],
 		);
-
-		$promotion['ID'] = ( empty($_POST['promotion_id']) ) ? false : $_POST['promotion_id'];
-		$promo_id = ( $promotion['ID'] ) ? wp_update_post($promotion) : wp_insert_post($promotion);
-
+		
+		$promo_id = ($promotion['ID']) ? wp_update_post($promotion) : wp_insert_post($promotion);
+		
 		if (empty($promo_id)) {
 			$errors->add('promo_error', __('There was a problem creating the promotion.', 'ims'));
 			return $errors;
 		}
-
+		
 		$data = array();
-		foreach (array('promo_code', 'promo_type', 'free-type', 'discount', 'items', 'rules') as $key) {
-			if (isset($_POST[$key]))
+		foreach (array('promo_code', 'promo_type', 'free-type', 'discount', 'items', 'rules', 'promo_limit') as $key) {
+			if (isset($_POST[$key]) && is_string($_POST[$key])) 
+				$data[$key] = trim($_POST[$key]);
+			elseif (isset($_POST[$key])) 
 				$data[$key] = $_POST[$key];
 		}
-
+		
 		$a = ( $promotion['ID'] ) ? 30 : 32;
 		update_post_meta($promo_id, '_ims_promo_data', $data);
 		
 		if (isset($_POST['promo_code']))
 			update_post_meta($promo_id, '_ims_promo_code', $_POST['promo_code']);
-
+		
+		$_POST = array();
 		wp_redirect($this->pageurl . "&ms=$a#promotions");
 		die();
 	}
@@ -542,6 +555,8 @@ class ImStoreSet extends ImStoreAdmin {
 						else
 							$this->opts[$key . $k2] = false;
 					}
+				}elseif($key == 'galleriespath' && !preg_match('/^\//',$_POST['galleriespath'])){
+					$this->opts[$key] = "/" . trim($_POST['galleriespath']);
 				}elseif (isset($_POST[$key]))
 					$this->opts[$key] = $_POST[$key];
 				else

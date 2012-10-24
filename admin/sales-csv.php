@@ -74,7 +74,7 @@ foreach( $results as $result ){
 			$str .= isset( $data[$key] ) ? str_replace( ',', '', $data[$key] ) . "\t" : "\t";
 		}
 	}
-	echo  chr(255) . chr(254) . mb_convert_encoding( $str . "\n",  'UTF-16LE', $enco ) ;
+	$str .= "\n";
 }	
-
+echo  chr(255) . chr(254) . mb_convert_encoding( $str,  'UTF-16LE', $enco ) ;
 die( );

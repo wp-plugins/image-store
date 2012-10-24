@@ -4,8 +4,8 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: e-commerce,shop,photo store,picture,image,galleries,imstore,image-store,secure,translate,translatable,watermark,slideshow,
 gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints,nextgen alternative
 Requires at least: 3.0.0
-Tested up to: 3.4.2
-Stable tag: 3.1.6
+Tested up to: 3.5.0
+Stable tag: 3.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,19 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+
+= 3.1.7=
+* Code clean up
+* Fixed: taxonomy template.
+* Fixed: potencial php errors.
+* Fixed: sales customer csv files.
+* Fixed: taxonomy template.
+* Fixed: backward compatibility for WordPress 3.0.0
+* Added: WePay Support.
+* Added: Promotion limits.
+* Added: additional WP 3.5 support.
+* Changed: Taxonomy template.
+* Changed: Taxonomy content display.
 
 = 3.1.6 =
 * Fixed: Slideshow paging.

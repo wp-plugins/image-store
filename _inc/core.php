@@ -17,7 +17,7 @@ class ImStore {
 	 * @param $domain plugin Gallery IDentifier
 	 * Make sure that new language( .mo ) files have 'ims-' as base name
 	 */
-	public $version = '3.1.6';
+	public $version = '3.1.7';
 
 	/**
 	 * Public variables
@@ -294,7 +294,6 @@ class ImStore {
 			$this->load_pages();
 
 		$wp_rewrite->add_rewrite_tag("%gallery%", '([^/]+)', "ims_gallery=");
-		$wp_rewrite->add_rewrite_tag('%paypalipn%', '([^/]+)', 'paypalipn=');
 		$wp_rewrite->add_rewrite_tag('%imslogout%', '([^/]+)', 'imslogout=');
 		$wp_rewrite->add_rewrite_tag('%imsmessage%', '([0-9]+)', 'imsmessage=');
 		$wp_rewrite->add_permastruct('ims_gallery', __('galleries', 'ims') . '/%ims_gallery%/%imspage%/', false);

@@ -41,9 +41,11 @@ $this->data 		= get_post_meta( $this->orderid,'_response_data',true);
 		<?php
 			foreach( $this->cart['images'] as $id => $sizes ){
 				
-				$parentid = wp_get_post_parent_id($id);
-				$image = get_post_meta( $id, '_wp_attachment_metadata', true );
-				$mini = $image['sizes']['mini'];
+				$parentid  = wp_get_post_parent_id($id);
+				$mini  		= array('url' => false, 'width' => false, 'height' => false, 'file' => false);
+				
+				if( $image = get_post_meta( $id, '_wp_attachment_metadata', true ))
+					$mini = wp_parse_args( $image['sizes']['mini'], $mini );
 				
 				$r = '<tr><td class="column-thumb"><img src="' . $mini['url'] . '" width="'. $mini['width']. ' " height="' . $mini ['height'] . '" alt="' . $mini['file'] .'"/></td>';
 				$r .= '<td colspan="6">';
@@ -82,10 +84,10 @@ $this->data 		= get_post_meta( $this->orderid,'_response_data',true);
 		<tr>
 				<td class="column-thumb" scope="row">&nbsp;</td>
 				<td><?php _e('Method', 'ims')?></td>
-				<td scope="row" ><?php if( isset( $this->data['method'] ) ) echo strip_tags( $this->data['method'] ) ?></td>
+				<td scope="row" ><?php if( isset( $this->data['method'] ) ) echo wp_strip_all_tags( $this->data['method'] ) ?></td>
 				<td>&nbsp;</td>
 				<td><?php _e('Payment Status', 'ims')?></td>
-				<td scope="row"><?php if( isset( $this->data['payment_status'] ) ) echo strip_tags( $this->data['payment_status'] ) ?></td>
+				<td scope="row"><?php if( isset( $this->data['payment_status'] ) ) echo wp_strip_all_tags( $this->data['payment_status'] ) ?></td>
 				<td>&nbsp;</td>
 		</tr>
 		<tr>
@@ -177,7 +179,7 @@ $this->data 		= get_post_meta( $this->orderid,'_response_data',true);
 			<tr>
 				<td class="column-thumb" scope="row">&nbsp;</td>
 				<td><?php _e('Additional Instructions', 'ims')?></td>
-				<td scope="row" colspan="5"><?php if( isset( $this->cart['instructions'] ) ) echo strip_tags( $this->cart['instructions'] ) ?></td>
+				<td scope="row" colspan="5"><?php if( isset( $this->cart['instructions'] ) ) echo wp_strip_all_tags( $this->cart['instructions'] ) ?></td>
 			</tr>
 			<tr><td scope="row" colspan="7">&nbsp;</td></tr>
 

@@ -509,7 +509,6 @@ class ImStoreGallery extends ImStoreAdmin {
 	 * @return void
 	 * @since 3.0.0
 	 */
-
 	function gallery_screen_columns($register = true) {
 		$this->columns = array(
 			'cb' => '<input type="checkbox">',

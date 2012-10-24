@@ -36,7 +36,7 @@ $output .= '
 		</thead>';
 
 $output .= '<tbody>';
-foreach ($this->sizes as $size) :
+foreach ((array)$this->sizes as $size) :
 
 	$package_sizes = '';
 	$css = ( $css == ' alternate' ) ? '' : ' alternate';

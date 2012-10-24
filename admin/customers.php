@@ -54,10 +54,8 @@ if ($current_status == 'inative')
 	$user_status['delete'] = __('Delete', 'ims');
 
 $user_status = apply_filters('ims_user_status', $user_status, $current_status);
-?>
 
 
-<?php
 if ($user_action):
 
 	//edit user
@@ -67,8 +65,8 @@ if ($user_action):
 			$_POST[$meta] = maybe_unserialize($value[0]);
 
 		$user = $wpdb->get_row($wpdb->prepare(
-						"SELECT * FROM $wpdb->users WHERE ID = %s", $edit_userid
-				));
+			"SELECT * FROM $wpdb->users WHERE ID = %s", $edit_userid
+		));
 		$_POST = array_merge($_POST, (array) $user);
 	}
 
@@ -262,32 +260,6 @@ if ($user_action):
 
 
 <?php
-
-/**
- * Return customer count by status
- *
- * @param string $pagenowur
- * @since 3.0.0
- * return void
- */
-function ims_customers_count_links($pagenowurl, $user_status) {
-	global $wpdb;
-	$r = $wpdb->get_results(
-		"SELECT meta_value status, count(meta_key) count 
-		FROM $wpdb->usermeta WHERE meta_key = 'ims_status' GROUP by meta_value"
-	);
-	
-	if (empty($r)) return;
-	$status = ( isset($_GET['status']) ) ? $_GET['status'] : 'active';
-
-	foreach ($r as $obj) {
-		$current = ($status == $obj->status) ? ' class="current"' : '';
-		$links[] = '<li><a href="' . $pagenowurl . '&amp;status=' . $obj->status . '"' . $current . '>' . $user_status[$obj->status] . ' <span class="count">( ' . $obj->count . ')</span></a></li>';
-	}
-
-	$links = apply_filters("ims_user_status_links", $links, $r, $pagenowurl);
-	echo implode(' | ', $links);
-}
 
 /**
  * Insert/update a customer

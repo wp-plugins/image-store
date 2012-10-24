@@ -20,6 +20,12 @@ $this->orderid = isset( $_POST['custom'] ) ?  $_POST['custom'] : $this->orderid;
 $data = get_post_meta( $this->orderid, '_response_data', true);
 $cart = get_post_meta( $this->orderid, '_ims_order_data', true );
 
+//redirect empty data
+if(empty($this->orderid) || empty($data)){
+	wp_redirect( get_permalink() );
+	die();
+}
+
 $this->subtitutions = array(
 	$data['mc_gross'], 
 	$this->format_price($data['payment_status']), 
@@ -31,19 +37,12 @@ $this->subtitutions = array(
 	$data['payer_email'],
 );
 
-$this->integrity = false;		
 $output .= '<div class="ims-innerbox">
 	 <div class="thank-you-message">' .
 		(  make_clickable( wpautop( stripslashes( preg_replace( $this->opts['tags'], $this->subtitutions, $this->opts['thankyoureceipt'] )) ) ) )
 	 . '</div>
 </div>';
 
-if( !empty($cart['promo']['discount']) )
-	$this->integrity = true;
-elseif( isset($cart['items']) && $cart['subtotal'] == $cart['total'] )
-	$this->integrity= true;
-	
-$output .= $this->get_download_links($cart, $data['mc_gross'], $this->integrity);
-
+$output .= $this->get_download_links($cart, $data['mc_gross'], $data['data_integrity']);
 setcookie( 'ims_orderid_' . COOKIEHASH,  false, (time()-315360000), COOKIEPATH, COOKIE_DOMAIN );
 $output .= '<div class="cl"></div>';

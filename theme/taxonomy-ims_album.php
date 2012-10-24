@@ -1,41 +1,26 @@
 <?php get_header(); ?>
 
-		<section id="primary">
+		<div id="primary">
 			<div id="content" role="main">
-
+				
 				<header class="page-header">
 					<h1 class="page-title"><?php single_term_title( ); ?></h1>
 				</header>
 				
-				
 				<div class="ims-gallery">
 				<?php while ( have_posts( ) ) : the_post(); ?>
-					<figure class="hmedia ims-img"><?php
-						$images = get_children( array(
-							'numberposts' => 1,
-							'post_type'=>'ims_image', 
-							'post_parent' => $post->ID,
-							'orderby' => 'menu_order',
-							'order' => 'ASC'
-						)); 
-						foreach( $images as  $image )
-							$data = wp_get_attachment_metadata( $image->ID ); 
-											
-						$size = ' width="'. $data['sizes']['thumbnail']['width'] .'" height="'.$data['sizes']['thumbnail']['height'].'"';
-						$imgattr = ' role="img" class="photo colorbox-2" alt="' . get_the_title( $post->ID ) . '"' . $size;
-			
-						echo '<a href="'. get_permalink() . '" title="View &quot;'. get_the_title( $post->ID ).'&quot; gallery" rel="enclosure">
-						<img src="' . IMSTORE_URL . '/_img/1x1.trans.gif" data-ims-src="' . $this->get_image_url($image->ID, 2) . '" ' . $imgattr . '/></a>'; 
-						echo '<figcaption class="gallery-caption"><span class="fn ims-img-name">'.get_the_title( $post->ID ).'</span></figcaption>';
-					?></figure>
-
+					<?php echo $ImStore->taxonomy_content() ?>
 				<?php endwhile; ?>
 				</div>
 				
-				<?php //theme_content_nav( 'nav-below' , 'galleries' ); ?>
+				<nav id="<?php echo $nav_id; ?>" role="navigation">
+					<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older Galleries', 'ims' ) ); ?></div>
+					<div class="nav-next"><?php previous_posts_link( __( 'Newer Galleries <span class="meta-nav">&rarr;</span>', 'ims' ) ); ?></div>
+				</nav><!-- #nav-above -->
 
 			</div><!-- #content -->
-		</section><!-- #primary -->
+		</div><!-- #primary -->
 
-<?php get_sidebar( 'galleries' ); ?>
 <?php get_footer(); ?>
+				
+

@@ -291,7 +291,7 @@ class ImStoreAdmin extends ImStore {
 		wp_enqueue_style('ims-tinymce', IMSTORE_URL . '/_css/tinymce.css', false, $this->version, 'all');
 
 		//display upgrade message
-		if (get_option('imstore_version') < $this->version) {
+		if (get_option('imstore_version') < $this->version && current_user_can('install_plugins')) {
 			echo '<div class="error fade"><p>'; 
 			echo sprintf( __('Please, <strong>deactive and active <a href="%s">Image Store plugin</a> to apply updates.</strong>','ims'),admin_url('plugins.php')); 
 			echo '</p></div>';
@@ -569,7 +569,6 @@ class ImStoreAdmin extends ImStore {
 			'ims_gallery_page_ims-settings', 
 			'ims_gallery_page_ims-customers', 
 		);
-		
 		do_action('ims_admin_init', $this);
 	}
 
@@ -1034,12 +1033,11 @@ class ImStoreAdmin extends ImStore {
 		foreach ($r as $obj) {
 			$current = ( $status == $obj->status) ? ' class="current"' : '';
 			$links[] = '<li class="status-' . $obj->status . '">
-				<a href="' . $this->pageurl . '&amp;status=' . $obj->status . '"' . $current . '>' . $stati[$obj->status] . ' <span class="count">(<span>' . $obj->count . '</span>)</span></a>
-			</li>';
+				<a href="' . $this->pageurl . '&amp;status=' . $obj->status . '"' . $current . '>' . $stati[$obj->status] . ' <span class="count">(<span>' . $obj->count . '</span>)</span></a>';
 		}
 
 		$links = apply_filters("ims_{$type}_status_links", $links, $r, $this->pageurl);
-		echo implode(' | ', $links);
+		echo implode(' | </li>', $links) . '</li>';
 	}
 
 	/**
@@ -1109,10 +1107,8 @@ class ImStoreAdmin extends ImStore {
 	 * @return void
 	 * @since 3.0.0
 	 */
-
 	function register_screen_columns() {
 		global $current_screen;
-
 		if (empty($current_screen))
 			return;
 

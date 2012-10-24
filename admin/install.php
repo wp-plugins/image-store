@@ -22,20 +22,23 @@ class ImStoreInstaller extends ImStore {
 	 * @since 0.5.0 
 	 */
 	function __construct() {
+		
 		$this->ver = get_option('imstore_version');
 		$this->userid = get_current_user_id();
-
+	
 		if (empty($this->ver))
 			$this->imstore_default_options();
 
 		if ($this->version > $this->ver || empty($this->ver))
 			$this->update();
 
-		$price_list = get_option('ims_pricelist');
-		if (empty($price_list))
+		if (!get_option('ims_pricelist'))
 			$this->price_lists();
-
+		
 		do_action('ims_install');
+		
+		//save imstore version
+		update_option('imstore_version', $this->version);
 	}
 
 	/**
@@ -70,14 +73,13 @@ class ImStoreInstaller extends ImStore {
 		$ims_ft_opts['gallery_template'] = false;
 		$ims_ft_opts['galleryexpire'] = '60';
 		$ims_ft_opts['gateway_method'] = 'post';
-		$ims_ft_opts['gateway_name'] = '';
-		$ims_ft_opts['gateway_url'] = '';
 		$ims_ft_opts['googleid'] = '';
 
 		$ims_ft_opts['hidefavorites'] = false;
 		$ims_ft_opts['hidephoto'] = false;
 		$ims_ft_opts['hideslideshow'] = false;
 
+		$ims_ft_opts['imgs_per_page'] = false;
 		$ims_ft_opts['imgsortdirect'] = 'ASC';
 		$ims_ft_opts['imgsortorder'] = 'menu_order';
 		$ims_ft_opts['imswidget'] = false;
@@ -157,6 +159,8 @@ class ImStoreInstaller extends ImStore {
 			'googleprod' => false,
 			'googleprod' => false,
 			'enotification' => false,
+			'wepaystage'=> false,
+			'wepayprod' => false,
 			'custom' => false,
 		);
 
@@ -252,7 +256,7 @@ class ImStoreInstaller extends ImStore {
 			);
 		}
 			
-		//add finish options
+		//update options if updating to 3.1.0
 		if ($this->ver <= "3.1.0"){
 			$ims_ft_opts['googleid'] =  '';
 			$ims_ft_opts['attchlink'] =  false;
@@ -261,10 +265,8 @@ class ImStoreInstaller extends ImStore {
 			$ims_ft_opts['wplightbox'] =  false;
 			$ims_ft_opts['widgettools'] =  false;
 			$ims_ft_opts['disablestore'] =  false;
-			$ims_ft_opts['gateway_url'] =  false;
 			$ims_ft_opts['hidefavorites'] =  false;
 			$ims_ft_opts['hideslideshow'] =  false;
-			$ims_ft_opts['gateway_name'] =  false;
 			$ims_ft_opts['gallery_template'] =  false;
 			$ims_ft_opts['showtexteditor'] =  false;
 			$ims_ft_opts['disable_decimal'] =  false;
@@ -285,6 +287,8 @@ class ImStoreInstaller extends ImStore {
 					'googlesand' => false,
 					'googleprod' => false,
 					'googleprod' => false,
+					'wepaystage' => false,
+					'wepayprod' => false,
 					'enotification' => false,
 					'custom' => false,
 				);
@@ -296,7 +300,7 @@ class ImStoreInstaller extends ImStore {
 			update_option($this->optionkey, $ims_ft_opts);
 		}
 		
-		//add finish options
+		//update options if updating to 3.1.5
 		if ($this->ver <= "3.1.5"){	
 			$ims_ft_opts['tags'] = array(
 				__('/%total%/', 'ims'),
@@ -311,6 +315,49 @@ class ImStoreInstaller extends ImStore {
 			);
 			update_option($this->optionkey, $ims_ft_opts);
 		}
+		
+		//update options if updating to 3.1.6
+		if ($this->ver <= "3.1.6"){	
+			$ims_ft_opts['gateway']['wepaystage'] = false;
+			$ims_ft_opts['gateway']['wepayprod'] = false;
+			update_option($this->optionkey, $ims_ft_opts);
+			
+			$gateways = array(
+				'paypalprod' => array(
+					'name' => __('PayPal', 'ims'),
+					'url' => 'https://www.paypal.com/cgi-bin/webscr',
+				),
+				'paypalsand' => array(
+					'name' => __('PayPal Sandbox', 'ims'),
+					'url' => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
+				),
+				'googleprod' => array(
+					'name' => __('Google Checkout', 'ims'),
+					'url' => 'https://checkout.google.com/api/checkout/v2/checkoutForm/Merchant/',
+				),
+				'googlesand' => array(
+					'name' => __('Google Checkout Sandbox', 'ims'),
+					'url' => 'https://sandbox.google.com/checkout/api/checkout/v2/checkoutForm/Merchant/',
+				),
+				'wepayprod' => array(
+					'url' => false,
+					'name' => __('WePay', 'ims'),
+				),
+				'wepaystage' => array(
+					'url' => false,
+					'name' => __('WePay Stage', 'ims')
+				),
+				'enotification' => array(
+					'url' => false,
+					'name' => __('Checkout', 'ims'),
+				),
+				'custom' => array(
+					'name' => $this->opts['gateway_name'],
+					'url' => $this->opts['gateway_url'],
+				)
+			);
+			update_option('ims_gateways', $gateways);
+		}
 
 		//add imstore capabilities
 		$ims_caps = array(
@@ -322,7 +369,6 @@ class ImStoreInstaller extends ImStore {
 			'manage_customers' => __('Manage Customers', 'ims'),
 			'change_permissions' => __('Change Permissions', 'ims'),
 		);
-
 		$ims_caps = apply_filters('ims_user_caps', $ims_caps);
 
 		//user options
@@ -330,7 +376,7 @@ class ImStoreInstaller extends ImStore {
 		$ims_user_opts['caplist'] = $ims_caps;
 		update_option('ims_user_options', $ims_user_opts);
 
-		//assign caps to adminstrato if not, to the editor
+		//assign caps to adminstrator, if not, to the editor
 		$role = get_role('administrator');
 		$role = ( empty($role) ) ? get_role('editor') : $role;
 		foreach ($ims_caps as $cap => $capname)
@@ -341,13 +387,10 @@ class ImStoreInstaller extends ImStore {
 		if (empty($customer))
 			add_role('customer', 'Customer', array('read' => 1, 'ims_read_galleries' => 1));
 
-		//save imstore version
-		update_option('imstore_version', $this->version);
-
 		//save all ims options to be deleted when plugin is unstalled
 		update_option('ims_options', array('ims_front_options', $this->optionkey, 'ims_back_options', 'ims_page_secure', 'ims_searchable', 
 		'ims_print_finishes','ims_shipping_options', 'ims_pricelist', 'ims_options', 'ims_page_galleries', 'ims_sizes', 'ims_image_key', 'ims_download_sizes',
-		'ims_dis_images', 'ims_user_options', 'ims_site_url', 'ims_color_filters', 'ims_page_cart', 'ims_color_options'));
+		'ims_dis_images', 'ims_user_options', 'ims_site_url', 'ims_color_filters', 'ims_page_cart', 'ims_color_options','ims_gateways'));
 
 		//add expire column
 		if (empty($this->ver) || ( $this->ver <= "3.0.1" && is_multisite() ))
@@ -629,7 +672,7 @@ class ImStoreInstaller extends ImStore {
 		$wpdb->query("
 			DELETE FROM $wpdb->postmeta WHERE meta_key 
 			IN( '_ims_list_opts', '_ims_sizes', '_ims_price', '_ims_folder_path', '_ims_price_list', '_ims_gallery_id', '_ims_sortby', 
-				 '_ims_order', '_ims_customer', '_ims_image_count', 'ims_download_max', '_ims_tracking', '_ims_visits', 
+				 '_ims_order', '_ims_customer', '_ims_image_count', 'ims_download_max', '_ims_tracking', '_ims_visits', '_ims_promo_count',
 				 'ims_downloads', '_ims_favorites', '_ims_order_data', '_ims_promo_data', '_ims_promo_code', '_response_data', 
 				 'ims_visits', 'ims_tracking'
 			 ) "

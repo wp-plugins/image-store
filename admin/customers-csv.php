@@ -57,9 +57,8 @@ foreach( $results as $result ){
 	$customer = get_userdata( $result[0] );
 	foreach( $columns as $key => $column )
 		$str .= isset( $customer->$key ) ? str_replace( ', ', '', $customer->$key ) . "\t" : "\t";
-	echo  chr(255) . chr(254) . mb_convert_encoding( $str . "\n",  'UTF-16LE', $enco ) ;
+	$str .= "\n";
 }
-
+echo  chr(255) . chr(254) . mb_convert_encoding( $str . "\n",  'UTF-16LE', $enco ) ;
 die( );
-
 ?>

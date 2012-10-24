@@ -22,7 +22,6 @@ wp_set_current_user(0);
 $nonce = wp_create_nonce("ims_download_img");
 wp_set_current_user($userid);
 
-
 //custom cart data
 if ($this->opts['gateway']['custom'] && !empty($this->opts['data_pair'])) {
 	$data_pair = array();
@@ -198,14 +197,37 @@ else: //else show table
 	$output .= '<input name="apply-changes" type="submit" value="' . esc_attr__('Update Cart', 'ims') . '" class="secondary" />';
 
 	$output .= '<span class="ims-bk"></span>';
-	
 	$output .= '<div class="ims-cart-actions"> <span class="ims-checkout-label">' . esc_attr__('Checkout using:', 'ims') . ' </span>';
 
-	//render button
+	include( IMSTORE_ABSPATH . '/_store/wepaysdk.php');
+	
+	//render buttons
 	foreach ((array)$this->opts['gateway'] as $key => $bol){
-		if ($bol)
-			$output .='<input name="' . $key . '" type="submit" value="' . esc_attr($this->gateway[$key]['name']) . 
-			'" class="primary ims-google-checkout" data-submit-url="' . esc_attr(urlencode($this->gateway[$key]['url'])) . '" /> ';
+		if( $this->in_array($key, array('wepaystage','wepayprod')) && $bol){
+			
+			$data = array(
+				'type' => 'GOODS', 
+				'account_id' => $this->opts['wepayaccountid'],
+				'amount' => $this->cart['total'],
+				'short_description' => __("Image Purchase"),
+				'reference_id' => $this->orderid,
+				'redirect_uri' => $this->get_permalink('receipt'),
+				'callback_uri' =>$this->get_permalink($this->imspage),
+			);
+			
+			if ($this->cart['shippingcost']) 
+				$data['require_shipping' ] = true;
+
+			try{ $checkout = $wepay->request('checkout/create', $data );
+			}catch(WePayException $e){ }
+			
+			if(!empty( $checkout->checkout_uri )) 
+				$this->gateways[$key]['url'] = $checkout->checkout_uri;
+		}
+		if ($bol){
+			$output .='<input name="' . $key . '" type="submit" value="' . esc_attr($this->gateways[$key]['name']) . 
+			'" class="primary ims-google-checkout" data-submit-url="' . esc_attr(urlencode($this->gateways[$key]['url'])) . '" /> ';
+		}
 	}
 	
 	$output .= apply_filters('ims_store_cart_actions', '', $this->cart) . '</div></td></tr>';
