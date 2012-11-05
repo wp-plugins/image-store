@@ -5,7 +5,7 @@
   Plugin URI: http://imstore.xparkmedia.com
   Description: Your very own image store within wordpress "ImStore"
   Author: Hafid R. Trujillo Huizar
-  Version: 3.1.7
+  Version: 3.1.8
   Author URI:http://www.xparkmedia.com
   Requires at least: 3.0.0
   Tested up to: 3.5.0

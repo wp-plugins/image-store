@@ -27,10 +27,10 @@ if(empty($this->orderid) || empty($data)){
 }
 
 $this->subtitutions = array(
-	$data['mc_gross'], 
-	$this->format_price($data['payment_status']), 
+	str_replace($this->sym,'\\'.$this->sym, $this->format_price($data['mc_gross'])), 
+	$data['payment_status'], 
 	get_the_title( $this->orderid ),
-	$this->format_price($cart['shipping']), 
+	str_replace($this->sym,'\\'.$this->sym, $this->format_price($cart['shipping'])), 
 	$data['txn_id'],
 	$data['last_name'], 
 	$data['first_name'], 

@@ -60,6 +60,7 @@ class ImStoreAdmin extends ImStore {
 
 		//post columns
 		add_filter('manage_ims_album_custom_column', array(&$this, 'show_cat_id'), 10, 3);
+		add_filter('manage_ims_tags_custom_column', array(&$this, 'show_cat_id'), 10, 3);
 		add_filter('manage_posts_custom_column', array(&$this, 'add_columns_val_gal'), 15, 2);
 
 		//metadata generation
@@ -75,6 +76,8 @@ class ImStoreAdmin extends ImStore {
 		add_action('admin_print_styles', array(&$this, 'register_screen_columns'), 0);
 		add_action('manage_edit-ims_album_columns', array(&$this, 'add_id_column'));
 		add_action('manage_edit-ims_album_sortable_columns', array(&$this, 'add_id_column'));
+		add_action('manage_edit-ims_tags_columns', array(&$this, 'add_id_column'));
+		add_action('manage_edit-ims_tags_sortable_columns', array(&$this, 'add_id_column'));
 
 		//speed up wordpress load
 		if (defined('DOING_AJAX') || defined('DOING_AUTOSAVE' || defined('SHORTINIT')))
@@ -871,7 +874,7 @@ class ImStoreAdmin extends ImStore {
 	}
 
 	/**
-	 * Add stuts column to galleries
+	 * Add status column to galleries
 	 *
 	 * @param null $null
 	 * @param array $column_name
