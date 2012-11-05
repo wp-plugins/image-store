@@ -967,24 +967,31 @@ class ImStoreFront extends ImStore {
 		global $wpdb, $paged;
 		extract( wp_parse_args( $atts, array(
 			'order'=>'DESC','orderby'=>'post_date','offset' =>0,
-			'album'=>false,'count'=>$this->posts_per_page, 'all' => false)
+			'album'=>false,'tag'=>false,'count'=>$this->posts_per_page, 'all' => false)
 		));
 	
+		$taxid = false;
 		$limit = ( $count < 1 ) ? '' : "LIMIT %d, %d";
 		$secure = ($all) ? '' : "AND post_password = ''";
 		$offset = (empty($paged)) ? 0 : (($count) * $paged) - $count;
+		
+		do_action('ims_before_get_galleries', $atts, $this);
 
-		if( $album ){
+		if( $album || $tag ){
+			if( $album ){ $taxid = $album; $tax =  'ims_album';
+			} else { $taxid = $tag; $tax = 'ims_tags' ;}
+			
 			$type = "SELECT DISTINCT object_id FROM $wpdb->terms AS t
 			INNER JOIN $wpdb->term_taxonomy tt ON t.term_id = tt.term_id
 			INNER JOIN $wpdb->term_relationships tr ON tt.term_taxonomy_id = tr.term_taxonomy_id
-			WHERE t.term_id = %d ";
+			WHERE t.term_id = %d AND tt.taxonomy = '$tax' ";
 		}else{
 			$type = " SELECT DISTINCT ID FROM $wpdb->posts WHERE 0 = %d AND
 			post_type = 'ims_gallery' AND post_status = 'publish' $secure";
 		}
 
-		$this->attachments = $wpdb->get_results($wpdb->prepare(
+	 	$this->attachments = $wpdb->get_results(
+		$wpdb->prepare(
 			"SELECT SQL_CALC_FOUND_ROWS im.ID, im.post_title, p.comment_status,
 			pm.meta_value meta, im.post_excerpt, im.post_parent, im.post_type, p.post_author
 			FROM ( SELECT * FROM $wpdb->posts  ORDER BY
@@ -996,12 +1003,15 @@ class ImStoreFront extends ImStore {
 			WHERE im.post_type = 'ims_image' AND pm.meta_key = '_wp_attachment_metadata'
 			AND im.post_status = 'publish' AND p.post_status = 'publish' AND im.post_parent IN ( $type )
 			GROUP BY im.post_parent ORDER BY p.{$orderby} $order, p.post_date DESC $limit
-		", $album, $offset, $count));
+		", $taxid, $offset, $count)
+		);
 
 		if (empty($this->attachments))
 			return;
 		
-		if (is_singular("ims_gallery") || is_tax("ims_album")) {
+		do_action('ims_after_get_galleries', $atts, $this);
+		
+		if (is_singular("ims_gallery") || is_tax("ims_album") || is_tax('ims_tags')) {
 			$wp_query->post_count = count($this->attachments);
 			$wp_query->found_posts = $wpdb->get_var('SELECT FOUND_ROWS( )');
 			$wp_query->max_num_pages = ceil($wp_query->found_posts / $count);
@@ -1278,20 +1288,37 @@ class ImStoreFront extends ImStore {
 		
 		if( isset($data['class']) )
 			$class = esc_attr($data['class']);
-			
-		if (is_array($data) && isset($data['sizes']['thumbnail']['width']))
-			$size .= ' width="' . esc_attr($data['sizes']['thumbnail']['width']) . '" ';
-		if (is_array($data) && isset($data['sizes']['thumbnail']['height']))
-			$size .= 'height="' . esc_attr($data['sizes']['thumbnail']['height']) . '"';
+		
+		if(is_array($data)){
+			switch ($sz) {
+				case 1: //preview
+						$size .= ' width="' . esc_attr($data['sizes']['preview']['width']) . '" ';
+						$size .= 'height="' . esc_attr($data['sizes']['preview']['height']) . '"';
+					break;
+				case 2: //thumbnail
+						$size .= ' width="' . esc_attr($data['sizes']['thumbnail']['width']) . '" ';
+						$size .= 'height="' . esc_attr($data['sizes']['thumbnail']['height']) . '"';
+					break;
+				case 3: //mini
+						$size .= ' width="' . esc_attr($data['sizes']['mini']['width']) . '" ';
+						$size .= 'height="' . esc_attr($data['sizes']['mini']['height']) . '"';
+					break;
+				case 4: //original
+					$size .= ' width="' . esc_attr($data['width']) . '" ';
+					$size .= 'height="' . esc_attr($data['height']) . '"';
+					break;
+			}
+		}
 				
 		$output  = '<' . $imagetag . ' class="hmedia ims-img' . " imgid-{$enc}" . '" itemscope itemprop="thumbnail" itemtype="http://schema.org/ImageObject">';
-		$output .= '<a  id="' . $enc . '" href="'. $data['link'] . '" class="' . $class . '" itemprop="contentUrl significantLink" title="' . esc_attr( $data['title'] ) . '" rel="enclosure">';
+		$output .= '<a  id="' . $enc . '" href="'. apply_filters('ims_image_link', $data['link'], $image) . '" class="' . $class . '" itemprop="contentUrl" title="' . esc_attr( $data['title'] ) . '" rel="enclosure">';
 		$output .= '<img src="' . IMSTORE_URL . '/_img/1x1.trans.gif" alt="'.esc_attr($data['alt']).'"'.$size.' data-ims-src="' . $this->get_image_url($ID,$sz).'" role="img"/></a>'; 
 		
 		if (( empty($this->opts['disablestore']) || empty($this->opts['hidefavorites']) ) && is_singular('ims_gallery') && empty($data['_dis_store'][0]))
 			$output .= ' <label><input name="imgs[]" type="checkbox" value="' . $enc . '" /><span class="ims-label"> ' . __('Select', 'ims') . '</span></label>';
-			
-		return $output .= '<'.$captiontag.' class="gallery-caption"><span class="fn ims-img-name">'.esc_attr($data['caption']).'</span></'.$captiontag.'></'.$imagetag.'>';
+		
+		$output .= '<'.$captiontag.' class="gallery-caption"><span class="fn ims-img-name">'.esc_attr($data['caption']).'</span></'.$captiontag.'>';
+		return $output .= apply_filters('ims_image_tag', '', $data, $ID) . '</'.$imagetag.'>';
 	}
 	
 	/* Display taxonomy content
@@ -1377,7 +1404,6 @@ class ImStoreFront extends ImStore {
 		$output .= "<{$gallerytag} id='ims-gallery-" . $this->galid . "' class='ims-gallery' itemscope itemtype='http://schema.org/ImageGallery'>";
 		
 		foreach ($this->attachments as $image) {
-			
 			$title = get_the_title($image->ID);
 			
 			if (!empty($image->post_parent)) {
@@ -1437,8 +1463,7 @@ class ImStoreFront extends ImStore {
 		elseif (isset($atts['favorites']) && $atts['favorites'] == true): //favorites
 		
 			$this->get_favorite_images();
-			$output = $this->display_galleries();
-			return $output;
+			return  $this->display_galleries();
 		
 		elseif (isset($atts['cart']) && $atts['cart'] == true): //cart
 		
@@ -1473,7 +1498,7 @@ class ImStoreFront extends ImStore {
 			$output .= $this->store_nav();
 		
 		$output .= '<div class="ims-labels">';
-		if ( $this->gal->post_expire != '0000-00-00 00:00:00' )
+		if ( isset($this->gal->post_expire) && $this->gal->post_expire != '0000-00-00 00:00:00' )
 			$output .= '<span class="ims-expires">' . __("Expires: ", 'ims') . date_i18n($this->dformat, strtotime($this->gal->post_expire)) . '</span>';
 		
 		$output .= '</div><!--.ims-labels-->';
@@ -1868,8 +1893,9 @@ class ImStoreFront extends ImStore {
 		
 		//dont change array order
 		$this->subtitutions = array(
-			$data['mc_gross'], $data['payment_status'], get_the_title($cartid),
-			$this->format_price($cart['shipping']), $data['txn_id'],$data['last_name'], $data['first_name'], $data['payer_email'],
+			str_replace($this->sym,'\\'.$this->sym, $this->format_price($data['mc_gross'])),$data['payment_status'], 
+			get_the_title($cartid), str_replace($this->sym,'\\'.$this->sym, $this->format_price($cart['shipping'])),
+			$data['txn_id'],$data['last_name'], $data['first_name'], $data['payer_email'],
 		);
 		
 		do_action('ims_after_checkout', $this->cart);

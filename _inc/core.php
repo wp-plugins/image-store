@@ -17,7 +17,7 @@ class ImStore {
 	 * @param $domain plugin Gallery IDentifier
 	 * Make sure that new language( .mo ) files have 'ims-' as base name
 	 */
-	public $version = '3.1.7';
+	public $version = '3.1.8';
 
 	/**
 	 * Public variables
@@ -575,8 +575,7 @@ class ImStore {
 
 		if ($this->opts['disable_decimal'])
 			$price = number_format_i18n((double) $price);
-		else
-			$price = number_format((double) $price, 2);
+		else $price = number_format((double) $price, 2);
 
 		$char = ( $sym ) ? $this->cformat[$this->loc] : "%s";
 		return sprintf($before . $char, $price . $after);

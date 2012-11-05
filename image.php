@@ -77,7 +77,6 @@ class ImStoreImage {
 				$this->image_dir = rtrim(WP_CONTENT_DIR, '/') . "/" . $this->metadata['file'];
 				break;
 		}
-		
 		$this->display_image();
 	}
 
