@@ -264,6 +264,7 @@ class ImStoreGallery extends ImStoreAdmin {
 				$expire = date_i18n($this->dformat, $time);
 				$ims_expire = date_i18n('Y-m-d H:i', $time);
 			}
+			
 		} else {
 
 			if (empty($this->meta['_ims_folder_path'][0])) {
@@ -288,6 +289,7 @@ class ImStoreGallery extends ImStoreAdmin {
 
 			$folderfield = '<input type="text" name="_ims_folder_path" id="_ims_folder_path" value="' . esc_attr($this->galpath) . '"' . $this->disabled . ' />';
 		}
+		
 		?>
 		<table class="ims-table" >
 			<tr>

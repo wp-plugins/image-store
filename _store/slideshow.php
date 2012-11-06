@@ -49,7 +49,7 @@ $output .= '<div class="image-color">' . "\n";
 if (!empty($this->listmeta['colors']) ){
 	$output .= '<span class="ims-color-label">' . __('Color Options:', 'ims') . '</span>' . "\n";
 	foreach ($this->listmeta['colors'] as $key => $color){
-		if($color['code'])
+		if(isset($color['code']) && $color['code'])
 			$output .= '<label><input type="checkbox" name="ims-color[]" value="'.$color['code'].'" class="ims-color ims-color-'.$color['code'].'" /> ' . $color['name'] . '</label>	' . "\n";
 	}
 }
