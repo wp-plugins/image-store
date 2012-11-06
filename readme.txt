@@ -5,7 +5,7 @@ Tags: e-commerce,shop,photo store,picture,image,galleries,imstore,image-store,se
 gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints,nextgen alternative
 Requires at least: 3.0.0
 Tested up to: 3.5.0
-Stable tag: 3.1.8
+Stable tag: 3.1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -86,13 +86,19 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 
 == Changelog ==
 
-= 3.1.8=
+= 3.1.9 =
+* Fixed: Fix blank cart buttons using shortcode
+* Fixed: Send email to user using shortcode cart
+* Fixed: Select field display under images
+* Fixed: A few php notices.
+
+= 3.1.8 =
 * Fixed: Potencial image display error.
 * Added: additional WP 3.5 support.
 * Added: Tag shortcode.
 * Added: Tag column id.
 
-= 3.1.7=
+= 3.1.7 =
 * Code clean up
 * Fixed: taxonomy template.
 * Fixed: potencial php errors.
@@ -100,7 +106,7 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * Fixed: taxonomy template.
 * Fixed: backward compatibility for WordPress 3.0.0
 * Added: WePay Support.
-* Added: Promotion limits.
+* Added: Promotion limits
 * Added: additional WP 3.5 support.
 * Changed: Taxonomy template.
 * Changed: Taxonomy content display.

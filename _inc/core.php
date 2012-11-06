@@ -17,7 +17,7 @@ class ImStore {
 	 * @param $domain plugin Gallery IDentifier
 	 * Make sure that new language( .mo ) files have 'ims-' as base name
 	 */
-	public $version = '3.1.8';
+	public $version = '3.1.9';
 
 	/**
 	 * Public variables

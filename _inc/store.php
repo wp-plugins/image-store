@@ -33,6 +33,7 @@ class ImStoreFront extends ImStore {
 	public $favorites_count = 0;
 	public $posts_per_page = 0;
 	public $gateways = array();
+	public $cart = array('items' => false);
 	
 	private $query_id = false;
 	private $page_cart = false;
@@ -42,7 +43,6 @@ class ImStoreFront extends ImStore {
 	
 	private $gallery_tags = array();
 	private $shipping_opts = array();
-	private $cart = array('items' => false);
 	private $download_links = false;
 	
 	/**
@@ -111,6 +111,12 @@ class ImStoreFront extends ImStore {
 			'imagetag' => 'figure',
 			'captiontag' => 'figcaption'
 		), $this);
+		
+		//get list of gateways
+		$this->gateways = get_option('ims_gateways');
+		$this->gateways['enotification']['url'] = get_permalink();
+		$this->gateways['googleprod']['url'] .= $this->opts['googleid'];
+		$this->gateways['googlesand']['url'] .= $this->opts['googleid'];
 		
 		//load styles  - change title format
 		add_action('wp_enqueue_scripts', array(&$this, 'load_scripts_styles'));
@@ -335,12 +341,6 @@ class ImStoreFront extends ImStore {
 		//set gallery page
 		if (is_singular('ims_gallery') && !$this->imspage )
 			$this->imspage = ($page = get_query_var('imspage')) ? $page : 'photos';
-		
-		//get list of gateways
-		$this->gateways = get_option('ims_gateways');
-		$this->gateways['enotification']['url'] = get_permalink();
-		$this->gateways['googleprod']['url'] .= $this->opts['googleid'];
-		$this->gateways['googlesand']['url'] .= $this->opts['googleid'];
 		
 		do_action('ims_gallery_init', $this);
 	}
@@ -850,7 +850,7 @@ class ImStoreFront extends ImStore {
 		
 		if( $this->imspage == 'slideshow' )
 			$this->posts_per_page = -1;
-		elseif( $this->opts['imgs_per_page'] )
+		elseif( isset($this->opts['imgs_per_page']) && $this->opts['imgs_per_page'] )
 			$this->posts_per_page = $this->opts['imgs_per_page'];
 		
 		if( $this->posts_per_page > 0 ){
@@ -1311,13 +1311,14 @@ class ImStoreFront extends ImStore {
 		}
 				
 		$output  = '<' . $imagetag . ' class="hmedia ims-img' . " imgid-{$enc}" . '" itemscope itemprop="thumbnail" itemtype="http://schema.org/ImageObject">';
-		$output .= '<a  id="' . $enc . '" href="'. apply_filters('ims_image_link', $data['link'], $image) . '" class="' . $class . '" itemprop="contentUrl" title="' . esc_attr( $data['title'] ) . '" rel="enclosure">';
+		$output .= '<a  id="' . $enc . '" href="'. apply_filters('ims_image_link', $data['link'], $data) . '" class="' . $class . '" itemprop="contentUrl" title="' . esc_attr( $data['title'] ) . '" rel="enclosure">';
 		$output .= '<img src="' . IMSTORE_URL . '/_img/1x1.trans.gif" alt="'.esc_attr($data['alt']).'"'.$size.' data-ims-src="' . $this->get_image_url($ID,$sz).'" role="img"/></a>'; 
 		
+		$output .=  '<'.$captiontag.' class="gallery-caption">';
 		if (( empty($this->opts['disablestore']) || empty($this->opts['hidefavorites']) ) && is_singular('ims_gallery') && empty($data['_dis_store'][0]))
 			$output .= ' <label><input name="imgs[]" type="checkbox" value="' . $enc . '" /><span class="ims-label"> ' . __('Select', 'ims') . '</span></label>';
 		
-		$output .= '<'.$captiontag.' class="gallery-caption"><span class="fn ims-img-name">'.esc_attr($data['caption']).'</span></'.$captiontag.'>';
+		$output .= '<span class="fn ims-img-name">'.esc_attr($data['caption']).'</span></'.$captiontag.'>';
 		return $output .= apply_filters('ims_image_tag', '', $data, $ID) . '</'.$imagetag.'>';
 	}
 	
@@ -1828,9 +1829,10 @@ class ImStoreFront extends ImStore {
 				}
 			}
 		}
-
+		
+		$output = '';
 		if (!empty($downlinks)) {
-			$output = '<div class="imgs-downloads">';
+			$output .= '<div class="imgs-downloads">';
 			$output .= '<h4 class="title">Downloads</h4>';
 			$output .= '<ul role="list" class="download-links">';
 			foreach ($downlinks as $link)
@@ -1905,7 +1907,7 @@ class ImStoreFront extends ImStore {
 			global $user_ID;
 			
 			wp_update_user(array( 
-				'ID' => $user_ID, 'user_email' => $data['user_email'], 'first_name' => $data['first_name'], 'last_name' => $data['last_name']
+				'ID' => $user_ID, 'user_email' => $data['payer_email'], 'first_name' => $data['first_name'], 'last_name' => $data['last_name']
 			));
 			
 			foreach ($this->opts['checkoutfields'] as $key => $label) {
