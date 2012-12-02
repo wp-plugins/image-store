@@ -21,24 +21,25 @@ class ImStoreInstaller extends ImStore {
 	 * @return void
 	 * @since 0.5.0 
 	 */
-	function __construct() {
+	function __construct( ) {
 		
 		$this->ver = get_option('imstore_version');
-		$this->userid = get_current_user_id();
+		$this->userid = get_current_user_id( );
 	
-		if (empty($this->ver))
-			$this->imstore_default_options();
+		if ( empty( $this->ver ) )
+			$this->imstore_default_options( );
 
-		if ($this->version > $this->ver || empty($this->ver))
-			$this->update();
+		if ( $this->version > $this->ver || empty( $this->ver ))
+			$this->update( );
 
-		if (!get_option('ims_pricelist'))
-			$this->price_lists();
+		if ( !get_option( 'ims_pricelist' ) )
+			$this->price_lists( );
 		
-		do_action('ims_install');
+		do_action( 'ims_install' );
 		
 		//save imstore version
-		update_option('imstore_version', $this->version);
+		update_option( 'imstore_version', $this->version );
+		
 	}
 
 	/**
@@ -122,6 +123,10 @@ class ImStoreInstaller extends ImStore {
 		$ims_ft_opts['watermark_trans'] = '90';
 		$ims_ft_opts['widgettools'] = false;
 		$ims_ft_opts['wplightbox'] = false;
+		
+		$ims_ft_opts['wepayaccesstoken'] = false;
+		$ims_ft_opts['wepayclientid'] = false;
+		$ims_ft_opts['wepayclientsecret'] = false;		
 
 		//dont change array order
 		$ims_ft_opts['tags'] = array(
@@ -134,6 +139,7 @@ class ImStoreInstaller extends ImStore {
 			__('/%customer_first%/', 'ims'),
 			__('/%customer_email%/', 'ims'),
 			__('/%instructions%/', 'ims'),
+			__('/%items_count%/', 'ims'),
 		);
 
 		$ims_ft_opts['required_ims_zip'] = 1;
@@ -313,52 +319,24 @@ class ImStoreInstaller extends ImStore {
 				__('/%customer_email%/', 'ims'),
 				__('/%instructions%/', 'ims'),
 			);
-			update_option($this->optionkey, $ims_ft_opts);
+			
+			update_option( $this->optionkey, $ims_ft_opts );
 		}
+	
+		//update options if updating to 3.2.0
+		if ($this->ver <= "3.2.0" ){	
 		
-		//update options if updating to 3.1.6
-		if ($this->ver <= "3.1.6"){	
 			$ims_ft_opts['gateway']['wepaystage'] = false;
 			$ims_ft_opts['gateway']['wepayprod'] = false;
-			update_option($this->optionkey, $ims_ft_opts);
+			$ims_ft_opts['wepayaccesstoken'] = false;
+			$ims_ft_opts['wepayclientid'] = false;
+			$ims_ft_opts['wepayclientsecret'] = false;	
+			$ims_ft_opts['tags'][] = __('/%items_count%/', 'ims');
 			
-			$gateways = array(
-				'paypalprod' => array(
-					'name' => __('PayPal', 'ims'),
-					'url' => 'https://www.paypal.com/cgi-bin/webscr',
-				),
-				'paypalsand' => array(
-					'name' => __('PayPal Sandbox', 'ims'),
-					'url' => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
-				),
-				'googleprod' => array(
-					'name' => __('Google Checkout', 'ims'),
-					'url' => 'https://checkout.google.com/api/checkout/v2/checkoutForm/Merchant/',
-				),
-				'googlesand' => array(
-					'name' => __('Google Checkout Sandbox', 'ims'),
-					'url' => 'https://sandbox.google.com/checkout/api/checkout/v2/checkoutForm/Merchant/',
-				),
-				'wepayprod' => array(
-					'url' => false,
-					'name' => __('WePay', 'ims'),
-				),
-				'wepaystage' => array(
-					'url' => false,
-					'name' => __('WePay Stage', 'ims')
-				),
-				'enotification' => array(
-					'url' => false,
-					'name' => __('Checkout', 'ims'),
-				),
-				'custom' => array(
-					'name' => $this->opts['gateway_name'],
-					'url' => $this->opts['gateway_url'],
-				)
-			);
-			update_option('ims_gateways', $gateways);
+			delete_option( 'ims_gateways' );
+			update_option( $this->optionkey, $ims_ft_opts );
 		}
-
+		
 		//add imstore capabilities
 		$ims_caps = array(
 			'read_sales' => __('Read sales', 'ims'),
@@ -707,6 +685,4 @@ class ImStoreInstaller extends ImStore {
 		wp_redirect(admin_url('plugins . php?deactivate=true'));
 		die();
 	}
-
 }
-new ImStoreInstaller( );

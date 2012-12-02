@@ -116,15 +116,15 @@ class ImStoreSet extends ImStoreAdmin {
 		}
 		if (isset($this->opts[$option][$key])
 				&& is_array($this->opts[$option]))
-			return $this->opts[$option][$key];
+			return stripslashes($this->opts[$option][$key]);
 		elseif (isset($this->opts[$option . $key]))
-			return $this->opts[$option . $key];
+			return stripslashes($this->opts[$option . $key]);
 		elseif (isset($this->opts[$option]))
-			return esc_attr($this->opts[$option]);
+			return stripslashes($this->opts[$option]);
 		elseif ($o = get_option($option))
-			return $o;
+			return stripslashes($o);
 		elseif ($ok = get_option($option . $key))
-			return $ok;
+			return stripslashes($ok);
 		return false;
 	}
 

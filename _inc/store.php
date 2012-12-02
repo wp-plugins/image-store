@@ -39,7 +39,7 @@ class ImStoreFront extends ImStore {
 	private $page_cart = false;
 	private $page_front = false;
 	private $page_galleries = false;
-	private $subtitutions = array();
+	private $substitutions = array();
 	
 	private $gallery_tags = array();
 	private $shipping_opts = array();
@@ -113,10 +113,41 @@ class ImStoreFront extends ImStore {
 		), $this);
 		
 		//get list of gateways
-		$this->gateways = get_option('ims_gateways');
-		$this->gateways['enotification']['url'] = get_permalink();
-		$this->gateways['googleprod']['url'] .= $this->opts['googleid'];
-		$this->gateways['googlesand']['url'] .= $this->opts['googleid'];
+		$this->gateways = array(
+			'paypalprod' => array(
+				'name' => __('PayPal', 'ims'),
+				'url' => 'https://www.paypal.com/cgi-bin/webscr',
+			),
+			'paypalsand' => array(
+				'name' => __('PayPal Sandbox', 'ims'),
+				'url' => 'https://www.sandbox.paypal.com/cgi-bin/webscr',
+			),
+			'googleprod' => array(
+				'name' => __('Google Checkout', 'ims'),
+				'url' => 'https://checkout.google.com/api/checkout/v2/checkoutForm/Merchant/'. $this->opts['googleid'],
+			),
+			'googlesand' => array(
+				'name' => __('Google Checkout Sandbox', 'ims'),
+				'url' => 'https://sandbox.google.com/checkout/api/checkout/v2/checkoutForm/Merchant/'. $this->opts['googleid'],
+			),
+			'wepayprod' => array(
+				'url' => false,
+				'name' => __('WePay', 'ims'),
+			),
+			'wepaystage' => array(
+				'url' => false,
+				'name' => __('WePay Stage', 'ims')
+			),
+			'enotification' => array(
+				'url' => get_permalink(),
+				'name' => __('Checkout', 'ims'),
+			),
+		);
+		
+		if( isset( $this->opts['gateway_url'] ) )
+			$gateways['custom']['url'] = $this->opts['gateway_url'];
+		if( isset( $this->opts['gateway_name'] ) )
+			$gateways['custom']['name'] = $this->opts['gateway_name'];
 		
 		//load styles  - change title format
 		add_action('wp_enqueue_scripts', array(&$this, 'load_scripts_styles'));
@@ -1515,6 +1546,8 @@ class ImStoreFront extends ImStore {
 		$output .= '<div class="ims-message' . $error . '">' . $this->message . '</div>';
 		
 		$output .= '<div class="ims-innerbox">';
+		$output .= apply_filters('ims_before_page', '', $this->imspage);
+		
 		switch ($this->imspage) {
 			case 'slideshow':
 				$this->get_gallery_images();
@@ -1702,8 +1735,8 @@ class ImStoreFront extends ImStore {
 		}
 
 		foreach ($this->opts['checkoutfields'] as $key => $label) {
-			if ($this->opts['required_' . $key] && empty($_POST[$key]))
-				$this->error .= sprintf(__('The %s is required.', 'ims'), $label) . "<br />";
+			if ( $this->opts['required_' . $key] && empty($_POST[$key]) )
+				$this->error .= sprintf(__('The %s is required.', 'ims'), $label ) . "<br />";
 		}
 
 		if (!empty($_POST['user_email']) && !is_email($_POST['user_email']))
@@ -1719,8 +1752,13 @@ class ImStoreFront extends ImStore {
 		$data['custom'] = $this->orderid;
 		$data['mc_gross'] = $this->cart['total'];
 		$data['payer_email'] = $_POST['user_email'];
+		$data['ims_phone'] = $_POST['ims_phone'];
 		$data['last_name'] = $_POST['last_name'];
 		$data['first_name'] = $_POST['first_name'];
+		$data['ims_zip'] = $_POST['ims_zip'];
+		$data['ims_city'] = $_POST['ims_city'];
+		$data['ims_state'] = $_POST['ims_state'];
+		$data['ims_address'] = $_POST['ims_address'];
 		$data['mc_currency'] = $this->opts['currency'];
 		$data['num_cart_items'] = $this->cart['items'];
 		$data['txn_id'] = sprintf("%08d", $this->orderid);
@@ -1805,7 +1843,8 @@ class ImStoreFront extends ImStore {
 	 */
 	function get_download_links($cart, $total, $integrity = false) {
 
-		if (empty($cart) || $total === false || !$integrity || $cart['total'] != $total)
+		if (empty($cart) || $total === false || !$integrity || 
+		abs($cart['total'] - $this->format_price($total, false)) > 0.00001)
 			return false;
 
 		if ($this->download_links !== false)
@@ -1873,7 +1912,7 @@ class ImStoreFront extends ImStore {
 		if ($cart['items'] && $data['mc_currency'] == $cart['currency'] &&
 		abs($data['mc_gross'] - $this->format_price($total, false)) < 0.00001)
 			$data['data_integrity'] = true;
-	
+		
 		sleep(1); 
 		$this->orderid = $cartid;
 		$this->imspage = 'receipt';
@@ -1884,7 +1923,6 @@ class ImStoreFront extends ImStore {
 		));
 		
 		//save response data
-		$this->subtitutions[] = $data['instructions'];
 		update_post_meta($cartid, '_response_data',$data);
 		
 		//update promotional count
@@ -1894,11 +1932,11 @@ class ImStoreFront extends ImStore {
 		}
 		
 		//dont change array order
-		$this->subtitutions = array(
+		$this->substitutions = apply_filters( 'ims_substitutions', array(
 			str_replace($this->sym,'\\'.$this->sym, $this->format_price($data['mc_gross'])),$data['payment_status'], 
 			get_the_title($cartid), str_replace($this->sym,'\\'.$this->sym, $this->format_price($cart['shipping'])),
-			$data['txn_id'],$data['last_name'], $data['first_name'], $data['payer_email'],
-		);
+			$data['txn_id'],$data['last_name'], $data['first_name'], $data['payer_email'], $data['instructions'], $cart['items'] 
+		));
 		
 		do_action('ims_after_checkout', $this->cart);
 		
@@ -1916,7 +1954,7 @@ class ImStoreFront extends ImStore {
 		}
 		
 		//send emails 
-		$message = preg_replace($this->opts['tags'], $this->subtitutions, $this->opts['notifymssg']);
+		$message = preg_replace($this->opts['tags'], $this->substitutions, $this->opts['notifymssg']);
 		$download_links = $this->get_download_links($cart, $data['mc_gross'], $data['data_integrity']);
 		
 		$headers = 'From: "' . $this->opts['receiptname'] . '" <' . $this->opts['receiptemail'] . ">\r\n";
@@ -1931,7 +1969,7 @@ class ImStoreFront extends ImStore {
 		//notify buyers
 		if (isset($data['payer_email']) && is_email($data['payer_email']) && !get_post_meta($cartid, '_ims_email_sent', true)){
 			
-			$message = make_clickable(wpautop(stripslashes(preg_replace($this->opts['tags'], $this->subtitutions, $this->opts['thankyoureceipt']))));
+			$message = make_clickable(wpautop(stripslashes(preg_replace($this->opts['tags'], $this->substitutions, $this->opts['thankyoureceipt']))));
 			wp_mail($data['payer_email'], sprintf(__('%s receipt.', 'ims'), get_bloginfo('blogname')), $message . $download_links, $headers);
 			
 			update_post_meta($cartid, '_ims_email_sent', 1);
@@ -1965,6 +2003,7 @@ class ImStoreFront extends ImStore {
 
 		//set defaults 
 		$color = $finish = 0;
+		$this->cart['total'] = 0;
 		$this->cart['items'] = 0;
 		$this->cart['tax'] = false;
 		$this->cart['shipping'] = 0;

@@ -12,7 +12,7 @@
 if (!defined('ABSPATH'))
 	die();
 
-$this->subtitutions = array();
+$this->substitutions = array();
 
 //pre populate fields
 $fields = array('last_name', 'first_name', 'user_email', 'ims_address', 'ims_city', 'ims_state', 'ims_zip', 'ims_phone');
@@ -74,7 +74,7 @@ $output .= apply_filters('ims_checkout_user_fields', '', $this->cart, $this->opt
 $output .= '<div class="ims-p">';
 $output .= '<label for="ims_instructions">' . __('Additional Instructions', 'ims') . ' </label>';
 $output .= '<textarea name="instructions" id="ims_instructions" class="ims-instructions">'
-		. ( isset($this->cart['instructions']) ? esc_textarea($this->cart['instructions']) : esc_textarea($this->cart['instructions']) ) . '</textarea>';
+		. ( isset($this->cart['instructions']) ? esc_textarea($this->cart['instructions']) : '' ) . '</textarea>';
 
 $output .= '</div>';
 $output .= '<div class="ims-p"><small><span class="req">*</span>' . __("Required fields", 'ims') . '</small></div>';
@@ -94,7 +94,7 @@ $output .= '</fieldset><!--.order-info-->';
 
 if (isset($this->opts['shippingmessage']))
 	$output .='<div class="shipping-message">' .
-			make_clickable(wpautop(stripslashes(preg_replace($this->opts['tags'], $this->subtitutions, $this->opts['shippingmessage'])))) . '</div>';
+			make_clickable(wpautop(stripslashes(preg_replace($this->opts['tags'], $this->substitutions, $this->opts['shippingmessage'])))) . '</div>';
 
 $output .= '<div class="ims-p submit-buttons">';
 $output .= '<input name="cancelcheckout" type="submit" value="' . esc_attr__('Cancel', 'ims') . '" class="secundary" /> ';

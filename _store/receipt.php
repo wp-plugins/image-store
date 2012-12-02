@@ -26,7 +26,7 @@ if(empty($this->orderid) || empty($data)){
 	die();
 }
 
-$this->subtitutions = array(
+$this->substitutions = array(
 	str_replace($this->sym,'\\'.$this->sym, $this->format_price($data['mc_gross'])), 
 	$data['payment_status'], 
 	get_the_title( $this->orderid ),
@@ -35,11 +35,13 @@ $this->subtitutions = array(
 	$data['last_name'], 
 	$data['first_name'], 
 	$data['payer_email'],
+	$data['instructions'],
+	$cart['items']
 );
 
 $output .= '<div class="ims-innerbox">
 	 <div class="thank-you-message">' .
-		(  make_clickable( wpautop( stripslashes( preg_replace( $this->opts['tags'], $this->subtitutions, $this->opts['thankyoureceipt'] )) ) ) )
+		(  make_clickable( wpautop( stripslashes( preg_replace( $this->opts['tags'], $this->substitutions, $this->opts['thankyoureceipt'] )) ) ) )
 	 . '</div>
 </div>';
 

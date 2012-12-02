@@ -166,12 +166,12 @@ function ajax_ims_add_images_to_favorites() {
 
 	if (is_user_logged_in()) {
 		$join = trim(get_user_meta($user_ID, '_ims_favorites', true) . "," . implode(',', $dec_ids), ',');
-		$ids = array_unique(explode(',', $join));
+		$ids = array_filter(array_unique(explode(',', $join)));
 		update_user_meta($user_ID, '_ims_favorites', implode(',', $ids));
 	} else {
 		$join = isset($_COOKIE['ims_favorites_' . COOKIEHASH]) ?
 				trim($_COOKIE['ims_favorites_' . COOKIEHASH] . "," . implode(',', $dec_ids), ',') : implode(',', $dec_ids);
-		$ids = array_unique(explode(',', $join));
+		$ids = array_filter(array_unique(explode(',', $join)));
 		setcookie('ims_favorites_' . COOKIEHASH, implode(',', $ids), 0, COOKIEPATH, COOKIE_DOMAIN);
 	}
 
