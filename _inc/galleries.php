@@ -659,7 +659,7 @@ class ImStoreGallery extends ImStoreAdmin {
 		
 		if(!file_exists($filepath))
 			return false;
-				
+	
 		// Construct the attachment array
 		$attachment = array(
 			'menu_order' => '',
@@ -682,7 +682,7 @@ class ImStoreGallery extends ImStoreAdmin {
 			if ( !trim( $image_meta['credit'] ) )
 				$image_meta['credit'] = $current_user->display_name;
 		}
-		
+					
 		$orininfo = getimagesize( $filepath );
 		$image_meta['color'] = __( 'Unknown', 'ims');
 		
@@ -694,8 +694,20 @@ class ImStoreGallery extends ImStoreAdmin {
 			}
 		} 
 		
-		require_once( ABSPATH . 'wp-admin/includes/post.php' );
-		$attach_id = wp_insert_post( $attachment );
+		//keep all image id, update data
+		global $wpdb;
+		if( $attach_id = $wpdb->get_var("
+			SELECT post_id 
+			FROM $wpdb->postmeta 
+			WHERE meta_value LIKE '%".
+			trim($this->galpath . "/{$file['name']}" ,'/')."%'"
+		)){
+			$attachment['ID'] = $attach_id;
+			wp_update_post( $attachment );
+		}else {
+			require_once( ABSPATH . 'wp-admin/includes/post.php' );
+			$attach_id = wp_insert_post( $attachment );
+		}
 		
 		if ( is_wp_error($attach_id) && $show_errors){
 			echo '<td colspan="'.$cols.'"><div class="error-div">
@@ -717,9 +729,8 @@ class ImStoreGallery extends ImStoreAdmin {
 					update_post_meta( $attach_id, '_ims_folder_path', "/". trim( $_REQUEST['folderpath'] , "/" ) );
 			}elseif( $show_errors )  echo 'error';
 			
-			return $metadata;
+			return $attach_id;
 		}
-		
 		return false;
 	}
 
@@ -740,8 +751,6 @@ class ImStoreGallery extends ImStoreAdmin {
 		$archive = false;
 		$download_file = false;
 
-		//check_admin_referer('update-' . $post->post_type . '_' . $postid);
-
 		$this->galpath = ( empty($_POST['_ims_folder_path']) ) ?
 		get_post_meta($postid, '_ims_folder_path', true) : "/" . trim($_POST['_ims_folder_path'], "/");
 
@@ -754,7 +763,7 @@ class ImStoreGallery extends ImStoreAdmin {
 			return $postid;
 
 		global $wpdb;
-		$fullpath = $this->content_dir . "/{$this->galpath}/";
+		$fullpath =  $this->content_dir . "{$this->galpath}/";
 
 		//upload remote zip
 		if (!empty($_POST['zipurl'])) {
@@ -784,17 +793,12 @@ class ImStoreGallery extends ImStoreAdmin {
 		//scan folder
 		if (!empty($_POST['scannfolder']) && !empty($this->galpath)) {
 			$scan = true;
+			$image_ids = array(0);
 			
 			//memory limit
 			set_time_limit( 0 );
 			ini_set( 'memory_limit', $this->get_memory_limit());
 			
-			//delete old data
-			$wpdb->query(
-				"DELETE p,pm FROM $wpdb->posts p LEFT JOIN $wpdb->postmeta pm 
-				ON (p.ID = pm.post_id) WHERE post_parent IN( $postid )"
-			);
-
 			if ($dh = @opendir($fullpath)) {
 				$x = 0;
 				while (false !== ($obj = readdir($dh))) {
@@ -809,62 +813,70 @@ class ImStoreGallery extends ImStoreAdmin {
 		}
 
 		//single file upload
-		if (isset($_POST['html-upload']) && empty($_FILES['async-upload']['error'])) {
+		if ( isset( $_POST['html-upload'] ) && empty( $_FILES['async-upload']['error']) ) {
 			$archive[] = array(
 				'status' => 'ok',
 				'filename' => $_FILES['async-upload']['name'],
-				'content' => file_get_contents($_FILES['async-upload']['tmp_name'])
+				'content' => file_get_contents( $_FILES['async-upload']['tmp_name'] )
 			);
-			@unlink($_FILES['async-upload']['tmp_name']);
+			@unlink( $_FILES['async-upload']['tmp_name'] );
 		}
 
 		//generate image information
 		if ($download_file || $archive) {
 
-			if ($download_file) {
+			if ( $download_file ) {
 				include_once( ABSPATH . 'wp-admin/includes/class-pclzip.php' );
-				$PclZip = new PclZip($download_file);
+				$PclZip = new PclZip( $download_file );
 				if (false == ( $archive = $PclZip->extract(PCLZIP_OPT_EXTRACT_AS_STRING)))
 					return $this->error = 3;
 			}
 
 			//delete temp file
-			@unlink($download_file);
+			@unlink( $download_file );
 			
 			global $pagenow, $current_user;
 			$this->pagenow = $pagenow = 'upload-img.php';
 
 			foreach ($archive as $file) {
 
-				if ('__MACOSX/' === substr($file['filename'], 0, 9) || (isset($file['folder']) && $file['folder'] == true )
-				|| !preg_match('/.('.implode('|',$this->exts).')$/i', $file['filename']) || $file['status'] != 'ok')
+				if ( '__MACOSX/' === substr( $file['filename'], 0, 9 ) || ( isset($file['folder']) && $file['folder'] == true )
+				|| !preg_match( '/.('. implode( '|',$this->exts ) .')$/i', $file['filename']) || $file['status'] != 'ok' )
 					continue;
 
-				$filename = basename($file['filename']);
+				$filename = basename( $file['filename'] );
 				
-				if (preg_match('(^._)', $filename))
+				if ( preg_match( '(^._)', $filename ) )
 					continue;
 
-				if (!file_exists($fullpath))
-					@mkdir($fullpath, 0755, true);
+				if ( !file_exists( $fullpath ) )
+					@mkdir( $fullpath, 0755, true );
 
 				$filepath = $fullpath . $filename;
-				if (!$scan) {
-					file_put_contents($filepath, $file['content']);
+				
+				if ( !$scan ) {
+					file_put_contents( $filepath, $file['content'] );
 					$filename = wp_unique_filename($fullpath, $filename);
 				}
 				
-				if (file_exists($filepath)) {
-					$filetype = wp_check_filetype($filename);
+				if ( file_exists( $filepath ) ) {
+					$filetype = wp_check_filetype( $filename );
 					$filedata = array(
-						'file'=> $filepath ,
+						'file'=> $filepath,
 						'name' =>$filename,
 						'type' => $filetype['type'],
-						'url'=> str_replace($this->content_dir, $this->content_url, $filepath),
+						'url'=> str_replace($this->content_dir, $this->content_url, $filepath ),
 					);
-					$this->generate_ims_metadata($filedata, $postid);
-				}
+					if( $image_id = $this->generate_ims_metadata( $filedata, $postid ) );
+						$image_ids[] = $image_id;
+				} 
 			}
+			
+			//delete old data if folder is scan
+			if( $scan ) $wpdb->query(
+				"DELETE p,pm FROM $wpdb->posts p LEFT JOIN $wpdb->postmeta pm 
+				ON ( p.ID = pm.post_id ) WHERE post_parent IN( $postid ) AND p.ID NOT IN (" . implode( ',', $image_ids ) . ")"
+			);
 		}
 
 		//save gallery settings

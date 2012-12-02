@@ -52,20 +52,23 @@ include( IMSTORE_ABSPATH . "/admin/settings-fields.php");
 				<?php 
 				$css = '';
 				foreach( $settings[$boxid] as $name => $row ){
+					$name = esc_attr($name);
 					echo '<tr class="row row-'.$name.$css.'">'	;
 					if( isset($row['col']) ){
 						foreach( (array)$row['opts'] as $id => $opt ){
 							echo '<td class="col"><label for="', $id , '">', $opt['label'] , '</label></td>';
 							echo '<td class="col-fields">';
 							
-							if(!isset($opt['type'])) ;
+							if(!isset($opt['type']));
+							
 							elseif( $this->is_checkbox($opt['type']) ) 
-								echo '<input type="', $opt['type'] , '" name="', $id , '" id="', $name , '" 
-								value="'. esc_attr((isset($opt['val']) ? $opt['val'] : 0 )) , '"', checked( $opt['val'], $this->vr( $id ), 0 ), ' /> ';
+								echo '<input type="',  esc_attr( $opt['type'] ) , '" name="', $id , '" id="', $name , '" value="'. 
+								esc_attr((isset($opt['val']) ? $opt['val'] : 0 )) , '"', checked( $opt['val'], $this->vr( $id ), 0 ), ' /> ';
 							else 
-								echo '<input type="', $opt['type'] , '" name="', $id , '" id="', $name , '" value="', esc_attr( ($val = $this->vr( $id ) ) ? $val : $opt['val'] ) , '" />';
+								echo '<input type="',  esc_attr( $opt['type'] ) , '" name="', $id , '" id="', $name , '" value="', esc_attr( ($val = $this->vr( $id ) ) ? $val : $opt['val'] ) , '" />';
 							
 							echo ( isset( $opt['desc'] ) ) ? '<small>'. $opt['desc'] . '</small>' : '';
+							
 							echo '</td>';
 						}
 					}elseif( isset($row['multi']) ){
@@ -82,11 +85,11 @@ include( IMSTORE_ABSPATH . "/admin/settings-fields.php");
 							else echo $opt['label'] , ' <input type="', $opt['type'] , '" name="', $name , '[' , $id , ']" 
 								id="', $name,$id, '" value="', esc_attr( ($val = $this->vr( $name, $id ) ) ? $val : $opt['val'] ) , '" />';
 							
-							echo ( isset( $opt['desc'] ) ) ? '<small>'. $opt['desc'] .'</small>' : '';
+							echo ( isset( $opt['desc'] ) ) ? '<small>'. esc_html($opt['desc']) .'</small>' : '';
 							
 							echo '</label>';
 						}
-						echo ( isset( $row['desc'] ) ) ? '<small>'. $row['desc'] . '</small>' : '';
+						echo ( isset( $row['desc'] ) ) ? '<small>'. esc_html($row['desc'] ). '</small>' : '';
 						echo '</td>'; 
 					}else{
 						echo '<td class="first">', (( $row['type'] == 'empty') ? '&nbsp;' : '<label for="'. $name .'">'.$row['label'].'</label>') , '</td>';
@@ -96,7 +99,7 @@ include( IMSTORE_ABSPATH . "/admin/settings-fields.php");
 								case 'select':
 									echo '<select name="', $name , '" id="', $name , '">';
 									foreach( (array)$row['opts'] as $val => $opt )
-										echo '<option value="', $val , '"', selected( $val, $this->vr($name) ) , '>', esc_html( $opt ) , '</option>';
+										echo '<option value="', esc_attr( $val ), '"', selected( $val, $this->vr($name) ) , '>', esc_html( $opt ) , '</option>';
 									echo '</select>';
 									break;
 								case 'textarea':
@@ -104,10 +107,10 @@ include( IMSTORE_ABSPATH . "/admin/settings-fields.php");
 									break;
 								case 'radio':
 									foreach( (array)$row['opts'] as $val => $opt )
-										echo '<label><input type="', $row['type'] , '" name="', $name , '" value="', $val , '"', checked( $val, $this->vr( $name ), 0 ) , ' /> ', $opt , '</label><br /> ';
+										echo '<label><input type="', $row['type'] , '" name="', $name , '" value="', esc_attr($val) , '"', checked( $val, $this->vr( $name ), 0 ) , ' /> ', $opt , '</label><br /> ';
 									break;
 								case 'checkbox':
-									echo '<input type="', $row['type'] , '" name="'. $name , '" id="'. $name , '" value="'. $row['val'] , '"'. checked( $row['val'], $this->vr( $name ), 0 ) , ' /> ';
+									echo '<input type="', $row['type'] , '" name="'. $name , '" id="'. $name , '" value="'. esc_attr($row['val']) , '"'. checked( $row['val'], $this->vr( $name ), 0 ) , ' /> ';
 									break;
 								case 'empty':
 									echo '&nbsp;';
@@ -119,7 +122,7 @@ include( IMSTORE_ABSPATH . "/admin/settings-fields.php");
 								case 'reset':
 								case 'submit':
 								case 'button':
-									echo '<input type="', $row['type'] , '" name="', $name , '" id="', $name , '" class="button" value="',$row['val'] , '" /> ';
+									echo '<input type="', $row['type'] , '" name="', $name , '" id="', $name , '" class="button" value="',esc_attr($row['val']), '" /> ';
 									break;
 								default:
 								echo '<input type="', $row['type'] , '" name="', $name , '" id="', $name , '"  value="', esc_attr( ($val = $this->vr( $name ) ) ? $val : $row['val'] ) , '" /> ';

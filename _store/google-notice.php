@@ -21,14 +21,6 @@ class ImStoreGoogleNotice {
 		global $ImStore;
 		$postdata = array();
 
-		//dont change array order
-		$this->subtitutions = array(
-			$_POST['order-total'], $_POST['financial-order-state'],
-			get_the_title($_POST['shopping-cart_merchant-private-data']),
-			$ImStore->format_price($_POST['order-adjustment_shipping_flat-rate-shipping-adjustment_shipping-cost']),
-			$_POST['google-order-number'], '', $_POST['buyer-billing-address_contact-name'], $_POST['buyer-billing-address_email'],
-		);
-
 		foreach ($_POST as $i => $v)
 			$postdata .= $i . '=' . $v . "\n";
 
@@ -37,6 +29,7 @@ class ImStoreGoogleNotice {
 			do_action('ims_before_google_notice', $postdata);
 			
 			$data['last_name'] = '';
+			$data['instructions'] = '';
 			$data['method'] = 'Google Checkout';
 			$data['num_cart_items'] = $cart['items'];
 			$data['mc_gross'] = $_POST['order-total'];

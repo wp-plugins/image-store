@@ -17,7 +17,7 @@ class ImStore {
 	 * @param $domain plugin Gallery IDentifier
 	 * Make sure that new language( .mo ) files have 'ims-' as base name
 	 */
-	public $version = '3.1.9';
+	public $version = '3.2.0';
 
 	/**
 	 * Public variables
@@ -109,7 +109,7 @@ class ImStore {
 	 */
 	function download_language_file($filedir) {
 
-		$data = @file_get_contents("http://xparkmedia.com/xm/wp-content/languages/ims-" . $this->locale . ".zip");
+		$data = @file_get_contents("https://xparkmedia.com/xm/wp-content/languages/ims-" . $this->locale . ".zip");
 		if (empty($data)) {
 			add_option('_ims_no_lan_file', current_time('timestamp'));
 			return;
@@ -622,16 +622,17 @@ class ImStore {
 	 * @return string
 	 * @since 2.1.1
 	 */
-	function url_decrypt($string) {
-		$str = '';
-		$string = base64_decode(implode('/', explode('::', urldecode($string))));
+	function url_decrypt($string, $url = true) {
+		$decoded = '';
+		$string = ( $url ) ? urldecode($string) : $string;
+		$string = base64_decode(implode('/', explode('::',$string)));
 		for ($i = 0; $i < strlen($string); $i++) {
 			$char = substr($string, $i, 1);
 			$keychar = substr($this->key, ($i % strlen($this->key)) - 1, 1);
 			$char = chr(ord($char) - ord($keychar));
-			$str.=$char;
+			$decoded.=$char;
 		}
-		return $str;
+		return $decoded;
 	}
 
 }

@@ -84,8 +84,8 @@ class ImStoreAdmin extends ImStore {
 			return;
 
 		//register hooks
-		register_activation_hook(IMSTORE_FILE_NAME, array(&$this, 'activate'));
-		register_deactivation_hook(IMSTORE_FILE_NAME, array(&$this, 'deactivate'));
+		register_activation_hook( IMSTORE_FILE_NAME, array(&$this, 'activate'));
+		register_deactivation_hook( IMSTORE_FILE_NAME, array(&$this, 'deactivate'));
 
 		add_action('init', array(&$this, 'admin_init'), 1);
 		add_action('init', array(&$this, 'save_screen_option'), 5);
@@ -111,11 +111,15 @@ class ImStoreAdmin extends ImStore {
 
 		//pricelist options
 		add_action('ims_pricelist_options', array(&$this, 'ims_pricelist_options'), 10);
+		
+		//upgrade messages
+		add_action( 'in_admin_header', array(&$this,'in_admin_header'));
 
 		if (is_multisite()) {
 			add_action('wpmu_options', array(&$this, 'wpmu_options'));
 			add_action('activated_plugin', array(&$this, 'activated_plugin'), 1, 2);
 			add_action('wpmu_new_blog', array(&$this, 'wpmu_create_blog'), 1);
+			add_action( 'wpmu_upgrade_page', array(&$this,'network_update_button'));
 			add_action('update_wpmu_options', array(&$this, 'update_wpmu_options'));
 		}
 
@@ -189,6 +193,7 @@ class ImStoreAdmin extends ImStore {
 	function activate() {
 		wp_schedule_event(strtotime("tomorrow 1 hours"), 'twicedaily', 'imstore_expire');
 		include_once( IMSTORE_ABSPATH . '/admin/install.php' );
+		new ImStoreInstaller();
 	}
 
 	/**
@@ -199,7 +204,7 @@ class ImStoreAdmin extends ImStore {
 	 */
 	function show_menu() {
 		global $wpdb;
-		include_once(IMSTORE_ABSPATH . '/admin/template.php' );
+		include_once( IMSTORE_ABSPATH . '/admin/template.php' );
 	}
 
 	/**
@@ -209,12 +214,12 @@ class ImStoreAdmin extends ImStore {
 	 * @return void
 	 * @since 0.5.0 
 	 */
-	function activated_plugin($plugin, $network_wide =false) {
-		if (!$network_wide || $plugin != IMSTORE_FOLDER)
+	function activated_plugin($plugin, $network_wide = false) {
+		if (!$network_wide || $plugin != IMSTORE_FOLDER )
 			return;
 
-		$opts = get_site_option($this->optionkey);
-		if (get_site_option('ims_sync_settings') && empty($opts)) {
+		$opts = get_site_option( $this->optionkey );
+		if ( get_site_option('ims_sync_settings') && empty( $opts ) ) {
 			include_once( IMSTORE_ABSPATH . '/admin/install.php' );
 			ImStoreInstaller::imstore_default_options();
 		} else {
@@ -226,7 +231,7 @@ class ImStoreAdmin extends ImStore {
 				switch_to_blog($blog->id);
 				$customer = @get_role('customer');
 				if (empty($customer))
-					add_role('customer', 'Customer', array('read' => 1, 'ims_read_galleries' => 1));
+					add_role('customer', 'Customer', array( 'read' => 1, 'ims_read_galleries' => 1) );
 				$wpdb->query("ALTER IGNORE TABLE  $wpdb->posts ADD post_expire DATETIME NOT NULL");
 			}
 			restore_current_blog();
@@ -240,12 +245,13 @@ class ImStoreAdmin extends ImStore {
 	 * @return void
 	 * @since 3.0.2
 	 */
-	function wpmu_create_blog($blog_id) {
-		if (!is_plugin_active_for_network(IMSTORE_FILE_NAME))
+	function wpmu_create_blog( $blog_id ) {
+		if ( !is_plugin_active_for_network( IMSTORE_FILE_NAME ) )
 			return;
 
-		switch_to_blog($blog_id);
+		switch_to_blog( $blog_id );
 		include_once( IMSTORE_ABSPATH . '/admin/install.php' );
+		new ImStoreInstaller();
 		restore_current_blog();
 	}
 
@@ -256,9 +262,8 @@ class ImStoreAdmin extends ImStore {
 	 * @since 3.0.0
 	 */
 	function update_wpmu_options() {
-		check_admin_referer('siteoptions');
-		$val = empty($_POST['ims_sync_settings']) ? false : $_POST['ims_sync_settings'];
-		update_site_option('ims_sync_settings', $val);
+		check_admin_referer( 'siteoptions' );
+		update_site_option( 'ims_sync_settings', !empty($_POST['ims_sync_settings']) );
 	}
 
 	/**
@@ -293,13 +298,6 @@ class ImStoreAdmin extends ImStore {
 
 		wp_enqueue_style('ims-tinymce', IMSTORE_URL . '/_css/tinymce.css', false, $this->version, 'all');
 
-		//display upgrade message
-		if (get_option('imstore_version') < $this->version && current_user_can('install_plugins')) {
-			echo '<div class="error fade"><p>'; 
-			echo sprintf( __('Please, <strong>deactive and active <a href="%s">Image Store plugin</a> to apply updates.</strong>','ims'),admin_url('plugins.php')); 
-			echo '</p></div>';
-		}
-
 		if (!$this->in_array($current_screen->id, $this->screens))
 			return;
 
@@ -324,7 +322,7 @@ class ImStoreAdmin extends ImStore {
 	 * @since 0.5.0 
 	 */
 	function load_ims_image_path($filepath, $postid) {
-		if ('ims_image' != get_post_type($postid))
+		if ( 'ims_image' != get_post_type($postid) )
 			return $filepath;
 
 		$imagedata = get_post_meta($postid, '_wp_attachment_metadata', true);
@@ -387,7 +385,7 @@ class ImStoreAdmin extends ImStore {
 	 */
 	function generate_image_metadata($metadata, $attachment_id) {
 		
-		if ('ims_image' != get_post_type($attachment_id) || empty($metadata['file']))
+		if ( 'ims_image' != get_post_type($attachment_id) || empty($metadata['file']) )
 			return $metadata;
 
 		$filename = basename($metadata['file']);
@@ -539,7 +537,7 @@ class ImStoreAdmin extends ImStore {
 		$this->galid = isset($_GET['post']) ? (int) $_GET['post'] : false;
 		$this->action = isset($_GET['action']) ? $_GET['action'] : false;
 
-		if ($this->galid)
+		if ( $this->galid )
 			$url = $this->pagenow . "?post=$this->galid&action=" . $this->action;
 		elseif ($this->page)
 			$url = $this->pagenow . '?post_type=ims_gallery&page=' . $this->page;
@@ -552,6 +550,7 @@ class ImStoreAdmin extends ImStore {
 			'active' => __('Active', 'ims'),
 			'inative' => __('Inative', 'ims'),
 		);
+		
 		$user_fields = array(
 			'ims_address' => __('Address', 'ims'),
 			'ims_city' => __('City', 'ims'),
@@ -562,6 +561,7 @@ class ImStoreAdmin extends ImStore {
 
 		$this->user_fields = apply_filters('ims_user_fields', $user_fields);
 		$this->user_status = apply_filters('ims_user_status', $user_status);
+		
 		$this->screens = array(
 			'ims_gallery', 
 			'edit-ims_tags',
@@ -572,7 +572,42 @@ class ImStoreAdmin extends ImStore {
 			'ims_gallery_page_ims-settings', 
 			'ims_gallery_page_ims-customers', 
 		);
+				
 		do_action('ims_admin_init', $this);
+	}
+	
+	/**
+	 * Display network update button
+	 *
+	 * @return array
+	 * @since 3.2.0
+	 */
+	function network_update_button( $blog_id ){
+		if( is_plugin_active_for_network( IMSTORE_FILE_NAME ) )
+			echo '<p><a class="button" href="'. IMSTORE_ADMIN_URL . '/update.php">' . __("Update Image Store") . '</a></p>';
+	}
+	
+	/**
+	 * Display upgrade messages
+	 *
+	 * @return array
+	 * @since 3.2.0
+	 */
+	function in_admin_header(){
+		
+		//display network sucessfull upgrade message
+		if( isset( $_REQUEST['ims-network-updated'] ) )
+			echo '<div class="updated fade"><p>'.__("Image Store has been updated across the network.").'</p></div>';
+
+		//display upgrade message
+		$message = sprintf( __( 'Deactive and active <a href="%s">Image Store plugin</a> to apply updates','ims'), admin_url( 'plugins.php') ); 
+		
+		//multisite installed message
+		if( current_user_can( 'manage_network' ) && is_plugin_active_for_network( IMSTORE_FILE_NAME ))
+			$message = sprintf( __( 'Apply <a href="%s">Image Store updates</a> across the network.','ims'), admin_url( 'network/upgrade.php' ) ); 
+		
+		if ( get_option('imstore_version') < $this->version && current_user_can('install_plugins') ) 
+			echo '<div class="error fade"><p>' . $message . '</p></div>';
 	}
 
 	/**

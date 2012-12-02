@@ -131,7 +131,7 @@ $this->data 		= get_post_meta( $this->orderid,'_response_data',true);
 				<td><?php _e('Shipping Adress 2', 'ims')?></td>
 				<td colspan="2">
 				<?php
-				foreach( array( 'address_city', 'address_state', 'address_zip' , 'address_country', 'ims_city', 'ims_state', 'ims_zip' , 'ims_address', 'ims_contry' ) as $key  ){
+				foreach( array( 'address_city', 'address_state', 'address_zip', 'address_country', 'ims_address', 'ims_city', 'ims_state', 'ims_zip', 'ims_contry' ) as $key  ){
 					if( !empty( $this->data[$key]  ) ) 
 						echo  $this->data[$key].", ";
 				}
@@ -161,7 +161,7 @@ $this->data 		= get_post_meta( $this->orderid,'_response_data',true);
                 <td scope="row">&nbsp;</td>
                 <td><?php _e('Phone', 'ims')?></td>
                 <td colspan="2">
-                <?php if( isset(  $this->data['ims_phone']) ) echo  $this->data['ims_phone']?>
+                <?php if( isset( $this->data['ims_phone']) ) echo  $this->data['ims_phone']?>
                 </td>
                 <td>&nbsp; </td>
                 <td>&nbsp;</td>
@@ -179,7 +179,7 @@ $this->data 		= get_post_meta( $this->orderid,'_response_data',true);
 			<tr>
 				<td class="column-thumb" scope="row">&nbsp;</td>
 				<td><?php _e('Additional Instructions', 'ims')?></td>
-				<td scope="row" colspan="5"><?php if( isset( $this->cart['instructions'] ) ) echo wp_strip_all_tags( $this->cart['instructions'] ) ?></td>
+				<td scope="row" colspan="5"><?php if( isset( $this->data['instructions'] ) ) echo wp_strip_all_tags( $this->data['instructions'] ) ?></td>
 			</tr>
 			<tr><td scope="row" colspan="7">&nbsp;</td></tr>
 

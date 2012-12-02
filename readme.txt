@@ -5,7 +5,7 @@ Tags: e-commerce,shop,photo store,picture,image,galleries,imstore,image-store,se
 gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints,nextgen alternative
 Requires at least: 3.0.0
 Tested up to: 3.5.0
-Stable tag: 3.1.9
+Stable tag: 3.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -86,6 +86,18 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 
 == Changelog ==
 
+= 3.2.0 =
+* Fixed: Image URL encoding issue
+* Fixed: Slash issue on setting.
+* Fixed: Translation issue on checkout
+* Fixed: Email checkout data issues.
+* Fixed: Email checkout data issues.
+* Fixed: Add to favorites issue.
+* Fixed: Image download issue.
+* Fixed: Sales missing information.
+* Change: scan folder process to keep original image id.
+* Added: multisite upgrade feature.
+
 = 3.1.9 =
 * Fixed: Fix blank cart buttons using shortcode
 * Fixed: Send email to user using shortcode cart
@@ -153,45 +165,6 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * Fixed: Delete packages.
 * Added: Additional hooks
 * Changed: From WP_MEMORY_LIMIT to WP_MAX_MEMORY_LIMIT
-
-= 3.1.1 =
-* Fixed: cart issues.
-* Fixed: shortcode gallery title.
-* Fixed: watermark display issue.
-* Fixed: cart page issues.
-* Fixed: receipt display
-
-= 3.1.0 =
-* Added: Gallery tags.
-* Added: Multiple checkout options.
-* Added: Load images by dragging and dropping.
-* Added: View and edit image IPTC metadata.
-* Added: Image Store tools widget
-* Added: Custom color
-* Added: Custom shipping
-* Added: Zero charge ( free images ) using promotions
-* Added: Additional shortcode options
-* Added: Cart page
-* Added: microformats
-* Added: Photo Finishes
-* Added: Color filter options
-* Added: Tools Widget
-* Added: Admin menu
-* Added: Slideshow navigation location
-* Added: Automatic language download
-* Removed: bw and sepia options.
-* Changed: image security link
-* Changed: slideshow display
-* Changed: sale order number display
-* Improved: payment security.
-* Improved: images security and image load
-* Fixed: HTML5 validation. (front-end)
-* Fixed: expiration date display
-* Fixed: download image for loged in users
-* Fixed: Tax / shipping calculation
-* Fixed: Firefox redirect message
-* Fixed: Gallery folder delete issue.
-* Fixed: Image image upload in some servers
 
 = Full change log =
 * http://xparkmedia.com/image-store/changelog/
