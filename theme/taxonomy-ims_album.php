@@ -4,12 +4,12 @@
 			<div id="content" role="main">
 				
 				<header class="page-header">
-					<h1 class="page-title"><?php single_term_title( ); ?></h1>
+					<h1 class="page-title"><?php single_cat_title( ); ?></h1>
 				</header>
 				
 				<div class="ims-gallery">
-				<?php while ( have_posts( ) ) : the_post(); ?>
-					<?php echo $ImStore->taxonomy_content() ?>
+				<?php while ( have_posts( ) ) : the_post( ); ?>
+					<?php echo $ImStore->taxonomy_content( ) ?>
 				<?php endwhile; ?>
 				</div>
 				

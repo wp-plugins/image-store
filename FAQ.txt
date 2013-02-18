@@ -30,4 +30,4 @@ Google checkout account:
 Yes, under settings > gallery settings check "Disable store features"
 
 9. Can I use this plugin with "NextGen Gallery".
-NO, there is no integration at the moment.
+NO, there is no integration.

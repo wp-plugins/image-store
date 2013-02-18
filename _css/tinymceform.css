@@ -1,0 +1,11 @@
+/**
+ * Image Store - Tinymce Form Styles
+ *
+ * @file tinymceform.css
+ * @package Image Store
+ * @author Hafid Trujillo
+ * @copyright 20010-2013
+ * @filesource  wp-content/plugins/image-store/_css/tinymceform.css
+ * @since 3.2.1
+ */
+ #ims-galleries form{width:100%}#ims-galleries .hide{display:none}#ims-galleries .regular-text{width:80%}#ims-galleries label{padding-right:5px}#ims-galleries label span{display:-moz-inline-stack;display:inline-block;width:14%;text-align:right}body#ims-galleries{width:485px!important;min-width:485px;max-width:485px}#search-results ul{margin:0}#gal-options div{margin-bottom:8px}#gal-options{padding-bottom:5px;margin-bottom:0;border-bottom:solid 1px #ddd}#ims-galleries .query-notice,#ims-galleries .waiting{display:none}#ims-galleries .link-search-wrapper{margin-bottom:10px}#ims-galleries #internal-toggle{display:-moz-inline-stack;display:inline-block;cursor:pointer;padding-left:18px;background:url("../_img/toggle-arrow.png") no-repeat 0 -3px}#ims-galleries #search-results{border:solid 1px #ddd;margin-bottom:15px;height:200px;overflow:auto}#ims-galleries #search-results ul{padding:0;margin:0;list-style:none}#ims-galleries #search-results li{padding:4px 5px;border-bottom:solid 1px #ddd;background:#fafafa;font-size:.9em;margin:0;cursor:pointer;color:#777;list-style:none}#ims-galleries #search-results li:hover,#ims-galleries #search-results li:active,#ims-galleries #search-results li:focus{background:#EAF2FA}#ims-galleries #search-results li .gtitle{display:-moz-inline-stack;display:inline-block;width:79%}#ims-galleries #search-results li .id{display:-moz-inline-stack;display:inline-block;width:14%;text-align:right}

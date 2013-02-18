@@ -1,1 +1,12 @@
-div#wpadminbar, div#adminmenuback,div#adminmenuwrap, div#footer{display:none!important}div#wpcontent,div#wpcontent .wrap{ margin:0}
+
+/**
+ * Image Store - Admin Sales Print Styels
+ *
+ * @file print.css
+ * @package Image Store
+ * @author Hafid Trujillo
+ * @copyright 20010-2013
+ * @filesource  wp-content/plugins/image-store/_css/print.css
+ * @since 1.0.0
+ */
+ ul#adminmenu,div#wpadminbar,div#adminmenuback,div#adminmenuwrap,div#footer,div#wphead,div.update-nag{display:none!important}div#wpbody,div#wpcontent,div#wpcontent .wrap{margin:0}

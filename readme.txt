@@ -1,23 +1,23 @@
 === Image Store ===
 Contributors: Hax
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YM9GXCFBND89E
-Tags: e-commerce,shop,photo store,picture,image,galleries,imstore,image-store,secure,translate,translatable,watermark,slideshow,
-gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints,nextgen alternative
+Tags: e-commerce,shop,photo store,picture,image,images,galleries,imstore,image-store,secure,translate,translatable,watermark,slideshow,voting,rate,wepay,
+gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints,nextgen alternative,nextgen gallery alternative,
 Requires at least: 3.0.0
-Tested up to: 3.5.0
-Stable tag: 3.2.0
+Tested up to: 3.5.1
+Stable tag: 3.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Image Store (ImStore) is a photo gallery and store plugin for WordPress with Paypal and Google Checkout integration.
 
 == Description ==
-This plugin was created because there was a need in the WorPress community to have an images store that did not required the installation of multiple plugins. Enjoy!! and please support the plugin. :@) 
+This plugin was created because there was a need in the WordPress community to have an images store that did not required the installation of multiple plugins. Enjoy!! and please support the plugin. :@) 
 
-The plugin fully integrated with the WordPress database it only creates a post_expire column on the posts table.
-so you will not find extra tables on your database(Cool!.. at least for me I hate extra tables).
+The plugin fully integrated with the WordPress database it only creates a post_expire column on the posts table. so you will not find extra tables on your database(Cool!.. at least for me, I hate extra tables). NextGEN Gallery alternative.
 
 * Example http://xparkmedia.com/image-store/demos/
+* Support http://xparkmedia.com/support/plugin/image-store
 * Languages http://xparkmedia.com/plugins/image-store/#languages
 * Shortcode guide http://xparkmedia.com/image-store/usage/
 
@@ -39,7 +39,7 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * Sales menu: To keep track of you sales.
 * Image upload: Via a zip-file(no zip-mod required).
 * Dynamic generation of sepia and black & white images.
-* Taxomony(albums): Group Galleries using custom taxonomy.
+* Taxonomy (albums/tags): Group Galleries using custom taxonomy.
 * Price lists: Create only list and apply across galleries.
 * Gallery Comments: allow user to add comments to galleries.
 * Watermark function: You can add a watermark image or text. 
@@ -50,7 +50,7 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * Secure Galleries: Secure clients photos so that only they can see them.
 * User Permissions: Give access to users to specific sections of the plugin.
 * Customer menu: Keep track of your galleries and customers.
-* Pugin uninstall: Remove all entries added by the plugin.
+* Plugin uninstall: Remove all entries added by the plugin.
 
 == Installation ==
 
@@ -73,10 +73,10 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * Chrome 5.1
 * Opera 9.6
 
-= Recomendations =
+= Recommendations =
 
 * Change your upload folder "Gallery folder path" for security purpose Image Store > settings > gallery settings.
-* Before installing the plugin set "Thumbnail size" setting to the decired size Wordpress admin > settings > media.
+* Before installing the plugin set "Thumbnail size" setting to the desired size Wordpress admin > settings > media.
 * DON'T provide download option for print size images use this option only for pixel sizes. 
 
 == Frequently Asked Questions ==
@@ -85,6 +85,21 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+
+= 3.2.1 =
+* Fixed: A few php notices / warnings.
+* Fixed: Issues with JetPack plugin.
+* Fixed: Missing finish information on sale details.
+* Fixed: Watermark breaks image display on some servers
+* Fixed: Metabox location breaks image upload.
+* Change: Lightbox, colorbox is no longer supported.
+* Change: Removed message subpath.
+* Change: Improved customer experience.
+* Improved: More mobile friendly.
+* Added: Column display option.
+* Added: Multi-language plugins support.
+* Added: Groups (albums,tags) settings.
+* Added: Voting feature.
 
 = 3.2.0 =
 * Fixed: Image URL encoding issue
@@ -105,7 +120,7 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * Fixed: A few php notices.
 
 = 3.1.8 =
-* Fixed: Potencial image display error.
+* Fixed: Potential image display error.
 * Added: additional WP 3.5 support.
 * Added: Tag shortcode.
 * Added: Tag column id.
@@ -113,7 +128,7 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 = 3.1.7 =
 * Code clean up
 * Fixed: taxonomy template.
-* Fixed: potencial php errors.
+* Fixed: potential php errors.
 * Fixed: sales customer csv files.
 * Fixed: taxonomy template.
 * Fixed: backward compatibility for WordPress 3.0.0
@@ -160,12 +175,6 @@ so you will not find extra tables on your database(Cool!.. at least for me I hat
 * Fixed: cart page issues.
 * Fixed: receipt display
 
-= 3.1.2 =
-* Fixed: image download.
-* Fixed: Delete packages.
-* Added: Additional hooks
-* Changed: From WP_MEMORY_LIMIT to WP_MAX_MEMORY_LIMIT
-
 = Full change log =
 * http://xparkmedia.com/image-store/changelog/
 
@@ -184,6 +193,7 @@ Jack Moore,Alex Gregory(http://colorpowered.com/colorbox/)
 * Upgrade from 1.0.2 and previous price lists need to bee updated to use the image unit. 
 * Upgrade from 0.5.2 and previous slideshow options will be added or reset setting to update options. 
 * Upgrade from 0.5.0 to 0.5.0 may change your permalinks. 
+* Upgrade to 3.2.1 Colorbox is no longer supported.
 
 == Screenshots ==
 
@@ -192,8 +202,9 @@ Jack Moore,Alex Gregory(http://colorpowered.com/colorbox/)
 3. Screenshot Pricing
 4. Screenshot Sales / Screen Options
 5. Screenshot Settings
-6. Screenshot Slideshow
-7. Screenshot Pricelist
-8. Screenshot Shopping Cart
-9. Screenshot Gallery embed
-10. Users
+7. Screenshot Photos / voting
+7. Screenshot Slideshow
+8. Screenshot Price list
+9. Screenshot Shopping Cart
+10. Screenshot Gallery embed
+11. Users
