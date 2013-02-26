@@ -168,7 +168,6 @@ class ImStoreAdmin extends ImStore {
 	 */
 	function deactivate( ) {
 		wp_clear_scheduled_hook( 'imstore_expire' );
-		flush_rewrite_rules( );
 	}
 	
 	/**
@@ -183,7 +182,6 @@ class ImStoreAdmin extends ImStore {
 		new ImStoreInstaller( );
 		
 		wp_schedule_event( strtotime( "tomorrow 1 hours" ), 'twicedaily', 'imstore_expire' );
-		flush_rewrite_rules( );
 	}
 	
 	/**

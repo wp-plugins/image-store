@@ -100,8 +100,8 @@ class ImStoreGallery extends ImStoreAdmin {
 			$this->blogpath = "/blogs.dir/{$this->blog_id}";
 			
 		if ( isset( $this->meta['_ims_folder_path'][0] ) )
-				$this->galpath = $this->meta['_ims_folder_path'][0];
-		else $this->galpath = $this->blogpath . $this->opts['galleriespath'] . "/gallery-$this->galid";
+				$this->galpath = '/' . trim( $this->meta['_ims_folder_path'][0], '.,/' );
+		else $this->galpath = $this->blogpath . '/' . trim( $this->opts['galleriespath'], '.,/' ) . "/gallery-$this->galid";
 		
 		if( empty( $post->post_title ) && $this->pagenow == 'post-new.php' )
 			$post->post_title = __( 'Gallery', 'ims' ) . " {$this->galid}";
@@ -372,14 +372,14 @@ class ImStoreGallery extends ImStoreAdmin {
 			return $data;
 			
 		if( isset( $_REQUEST['folderpath'] ) )
-		$this->galpath = "/" . trim( sanitize_file_name( $_REQUEST['folderpath'] ), "/" );
+		$this->galpath = "/" . trim( $_REQUEST['folderpath'], ".,/" );
 
 		$path['error'] = false;
 		$path['subdir'] = $this->galpath;
 		$path['baseurl'] = $this->content_url;
 		$path['basedir'] = $this->content_dir;
+		$path['url'] = $this->content_url . $this->galpath;
 		$path['path'] = $this->content_dir . $this->galpath;
-		$path['url'] = trim( $this->content_url,'/' ) . '/' . $this->galpath;
 
 		$path = apply_filters( 'ims_upload_path', $path, $data );
 		return $path;
@@ -610,7 +610,7 @@ class ImStoreGallery extends ImStoreAdmin {
 			SELECT post_id 
 			FROM $wpdb->postmeta 
 			WHERE meta_value LIKE '%".
-			trim( $this->galpath . "/{$file['name']}" ,'/' )."%'"
+			trim( $this->galpath . "/{$file['name']}" ,'.,/' )."%'"
 		 ) ){
 			$attachment['ID'] = $attach_id;
 			wp_update_post( $attachment );
@@ -636,7 +636,7 @@ class ImStoreGallery extends ImStoreAdmin {
 			if( update_post_meta( $attach_id, '_wp_attachment_metadata', $metadata ) && $show_errors ){
 				echo apply_filters( "ims_async_upload", $attach_id, $metadata, $attachment );
 				if( !get_post_meta( $parent_id, '_ims_folder_path' ) )
-					update_post_meta( $parent_id, '_ims_folder_path', "/". trim( sanitize_file_name($_REQUEST['folderpath']), "/" ) );
+					update_post_meta( $parent_id, '_ims_folder_path', "/". trim( sanitize_file_name($_REQUEST['folderpath']), ".,/" ) );
 			}elseif( $show_errors ) echo 'error';
 			
 			return $attach_id;
@@ -664,10 +664,10 @@ class ImStoreGallery extends ImStoreAdmin {
 
 		if( empty( $_POST['_ims_folder_path'] ) )
 			$this->galpath = get_post_meta( $postid, '_ims_folder_path', true );
-		 else $this->galpath = "/" . trim( $_POST['_ims_folder_path'], "/" );
+		 else $this->galpath = "/" . trim( $_POST['_ims_folder_path'], ".,/" );
 
 		if ( isset( $_POST['scannfolder'] ) && !empty( $_POST['galleryfolder'] ) ) {
-			$this->galpath = "/" . trim( $_POST['galleryfolder'], "/" );
+			$this->galpath = "/" . trim( $_POST['galleryfolder'], ".,/" );
 			update_post_meta( $postid, '_ims_folder_path', $this->galpath );
 		}
 	
