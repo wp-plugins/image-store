@@ -116,7 +116,7 @@
 					
 					
 				} elseif ( !empty( $ImStore->opts['downloadorig'] ) ) {
-					$this->image_dir = $ImStore->content_dir . "/" . $this->attachment['file'];
+					$this->image_dir = apply_filters( 'ims_download_image_original', $ImStore->content_dir . "/" . $this->attachment['file'], $this->id);
 					
 				
 				} elseif ( isset( $this->attachment['sizes']['preview']['path'] ) )

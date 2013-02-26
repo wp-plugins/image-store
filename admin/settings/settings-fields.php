@@ -213,9 +213,9 @@
 			'label' => __( 'Sort images', 'ims' ),
 			'opts' => array( 
 				'menu_order' => __( 'Custom order', 'ims' ),
-				'post_excerpt' => __( 'Caption', 'ims' ),
-				'post_title' => __( 'Image title', 'ims' ),
-				'post_date' => __( 'Image date', 'ims' ),
+				'excerpt' => __( 'Caption', 'ims' ),
+				'title' => __( 'Image title', 'ims' ),
+				'date' => __( 'Image date', 'ims' ),
 			 ),
 		 ),
 		'imgsortdirect' => array( 
