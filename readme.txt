@@ -5,7 +5,7 @@ Tags: e-commerce,shop,photo store,picture,image,images,galleries,imstore,image-s
 gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints,nextgen alternative,nextgen gallery alternative,
 Requires at least: 3.0.0
 Tested up to: 3.5.1
-Stable tag: 3.2.3
+Stable tag: 3.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
