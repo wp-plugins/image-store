@@ -90,8 +90,8 @@ class ImStoreFeeds {
 			return;
 
 		$ImStore->order = 'DESC';
+		$ImStore->sortby = 'date';
 		$ImStore->galid = $post->ID;
-		$ImStore->sortby = 'post_date';
 		$ImStore->posts_per_page = get_option( 'posts_per_rss' );
 		
 		$ImStore->get_gallery_images( );

@@ -179,7 +179,9 @@ class ImStoreCart {
 			foreach ( $request['ims-image-size'] as $size_name ) {
 			
 				$size = str_replace( array( '|','\\','.',' ' ), '', $size_name );
-				if( !$price = $this->get_image_size_price( $size ) )
+				$price = $this->get_image_size_price( $size );
+				
+				if(  $price === false )
 					continue;
 				
 				$quantity = intval( $request['ims-quantity'] );
@@ -235,6 +237,9 @@ class ImStoreCart {
 			update_post_meta( $this->orderid, '_ims_order_data', false );
 			return;
 		}
+		
+		if( isset( $request['shipping'] ) )
+			$this->cart['shipping_type'] = intval( $request['shipping']);
 		
 		$this->cart['items'] = $this->cart['subtotal'] = 0;
 		
@@ -315,6 +320,10 @@ class ImStoreCart {
 			
 			$this->cart['total'] += $this->cart['tax'];
 		}
+		
+		//if discount is more than total zeroout cart
+		if( $this->cart['total'] < 0 )
+			 $this->cart['total'] = 0;
 		
 		do_action( 'ims_before_save_cart', $this->cart );
 		do_action( "ims_before_save_cart_{$action}", $this->cart );
@@ -777,7 +786,7 @@ class ImStoreCart {
 				break;
 		}
 		
-		$this->cart['promo']['promo_id'] = false;
+		$this->cart['promo'] = array( 'discount' => false, 'promo_id' => false, 'code' => false );
 		$this->error = __("Your current purchase doesn't meet the promotion requirements.", 'ims');
 		return false;
 	}

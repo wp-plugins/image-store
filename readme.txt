@@ -5,7 +5,7 @@ Tags: e-commerce,shop,photo store,picture,image,images,galleries,imstore,image-s
 gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints,nextgen alternative,nextgen gallery alternative,
 Requires at least: 3.0.0
 Tested up to: 3.5.1
-Stable tag: 3.2.1
+Stable tag: 3.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,23 @@ The plugin fully integrated with the WordPress database it only creates a post_e
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+
+= 3.2.3 =
+* Fixed: Checkout issues.
+* Fixed: Lightbox showing wrong image.
+* Fixed: Deactivate voting issue.
+* Fixed: Shipping issue.
+* Fixed: Add price list issue.
+* Fixed: Add image ajax issue.
+* Fixed: PHP notices.
+
+= 3.2.2 =
+* Fixed: foder path issue
+* Fixed: Permalink issue
+* Fixed: Visits counter
+* Fixed: A few php notices.
+* Fixed: Sort issue.
+* Added: Floating tools menu.
 
 = 3.2.1 =
 * Fixed: A few php notices / warnings.

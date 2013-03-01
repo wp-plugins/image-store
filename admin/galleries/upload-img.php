@@ -53,7 +53,7 @@
 		echo '<td colspan="' . $cols . '"><div class="error-div">
 		<a class="dismiss" href="#" >' . __( 'Dismiss' , 'ims' ) . '</a>
 		<strong>' . sprintf( __('&#8220;%s&#8221; has failed to upload due to an error', 'ims' ), esc_html( $filename ) ) . '</strong><br />' .
-		esc_html( $filedata->get_error_message() ) . '</div></td>';
+		esc_html( $filedata->get_error_message( ) ) . '</div></td>';
 		exit;
 	}
 	

@@ -59,10 +59,10 @@
 				return;
 			
 			$sort = array(
-				'date' => 'post_date',
-				'title' => 'post_title',
+				'title' => 'title',
+				'date' => 'date',
+				'caption' => 'excerpt',
 				'custom' => 'menu_order',
-				'caption' => 'post_excerpt',
 			);
 			
 			global $wpdb;

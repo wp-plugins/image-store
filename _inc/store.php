@@ -961,6 +961,19 @@ class ImStoreFront extends ImStore {
 	}
 	
 	/**
+	 * Add visted count
+	 *
+	 * @since 3.1.0
+	 * return void
+	 */
+	function visited_gallery( ) {
+		if ( isset( $_COOKIE['ims_gal_' . $this->galid . '_' . COOKIEHASH] ) )
+			return;
+		setcookie( 'ims_gal_' . $this->galid . '_' . COOKIEHASH, true, 0, COOKIEPATH, COOKIE_DOMAIN );
+		update_post_meta( $this->galid, '_ims_visits', get_post_meta( $this->galid, '_ims_visits', true ) + 1);
+	}
+	
+	/**
 	 * Display the secure section
 	 * of the image store
 	 *
@@ -1067,7 +1080,6 @@ class ImStoreFront extends ImStore {
 			setcookie( 'wp-postpass_' . COOKIEHASH, $cookie_val, 0, COOKIEPATH, COOKIE_DOMAIN );
 			
 			update_post_meta( $gal->post_id, '_ims_visits', get_post_meta( $gal->ID, '_ims_visits', true ) + 1 );
-			
 			wp_redirect( get_permalink( $gal->ID ) );
 			die( );
 		}
@@ -1331,7 +1343,7 @@ class ImStoreFront extends ImStore {
 				$output .= ' <label><input name="imgs[]" type="checkbox" value="' . $enc . '" />
 				<span class="ims-label"> ' . __( 'Select', 'ims' ) . '</span></label>';
 			
-			if( !$this->opts['disable_like'] ){
+			if( !$this->is_taxonomy && !$this->opts['disable_like'] ){
 				$voted = $this->in_array( $imageid, $this->user_votes) ? ' ims-voted' : '';
 				$output .= '<span data-id="' . $enc . '" class="rating' . $voted . '"><em class="value">' . $this->get_image_vote_count( $imageid ) . '</em>+</span>';
 			}
@@ -1482,7 +1494,7 @@ class ImStoreFront extends ImStore {
 				<a class="url fn thumb" href="' . $this->get_image_url( $image->ID, 1 ) . '" title="' . esc_attr( $image->post_title ) . '" rel="enclosure" >' . $img . '</a> 
 				<span class="img-metadata caption">' . apply_filters( 'ims_image_caption', $image->post_excerpt, $image );
 			
-				if( !$this->is_taxonomy ) {
+				if( !$this->opts['disable_like'] ) {
 					$voted = $this->in_array(  $image->ID, $this->user_votes) ? ' ims-voted' : '';
 					$output .= '<span data-id="' . $enc . '" class="rating' . $voted . '"><em class="value">' . $this->get_image_vote_count( $image->ID ) . '</em>+</span>';
 				}
@@ -1553,7 +1565,8 @@ class ImStoreFront extends ImStore {
 		$output .= apply_filters( 'ims_gallery_navigation', $nav, $post );
 		
 		$wp_query->is_single = true;
-
+		$this->visited_gallery(); //register visit
+		
 		return $output;
 	}
 	
@@ -1850,7 +1863,7 @@ class ImStoreFront extends ImStore {
 			$order = $this->meta['_ims_order'][0];
 		
 		if( $sortby != 'menu_order' )
-			$sortby = "post_{$sortby}";
+			$sortby = "post_" . str_replace( "post_", '', $sortby );
 		
 		if( $this->imspage == 'slideshow' )
 			$this->posts_per_page = -1;
