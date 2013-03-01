@@ -104,12 +104,14 @@
 		
 		if( isset( $meta['colors'][$x]['name'] ) ){ // colors
 			$output .=	 '<td role="gridcell" class="ims-color-name">' . $meta['colors'][$x]['name'] . '</td>';
-			$output .=	 '<td role="gridcell"  class="ims-color-price">' . $this->format_price( $meta['colors'][$x]['price'] ) . '</td>';
+			$output .=	 '<td role="gridcell"  class="ims-color-price">' . 
+			(( $meta['colors'][$x]['type'] == 'percent' ) ? $meta['colors'][$x]['price'] . "%" : $this->format_price($meta['colors'][$x]['price']) ) . '</td>';
 		}else $output .=	 '<td role="gridcell" colspan="2" class="ims-color-empty">&nbsp;</td>';
 			
 		if( isset( $meta['finishes'][$x]['name'] ) ){ // finishes
 			$output .=	 '<td role="gridcell" class="ims-finish-name">' . $meta['finishes'][$x]['name'] . '</td>';
-			$output .=	 '<td role="gridcell"  class="ims-finish-price">' . $this->format_price( $meta['finishes'][$x]['price'] ) . '</td>';
+			$output .=	 '<td role="gridcell"  class="ims-finish-price">' . 
+			(( $meta['finishes'][$x]['type'] == 'percent' ) ? $meta['finishes'][$x]['price'] . "%" : $this->format_price($meta['finishes'][$x]['price']) ) . '</td>';
 		}else $output .=	 '<td role="gridcell" colspan="2" class="ims-finish-empty">&nbsp;</td>';
 	
 		$output .= '</tr>';

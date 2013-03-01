@@ -332,6 +332,7 @@
 		case 'remove-vote':
 			ajax_ims_vote_actions( );
 			break;
+		case 'deletelist':
 		case 'deleteimage':
 		case 'deletepackage':
 			ajax_imstore_delete_post( );

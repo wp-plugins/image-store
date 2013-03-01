@@ -680,7 +680,7 @@ class ImStoreAdmin extends ImStore {
 			$metadata['sizes'][$size]['path'] = $this->content_dir . "/$path/" . $sizedata['file'];
 		}
 		
-		return $metadata;
+		return apply_filters( 'ims_generate_image_metadata', $metadata, $attachment_id, $path );
 	}
 	
 	/**

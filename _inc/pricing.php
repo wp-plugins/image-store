@@ -260,6 +260,12 @@ class ImStorePricing extends ImStoreAdmin {
 			$errors = $this->update_package( );
 		}
 		
+		//create new pricelist
+		if ( isset( $_POST['newpricelist'] ) ) {
+			check_admin_referer('ims_new_pricelist');
+			$errors = $this->create_pricelist( );
+		}
+				
 		//update list
 		if ( isset( $_POST['updatelist'] ) ) {
 			check_admin_referer( 'ims_pricelist' );
@@ -453,13 +459,10 @@ class ImStorePricing extends ImStoreAdmin {
 		}
 		
 		$price_list = array(
-			'post_title' => false,
 			'post_status' => 'publish',
 			'post_type' => 'ims_package',
+			'post_title' => $_POST['package_name']
 		);
-		
-		if( isset( $_POST['package_name'] ) )
-			$price_list['post_title'] = $_POST['package_name'];
 
 		$list_id = wp_insert_post( $price_list );
 		
@@ -468,8 +471,9 @@ class ImStorePricing extends ImStoreAdmin {
 			return $errors;
 		}
 		
+		do_action( 'ims_new_package', $list_id );
+
 		wp_redirect( $this->pageurl . "&ms=35#packages" );
-		
 		die( );
 	}
 	
@@ -479,7 +483,7 @@ class ImStorePricing extends ImStoreAdmin {
 	 * @return void | WP_error object
 	 * @since 3.0.0
 	 */
-	function update_package() {
+	function update_package( ) {
 		
 		if ( empty( $_POST['packageid'] ) )
 			return;
@@ -512,6 +516,41 @@ class ImStorePricing extends ImStoreAdmin {
 	}
 	
 	/**
+	 * Create new price list
+	 *
+	 * @return void | WP_error object
+	 * @since 3.0.0
+	 */
+	function create_pricelist( ) {
+		$errors = new WP_Error( );
+
+		if ( empty( $_POST['pricelist_name'] ) ) {
+			$errors->add('empty_name', __('A name is required.', 'ims'));
+			return $errors;
+		}
+
+		$price_list = array(
+			'post_status' => 'publish',
+			'post_type' => 'ims_pricelist',
+			'post_title' => $_POST['pricelist_name'],
+		);
+
+		$list_id = wp_insert_post( $price_list );
+
+		if ( empty( $list_id ) ) {
+			$errors->add( 'list_error', __( 'There was a problem creating the list.', 'ims' ) );
+			return $errors;
+		}
+
+		add_post_meta( $list_id, '_ims_list_opts', array( 'colors' => array(), 'finishes' => array() ) );
+		
+		do_action( 'ims_new_pricelist', $list_id );
+		
+		wp_redirect($this->pageurl . "&ms=38");
+		die( );
+	}
+
+	/**
 	 * Update list
 	 *
 	 * @return void | WP_error object
@@ -527,7 +566,6 @@ class ImStorePricing extends ImStoreAdmin {
 			$errors->add('empty_name', __('A name is required.', 'ims'));
 			return $errors;
 		}
-		
 		
 		$lisid = intval( $_POST['listid'] );
 		$options = array( 'colors' => array( ), 'finishes' => array( ) );
@@ -953,7 +991,7 @@ class ImStorePricing extends ImStoreAdmin {
 									<input type="text" name="finishes[<?php echo $key ?>][name]" value="<?php echo esc_attr( $finish['name'] ) ?>" class="name" />
 								</td>
 								<td colspan="2" class="cost">
-									<span class="hidden"><?php echo $this->format_price($finish['price']) ?></span>
+									<span class="hidden"><?php echo ( $finish['type'] == 'percent' ) ? $finish['price']  : $this->format_price($finish['price']) ?></span>
 									<input type="text" name="finishes[<?php echo $key ?>][price]" value="<?php echo $finish['price'] ?>" class="price">
 								</td>
 								<td class="type">

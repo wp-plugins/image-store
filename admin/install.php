@@ -57,6 +57,7 @@ class ImStoreInstaller extends ImStore {
 		$ims_ft_opts['album_per_page'] = false;
 		$ims_ft_opts['album_template'] = 'page.php';
 		$ims_ft_opts['album_slug'] = 'albums';
+		$ims_ft_opts['album_level'] = false;
 		$ims_ft_opts['autoStart'] = '';
 		$ims_ft_opts['attchlink'] = false;
 
@@ -373,8 +374,11 @@ class ImStoreInstaller extends ImStore {
 			$ims_ft_opts['required_last_name'] = false;
 			$ims_ft_opts['required_ims_phone'] = false;
 			
-			
 			update_option( $this->optionkey, $ims_ft_opts );
+		}
+		
+		if ( $this->ver <= "3.2.3" ){
+			$ims_ft_opts['album_level'] = false;
 		}
 		
 		//add imstore capabilities

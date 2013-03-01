@@ -1343,7 +1343,7 @@ class ImStoreFront extends ImStore {
 				$output .= ' <label><input name="imgs[]" type="checkbox" value="' . $enc . '" />
 				<span class="ims-label"> ' . __( 'Select', 'ims' ) . '</span></label>';
 			
-			if( !$this->opts['disable_like'] ){
+			if( !$this->is_taxonomy && !$this->opts['disable_like'] ){
 				$voted = $this->in_array( $imageid, $this->user_votes) ? ' ims-voted' : '';
 				$output .= '<span data-id="' . $enc . '" class="rating' . $voted . '"><em class="value">' . $this->get_image_vote_count( $imageid ) . '</em>+</span>';
 			}
@@ -1494,7 +1494,7 @@ class ImStoreFront extends ImStore {
 				<a class="url fn thumb" href="' . $this->get_image_url( $image->ID, 1 ) . '" title="' . esc_attr( $image->post_title ) . '" rel="enclosure" >' . $img . '</a> 
 				<span class="img-metadata caption">' . apply_filters( 'ims_image_caption', $image->post_excerpt, $image );
 			
-				if( !$this->is_taxonomy ) {
+				if( !$this->opts['disable_like'] ) {
 					$voted = $this->in_array(  $image->ID, $this->user_votes) ? ' ims-voted' : '';
 					$output .= '<span data-id="' . $enc . '" class="rating' . $voted . '"><em class="value">' . $this->get_image_vote_count( $image->ID ) . '</em>+</span>';
 				}
