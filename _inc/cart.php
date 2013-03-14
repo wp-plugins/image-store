@@ -238,8 +238,9 @@ class ImStoreCart {
 			return;
 		}
 		
+		$this->cart['shippingcost'] = false;
 		if( isset( $request['shipping'] ) )
-			$this->cart['shipping_type'] = intval( $request['shipping']);
+		$this->cart['shipping_type'] = intval( $request['shipping']);
 		
 		$this->cart['items'] = $this->cart['subtotal'] = 0;
 		
@@ -249,7 +250,8 @@ class ImStoreCart {
 					
 					$enc = $ImStore->url_encrypt( $id );
 					
-					if( $request['ims-quantity'][$enc][$size][$color] < 1 ){
+					if( isset( $request['ims-quantity'][$enc][$size][$color] ) && 
+					$request['ims-quantity'][$enc][$size][$color] < 1 ){
 						unset( $this->cart['images'][$id] );
 						continue;
 					}
@@ -416,6 +418,9 @@ class ImStoreCart {
 		$headers = 'From: "' . $ImStore->opts['receiptname'] . '" <' . $ImStore->opts['receiptemail'] . ">\r\n";
 		$headers .= "Content-type: text/html; charset=utf8\r\n";
 		
+		$message = apply_filters( 'ims_email_headers', $headers, $ImStore->opts['tags'], $this->substitutions );
+		$message = apply_filters( 'ims_admin_message', $message, $ImStore->opts['tags'], $this->substitutions );
+		
 		wp_mail( $ImStore->opts['notifyemail'], $ImStore->opts['notifysubj'], $message . $this->download_links , $headers );
 		
 		if ( empty( $ImStore->opts['emailreceipt'] ) )
@@ -427,6 +432,7 @@ class ImStoreCart {
 				stripslashes( preg_replace( $ImStore->opts['tags'], $this->substitutions, $ImStore->opts['thankyoureceipt'] ) ) 
 			) );
 			
+			$message = apply_filters( 'ims_customer_message', $message, $ImStore->opts['tags'], $this->substitutions );
 			if( wp_mail( $this->data['payer_email'], sprintf( __('%s receipt.', 'ims' ), get_bloginfo( 'blogname' ) ), $message . $this->download_links, $headers ) )
 				update_post_meta( $this->orderid, '_ims_email_sent', 1 );
 		}
@@ -544,13 +550,13 @@ class ImStoreCart {
 		if( isset( $this->listmeta['colors'][$color]['name'] ) )
 			 $values['color_name'] = $this->listmeta['colors'][$color]['name'];
 		
-		if ( isset( $this->sizes[$size]['download'] ) )
+		if ( !empty( $this->sizes[$size]['download'] ) )
 			$values['download'] = $this->sizes[$size]['download'];
 			
-		else if( !$ImStore->opts['disable_shipping'] ) $this->cart['shippingcost'] = 1;
-		
+		else if( !$ImStore->opts['disable_shipping'] && !$values['download'] ) 
+			$this->cart['shippingcost'] = 1;
+			
 		$values['subtotal'] = ( ( $price + $values['color'] + $values['finish'] ) *  $values['quantity'] );
-		
 		return $values;
 	}
 	

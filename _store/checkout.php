@@ -21,8 +21,11 @@
 	foreach( $fields as $field ){
 		if( isset( $_POST[ $field ] ) )
 			$userdata->$field = $_POST[ $field ];
-		else if( !isset( $userdata->$field  ) )
+		else if( !isset( $userdata->$field  ) ){
+			if( !is_object( $userdata ) )
+				$userdata = new stdClass();
 			$userdata->$field = false;
+		}
 	}
 	
 	$output .= '<form method="post" action="#" class="shipping-info">';

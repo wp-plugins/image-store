@@ -33,7 +33,7 @@ class ImStore {
 	public $promo_types = array( );
 	public $rules_property = array( );
 	
-	public $version = '3.2.3';
+	public $version = '3.2.4';
 	public $customer_role = 'customer';
 	public $optionkey = 'ims_front_options';
 	
@@ -76,11 +76,11 @@ class ImStore {
 			return;
 			
 		$mofile = $this->content_dir . '/languages/_ims/' . 'ims' . '-' . $this->locale . '.mo';
-		if ( !file_exists( $mofile ) && is_admin( ) && current_user_can( 'activate_plugins' ) ) {
+		/*if ( !file_exists( $mofile ) && is_admin( ) && current_user_can( 'activate_plugins' ) ) {
 			$time = get_option( '_ims_no_lan_file' );
 			if ( $time + ( 86400 * 2 ) <= time(  ) )
 				$this->download_language_file( $mofile );
-		}
+		}*/
 		
 		if ( function_exists( 'load_plugin_textdomain' ) )
 			load_plugin_textdomain( 'ims', false, apply_filters( 'ims_load_textdomain', '../languages/_ims/', 'ims', $this->locale ) );

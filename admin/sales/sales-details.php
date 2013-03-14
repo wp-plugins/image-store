@@ -15,7 +15,7 @@
 		die( );
 		
 	$this->orderid 	= intval ($_GET['id'] );
-	$this->order		= get_post( $this->orderid ); 
+	$this->sale		= get_post( $this->orderid ); 
 	$this->cart 		= get_post_meta( $this->orderid,'_ims_order_data',true );
 	$this->data 		= get_post_meta( $this->orderid,'_response_data',true ); 
 	
@@ -85,7 +85,7 @@
                 }
             ?>
             <?php 
-            if( empty( $this->data['data_integrity'] ) && $this->order->post_status == 'pending' ): ?>
+            if( empty( $this->data['data_integrity'] ) && $this->sale->post_status == 'pending' ): ?>
             <tr class="not-verified">
                     <td colspan="7"><strong>
                     <?php _e( "Review payment information for this order before shipping items,
@@ -106,7 +106,7 @@
             <tr>
                     <td class="column-thumb" scope="row">&nbsp;</td>
                     <td><?php _e('Date', 'ims')?></td>
-                    <td><?php echo date_i18n( $this->dformat, strtotime( $this->order->post_date ) )?></td>
+                    <td><?php echo date_i18n( $this->dformat, strtotime( $this->sale->post_date ) )?></td>
                     <td>&nbsp;</td>
                     <td><?php _e('Item subtotal', 'ims')?></td>
                     <td><span class="total"><?php echo $this->format_price( $this->cart['subtotal'] )?></span></td>

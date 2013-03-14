@@ -276,7 +276,7 @@ class ImStorePricing extends ImStoreAdmin {
 		if ( isset( $_POST['updateshipping'] ) ) {
 			
 			check_admin_referer( 'ims_shipping' );
-			$shipping = isset( $_POST['shipping'] ) ? (array) $_POST['shipping'] : false;
+			$shipping = isset( $_POST['shipping'] ) ? array_values( $_POST['shipping'] ) : false;
 			
 			update_option( 'ims_shipping_options', $shipping );
 			wp_redirect( $this->pageurl . "&ms=43" );
@@ -287,7 +287,7 @@ class ImStorePricing extends ImStoreAdmin {
 		if ( isset( $_POST['updatecolors'] ) ) {
 			
 			check_admin_referer( 'ims_colors' );
-			$colors = isset( $_POST['colors'] ) ? (array) $_POST['colors'] : false;
+			$colors = isset( $_POST['colors'] ) ? array_values( $_POST['colors'] ) : false;
 			
 			update_option( 'ims_color_options', $colors );
 			wp_redirect( $this->pageurl . "&ms=42" );
@@ -298,7 +298,7 @@ class ImStorePricing extends ImStoreAdmin {
 		if ( isset( $_POST['updateimglist'] ) ) {
 			
 			check_admin_referer( 'ims_imagesizes' );
-			$sizes = isset( $_POST['sizes'] ) ? (array) $_POST['sizes'] : false ;
+			$sizes = isset( $_POST['sizes'] ) ? array_values( $_POST['sizes'] ): false ;
 			
 			update_option( 'ims_sizes', $sizes );
 			wp_redirect( $this->pageurl . "&ms=37" );
@@ -309,7 +309,7 @@ class ImStorePricing extends ImStoreAdmin {
 		if ( isset( $_POST['updatefinishes'] ) ) {
 			
 			check_admin_referer('ims_finishes');
-			$finishes = isset( $_POST['finishes'] ) ? (array) $_POST['finishes'] : false;
+			$finishes = isset( $_POST['finishes'] ) ? array_values( $_POST['finishes'] ) : false;
 			
 			update_option( 'ims_print_finishes', $finishes );
 			wp_redirect( $this->pageurl . "&ms=44" );
@@ -320,7 +320,7 @@ class ImStorePricing extends ImStoreAdmin {
 		if ( isset( $_POST['updatefilters'] ) ) {
 			
 			check_admin_referer( 'ims_filters' );
-			$filters = isset( $_POST['filters'] ) ?  (array) $_POST['filters'] : array( ) ;
+			$filters = isset( $_POST['filters'] ) ? array_values( $_POST['filters'] ) : array( ) ;
 			
 			$processed = array( );
 			foreach( $filters as $filter ){
@@ -571,10 +571,10 @@ class ImStorePricing extends ImStoreAdmin {
 		$options = array( 'colors' => array( ), 'finishes' => array( ) );
 		
 		if( isset(  $_POST['colors'] ) )
-			$options['colors'] = (array) $_POST['colors'];
+			$options['colors'] = array_values( $_POST['colors'] );
 		
 		if( isset(  $_POST['finishes'] ) )
-			$options['finishes'] = (array) $_POST['finishes'];
+			$options['finishes'] = array_values( $_POST['finishes'] );
 		
 		$sizes = array( );
 		if( isset( $_POST['sizes'] ) )
