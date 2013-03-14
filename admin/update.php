@@ -10,10 +10,6 @@
 	 * @filesource  wp-content/plugins/image-store/admin/update.php
 	 * @since 3.2.0
 	 */
-	 
-	 // Stop direct access of the file
-	 if ( !defined( 'ABSPATH' ) )
-		die( );
 		
 		//define constants
 		define( 'WP_ADMIN', true );
@@ -50,14 +46,11 @@
 		if( $blogs ){
 			include_once( IMSTORE_ABSPATH . '/admin/install.php' );
 			foreach ( (array) $blogs as $details ) {
-				
 				switch_to_blog( $details['blog_id'] );
 				new ImStoreInstaller( );
-				
-				wp_redirect( IMSTORE_ADMIN_URL . '/update.php?n=' . (  $n + 5 ) );
-				
-				die( );
 			}
+			wp_redirect( IMSTORE_ADMIN_URL . '/update.php?n=' . (  $n + 5 ) );
+			die( );
 		}
 		
 		wp_redirect( admin_url( 'network/upgrade.php?ims-network-updated' ) );

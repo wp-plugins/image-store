@@ -431,6 +431,8 @@ class ImStoreFront extends ImStore {
 		if ( isset( $_POST['ims-enotice-checkout' ] ) )
 			$this->validate_user_input( );
 		
+		$this->is_grid = $this->in_array( $this->imspage, array( 'favorites', 'photos' ) );
+
 		if ( isset( $_POST['google-order-number'] ) && isset( $_POST['shopping-cart_merchant-private-data'] ) ){
 			include_once( IMSTORE_ABSPATH . '/_inc/google.php' );
 			ImStoreCartGoogle::process_notice( );
@@ -572,10 +574,14 @@ class ImStoreFront extends ImStore {
 			return;
 		
 		global $ImStoreCart;
+		foreach( array(  'user_email' => 'payer_email', 'first_name' => 'first_name', 
+		 'last_name' => 'last_name', 'ims_phone' => 'ims_phone',  'ims_zip' => 'address_zip',   
+		 'ims_city' => 'address_city', 'ims_address', 'address_country') as $field => $cart_key ){
+			if( !empty( $_POST[ $field ] ) )	 $ImStoreCart->data[ $cart_key ] = $_POST[ $field ];
+		}
 		
 		$ImStoreCart->data['custom'] = $this->orderid;
 		$ImStoreCart->data['mc_gross'] = $this->cart['total'];
-		$ImStoreCart->data['payer_email'] = $_POST['user_email'];
 		
 		$ImStoreCart->data['num_cart_items'] = $this->cart['items'];
 		$ImStoreCart->data['mc_currency'] = $this->opts['currency'];
@@ -1348,6 +1354,7 @@ class ImStoreFront extends ImStore {
 				$output .= '<span data-id="' . $enc . '" class="rating' . $voted . '"><em class="value">' . $this->get_image_vote_count( $imageid ) . '</em>+</span>';
 			}
 			
+			$output  .= apply_filters( 'ims_image_tag_meta', '', $data, $imageid, $size, $enc );
 			$output  .= '</span><!--.img-metadata-->';
 		}
 		

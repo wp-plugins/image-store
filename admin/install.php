@@ -41,7 +41,6 @@ class ImStoreInstaller extends ImStore {
 		
 		//save imstore version
 		update_option( 'imstore_version', $this->version );
-		
 	}
 
 	/**
