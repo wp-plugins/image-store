@@ -2,10 +2,10 @@
 Contributors: Hax
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YM9GXCFBND89E
 Tags: e-commerce,shop,photo store,picture,image,images,galleries,imstore,image-store,secure,translate,translatable,watermark,slideshow,voting,rate,wepay,
-gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints,nextgen alternative,nextgen gallery alternative,
+gallery,sale,photographers,shop,online,google,shopping,cart,paypal,rss,shortcode,multi-languages,widget,prints,pagseguro,nextgen alternative,nextgen gallery alternative,
 Requires at least: 3.0.0
 Tested up to: 3.5.1
-Stable tag: 3.2.4
+Stable tag: 3.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,7 +35,6 @@ The plugin fully integrated with the WordPress database it only creates a post_e
 * Sort images feature.
 * CSV sales download.
 * CSV customer download.
-* Customer Mailpress integration.
 * Sales menu: To keep track of you sales.
 * Image upload: Via a zip-file(no zip-mod required).
 * Dynamic generation of sepia and black & white images.
@@ -85,6 +84,14 @@ The plugin fully integrated with the WordPress database it only creates a post_e
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+
+= 3.2.5 =
+* Fixed: Email checkout issues.
+* Fixed: Price list display issues.
+* Fixed: Bug on password-protected images.
+* Fixed: GoogleCheckout image download.
+* Added: ligthbox keyboard navigation.
+* Added: Pagseguro payment gateway (beta).
 
 = 3.2.4 =
 * Fixed: Email checkout issues.

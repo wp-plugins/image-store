@@ -109,6 +109,10 @@ class ImStoreInstaller extends ImStore {
 		$ims_ft_opts['prevLinkText'] = __('Previous', 'ims');
 		$ims_ft_opts['prevPageLinkText'] = __('&lsaquo; Prev', 'ims');
 		
+		$ims_ft_opts['pagseguroemail'] = false;
+		$ims_ft_opts['pagsegurotoken'] = false;
+		$ims_ft_opts['pagsegurotesturl'] = false;
+		
 		$ims_ft_opts['receiptname'] =  'Image Store';
 		$ims_ft_opts['receiptemail'] =  'imstore@' . $_SERVER['HTTP_HOST'];
 				

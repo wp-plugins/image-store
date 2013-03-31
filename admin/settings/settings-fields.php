@@ -478,6 +478,8 @@
 				'googleprod' => array( 'val' => 1, 'label' => __( 'Google Checkout Production (live)', 'ims' ), 'type' => 'checkbox' ),
 				'wepaystage' => array( 'val' => 1, 'label' => __( 'WePay Stage (test)', 'ims' ), 'type' => 'checkbox' ),
 				'wepayprod' => array( 'val' => 1, 'label' => __( 'WePay Production (live)', 'ims' ), 'type' => 'checkbox' ),
+				'pagsegurosand' => array( 'val' => 1, 'label' => __( 'Pago Seguro Sandbox (test)', 'ims' ), 'type' => 'checkbox' ),
+				'pagseguroprod' => array( 'val' => 1, 'label' => __( 'Pago Seguro Production (live)', 'ims' ), 'type' => 'checkbox' ),
 				'custom' => array( 'val' => 1, 'label' => __( 'Other', 'ims' ), 'type' => 'checkbox' ),
 			 )
 		 ),

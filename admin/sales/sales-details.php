@@ -33,7 +33,7 @@
                         <span class="quantity"><?php _e('Quantity', 'ims')?></span>
                         <span class="size"><?php _e('Size', 'ims')?></span>
                         <span class="color"><?php _e('Color', 'ims')?></span>
-                        <span class="fisnish"><?php _e('Fisnish', 'ims')?></span>
+                        <span class="fisnish"><?php _e('Finish', 'ims')?></span>
                         <span class="price"><?php _e('Unit Price', 'ims')?></span>
                         <span class="subtotal"><?php _e('Subtotal', 'ims')?></span>
                         <span class="title"><?php _e('Title', 'ims')?></span>

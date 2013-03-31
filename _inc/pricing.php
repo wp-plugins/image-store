@@ -276,7 +276,7 @@ class ImStorePricing extends ImStoreAdmin {
 		if ( isset( $_POST['updateshipping'] ) ) {
 			
 			check_admin_referer( 'ims_shipping' );
-			$shipping = isset( $_POST['shipping'] ) ? array_values( $_POST['shipping'] ) : false;
+			$shipping = isset( $_POST['shipping'] ) ? array_values( $_POST['shipping'] ) : array();
 			
 			update_option( 'ims_shipping_options', $shipping );
 			wp_redirect( $this->pageurl . "&ms=43" );
@@ -287,7 +287,7 @@ class ImStorePricing extends ImStoreAdmin {
 		if ( isset( $_POST['updatecolors'] ) ) {
 			
 			check_admin_referer( 'ims_colors' );
-			$colors = isset( $_POST['colors'] ) ? array_values( $_POST['colors'] ) : false;
+			$colors = isset( $_POST['colors'] ) ? array_values( $_POST['colors'] ) : array();
 			
 			update_option( 'ims_color_options', $colors );
 			wp_redirect( $this->pageurl . "&ms=42" );
@@ -298,7 +298,7 @@ class ImStorePricing extends ImStoreAdmin {
 		if ( isset( $_POST['updateimglist'] ) ) {
 			
 			check_admin_referer( 'ims_imagesizes' );
-			$sizes = isset( $_POST['sizes'] ) ? array_values( $_POST['sizes'] ): false ;
+			$sizes = isset( $_POST['sizes'] ) ? array_values( $_POST['sizes'] ): array() ;
 			
 			update_option( 'ims_sizes', $sizes );
 			wp_redirect( $this->pageurl . "&ms=37" );
@@ -309,7 +309,7 @@ class ImStorePricing extends ImStoreAdmin {
 		if ( isset( $_POST['updatefinishes'] ) ) {
 			
 			check_admin_referer('ims_finishes');
-			$finishes = isset( $_POST['finishes'] ) ? array_values( $_POST['finishes'] ) : false;
+			$finishes = isset( $_POST['finishes'] ) ? array_values( $_POST['finishes'] ) : array();
 			
 			update_option( 'ims_print_finishes', $finishes );
 			wp_redirect( $this->pageurl . "&ms=44" );
