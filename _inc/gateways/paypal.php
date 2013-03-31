@@ -7,7 +7,7 @@
  * @package Image Store
  * @author Hafid Trujillo
  * @copyright 20010-2013
- * @filesource  wp-content/plugins/image-store/_inc/paypal.php
+ * @filesource  wp-content/plugins/image-store/_inc/gateways/paypal.php
  * @since 3.2.1
  */
  
@@ -23,6 +23,7 @@ class ImStoreCartPayPal {
 		add_filter( 'ims_store_cart_actions', array( &$this, 'cart_actions' ), 20, 1 );
 		add_filter( 'ims_cart_hidden_fields', array( &$this, 'cart_hidden_fields' ), 20, 2 );
 		add_filter( 'ims_cart_item_hidden_fields', array( &$this, 'item_hidden_fields' ), 20, 8 );
+		add_action( 'ims_after_post_actions', array( &$this, 'process_notice' ), 30, 11 );
 	}
 	
 	/**
@@ -33,8 +34,11 @@ class ImStoreCartPayPal {
 	 */
 	function process_notice( ){
 		
+		if ( empty( $_POST['txn_id'] ) || empty( $_POST['custom'] ) || !is_numeric( $_POST['custom'] ) )
+			return;
+		
 		global $ImStore;
-		if( !is_numeric( $_POST['custom'] ) || empty( $ImStore->opts['paypalname'] ))
+		if( empty( $ImStore->opts['paypalname'] ))
 			return;
 			
 		$postdata = '';
@@ -94,12 +98,8 @@ class ImStoreCartPayPal {
 			$cartid = intval( trim( $_POST['custom'] ) );
 			
 			global $ImStoreCart;
-			if( !class_exists( 'ImStoreCart' ) ){
-				include_once( IMSTORE_ABSPATH . '/_inc/cart.php' );
-				$ImStoreCart = new ImStoreCart( );
-			}
-			
 			$ImStoreCart->setup_cart( $cartid );
+			
 			do_action( 'ims_before_paypal_ipn', false, $cartid );
 			
 			$ImStoreCart->data = wp_parse_args( $_POST, $ImStoreCart->data );
@@ -177,7 +177,7 @@ class ImStoreCartPayPal {
 	 */
 	function cart_hidden_fields( $output, $cart ){
 		
-		global $ImStore;
+		global $ImStore, $ImStoreCart;
 		
 		$output .= '
 		<input type="hidden" readonly="readonly" name="rm" data-value-ims="2" />
@@ -185,8 +185,8 @@ class ImStoreCartPayPal {
 		<input type="hidden" name="cmd" data-value-ims="_cart" />
 		<input type="hidden" name="lc" data-value-ims="' . esc_attr( get_bloginfo( 'language' ) ) . '" />
 		<input type="hidden" name="shipping_1" data-value-ims="' . esc_attr( $cart['shipping'] ) . '" />
-		<input type="hidden" name="custom" data-value-ims="' . esc_attr( $ImStore->orderid  ) . '" />
 		<input type="hidden" name="page_style" data-value-ims="' . get_bloginfo( 'name' ) . '" />
+		<input type="hidden" name="custom" data-value-ims="' . esc_attr( $ImStoreCart->orderid  ) . '" />
 		<input type="hidden" name="return" data-value-ims="' . $ImStore->get_permalink( 'receipt' ) . '" />
 		<input type="hidden" name="business" data-value-ims="' . esc_attr( $ImStore->opts['paypalname'] ) . '" />
 		<input type="hidden" name="currency_code" data-value-ims="' . esc_attr( $ImStore->opts['currency'] ) . '" />

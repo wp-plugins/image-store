@@ -185,6 +185,27 @@ class ImStoreSet extends ImStoreAdmin {
 			);
 		}
 		
+		//pagseguro	
+		if( $this->opts['gateway']['pagsegurosand'] 
+		|| $this->opts['gateway']['pagseguroprod'] ){
+			
+			$settings['payment']['pagseguroemail'] = array(
+				'val' => '',
+				'type' => 'text',
+				'label' => __('PagSeguro Seller email', 'ims'),
+			);
+			$settings['payment']['pagsegurotoken'] = array(
+				'val' => '',
+				'type' => 'text',
+				'label' => __('PagSeguro token', 'ims'),
+			);
+			$settings['payment']['pagsegurotesturl'] = array(
+				'val' => '',
+				'type' => 'text',
+				'label' => __('PagSeguro test url', 'ims'),
+			);
+		}
+		
 		//custom
 		if ($this->opts['gateway']['custom']) {
 			$settings['payment']['gateway_name'] = array(
@@ -293,7 +314,7 @@ class ImStoreSet extends ImStoreAdmin {
 			return stripslashes( $this->opts[$option][$key] );
 		elseif ( isset( $this->opts[$option . $key] ) )
 			return stripslashes( $this->opts[$option . $key] );
-		elseif ( isset( $this->opts[$option] ) )
+		elseif ( isset( $this->opts[$option] ) && is_string( $this->opts[$option] ) )
 			return stripslashes( $this->opts[$option] );
 		elseif ( $o = get_option( $option ) )
 			return stripslashes( $o );
