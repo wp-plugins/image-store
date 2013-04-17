@@ -464,6 +464,7 @@ class ImStoreAdmin extends ImStore {
 	 */
 	function add_columns( $columns ) {
 		switch ( $this->screen_id ) {
+			case false:
 			case "edit-ims_gallery":
 				return array(
 					'cb' => '<input type="checkbox">',
@@ -1020,11 +1021,12 @@ class ImStoreAdmin extends ImStore {
 		if ( false == $customers ) {
 			global $wpdb;
 
-			$customers = $wpdb->get_results( "SELECT DISTINCT ID, user_login FROM $wpdb->users AS u 
+			$customers = $wpdb->get_results( "SELECT  ID, user_login FROM $wpdb->users AS u 
 			LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id
 			LEFT JOIN $wpdb->usermeta ur ON u.ID = ur.user_id 
 			WHERE um.meta_key = 'ims_status' AND um.meta_value = 'active' 
-			AND ( ur.meta_key = '{$wpdb->prefix}capabilities' AND ur.meta_value LIKE '%{$this->customer_role}%' )");
+			AND ( ur.meta_key = '{$wpdb->prefix}capabilities' AND ur.meta_value LIKE '%{$this->customer_role}%' 
+			GROUP BY u.user_id )");
 			
 			wp_cache_set( 'ims_customers', $customers, 'ims' );
 		}
@@ -1043,7 +1045,7 @@ class ImStoreAdmin extends ImStore {
 		if ( false == $pricelists ) {
 			global $wpdb;
 			
-			$pricelists = $wpdb->get_results( "SELECT DISTINCT ID, post_title FROM $wpdb->posts WHERE post_type = 'ims_pricelist'" );
+			$pricelists = $wpdb->get_results( "SELECT ID, post_title FROM $wpdb->posts WHERE post_type = 'ims_pricelist'" );
 			wp_cache_set( 'ims_pricelists', $pricelists, 'ims' );
 		}
 		return $pricelists;

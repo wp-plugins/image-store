@@ -591,7 +591,7 @@ class ImStoreFront extends ImStore {
 			return;
 		
 		foreach( array(  'user_email' => 'payer_email', 'first_name' => 'first_name', 'ims_address' => 'address_street',
-		 'last_name' => 'last_name', 'ims_phone' => 'ims_phone',  'ims_zip' => 'address_zip',   
+		 'last_name' => 'last_name', 'ims_phone' => 'ims_phone',  'ims_zip' => 'address_zip', 'ims_state' => 'address_state',  
 		 'ims_city' => 'address_city', 'address_country', 'instructions' => 'instructions' ) as $field => $cart_key ){
 			if( !empty( $_POST[ $field ] ) )	 $ImStoreCart->data[ $cart_key ] = $_POST[ $field ];
 		}
@@ -1363,7 +1363,7 @@ class ImStoreFront extends ImStore {
 		if( !$this->is_taxonomy && !$this->is_widget ) {
 			$output .= '<span class="img-metadata">';
 			
-			if( $this->active_store || !$this->opts['hidefavorites'] ) 
+			if( $this->active_store || !$this->opts['hidefavorites'] )
 				$output .= ' <label><input name="imgs[]" type="checkbox" value="' . $enc . '" />
 				<span class="ims-label"> ' . __( 'Select', 'ims' ) . '</span></label>';
 			
@@ -1459,6 +1459,7 @@ class ImStoreFront extends ImStore {
 			return;
 		
 		$this->subnav = array(
+		  'ims-scroll-up' => __( "Scroll to Top", 'ims' ),
 			'ims-select-all' => __( "Select all", 'ims' ),
 			'ims-unselect-all' => __( "Unselect all", 'ims' ),
 		);
@@ -1671,8 +1672,8 @@ class ImStoreFront extends ImStore {
 			}
 		}
 		
-		$title = get_the_title( );
-		$meta = get_post_meta( $post->ID, '_wp_attachment_metadata', true );
+		$title 	= get_the_title( );
+		$meta = (array) get_post_meta( $post->ID, '_wp_attachment_metadata', true );
 		$meta += array( 'link' => get_permalink( $next_post->ID ), 'alt' => $title, 'class' => array(), 'caption' => wptexturize( $post->post_excerpt ), 'title' => $title );
 		
 		$mcss = '';
@@ -1825,7 +1826,7 @@ class ImStoreFront extends ImStore {
 		if ( empty( $q['sentence'] ) && count( $q['search_terms'] ) > 1 && $q['search_terms'][0] != $q['s'])
 			$search .= " OR ($wpdb->posts.post_title LIKE '{$n}{$term}{$n}') OR ($wpdb->posts.post_content LIKE '{$n}{$term}{$n}')";
 		
-		return " $where OR ( ID IN ( SELECT DISTINCT post_parent FROM $wpdb->posts
+		return " $where OR ( ID IN ( SELECT post_parent FROM $wpdb->posts
 		WHERE 1=1 AND $search AND $wpdb->posts.post_status = 'publish' ) )";
 	}
 	
@@ -1955,7 +1956,7 @@ class ImStoreFront extends ImStore {
 		$ids = $wpdb->escape( $this->favorites_ids );
 		
 		$this->attachments = $wpdb->get_results(
-			"SELECT DISTINCT p.*, meta_value meta FROM $wpdb->posts AS p 
+			"SELECT  p.*, meta_value meta FROM $wpdb->posts AS p 
 			LEFT JOIN $wpdb->postmeta AS pm ON p.ID = pm.post_id WHERE post_type = 'ims_image'
 			AND meta_key = '_wp_attachment_metadata' AND p.ID IN ( $ids ) GROUP BY ID
 			ORDER BY " . $wpdb->escape( $this->opts['imgsortorder'] ) . " " . 
@@ -1995,14 +1996,14 @@ class ImStoreFront extends ImStore {
 			
 			$taxid = ( $album ) ? 'ims_album' : 'ims_tags' ;	
 			
-			$type = "SELECT DISTINCT object_id FROM $wpdb->terms AS t
+			$type = "SELECT object_id FROM $wpdb->terms AS t
 			INNER JOIN $wpdb->term_taxonomy tt ON t.term_id = tt.term_id
 			INNER JOIN $wpdb->term_relationships tr ON tt.term_taxonomy_id = tr.term_taxonomy_id
-			WHERE t.term_id = %d AND tt.taxonomy = '$tax' ";
+			WHERE t.term_id = %d AND tt.taxonomy = '$tax' GROUP BY t.object_id ";
 		
 		}else{
 			
-			$type = " SELECT DISTINCT ID FROM $wpdb->posts WHERE 0 = %d AND
+			$type = " SELECT ID FROM $wpdb->posts WHERE 0 = %d AND
 			post_type = 'ims_gallery' AND post_status = 'publish' $secure";
 			
 		}
@@ -2011,7 +2012,7 @@ class ImStoreFront extends ImStore {
 			$wpdb->prepare(
 				"SELECT SQL_CALC_FOUND_ROWS  im.ID, im.post_title, p.comment_status,
 				pm.meta_value meta, im.post_excerpt, im.post_parent, im.post_type, p.post_author
-				FROM ( SELECT * FROM $wpdb->posts  ORDER BY
+				FROM ( SELECT * FROM $wpdb->posts ORDER BY
 				 " . $wpdb->escape( $this->opts['imgsortorder'] ) . " " . $wpdb->escape( $this->opts['imgsortdirect'] ) . " )  AS im
 				 
 				LEFT JOIN $wpdb->postmeta AS pm ON pm.post_id = im.ID

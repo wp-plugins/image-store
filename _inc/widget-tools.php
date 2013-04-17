@@ -76,7 +76,7 @@ class ImStoreWidgetTools extends WP_Widget {
 				$link		 	= get_permalink( $parent_id );
 				$title 		= esc_attr( get_the_title( $id ) );
 				 
-				if( $meta = get_post_meta( $id, '_wp_attachment_metadata', true ) ){
+				if( $meta = (array) get_post_meta( $id, '_wp_attachment_metadata', true ) ){
 					$meta+= array( 'link' => $link, 'alt' => $title, 'title' => $title );
 					echo $ImStore->image_tag( $id, $meta, 3, false );
 				}

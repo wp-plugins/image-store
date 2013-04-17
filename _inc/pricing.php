@@ -123,7 +123,7 @@ class ImStorePricing extends ImStoreAdmin {
 		$packages = wp_cache_get( 'ims_packages' );
 		if ( false == $packages ) {
 			global $wpdb;
-			$packages = $wpdb->get_results( "SELECT DISTINCT ID, post_title FROM $wpdb->posts WHERE post_type = 'ims_package'" );
+			$packages = $wpdb->get_results( "SELECT ID, post_title FROM $wpdb->posts WHERE post_type = 'ims_package'" );
 			wp_cache_set( 'ims_packages', $packages );
 		}
 		return $packages;

@@ -45,16 +45,13 @@
 				global $ImStore;
 
 				$this->id = (int) $ImStore->url_decrypt( $_REQUEST['img'], false );
-				$this->attachment = get_post_meta( $this->id, '_wp_attachment_metadata', true );
-				
+				$this->attachment = (array) get_post_meta( $this->id, '_wp_attachment_metadata', true );
 				
 				if ( empty( $this->attachment ) )
 					wp_die( __( 'Sorry, we could find the image' ) );
 					
-		
 				$sizes = get_option( 'ims_sizes', true );
 				$imgsize = empty( $_REQUEST['sz'] ) ? 'preview' : $_REQUEST['sz'];
-			
 				
 				$dimentions = array( );
 				foreach ( $sizes as $size) {
@@ -153,6 +150,9 @@
 				$modified = gmdate( "D, d M Y H:i:s", @filemtime( $this->image_dir )  );
 				$etag = '"' . md5( $this->image_dir . $color . $modified ) . '"';
 				
+				header("Robots: none");
+				header( 'X-Content-Type-Options: nosniff' );
+	
 				header( 'ETag: ' . $etag );
 				header( 'Last-Modified: $modified GMT' );
 				header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', time(  ) + 100000000 ) . ' GMT');

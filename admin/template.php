@@ -79,7 +79,7 @@
         <?php if ( $this->page == 'ims-settings' ): //display ads ?>
         	
         <div class="ims-social-box">
-            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=8SJEQXK5NK4ES" class="ims-donate" title="Like the plugin? Please Donate"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" alt="donate" height="20"></a>
+            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=YM9GXCFBND89E" class="ims-donate" title="Like the plugin? Please Donate"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" alt="donate" height="20"></a>
             <a href="https://twitter.com/xparkmedia" class="twitter-follow-button" data-show-count="false">Follow @xparkmedia</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
         </div><!--.ims-social-box-->

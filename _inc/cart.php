@@ -631,7 +631,7 @@ class ImStoreCart {
 			$vals = explode( '|', $input );
 			
 			if ( isset( $vals[1] ) )
-			$data_pair[ trim( $vals[0] ) ] = trim( $vals[1] );
+				$data_pair[ trim( $vals[0] ) ] = trim( $vals[1] );
 		};
 		
 		foreach ( $data_pair as $key => $sub) {
@@ -680,9 +680,10 @@ class ImStoreCart {
 		
 		$ImStore->is_widget = true;
 		$enc = $ImStore->url_encrypt( $imageid );
+		$meta = (array) get_post_meta( $imageid, '_wp_attachment_metadata', true );
 		
-		$meta = get_post_meta( $imageid, '_wp_attachment_metadata', true );		
-		$meta += array( 'link' => $ImStore->get_image_url( $imageid ), 'alt' => $meta['sizes']['mini']['file'], 'title' => $meta['sizes']['mini']['file'] );
+		if( isset( $meta['sizes']['mini'] ) && is_array( $meta['sizes']['mini'] ) )
+			$meta += array( 'link' => $ImStore->get_image_url( $imageid ), 'alt' => $meta['sizes']['mini']['file'], 'title' => $meta['sizes']['mini']['file'] );
 		
 		$output = '<tr role="row"> <td role="gridcell" class="ims-preview">'; //start row
 		$output .= $ImStore->image_tag( $imageid, $meta, 3 );

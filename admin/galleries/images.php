@@ -95,7 +95,7 @@
         <?php
         foreach ( $images->posts as $image ) {
             $css = ( $css == ' alternate') ? '' : ' alternate';
-            $meta = get_post_meta( $image->ID, '_wp_attachment_metadata', true );
+            $meta = (array) get_post_meta( $image->ID, '_wp_attachment_metadata', true );
 			
             echo '<tr id="media-item-' . $image->ID . '" class="media-item iedit' . $css . '">';
             $this->display_image_columns( $image->ID, $meta, (array) $image );

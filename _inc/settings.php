@@ -450,8 +450,8 @@ class ImStoreSet extends ImStoreAdmin {
 			if ( isset( $_POST['wlocal'] ) )
 				update_option( 'ims_wlocal', $_POST['wlocal'] );
 
-			if ( isset( $_POST['album_template'] ) ) 
-				update_option( 'ims_searchable', ( empty( $_POST['ims_searchable'] ) ) ? false : $_POST['ims_searchable'] );
+			if ( isset( $_POST['ims_searchable'] ) ) 
+				update_option( 'ims_searchable', $_POST['ims_searchable'] );
 			
 			if ( $this->in_array( $action, array( 'taxonomies', 'image', 'gallery' ) )  )
 				$this->pageurl .= "&flush=1";
