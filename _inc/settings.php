@@ -185,6 +185,27 @@ class ImStoreSet extends ImStoreAdmin {
 			);
 		}
 		
+		//pagseguro	
+		if( $this->opts['gateway']['pagsegurosand'] 
+		|| $this->opts['gateway']['pagseguroprod'] ){
+			
+			$settings['payment']['pagseguroemail'] = array(
+				'val' => '',
+				'type' => 'text',
+				'label' => __('PagSeguro Seller email', 'ims'),
+			);
+			$settings['payment']['pagsegurotoken'] = array(
+				'val' => '',
+				'type' => 'text',
+				'label' => __('PagSeguro token', 'ims'),
+			);
+			$settings['payment']['pagsegurotesturl'] = array(
+				'val' => '',
+				'type' => 'text',
+				'label' => __('PagSeguro test url', 'ims'),
+			);
+		}
+		
 		//custom
 		if ($this->opts['gateway']['custom']) {
 			$settings['payment']['gateway_name'] = array(
@@ -293,7 +314,7 @@ class ImStoreSet extends ImStoreAdmin {
 			return stripslashes( $this->opts[$option][$key] );
 		elseif ( isset( $this->opts[$option . $key] ) )
 			return stripslashes( $this->opts[$option . $key] );
-		elseif ( isset( $this->opts[$option] ) )
+		elseif ( isset( $this->opts[$option] ) && is_string( $this->opts[$option] ) )
 			return stripslashes( $this->opts[$option] );
 		elseif ( $o = get_option( $option ) )
 			return stripslashes( $o );
@@ -429,8 +450,8 @@ class ImStoreSet extends ImStoreAdmin {
 			if ( isset( $_POST['wlocal'] ) )
 				update_option( 'ims_wlocal', $_POST['wlocal'] );
 
-			if ( isset( $_POST['album_template'] ) ) 
-				update_option( 'ims_searchable', ( empty( $_POST['ims_searchable'] ) ) ? false : $_POST['ims_searchable'] );
+			if ( isset( $_POST['ims_searchable'] ) ) 
+				update_option( 'ims_searchable', $_POST['ims_searchable'] );
 			
 			if ( $this->in_array( $action, array( 'taxonomies', 'image', 'gallery' ) )  )
 				$this->pageurl .= "&flush=1";

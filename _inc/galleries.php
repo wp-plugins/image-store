@@ -165,7 +165,7 @@ class ImStoreGallery extends ImStoreAdmin {
 			
 			unset( $_POST['imageid'] );
 			unset( $_POST['save-metadata'] );
-			$meta = get_post_meta( $id, '_wp_attachment_metadata', true );
+			$meta = (array) get_post_meta( $id, '_wp_attachment_metadata', true );
 		
 			foreach ( $_POST as $key => $val )
 				$meta['image_meta'][$key] = $val;
@@ -828,7 +828,7 @@ class ImStoreGallery extends ImStoreAdmin {
 			if ( $_POST['actions'] == 'delete' ) {
 				foreach ( ( array ) $_POST['galleries'] as $id ) {
 					if ( $this->opts['deletefiles'] ) {
-						$data = get_post_meta( $id, '_wp_attachment_metadata', true );
+						$data = (array) get_post_meta( $id, '_wp_attachment_metadata', true );
 						if ( $data && is_array( $data['sizes'] ) ) {
 							foreach ( $data['sizes'] as $size ) {
 								if ( file_exists( $fullpath . "_resized/" . $size['file'] ) )
