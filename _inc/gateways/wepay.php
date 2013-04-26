@@ -7,7 +7,7 @@
  * @package Image Store
  * @author Hafid Trujillo
  * @copyright 20010-2013
- * @filesource  wp-content/plugins/image-store/_inc/wepay.php
+ * @filesource  wp-content/plugins/image-store/_inc/gateways/wepay.php
  * @since 3.2.1
  */
  
@@ -21,6 +21,7 @@ class ImStoreCartWePay {
 	 */
 	function ImStoreCartWePay( ) {
 		add_filter( 'ims_store_cart_actions', array( &$this, 'cart_actions' ), 40, 1 );
+		add_action( 'ims_before_post_actions', array( &$this, 'process_notice' ), 30, 12 );
 	}
 	
 	/**
@@ -31,23 +32,26 @@ class ImStoreCartWePay {
 	 */
 	function process_notice( ){
 		
+		if( empty( $_REQUEST['checkout_id'] ) )
+			return;
+			
 		global $ImStore;
 		if( !is_numeric( $_REQUEST['checkout_id'] ) || empty( $ImStore->opts['wepayclientid'] ) 
 		|| empty( $ImStore->opts['wepayclientsecret'] )  || empty( $ImStore->opts['wepayaccesstoken'] ) )
 			return;
 		
 		$checkout_id = intval( trim( $_REQUEST['checkout_id'] ) );
-		include_once( IMSTORE_ABSPATH . '/_inc/wepaysdk.php' );
+		include_once( IMSTORE_ABSPATH . '/_inc/gateways/wepaysdk.php' );
 		
 		$wepay = new WePay(
 		  $ImStore->opts['wepayaccesstoken'],
 		  $ImStore->opts['wepayclientid'],
 		  $ImStore->opts['wepayclientsecret'],
-		  (( $this->opts['gateway']['wepayprod'] ) ? true : false )
+		  (( $ImStore->opts['gateway']['wepayprod'] ) ? true : false )
 		);
 		
 		$checkout = $wepay->request( 'checkout', array( 'checkout_id' => $checkout_id ) );
-		
+				
 		if( empty($checkout) || empty( $checkout->reference_id ) )
 			return ;
 		
@@ -72,12 +76,8 @@ class ImStoreCartWePay {
 		$cartid = $checkout->reference_id;
 		
 		global $ImStoreCart;
-		if( !class_exists( 'ImStoreCart' ) ){
-			include_once( IMSTORE_ABSPATH . '/_inc/cart.php' );
-			$ImStoreCart = new ImStoreCart( );
-		}
-		
 		$ImStoreCart->setup_cart( $cartid );
+		
 		do_action( 'ims_before_wepay_notice', false, $cartid );
 		
 		foreach( $response_data as $key => $reponse ){
@@ -135,12 +135,12 @@ class ImStoreCartWePay {
 	function button_request( $env ){
 	
 		global $ImStore, $ImStoreCart;
-		include_once( IMSTORE_ABSPATH . '/_inc/wepaysdk.php' );
+		include_once( IMSTORE_ABSPATH . '/_inc/gateways/wepaysdk.php' );
 
 		$data = array(
 			'type' => 'GOODS', 
-			'reference_id' => $ImStore->orderid,
 			'amount' => $ImStoreCart->cart['total'],
+			'reference_id' => $ImStoreCart->orderid,
 			'short_description' => __("Image Purchase"),
 			'account_id' => $ImStore->opts['wepayaccountid'],
 			'redirect_uri' => $ImStore->get_permalink( 'receipt' ),

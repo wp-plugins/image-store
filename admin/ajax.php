@@ -12,6 +12,7 @@
 	 */
 	 
 	//dont cache file
+	header("Robots: none");
 	header( 'X-Content-Type-Options: nosniff' );
 	header( 'Last-Modified:' . gmdate( 'D,d M Y H:i:s' ) . ' GMT' );
 	header( 'Cache-control:no-cache,no-store,must-revalidate,max-age=0');
@@ -132,7 +133,7 @@
 		$postid = (int) $_GET['postid'];
 		
 		if ( !empty( $_GET['parent'] ) && !empty( $_GET['deletefile'] ) && $ImStore->opts['deletefiles'] ) {
-			$meta = get_post_meta( $postid, '_wp_attachment_metadata', true );
+			$meta = (array) get_post_meta( $postid, '_wp_attachment_metadata', true );
 			
 			if( $meta && is_array( $meta['sizes'] ) ) {
 				

@@ -43,11 +43,6 @@ class ImStoreCart {
 			$this->orderid = $orderid;
 		else  return $this->cart;
 		
-		global $ImStore;
-		$this->sizes = $ImStore->sizes;
-		$this->gallery_id = $ImStore->galid;
-		
-		$this->listmeta = $ImStore->listmeta;
 		$this->status = get_post_status( $this->orderid );
 		
 		if ( $cart = get_post_meta( $this->orderid, '_ims_order_data', true ) )
@@ -136,7 +131,7 @@ class ImStoreCart {
 		if ( empty( $request['ims-image-size'] ) )
 			$this->error = __( 'Please, select an image size.', 'ims' );
 		
-		if ( empty( $request['ims-to-cart-ids'] ) )
+		if ( empty( $request['ims-to-cart-ids'] ) || empty( $this->sizes ) )
 			$this->error = __( 'There was a problem adding the images to the cart.', 'ims' );
 		
 		if ( !empty( $this->error ) )
@@ -164,9 +159,6 @@ class ImStoreCart {
 
 		if ( isset( $request['imstore-finish'] ) )
 			$finish = $request['imstore-finish'];
-			
-		if( empty( $this->data ) )
-			$this->setup_cart( );
 		
 		$images = explode( ',', $request['ims-to-cart-ids'] );
 		
@@ -211,6 +203,7 @@ class ImStoreCart {
 			
 		global $ImStore;
 		do_action( 'ims_before_update_cart', $this );
+		
 		$this->cart['promo'] = array( 'code' => false,'discount' => false, 'promo_id' => false, 'promo_type' => false );
 		
 		if( isset( $_POST['promocode'] ) )
@@ -415,10 +408,10 @@ class ImStoreCart {
 		$this->get_download_links( );
 		$message = preg_replace( $ImStore->opts['tags'], $this->substitutions, $ImStore->opts['notifymssg'] );
 		
-		$headers = 'From: "' . $ImStore->opts['receiptname'] . '" <' . $ImStore->opts['receiptemail'] . ">\r\n";
+		$headers = 'From: "' . esc_attr( $ImStore->opts['receiptname'] ). '" <' . esc_attr( $ImStore->opts['receiptemail'] ) . ">\r\n";
 		$headers .= "Content-type: text/html; charset=utf8\r\n";
 		
-		$message = apply_filters( 'ims_email_headers', $headers, $ImStore->opts['tags'], $this->substitutions );
+		$headers = apply_filters( 'ims_email_headers', $headers, $ImStore->opts['tags'], $this->substitutions );
 		$message = apply_filters( 'ims_admin_message', $message, $ImStore->opts['tags'], $this->substitutions );
 		
 		wp_mail( $ImStore->opts['notifyemail'], $ImStore->opts['notifysubj'], $message . $this->download_links , $headers );
@@ -448,7 +441,7 @@ class ImStoreCart {
 	function get_download_links( ) {
 		
 		global $ImStore;
-		
+				
 		// Dont change array order
 		$this->substitutions = apply_filters( 'ims_substitutions', array(
 			str_replace( $ImStore->sym, '\\' . $ImStore->sym, $ImStore->format_price( $this->data['mc_gross'] ) ), 
@@ -551,9 +544,9 @@ class ImStoreCart {
 			 $values['color_name'] = $this->listmeta['colors'][$color]['name'];
 		
 		if ( !empty( $this->sizes[$size]['download'] ) )
-			$values['download'] = $this->sizes[$size]['download'];
+			$values['download'] = 1;
 			
-		else if( !$ImStore->opts['disable_shipping'] && !$values['download'] ) 
+		if( !$ImStore->opts['disable_shipping'] && !$values['download'] ) 
 			$this->cart['shippingcost'] = 1;
 			
 		$values['subtotal'] = ( ( $price + $values['color'] + $values['finish'] ) *  $values['quantity'] );
@@ -638,7 +631,7 @@ class ImStoreCart {
 			$vals = explode( '|', $input );
 			
 			if ( isset( $vals[1] ) )
-			$data_pair[ trim( $vals[0] ) ] = trim( $vals[1] );
+				$data_pair[ trim( $vals[0] ) ] = trim( $vals[1] );
 		};
 		
 		foreach ( $data_pair as $key => $sub) {
@@ -687,9 +680,10 @@ class ImStoreCart {
 		
 		$ImStore->is_widget = true;
 		$enc = $ImStore->url_encrypt( $imageid );
+		$meta = (array) get_post_meta( $imageid, '_wp_attachment_metadata', true );
 		
-		$meta = get_post_meta( $imageid, '_wp_attachment_metadata', true );		
-		$meta += array( 'link' => $ImStore->get_image_url( $imageid ), 'alt' => $meta['sizes']['mini']['file'], 'title' => $meta['sizes']['mini']['file'] );
+		if( isset( $meta['sizes']['mini'] ) && is_array( $meta['sizes']['mini'] ) )
+			$meta += array( 'link' => $ImStore->get_image_url( $imageid ), 'alt' => $meta['sizes']['mini']['file'], 'title' => $meta['sizes']['mini']['file'] );
 		
 		$output = '<tr role="row"> <td role="gridcell" class="ims-preview">'; //start row
 		$output .= $ImStore->image_tag( $imageid, $meta, 3 );
@@ -704,6 +698,7 @@ class ImStoreCart {
 			$colorname = ( $item['color_name'] ) ? trim( $item['color_name'], " + ") : false;
 			
 			$output .= '<div class="ims-clear-row">';
+			$output .= apply_filters( 'ims_cart_image_before_list_row', '', $imageid, $item, $color, $enc, $row, $title, $size );
 			$output .= 
 			'<span class="ims-quantity">
 				<input type="text" name="ims-quantity' . "[$enc][$size][$color]" . '" value="' . esc_attr( $item['quantity'] ).'" class="input" />

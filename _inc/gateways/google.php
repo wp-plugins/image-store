@@ -26,6 +26,7 @@ class ImStoreCartGoogle {
 		add_filter( 'ims_store_cart_actions', array( &$this, 'cart_actions' ), 30, 1 );
 		add_filter( 'ims_cart_hidden_fields', array( &$this, 'cart_hidden_fields' ), 30, 2 );
 		add_filter( 'ims_cart_item_hidden_fields', array( &$this, 'item_hidden_fields' ), 30, 8 );
+		add_action( 'ims_after_post_actions', array( &$this, 'process_notice' ), 30, 10 );
 	}
 	
 	/**
@@ -36,6 +37,10 @@ class ImStoreCartGoogle {
 	 */
 	function process_notice(  ){
 		
+		if ( empty( $_POST['google-order-number'] ) || 
+		empty( $_POST['shopping-cart_merchant-private-data'] ) )
+		return;
+		
 		global $ImStore;
 		
 		if( empty( $ImStore->opts['googleid'] ) || empty( $ImStore->opts['googlekey'] ) ||
@@ -45,18 +50,15 @@ class ImStoreCartGoogle {
 		$cartid = intval( trim( $_POST['shopping-cart_merchant-private-data'] ) );
 		
 		global $ImStoreCart;
-		if( !class_exists( 'ImStoreCart' ) ){
-			include_once( IMSTORE_ABSPATH . '/_inc/cart.php' );
-			$ImStoreCart = new ImStoreCart( );
-		}
-		
 		$ImStoreCart->setup_cart( $cartid );
+		
 		do_action( 'ims_before_google_notice', false, $cartid );
 		
 		$response_data  = array( 
 			'order-total' => 'payment_gross', 
 			'google-order-number' => 'txn_id', 
-			'financial-order-state' => 'mc_currency', 
+			'order-total_currency' => 'mc_currency', 
+			'financial-order-state' => 'payment_status', 
 			'buyer-billing-address_email' => 'payer_email',
 			'buyer-shipping-address_city' => 'address_city',
 			'buyer-shipping-address_phone' => 'ims_phone',
@@ -143,14 +145,14 @@ class ImStoreCartGoogle {
 	 */
 	function cart_hidden_fields( $output, $cart ){
 		
-		global $ImStore;
+		global $ImStore, $ImStoreCart;
 		$this->row++;
 		
 		$output .= 
 		'<input type="hidden" name="edit-cart-url"  data-value-ims="' . esc_attr( $ImStore->get_permalink( ) ) . '" />
 		<input type="hidden" name="tax_country"  data-value-ims="' . esc_attr( $ImStore->opts['taxcountry'] )  . '" />
 		<input type="hidden" name="tax_rate"  data-value-ims="' . esc_attr( $ImStore->opts['taxamount'] / 100 ) . '" />
-		<input type="hidden" name="shopping-cart.merchant-private-data"  data-value-ims="' . esc_attr( $ImStore->orderid ) . '" />';
+		<input type="hidden" name="shopping-cart.merchant-private-data"  data-value-ims="' . esc_attr( $ImStoreCart->orderid ) . '" />';
 		
 		$output .=
 		 '<input type="hidden" name="checkout-flow-support.merchant-checkout-flow-support.edit-cart-url"  data-value-ims="' . esc_attr( $ImStore->get_permalink( $ImStore->imspage ) ) . '" />

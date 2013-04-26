@@ -5,11 +5,11 @@
  * @file wepaysdk.php
  * @package Image Store
  * @author WePay
- * @filesource  wp-content/plugins/image-store/_inc/wepaysdk.php
+ * @filesource  wp-content/plugins/image-store/_inc/gateways/wepaysdk.php
  * @since 3.2.0
  */
 
-define( 'WPWEPAY_PATH', IMSTORE_ABSPATH . '/_inc/' );
+define( 'WPWEPAY_PATH', IMSTORE_ABSPATH . '/_inc/gateways/' );
 define( 'WPWEPAY_URL', plugin_dir_url( WPWEPAY_PATH ) );
 define( 'WPWEPAY_BASENAME', plugin_basename( WPWEPAY_PATH ) );
 

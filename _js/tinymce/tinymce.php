@@ -63,18 +63,18 @@
     
     
     <body id="ims-galleries" class="hide no-js <?php echo apply_filters( 'admin_body_class', '' ) . " $admin_body_class"; ?>">
-    	<form  method="post" tabindex="-1">
+    	<form  method="post">
             <div id="gal-selector">
                 <div id="gal-options"><br>
                     <div>
                         <label><span><?php _e( 'Images', 'ims'); ?></span>
-                        <input id="number" type="text" tabindex="30" name="number" value="<?php echo esc_attr( $number )?>" /> 
+                        <input id="number" type="text" name="number" value="<?php echo esc_attr( $number )?>" /> 
                         <small><?php _e( 'How many images to display.', 'ims'); ?></small></label>
                     </div>
                                 
                     <div>
                         <label><span><?php _e( 'Gallery id', 'ims'); ?></span> 
-                        <input id="galid" type="text" tabindex="20" class="regular-text" name="galid" value="<?php echo esc_attr( $id )?>" /></label>
+                        <input id="galid" type="text" class="regular-text" name="galid" value="<?php echo esc_attr( $id )?>" /></label>
                     </div>
                     
                     <div>
@@ -123,7 +123,7 @@
                     <div class="link-search-wrapper">
                         <label>
                             <span><?php _e( 'Search' ); ?></span>
-                            <input type="text" id="search-field" class="link-search-field regular-text" tabindex="60" autocomplete="off" />
+                            <input type="text" id="search-field" class="link-search-field regular-text" autocomplete="off" />
                             <img class="waiting" src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>" alt="" />
                         </label>
                     </div>

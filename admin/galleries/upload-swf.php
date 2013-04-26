@@ -16,7 +16,7 @@
 	
 	$flash = true;
 	if ( false !== stripos( $_SERVER['HTTP_USER_AGENT'], 'mac' )
-		&& apache_mod_loaded( 'mod_security') )
+	&& apache_mod_loaded( 'mod_security') )
 		$flash = false;
 	
 	$flash = apply_filters( 'flash_uploader', $flash );
@@ -31,7 +31,8 @@
 	
 	?>
     
-     <form enctype="multipart/form-data" method="post" action="<?php echo admin_url( 'media-upload.php?inline=&amp;upload-page-form=' ); ?>" class="media-upload-form type-form validate" id="file-form">
+     <form enctype="multipart/form-data" method="post" action="<?php 
+	 echo admin_url( 'media-upload.php?inline=&amp;upload-page-form=' ); ?>" class="media-upload-form type-form validate" id="file-form">
 	
 		<?php 
         

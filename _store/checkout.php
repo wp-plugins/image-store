@@ -87,7 +87,7 @@
 	$output .= apply_filters( 'ims_checkout_order_fields', '', $this->cart, $this->opts );
 	
 	$output .= '<div class="ims-p submit-buttons">';
-	$output .= '<input name="ims-cancel-checkout" type="submit" value="' . esc_attr__( 'Cancel', 'ims' ) . '" class="secundary" /> ';
+	$output .= '<input name="ims-cancel-checkout" type="submit" value="' . esc_attr__( 'Cancel', 'ims' ) . '" class="secundary secondary" /> ';
 	$output .= '<input name="ims-enotice-checkout" type="submit" value="' . esc_attr__(' Submit Order', 'ims' ) . '" class="primary" />';
 	
 	$output .= apply_filters( 'ims_checkout_actions', '', $this->cart, $this->opts );

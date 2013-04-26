@@ -33,7 +33,7 @@
                         <span class="quantity"><?php _e('Quantity', 'ims')?></span>
                         <span class="size"><?php _e('Size', 'ims')?></span>
                         <span class="color"><?php _e('Color', 'ims')?></span>
-                        <span class="fisnish"><?php _e('Fisnish', 'ims')?></span>
+                        <span class="fisnish"><?php _e('Finish', 'ims')?></span>
                         <span class="price"><?php _e('Unit Price', 'ims')?></span>
                         <span class="subtotal"><?php _e('Subtotal', 'ims')?></span>
                         <span class="title"><?php _e('Title', 'ims')?></span>
@@ -49,7 +49,7 @@
 					$parentid  	= $this->get_post_parent_id( $id );
                     $mini  		= array('url' => false, 'width' => false, 'height' => false, 'file' => false);
                     
-                    if( $image = get_post_meta( $id, '_wp_attachment_metadata', true ))
+                    if( $image = (array) get_post_meta( $id, '_wp_attachment_metadata', true ))
                         $mini = wp_parse_args( $image['sizes']['mini'], $mini );
                     
                     $r = '<tr><td class="column-thumb"><img src="' . $mini['url'] . '" width="'. $mini['width']. ' " height="' . $mini ['height'] . '" alt="' . $mini['file'] .'"/></td>';
@@ -58,19 +58,19 @@
                     foreach( $sizes as $size => $colors ){
                         foreach( $colors as $color => $item ){
 							
-							$finishprice = isset( $item['finish'] ) ? $item['finish']: 0;
-							$finishname = isset( $item['finish_name'] ) ? $item['finish_name']: '';
-							
-							if( isset( $item['color_name'] ) )
-								$colorname = $item['color_name'];
-							else  $colorname = isset( $this->color[$color] ) ? $this->color[$color] : '';
-							$colorprice = isset( $item['color'] ) ? $item['color']: 0;
+														$finishprice = isset( $item['finish'] ) ? $item['finish']: 0;
+														$finishname = isset( $item['finish_name'] ) ? $item['finish_name']: '';
+														
+														if( isset( $item['color_name'] ) )
+															$colorname = $item['color_name'];
+														else  $colorname = isset( $this->color[$color] ) ? $this->color[$color] : '';
+														$colorprice = isset( $item['color'] ) ? $item['color']: 0;
 							
                             $r .= '<div class="clear-row">';
                             $r .= '<span class="quantity">' .  $item['quantity'] . '</span>';
                             $r .= '<span class="size">' . ( isset($item['size']) ?$item['size']:$size). '</span>';
                             $r .= '<span class="color">' . $colorname . $this->format_price( $colorprice, true, ' + ' ) . '</span>';
-							$r .=  '<span class="fisnish">' . $finishname . $this->format_price( $finishprice,  true, ' + ' ) . '</span>';
+														$r .=  '<span class="fisnish">' . $finishname . $this->format_price( $finishprice,  true, ' + ' ) . '</span>';
                             $r .= '<span class="price">' . $this->format_price( $item['price'] ) . '</span>';
                             $r .= '<span class="subtotal">' . $this->format_price( $item['subtotal'] ) . '</span>';
                             $r .= '<span class="title">' .  get_the_title($id) . '</span>';

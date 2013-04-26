@@ -211,7 +211,7 @@ class ImStoreSales extends ImStoreAdmin {
 		if ( false == $r ) {
 			
 			$r = $wpdb->get_results("
-				SELECT distinct YEAR( post_date ) y, MONTH ( post_date )  m, UNIX_TIMESTAMP( post_date ) t
+				SELECT  YEAR( post_date ) y, MONTH ( post_date )  m, UNIX_TIMESTAMP( post_date ) t
 				FROM $wpdb->posts WHERE post_status $status  AND post_status != 'draft' 
 				AND post_type = 'ims_order' AND post_date != 0 group by y, m");
 			

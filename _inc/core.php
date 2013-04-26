@@ -33,7 +33,7 @@ class ImStore {
 	public $promo_types = array( );
 	public $rules_property = array( );
 	
-	public $version = '3.2.4';
+	public $version = '3.2.7';
 	public $customer_role = 'customer';
 	public $optionkey = 'ims_front_options';
 	
@@ -76,11 +76,6 @@ class ImStore {
 			return;
 			
 		$mofile = $this->content_dir . '/languages/_ims/' . 'ims' . '-' . $this->locale . '.mo';
-		/*if ( !file_exists( $mofile ) && is_admin( ) && current_user_can( 'activate_plugins' ) ) {
-			$time = get_option( '_ims_no_lan_file' );
-			if ( $time + ( 86400 * 2 ) <= time(  ) )
-				$this->download_language_file( $mofile );
-		}*/
 		
 		if ( function_exists( 'load_plugin_textdomain' ) )
 			load_plugin_textdomain( 'ims', false, apply_filters( 'ims_load_textdomain', '../languages/_ims/', 'ims', $this->locale ) );
@@ -332,6 +327,15 @@ class ImStore {
 
 		register_post_type( 'ims_image', $image );
 		register_post_type( 'ims_gallery', $posttype );
+		
+		register_post_status( 'expire', array(
+			'public' => false,
+			'label' => _x( 'Expired', 'post' ),
+			'exclude_from_search' => true,
+			'show_in_admin_all_list' => true,
+			'show_in_admin_status_list' => true,
+			'label_count'  => _n_noop( 'Expired <span class="count">(%s)</span>', 'Expired <span class="count">(%s)</span>' ),
+		) );
 		
 		register_taxonomy( 'ims_tags', array( 'ims_gallery' ), $tags );
 		register_taxonomy( 'ims_album', array( 'ims_gallery' ), $albums );
