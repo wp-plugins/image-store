@@ -78,7 +78,7 @@ class ImStoreCartPayPal {
 		
 		$info = implode( ',', $info );
 		
-		if ( !eregi( 'VERIFIED', $info ) ) {
+		if ( !preg_match( '/(VERIFIED)/', $info ) ) {
 			
 			$file = IMSTORE_ABSPATH . "/ipn_log.txt";
 			$log = array( 'REQUEST_TIME', 'REMOTE_ADDR', 'REQUEST_METHOD', 'HTTP_USER_AGENT', 'REMOTE_PORT' );

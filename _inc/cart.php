@@ -408,10 +408,10 @@ class ImStoreCart {
 		$this->get_download_links( );
 		$message = preg_replace( $ImStore->opts['tags'], $this->substitutions, $ImStore->opts['notifymssg'] );
 		
-		$headers = 'From: "' . $ImStore->opts['receiptname'] . '" <' . $ImStore->opts['receiptemail'] . ">\r\n";
+		$headers = 'From: "' . esc_attr( $ImStore->opts['receiptname'] ). '" <' . esc_attr( $ImStore->opts['receiptemail'] ) . ">\r\n";
 		$headers .= "Content-type: text/html; charset=utf8\r\n";
 		
-		$message = apply_filters( 'ims_email_headers', $headers, $ImStore->opts['tags'], $this->substitutions );
+		$headers = apply_filters( 'ims_email_headers', $headers, $ImStore->opts['tags'], $this->substitutions );
 		$message = apply_filters( 'ims_admin_message', $message, $ImStore->opts['tags'], $this->substitutions );
 		
 		wp_mail( $ImStore->opts['notifyemail'], $ImStore->opts['notifysubj'], $message . $this->download_links , $headers );

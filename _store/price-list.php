@@ -114,7 +114,8 @@
 		if( isset( $meta['colors'][$x]['name'] ) && $color_count ){ // colors
 			$output .=	 '<td role="gridcell" colspan="' . ( 6 - $colspan - 2 ) .'" class="ims-color-name">' . $meta['colors'][$x]['name'] . '</td>';
 			$output .=	 '<td role="gridcell" colspan="' . ( 6 - $colspan - 2 ) .'" class="ims-color-price">' . 
-			(( $meta['colors'][$x]['type'] == 'percent' ) ? $meta['colors'][$x]['price'] . "%" : $this->format_price($meta['colors'][$x]['price']) ) . '</td>';
+			(( isset( $meta['colors'][$x]['type'] )  && $meta['colors'][$x]['type'] == 'percent' ) 
+			? $meta['colors'][$x]['price'] . "%" : $this->format_price($meta['colors'][$x]['price']) ) . '</td>';
 		} else if( $color_count ) $output .=	 '<td role="gridcell" colspan="' . ( 6 - $colspan ) .'" class="ims-color-name ims-color-empty">&nbsp;</td>';
 			
 		if( isset( $meta['finishes'][$x]['name'] ) && $finish_count ){ // finishes
