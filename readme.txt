@@ -84,6 +84,16 @@ The plugin fully integrated with the WordPress database it only creates a post_e
 
 == Changelog ==
 
+= 3.2.8 =
+* Fixed: Folder permission issues on some servers.
+* Fixed: MySQL query error.
+* Fixed: User permission display.
+* Fixed: Filter issue with sales reports.
+* Fixed: Missing button on shopping cart shortcode.
+* Fixed: Shortcode taxonomy issue.
+* Added: Watermark tile option.
+* Added: Additional support for WP 3.6.
+
 = 3.2.7 =
 * Fixed: PHP error on php 5.3.
 * Fixed: jquery issue with some themes.

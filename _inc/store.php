@@ -504,8 +504,8 @@ class ImStoreFront extends ImStore {
 			}	
 		}
 		
-		if( $this->imspage == 'shopping-cart' )
-			add_filter( 'ims_store_cart_actions', array( $ImStoreCart, 'cart_actions' ), 50, 1 );
+		//if( $this->imspage == 'shopping-cart' )
+		add_filter( 'ims_store_cart_actions', array( $ImStoreCart, 'cart_actions' ), 50, 1 );
 	}
 	
 	/**
@@ -1338,12 +1338,15 @@ class ImStoreFront extends ImStore {
 		$dimentions = '' ; 	
 		$size = $this->image_sizes[$sz];
 		$enc = $this->url_encrypt( $imageid );
+		
+		$data = apply_filters( 'ims_image_data',  $data );
 		$classes = isset( $data['class']) ? ( array) $data['class'] : array();
 		
 		if( !$this->is_taxonomy ) $classes[] = ' hreview';
 				
 		$css = esc_attr( implode( ' ', $classes ) );
 		$url = esc_attr( $this->get_image_url( $imageid, $sz ) );
+		
 		$link = esc_attr( apply_filters( 'ims_image_link', $data['link'], $data ) );
 		
 		extract( $this->gallery_tags );
@@ -1994,12 +1997,13 @@ class ImStoreFront extends ImStore {
 		
 		if( $album || $tag ){
 			
-			$taxid = ( $album ) ? 'ims_album' : 'ims_tags' ;	
+			$taxid = ( $album ) ? $album : $tag;
+			$tax = ( $album ) ? 'ims_album' : 'ims_tags' ;	
 			
-			$type = "SELECT object_id FROM $wpdb->terms AS t
+			$type = "SELECT tr.object_id FROM $wpdb->terms AS t
 			INNER JOIN $wpdb->term_taxonomy tt ON t.term_id = tt.term_id
 			INNER JOIN $wpdb->term_relationships tr ON tt.term_taxonomy_id = tr.term_taxonomy_id
-			WHERE t.term_id = %d AND tt.taxonomy = '$tax' GROUP BY t.object_id ";
+			WHERE t.term_id = %d AND tt.taxonomy = '$tax' GROUP BY tr.object_id ";
 		
 		}else{
 			

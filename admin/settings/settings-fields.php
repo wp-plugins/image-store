@@ -307,6 +307,12 @@
 			'label' => __( 'Watermark URL', 'ims' ),
 			'desc' => __( 'Path relative to wp-content or full URL to image, PNG with transparency recommended', 'ims' ),
 		 ),
+		 'watermarktile' => array( 
+			'val' => 1,
+			'type' => 'checkbox',
+			'label' => __( 'Tile Watermark', 'ims' ),
+			'desc' => __( 'Tile image or text watermark, it will disable the watermark location option', 'ims' ),
+		 ),
 	 );
 	
 	//slideshow

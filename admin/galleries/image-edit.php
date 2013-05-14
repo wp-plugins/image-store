@@ -26,7 +26,7 @@
 	//load wp
 	require_once '../../../../../wp-admin/admin.php';
 	
-	if( !current_user_can( 'edit_plugins' ) )
+	if( !current_user_can( 'upload_files' ) )
 	wp_die( __( 'Cheatin&#8217; uh?', 'ims' ) );
 	
 	check_admin_referer("ims_edit_image");
