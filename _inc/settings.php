@@ -32,6 +32,7 @@ class ImStoreSet extends ImStoreAdmin {
 		add_action( 'admin_init', array( &$this, 'save_settings' ), 10 );
 		add_action( 'ims_settings', array( &$this, 'watermark_location'), 2 );
 		add_action( 'ims_setting_fields', array( &$this, 'show_user_caps' ), 11 );
+		add_action( 'ims_setting_fields', array( &$this, 'watermark_settings' ), 12 );
 		add_action( 'ims_setting_fields', array( &$this, 'add_gateway_fields' ), 10 );
 		
 		//script styles
@@ -65,6 +66,21 @@ class ImStoreSet extends ImStoreAdmin {
 		return $tabs;
 	}
 	
+	
+	function watermark_settings( $settings ){
+		
+		if( $this->opts['watermark'] != 1 )
+			unset( $settings['image']['watermark_'] );
+		
+		if( $this->opts['watermark'] != 2 )
+			unset( $settings['image']['watermarkurl'] );
+		
+		if( $this->opts['watermark'] == 0 )
+			unset( $settings['image']['watermarktile'] );
+		
+		return $settings;	
+	}
+	
 	/**
 	 * Add watermark location option
 	 *
@@ -74,7 +90,10 @@ class ImStoreSet extends ImStoreAdmin {
 	function watermark_location($boxid) {
 		if ( $boxid != 'image' )
 			return;
-
+		
+		if( $this->opts['watermarktile'] || !$this->opts['watermark'] )
+			return;
+		
 		$option = get_option('ims_wlocal');
 		$wlocal = empty($option) ? 5 : $option;
 
@@ -307,7 +326,7 @@ class ImStoreSet extends ImStoreAdmin {
 	function vr( $option, $key = false, $userid = 0 ) {
 		if ( $userid ) {
 			$usermeta = get_user_meta( $userid, 'ims_user_caps', true );
-			if ( isset( $usermeta[$option] ) ) return true;
+			if ( isset( $usermeta["{$option}{$key}"] ) ) return true;
 			return false;
 		}
 		if ( isset( $this->opts[$option][$key] ) && is_array( $this->opts[$option] ) )

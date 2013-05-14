@@ -140,6 +140,7 @@ class ImStoreInstaller extends ImStore {
 		$ims_ft_opts['watermark_trans'] = '90';
 		$ims_ft_opts['widgettools'] = false;
 		$ims_ft_opts['wplightbox'] = false;
+		$ims_ft_opts['watermarktile'] = false;
 		
 		$ims_ft_opts['wepayaccesstoken'] = false;
 		$ims_ft_opts['wepayclientid'] = false;
@@ -382,6 +383,10 @@ class ImStoreInstaller extends ImStore {
 		
 		if ( $this->ver <= "3.2.3" ){
 			$ims_ft_opts['album_level'] = false;
+		}
+		
+		if ( $this->ver <= "3.2.7" ){
+			$ims_ft_opts['watermarktile'] = false;
 		}
 		
 		//add imstore capabilities

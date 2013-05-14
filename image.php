@@ -27,6 +27,7 @@
 		private $watermark = false;
 		private $content_dir = false;
 		
+		public $space = 10; 
 		private $data = array( );
 		private $opts = array( );
 		private $metadata = array( );
@@ -92,7 +93,8 @@
 			
 			if ( isset( $url_data[2] ) )
 				$this->watermark = 1;
-		
+			
+			$this->size = $size;
 			$this->display_image( );
 		}
 		
@@ -162,59 +164,64 @@
 				
 				//text watermark
 				if ( $this->opts['watermark'] == 1 ) {
+						
+				  $font_text = $this->opts['watermark_text'];
+				  $font_size = $this->opts['watermark_size'];
+				  $font = dirname( __FILE__ ) . '/_fonts/arial.ttf';
+				  $rgb = $this->HexToRGB( $this->opts['watermark_color'] );
+				  
+				  $info = getimagesize( $this->image_dir );
+				  $tb = imagettfbbox( $font_size, 0, $font, $font_text );
+				  $icolor = imagecolorallocatealpha( $image, $rgb['r'], $rgb['g'], $rgb['b'], $this->opts['watermark_trans'] );
 					
-					$font_text = $this->opts['watermark_text'];
-					$font_size = $this->opts['watermark_size'];
-					$font = dirname( __FILE__ ) . '/_fonts/arial.ttf';
-					$rgb = $this->HexToRGB( $this->opts['watermark_color'] );
-					
-					$black = imagecolorallocatealpha( $image, 0, 0, 0, 90 );
-					$icolor = imagecolorallocatealpha( $image, $rgb['r'], $rgb['g'], $rgb['b'], $this->opts['watermark_trans'] );
-					
-					$info = getimagesize( $this->image_dir );
-					$tb = imagettfbbox( $font_size, 0, $font, $font_text );
-					
-					switch ( $position ) {
-						case 1:
-							$x = 2;
-							$y = abs($tb[5]) + 2;
-							break;
-						case 2:
-							$x = ceil(( $info[0] - $tb[2] ) / 2);
-							$y = abs($tb[5]) + 2;
-							break;
-						case 3:
-							$x = ($info[0] - $tb[2] ) - 4;
-							$y = abs($tb[5]) + 2;
-							break;
-						case 4:
-							$x = 2;
-							$y = $info[1] / 2;
-							break;
-						case 5:
-							$x = ceil(( $info[0] - $tb[2] ) / 2);
-							$y = $info[1] / 1.7;
-							break;
-						case 6:
-							$x = ($info[0] - $tb[2] ) - 4;
-							$y = $info[1] / 2;
-							break;
-						case 7:
-							$x = 2;
-							$y = $info[1] / 1.03;
-							break;
-						case 9:
-							$x = ($info[0] - $tb[2] ) - 4;
-							$y = $info[1] / 1.03;
-							break;
-						default:
-							$x = ceil(( $info[0] - $tb[2] ) / 2);
-							$y = $info[1] / 1.03;
-					}
-					
-					imagettftext( $image, $font_size, 0, $x, $y, $black, $font, $font_text );
-					imagettftext( $image, $font_size, 0, $x, $y, $icolor, $font, $font_text );					
-				
+				  //title text
+				  if( !empty($this->opts['watermarktile']) ){
+					  
+					  foreach( $this->get_tile_points( $info[0], $info[1], abs( $tb[2] ), abs( $tb[5] ) ) as $m )
+					  imagettftext( $image, $font_size, 0, $m['x'], $m['y'], $icolor, $font, $font_text );
+						  
+				  }else{
+				  
+					  switch ( $position ) {
+						  case 1:
+							  $x = 2;
+							  $y = abs($tb[5]) + 2;
+							  break;
+						  case 2:
+							  $x = ceil(( $info[0] - $tb[2] ) / 2);
+							  $y = abs($tb[5]) + 2;
+							  break;
+						  case 3:
+							  $x = ($info[0] - $tb[2] ) - 4;
+							  $y = abs($tb[5]) + 2;
+							  break;
+						  case 4:
+							  $x = 2;
+							  $y = $info[1] / 2;
+							  break;
+						  case 5:
+							  $x = ceil(( $info[0] - $tb[2] ) / 2);
+							  $y = $info[1] / 1.7;
+							  break;
+						  case 6:
+							  $x = ($info[0] - $tb[2] ) - 4;
+							  $y = $info[1] / 2;
+							  break;
+						  case 7:
+							  $x = 2;
+							  $y = $info[1] / 1.03;
+							  break;
+						  case 9:
+							  $x = ($info[0] - $tb[2] ) - 4;
+							  $y = $info[1] / 1.03;
+							  break;
+						  default:
+							  $x = ceil(( $info[0] - $tb[2] ) / 2);
+							  $y = $info[1] / 1.03;
+					  }
+					  imagettftext( $image, $font_size, 0, $x, $y, $icolor, $font, $font_text );		
+				  }
+						
 				}else if ( $this->opts['watermark'] == 2  && $this->opts['watermarkurl'] ) {
 					
 					$wmtype = wp_check_filetype( basename( $this->opts['watermarkurl'] ) );
@@ -282,8 +289,10 @@
 											$y = ( $info[1] - $wmratio['h'] ) / 1.7;
 									}
 									
+									// resize watermark 
 									$wmnew = imagecreatetruecolor( $wmratio['w'], $wmratio['h'] );
-							
+									imagecopyresampled( $wmnew, $watermark, 0, 0, 0, 0, $wmratio['w'], $wmratio['h'], $wminfo[0], $wminfo[1] );
+									
 									// keep transperancy
 									if ( $wmtype['ext'] == "png" ) {
 										$background = imagecolorallocate( $wmnew, 0, 0, 0 );
@@ -291,10 +300,12 @@
 										imagealphablending( $wmnew, true );
 									}
 									
-									// resize watermark and merge images
-									imagecopyresampled( $wmnew, $watermark, 0, 0, 0, 0, $wmratio['w'], $wmratio['h'], $wminfo[0], $wminfo[1] );
-									imagecopymerge( $image, $wmnew, $x, $y, 0, 0, $wmratio['w'], $wmratio['h'], 30 );
-									
+									if( !empty($this->opts['watermarktile']) ){
+										foreach( $this->get_tile_points( $info[0], $info[1], $wmratio['w'], $wmratio['h'] ) as $m )
+										imagecopymerge( $image, $wmnew, $m['x'], $m['y'], 0, 0, $wmratio['w'], $wmratio['h'], 30 );
+									} else imagecopymerge( $image, $wmnew, $x, $y, 0, 0, $wmratio['w'], $wmratio['h'], 30 );
+
+
 									@imagedestroy( $wmnew );
 									@imagedestroy( $watermark );
 									
@@ -328,6 +339,12 @@
 				}
 			}
 			
+			//sharpen image
+			if(  $this->size != 'original' ){
+				$matrix = array(  array(-1, -1, -1),  array(-1, 16, -1),  array(-1, -1, -1) );
+				$divisor = array_sum( array_map( 'array_sum', $matrix) );
+				imageconvolution( $image, $matrix, $divisor, 0);
+			}
 			
 			$quality = get_option( 'preview_size_q', 85 );
 			
@@ -352,6 +369,30 @@
 			
 			die( );
 		}
+		
+		
+		/**
+		 * Get image location for tilling
+		 *
+		 * @param unit $w image width
+		 * @param unit $h image height
+		 * @param unit $ww watermark width
+		 * @param unit $wh watermark heigth
+		 * @return array
+		 * @since 3.2.8
+		 */
+		function get_tile_points( $w, $h, $ww, $wh ){
+			
+			$points = array();  $s = $this->space; 
+			$p = ( $this->opts['watermark'] == 1 ) ? $wh : 1;
+			
+			for( $x = 0; $x < ( $w + $s ); $x += ( $s + $ww ) ) { 
+				for( $y = $p; $y < ( $h + $s ); $y += ( $s + $wh ) ) 
+					$points[] = array( 'x' => $x, 'y' => $y);
+			} 
+			return $points;
+		}
+		
 		
 		/**
 		 * Conver hex color to rgb

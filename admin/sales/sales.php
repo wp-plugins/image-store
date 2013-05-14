@@ -46,12 +46,18 @@
 		'paged' => $page,
 		'post_type' => 'ims_order',
 		'post_status' => $this->status,
+		'year' => substr( $this->cdate, 0, 4 ),
+		'monthnum' => substr( $this->cdate, -2 ),
 		'posts_per_page' => $this->per_page,
+		'meta_query' => array( array(
+			'compare' => 'LIKE',
+			'key' => '_response_data', 
+			'value' => $this->payment_status,
+		) )
 	) );
 	
 	$sales = new WP_Query( $args );
 	$start = ($page - 1) * $this->per_page;
-	
 	
 	$page_links = paginate_links( array(
 		'prev_text' => __('&laquo;'),
@@ -82,7 +88,7 @@
                     <?php
                     foreach ( $order_status as $key => $label ){ 
 						if ( !$this->is_trash || $key != 'trash' )
-                        echo '<option value="', esc_attr( $key ), '">', $label, '</option>';
+                        echo '<option value="', esc_attr( $key ), '" ' . selected( $this->status, $key, false) . ' >', $label, '</option>';
 					}
                     ?>
                 </select>
@@ -92,7 +98,7 @@
 					<option value=""><?php esc_attr_e( 'Payment Status', 'ims' ) ?></option>
                     <?php
 					foreach ( $payment_status as $key => $label )
-						echo '<option value="', esc_attr( $key ), '">', $label, '</option>';
+						echo '<option value="', esc_attr( $key ), '" ' . selected( $this->payment_status, $key, false) . ' >', $label, '</option>';
 					?>
                 </select>
                 <?php } ?>

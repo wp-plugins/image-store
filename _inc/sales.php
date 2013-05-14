@@ -20,6 +20,7 @@ class ImStoreSales extends ImStoreAdmin {
 	public $status = false;
 	public $search = false;
 	public $is_trash = false;
+	public $payment_status = false;
 	
 	public $hidden = array( );
 	public $columns = array( );
@@ -41,9 +42,15 @@ class ImStoreSales extends ImStoreAdmin {
 		if( isset( $_GET['m'] ) )
 			$this->cdate = ( int ) $_GET['m'];
 		
+		if( isset( $_GET['payment-action'] ) )
+			$this->payment_status = trim( $_GET['payment-action'] );
+		
 		if( isset( $_GET['status'] ) )
 			$this->status = trim( $_GET['status'] );
 			
+		if( isset( $_GET['order-action'] ) && empty( $_GET['status'] ) )
+			$this->status = trim( $_GET['order-action'] );
+		
 		if( isset( $_GET['osearch'] ) )
 			$this->search  = trim( $_GET['osearch'] );
 	

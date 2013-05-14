@@ -649,6 +649,9 @@ class ImStoreAdmin extends ImStore {
 		if ( !preg_match(" /(_resized)/i", $path ) )
 			$path = "$path/_resized";
 		
+		if ( !file_exists( $path ) )
+			@mkdir( $path, 0755, true );
+		
 		//generate mini image for thumbnail edit
 		if ( isset( $_REQUEST['target'] ) && 'thumbnail' == preg_replace( '/[^a-z0-9_-]+/i', '', $_REQUEST['target'] ) ) {
 			$resized_file = image_resize( 
@@ -1025,8 +1028,8 @@ class ImStoreAdmin extends ImStore {
 			LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id
 			LEFT JOIN $wpdb->usermeta ur ON u.ID = ur.user_id 
 			WHERE um.meta_key = 'ims_status' AND um.meta_value = 'active' 
-			AND ( ur.meta_key = '{$wpdb->prefix}capabilities' AND ur.meta_value LIKE '%{$this->customer_role}%' 
-			GROUP BY u.user_id )");
+			AND ( ur.meta_key = '{$wpdb->prefix}capabilities' AND ur.meta_value LIKE '%{$this->customer_role}% ) ' 
+			GROUP BY u.user_id" );
 			
 			wp_cache_set( 'ims_customers', $customers, 'ims' );
 		}

@@ -33,7 +33,7 @@ class ImStore {
 	public $promo_types = array( );
 	public $rules_property = array( );
 	
-	public $version = '3.2.7';
+	public $version = '3.2.8';
 	public $customer_role = 'customer';
 	public $optionkey = 'ims_front_options';
 	
