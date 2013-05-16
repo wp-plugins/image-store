@@ -110,23 +110,23 @@
 			var target = 'all'; //what to edit
 			
 			//set target
-			$( ".imgedit-group input[type='radio']" ).live( 'click', function( ){
+			$( "#image-editor-<?php echo $id?>" ).delegate( ".imgedit-group input[type='radio']", 'click', function( ){
 				target = $( this ).val( ); 
 			});
 			
 			//restore
-			$( ".imgedit-settings input.button-primary" ).live( 'click', function( ){ 
+			$( "#image-editor-" + <?php echo $id?> ).delegate( ".imgedit-settings input.button-primary", 'click', function( ){ 
 				get_ims_tubmnail( );
 				setTimeout( "parent.tb_remove( )", 1000 ); 
 			});
 			
 			//cancel / close window
-			$(".imgedit-submit input.button").live( 'click', function( ){ 
+			$( "#image-editor-<?php echo $id?>" ).delegate( ".imgedit-submit input.button", 'click', function( ){ 
 				setTimeout( "parent.tb_remove( )", 500 ); 
 			});
 			
 			//save
-			$(".imgedit-submit input.imgedit-submit-btn").live( 'click', function( ){ 
+			$( "#image-editor-<?php echo $id?>" ).delegate( ".imgedit-submit input.imgedit-submit-btn", 'click', function( ){ 
 				get_ims_tubmnail( );
 				setTimeout( "parent.tb_remove( )", 2000 );
 			});

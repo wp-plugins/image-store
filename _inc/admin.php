@@ -455,6 +455,22 @@ class ImStoreAdmin extends ImStore {
 	}
 	
 	/**
+	 * Sanitize gallery path
+	 * added by the user
+	 *
+	 * @param string $path
+	 * @param bool $lefttrim
+	 * @return array
+	 * @since 3.2.9
+	 */
+	function sanitize_path( $path, $lefttrim = false ){
+		$path = str_replace( array(" ", '"', "'", '$', '`', "&", "~", "^", "?", "#"), '', $path );
+		
+		if( $lefttrim ) return remove_accents( ltrim( str_replace( array( '../', './', '\'', '\\', '//' ), '/', $path ) , ".,/" ) );
+		else return remove_accents( trim( str_replace( array( '../', './', '\'', '\\', '//' ), '/', $path ) , ".,/" ) );
+	}
+	
+	/**
 	 * Display aditional colums for 
 	 * cutomer status
 	 *
@@ -643,17 +659,21 @@ class ImStoreAdmin extends ImStore {
 			return $metadata;
 			
 		$filename = basename( $metadata['file'] );
-		$path =  ltrim( dirname( str_ireplace( $this->content_dir, '', $metadata['file'] ) ), '/' );
+		$path = $this->sanitize_path( dirname( str_ireplace( $this->content_dir, '', $metadata['file'] ) ), true);
 		
 		$metadata['file'] = "$path/$filename";
-		if ( !preg_match(" /(_resized)/i", $path ) )
+		if ( !preg_match(" /(_resized)/i", $path ) ){
 			$path = "$path/_resized";
+			
+			if ( isset( $_REQUEST['target'] ) && 'thumbnail' != $_REQUEST['target'] ) 
+			@copy( $this->content_dir . "/$path/" . $filename, $this->content_dir . '/' . $metadata['file'] );
+		}
 		
 		if ( !file_exists( $path ) )
 			@mkdir( $path, 0755, true );
 		
 		//generate mini image for thumbnail edit
-		if ( isset( $_REQUEST['target'] ) && 'thumbnail' == preg_replace( '/[^a-z0-9_-]+/i', '', $_REQUEST['target'] ) ) {
+		if ( isset( $_REQUEST['target'] ) && 'thumbnail' == $_REQUEST['target'] ) {
 			$resized_file = image_resize( 
 				$this->content_dir . "/$path/" . $metadata['sizes']['thumbnail']['file'],
 				get_option("mini_size_w"),
@@ -773,8 +793,8 @@ class ImStoreAdmin extends ImStore {
 	 * @since 3.0.0
 	 */
 	function alter_image_sizes( $sizes ) {
-		$posid = isset( $_REQUEST['postid'] ) ? $_REQUEST['postid'] : false;
-		if ( $this->pagenow == 'upload-img.php' ||  'ims_image' == get_post_type( $posid ) )
+		$postid = isset( $_REQUEST['postid'] ) ? $_REQUEST['postid'] : false;
+		if ( $this->pagenow == 'upload-img.php' ||  'ims_image' == get_post_type( $postid ) )
 			$sizes = apply_filters( 'ims_aternative_image_sizes', array('mini', 'thumbnail', 'preview' ) );
 		return $sizes;
 	}
@@ -789,11 +809,11 @@ class ImStoreAdmin extends ImStore {
 		if ( preg_match(" /(_resized)/i", $file ) )
 			return $file;
 		
-		$posid = isset( $_REQUEST['postid'] ) ? $_REQUEST['postid'] : false;
-		if ( $this->pagenow == 'upload-img.php' ||  'ims_image' == get_post_type( $posid ) ){
+		$postid = isset( $_REQUEST['postid'] ) ? $_REQUEST['postid'] : false;
+		if ( $this->pagenow == 'upload-img.php' ||  'ims_image' == get_post_type( $postid ) ){
 			$pathinfo = pathinfo( $file );
-			$despath = $pathinfo['dirname'] . "/_resized/";
-	
+			$despath = "/" . $this->sanitize_path(  $pathinfo['dirname'], true ) . "/_resized/";
+			
 			if ( !file_exists( $despath ) )
 				@mkdir( $despath, 0755, true );
 			if ( copy( $file, $despath . $pathinfo['basename'] ) ) {
@@ -1028,8 +1048,8 @@ class ImStoreAdmin extends ImStore {
 			LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id
 			LEFT JOIN $wpdb->usermeta ur ON u.ID = ur.user_id 
 			WHERE um.meta_key = 'ims_status' AND um.meta_value = 'active' 
-			AND ( ur.meta_key = '{$wpdb->prefix}capabilities' AND ur.meta_value LIKE '%{$this->customer_role}% ) ' 
-			GROUP BY u.user_id" );
+			AND ( ur.meta_key = '{$wpdb->prefix}capabilities' AND ur.meta_value LIKE '%{$this->customer_role}%' ) 
+			GROUP BY u.id" );
 			
 			wp_cache_set( 'ims_customers', $customers, 'ims' );
 		}

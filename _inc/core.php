@@ -33,7 +33,7 @@ class ImStore {
 	public $promo_types = array( );
 	public $rules_property = array( );
 	
-	public $version = '3.2.8';
+	public $version = '3.2.9';
 	public $customer_role = 'customer';
 	public $optionkey = 'ims_front_options';
 	
@@ -88,35 +88,10 @@ class ImStore {
 	 *
 	 * @return void
 	 * @since 3.0.1
+	 * deprecated since 3.2.8
 	 */
 	function download_language_file( $mofile ) {
-		
-		add_option( '_ims_no_lan_file', time(  ) );
-		
-		$data = @file_get_contents( "https://xparkmedia.com/xm/wp-content/languages/ims-" . $this->locale . ".zip" );
-		
-		if ( empty( $data ) ) 
-			return;
-
-		if ( !file_exists( $path = dirname( $filedir ) ) )
-			@mkdir($path, 0755, true);
-		
-		if( !is_writable( $path ) )
-			return;
-		
-		$temp = $path . '/temp.zip';
-		@file_put_contents( $temp, $data );
-		
-		include_once( ABSPATH . 'wp-admin/includes/class-pclzip.php' );
-		$PclZip = new PclZip( $temp );
-		
-		if ( false == ( $archive = $PclZip->extract( PCLZIP_OPT_EXTRACT_AS_STRING ) ) )
-			return;
-		
-		foreach ( $archive as $file )
-			@file_put_contents( $path . "/" . $file['filename'], $file['content'] );
-
-		@unlink( $temp );
+		return false;		
 	}
 	
 	/**

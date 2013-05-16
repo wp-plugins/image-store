@@ -372,7 +372,7 @@ class ImStoreGallery extends ImStoreAdmin {
 			return $data;
 			
 		if( isset( $_REQUEST['folderpath'] ) )
-		$this->galpath = "/" . trim( $_REQUEST['folderpath'], ".,/" );
+			$this->galpath = "/" . $this->sanitize_path( $_REQUEST['folderpath'] );
 
 		$path['error'] = false;
 		$path['subdir'] = $this->galpath;
@@ -636,7 +636,7 @@ class ImStoreGallery extends ImStoreAdmin {
 			if( update_post_meta( $attach_id, '_wp_attachment_metadata', $metadata ) && $show_errors ){
 				echo apply_filters( "ims_async_upload", $attach_id, $metadata, $attachment );
 				if( !get_post_meta( $parent_id, '_ims_folder_path' ) )
-					update_post_meta( $parent_id, '_ims_folder_path', "/". trim( sanitize_file_name($_REQUEST['folderpath']), ".,/" ) );
+					update_post_meta( $parent_id, '_ims_folder_path', "/". $this->sanitize_path( $_REQUEST['folderpath'] ) );
 			}elseif( $show_errors ) echo 'error';
 			
 			return $attach_id;
@@ -664,10 +664,10 @@ class ImStoreGallery extends ImStoreAdmin {
 
 		if( empty( $_POST['_ims_folder_path'] ) )
 			$this->galpath = get_post_meta( $postid, '_ims_folder_path', true );
-		 else $this->galpath = "/" . trim( $_POST['_ims_folder_path'], ".,/" );
+		 else $this->galpath = "/" . $this->sanitize_path( $_POST['_ims_folder_path'] );
 
 		if ( isset( $_POST['scannfolder'] ) && !empty( $_POST['galleryfolder'] ) ) {
-			$this->galpath = "/" . trim( $_POST['galleryfolder'], ".,/" );
+			$this->galpath = "/" . $this->sanitize_path( $_POST['galleryfolder'] );
 			update_post_meta( $postid, '_ims_folder_path', $this->galpath );
 		}
 	
