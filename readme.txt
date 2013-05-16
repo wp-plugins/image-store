@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: e-commerce,photo store,galleries,imstore,image-store,secure,watermark,slideshow,rate,wepay,shopping,cart,paypal,widget,prints,pagseguro,nextgen, alternative
 Requires at least: 3.0.0
 Tested up to: 3.5.1
-Stable tag: 3.2.8
+Stable tag: 3.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,10 @@ The plugin fully integrated with the WordPress database it only creates a post_e
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+
+= 3.2.9 =
+* Security Update
+* Fixed: MySQL query error.
 
 = 3.2.8 =
 * Fixed: Folder permission issues on some servers.
