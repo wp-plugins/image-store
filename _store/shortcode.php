@@ -151,7 +151,7 @@
 			extract( $atts );
 			
 			$ImStore->active_store = false;
-			$ImStore->opts['hidefavorites'] = true;
+			$ImStore->opts['favorites'] = false;
 			
 			if ( $linkto == 'attachment' ) 
 				$ImStore->opts['attchlink'] = true;
@@ -175,7 +175,7 @@
 		function display_slideshow( $output = '' ) {
 			
 			$this->active_store = false;
-			$this->opts['hidefavorites'] = true;
+			$this->opts['favorites'] = false;
 
 			include( apply_filters( 'ims_slideshow_path', IMSTORE_ABSPATH . '/_store/slideshow.php' ) );
 			return $output;

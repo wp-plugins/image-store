@@ -5,10 +5,10 @@
   Plugin URI: http://xparkmedia.com/plugins/image-store/
   Description: Your very own image store within wordpress "ImStore"
   Author: Hafid R. Trujillo Huizar
-  Version: 3.2.9
+  Version: 3.3.0
   Author URI:http://www.xparkmedia.com
   Requires at least: 3.0.0
-  Tested up to: 3.5.1
+  Tested up to: 3.6.0
   Text Domain: ims
 
   Copyright 2010-2013 by Hafid Trujillo http://www.xparkmedia.com
@@ -82,7 +82,7 @@ if ( !class_exists( 'ImStore' ) && !defined( 'IMSTORE_ABSPATH' ) ) {
 			include_once( IMSTORE_ABSPATH . "/_inc/customers.php" );
 			$ImStore = new ImStoreCustomers( $page, $action ); 
 		
-		} elseif ( $post_type == 'ims_gallery' && $page == 'ims-sales' ) {
+		} elseif ( $page == 'ims-sales' ) {
 			include_once( IMSTORE_ABSPATH . "/_inc/sales.php" );
 			$ImStore = new ImStoreSales( $page, $action ); 
 			

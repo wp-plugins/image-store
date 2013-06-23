@@ -92,7 +92,7 @@ class ImStoreFeeds {
 		$ImStore->order = 'DESC';
 		$ImStore->sortby = 'date';
 		$ImStore->galid = $post->ID;
-		$ImStore->posts_per_page = get_option( 'posts_per_rss' );
+		$ImStore->posts_per_page = $ImStore->get_option( 'posts_per_rss' );
 		
 		$ImStore->get_gallery_images( );
 		$this->charset = get_bloginfo( 'charset' );

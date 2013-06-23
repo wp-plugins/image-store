@@ -18,6 +18,7 @@ class ImStore {
 	 *
 	 * Make sure that new language( .mo ) files have 'ims-' as base name
 	 */
+	public $baseurl = '';
 	public $dformat = '';
 	public $content_url = '';
 	public $content_dir = '';
@@ -33,7 +34,7 @@ class ImStore {
 	public $promo_types = array( );
 	public $rules_property = array( );
 	
-	public $version = '3.2.9';
+	public $version = '3.3.0';
 	public $customer_role = 'customer';
 	public $optionkey = 'ims_front_options';
 	
@@ -91,7 +92,24 @@ class ImStore {
 	 * deprecated since 3.2.8
 	 */
 	function download_language_file( $mofile ) {
-		return false;		
+		 _deprecated_function( __FUNCTION__, '3.2.7' );
+		return;		
+	}
+	
+	/**
+	 * Return site option
+	 *
+	 * @return string | array
+	 * @since 3.2.10
+	 */
+	function get_option( $setting, $default = false ){
+		
+		if( $this->sync ) 
+			$option = get_blog_option( 1, $setting, $default );
+		if( empty( $option ) ) 
+			return get_option( $setting, $default );
+			
+		return $option;
 	}
 	
 	/**
@@ -182,6 +200,7 @@ class ImStore {
 		
 		$this->dformat = get_option( 'date_format' );
 		$this->perma = get_option( 'permalink_structure' );
+		$this->baseurl = apply_filters( 'ims_base_image_url', IMSTORE_URL . '/image.php?i=' );
 		$this->cformat = array( '', "$this->sym%s", "$this->sym %s", "%s$this->sym", "%s $this->sym");
 		
 		$this->units = apply_filters( 'ims_units', array(
@@ -216,7 +235,7 @@ class ImStore {
 	 */
 	function register_post_types( ) {
 		
-		$searchable = get_option( 'ims_searchable' ) ? false : true;
+		$searchable = $this->get_option( 'ims_searchable' ) ? false : true;
 		
 		//image type to be able to display images
 		$image = apply_filters( 'ims_image_post_type', array(
@@ -249,9 +268,9 @@ class ImStore {
 			'publicly_queryable' => true,
 			'hierarchical' => false,
 			'revisions' => false,
-			'capability_type' => 'page',
 			'query_var' => 'ims_gallery',
 			'show_in_nav_menus' => false,
+			'capability_type' => 'ims_gallery',
 			'exclude_from_search' => $searchable,
 			'menu_icon' => IMSTORE_URL . '/_img/imstore.png',
 			'supports' => array( 'title', 'comments', 'author', 'excerpt', 'page-attributes' ),
@@ -329,7 +348,7 @@ class ImStore {
 		$this->pages['slideshow'] = __( 'Slideshow', 'ims' );
 		$this->pages['favorites'] = __( 'Favorites', 'ims' );
 
-		if ( empty( $this->opts['disablestore'] ) ) {
+		if ( $this->opts['store'] ) {
 			$this->pages['price-list'] = __( 'Price List', 'ims' );
 			$this->pages['shopping-cart'] = __( 'Shopping Cart', 'ims' );
 			$this->pages['receipt'] = __( 'Receipt', 'ims' );
@@ -430,11 +449,29 @@ class ImStore {
 	 */
 	function set_user_caps( ) {
 		global $current_user;
+		
 		if ( !isset( $current_user->ID ) || isset( $current_user->caps['administrator'] ) )
 			return; 
-
-		if ( !empty( $current_user->ims_user_caps ) )
-			$current_user->allcaps += $current_user->ims_user_caps;
+		
+		$ims_caps = $this->get_option( 'ims_user_options' );
+		$core_caps = ( array) get_option( 'ims_core_caps', true );
+		$ims_user_caps = ( array ) get_user_meta( $current_user->ID, 'ims_user_caps', true );
+		
+		foreach( $ims_caps['caplist'] as $cap => $label ){
+			if( isset( $ims_user_caps["ims_{$cap}"] ) ) 
+				$current_user->add_cap( "ims_{$cap}" );
+			else if( isset( $current_user->allcaps["ims_{$cap}"] ) )
+				$current_user->remove_cap( "ims_{$cap}" ); 
+		}
+		foreach( $core_caps as $cap ){
+			if( isset( $ims_user_caps["ims_manage_galleries"]  ) )
+				$current_user->add_cap( $cap );
+			else if( isset( $current_user->allcaps[$cap] ) )
+				$current_user->remove_cap( $cap ); 
+				
+			if( isset( $ims_user_caps["ims_add_galleries"] ) && $cap == 'edit_ims_gallerys' )
+				$current_user->add_cap( $cap );
+		}
 	}
 	
 	/**
@@ -461,7 +498,6 @@ class ImStore {
 		);
 		
 		wp_cache_set( "ims_vote_count_{$image_id}", $count, 'ims' );
-		
 		return $count;
 	}
 	
@@ -523,10 +559,6 @@ class ImStore {
 				"index.php?ims_gallery=" . $wp_rewrite->preg_index( 1 ) . "&imspage=$id" .
 				'&paged=' . $wp_rewrite->preg_index( 2 );
 			}
-			
-			$new_rules[$this->opts['gallery_slug'] . "/([^/]+)/" . $this->page_slugs[$id] . "/ms/([0-9]+)/?$"] =
-			"index.php?ims_gallery=" . $wp_rewrite->preg_index( 1 ) . "&imspage=$id" .
-			'&imsmessage=' . $wp_rewrite->preg_index( 2 );
 
 			$new_rules[$this->opts['gallery_slug'] . "/([^/]+)/" . $this->page_slugs[$id] . "/?$"] =
 			"index.php?ims_gallery=" . $wp_rewrite->preg_index( 1 ) . "&imspage=$id";
@@ -589,7 +621,7 @@ class ImStore {
 		if ( stripos( $price, $this->sym ) !== false )
 			return $price;
 
-		if ( $this->opts['disable_decimal'] )
+		if ( !$this->opts['decimal'] )
 			$price = number_format_i18n( (double) $price );
 		else $price = number_format( (double) $price, 2 );
 
@@ -622,6 +654,32 @@ class ImStore {
 		if ( !$post || is_wp_error( $post ) )
 			return false;
 		return (int) $post->post_parent;
+	}
+	
+	/**
+	 * Encrypt url
+	 *
+	 * @parm string $string
+	 * @return string
+	 * @since 2.1.1
+	 */
+	function url_encrypt( $string ) {
+		
+		$str = '';
+		for ( $i = 0; $i < strlen( $string ); $i++ ) {
+			$char = substr( $string, $i, 1 );
+			$keychar = substr( $this->key, ( $i % strlen( $this->key ) ) - 1, 1 );
+			$char = chr( ord( $char ) + ord( $keychar ) );
+			$str .= $char;
+		}
+		
+		return urlencode( 
+			implode( '::', 
+				explode( '/',
+					str_replace( '=', '', base64_encode( $str ) )
+				) 
+			) 
+		);
 	}
 	
 	/**

@@ -53,6 +53,7 @@ class ImStoreAdmin extends ImStore {
 		//add_filter('posts_request', array(&$this, 'posts_request'));
 		
 		//image load processing
+		add_filter( 'image_save_pre', array( &$this, 'image_save_pre' ), 15, 2 );
 		add_filter( 'get_attached_file', array( &$this, 'load_ims_image_path' ), 15, 2 );
 		add_filter( 'intermediate_image_sizes', array( &$this, 'alter_image_sizes' ), 50 );
 		add_filter( 'load_image_to_edit_path', array( &$this, 'load_ims_image_path' ), 15, 2 );
@@ -156,8 +157,8 @@ class ImStoreAdmin extends ImStore {
 		$this->galid = ( int ) $_GET['post'];
 			
 		$this->uid = $user_ID;
-		$this->uopts = get_option( 'ims_user_options' );
 		$this->ajaxnonce = wp_create_nonce( 'ims_ajax' );
+		$this->uopts = $this->get_option( 'ims_user_options' );
 	}
 	
 	/**
@@ -178,8 +179,11 @@ class ImStoreAdmin extends ImStore {
 	 * @since 0.5.0 
 	 */
 	function activate( ) {
+		
 		include_once( IMSTORE_ABSPATH . '/admin/install.php' );
-		new ImStoreInstaller( );
+		
+		$ImStoreInstaller = new ImStoreInstaller( );
+		$ImStoreInstaller->init( );
 		
 		wp_schedule_event( strtotime( "tomorrow 1 hours" ), 'twicedaily', 'imstore_expire' );
 	}
@@ -264,15 +268,17 @@ class ImStoreAdmin extends ImStore {
 	function add_menu( ) {
 		$menu ='edit.php?post_type=ims_gallery';
 		
-		if ( empty( $this->opts['disablestore'] ) ) {
+		if ( $this->opts['store'] ) {
 			$this->screens['sales'] = add_submenu_page( $menu, __( 'Sales', 'ims' ), __( 'Sales', 'ims' ), 'ims_read_sales', 'ims-sales', array( &$this, 'show_menu' ) );
 			$this->screens['pricing'] = add_submenu_page( $menu, __( 'Pricing', 'ims' ), __( 'Pricing', 'ims' ), 'ims_change_pricing', 'ims-pricing', array( &$this, 'show_menu' ) );
 			$this->screens['customers'] = add_submenu_page( $menu, __( 'Customers', 'ims' ), __( 'Customers', 'ims' ), 'ims_manage_customers', 'ims-customers', array( &$this, 'show_menu' ) );
 		}
 
 		$this->screens['settings'] = add_submenu_page( $menu, __( 'Settings', 'ims' ), __( 'Settings', 'ims' ), 'ims_change_settings', 'ims-settings', array( &$this, 'show_menu' ) );
-		if ( current_user_can( 'ims_read_galleries' ) )
-			$this->screens['user-galleries'] =	add_users_page( __( 'Image Store', 'ims' ), __( 'Galleries', 'ims' ), 'ims_read_galleries', 'user-galleries', array( &$this, 'show_menu' ) );
+		if ( current_user_can( 'ims_read_galleries' ) && $this->opts['store'] && !current_user_can( 'administrator' ) ){
+			$this->screens['user-galleries'] =	add_users_page( __( 'Image Store', 'ims' ), __( 'My Galleries', 'ims' ), 'ims_read_galleries', 'user-galleries', array( &$this, 'show_menu' ) );
+			$this->screens['user-images'] =	add_users_page( __( 'Image Store', 'ims' ), __( 'My Images', 'ims' ), 'ims_read_galleries', 'user-images', array( &$this, 'show_menu' ) );
+		}
 	}
 	
 	/**
@@ -292,7 +298,7 @@ class ImStoreAdmin extends ImStore {
 		
 		//multisite installed message
 		if( current_user_can( 'manage_network' ) && is_plugin_active_for_network( IMSTORE_FILE_NAME ))
-			$message = sprintf( __( 'Apply <a href="%s">Image Store updates</a> across the network.', 'ims' ), admin_url( 'network/upgrade.php' ) ); 
+			$message = sprintf( __( 'Apply <a href="%s">Image Store updates</a> across the network.', 'ims' ), network_site_url( 'wp-admin/network/upgrade.php' ) ); 
 		
 		if ( get_option( 'imstore_version' ) < $this->version && current_user_can( 'install_plugins' ) ) 
 			echo '<div class="error fade"><p>' . $message . '</p></div>';
@@ -466,7 +472,8 @@ class ImStoreAdmin extends ImStore {
 	function sanitize_path( $path, $lefttrim = false ){
 		$path = str_replace( array(" ", '"', "'", '$', '`', "&", "~", "^", "?", "#"), '', $path );
 		
-		if( $lefttrim ) return remove_accents( ltrim( str_replace( array( '../', './', '\'', '\\', '//' ), '/', $path ) , ".,/" ) );
+		if( $lefttrim == 'notrim' ) return remove_accents( ltrim( str_replace( array( '../', './', '\'', '\\', '//' ), '/', $path ) , ".," ) );
+		else if( $lefttrim ) return remove_accents( ltrim( str_replace( array( '../', './', '\'', '\\', '//' ), '/', $path ) , ".,/" ) );
 		else return remove_accents( trim( str_replace( array( '../', './', '\'', '\\', '//' ), '/', $path ) , ".,/" ) );
 	}
 	
@@ -555,11 +562,13 @@ class ImStoreAdmin extends ImStore {
 				break;
 			case 'images':
 				global $wpdb;
-				echo $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->posts WHERE post_parent = $postid AND post_status = 'publish'");
+				echo $wpdb->get_var( $wpdb->prepare( 
+				"SELECT COUNT(*) FROM $wpdb->posts WHERE post_parent = %d AND post_status = 'publish'", $postid ));
 				break;
 			case 'expire':
 				global $post;
-				echo ( $post->post_expire == '0000-00-00 00:00:00' ) ? '' : date_i18n( $this->dformat, strtotime( $post->post_expire ));
+				if ( $post->post_expire != '0000-00-00 00:00:00' )
+					echo mysql2date( $this->dformat, $post->post_expire, true );
 				break;
 			default:
 		}
@@ -616,16 +625,30 @@ class ImStoreAdmin extends ImStore {
 	 * @since 3.0.0
 	 */
 	function register_screen_columns( ){
-		if( $this->screen_id != 'profile_page_user-galleries' )
-			return;
-		add_filter( 'screen_settings', array( &$this, 'screen_settings' ) );
-		register_column_headers( 'profile_page_user-galleries', array(
-			'gallery' => __( 'Gallery', 'ims' ),
-			'galleryid' => __( 'Gallery ID', 'ims' ),
-			'password' => __( 'Password', 'ims' ),
-			'expire' => __( 'Expires', 'ims' ),
-			'images' => __( 'Images', 'ims' ),
-		) );
+		switch( $this->screen_id ){
+			case 'profile_page_user-galleries':
+				register_column_headers( 'profile_page_user-galleries', array(
+					'gallery' => __( 'Gallery', 'ims' ),
+					'galleryid' => __( 'Gallery ID', 'ims' ),
+					'password' => __( 'Password', 'ims' ),
+					'expire' => __( 'Expires', 'ims' ),
+					'images' => __( 'Images', 'ims' ),
+				) );
+				add_filter( 'screen_settings', array( &$this, 'screen_settings' ) );
+				break;
+			case 'profile_page_user-images':
+				register_column_headers( 'profile_page_user-images', array(
+					'image' => __( 'Image', 'ims' ),
+					'gallery' => __( 'Gallery', 'ims' ),
+					'size' => __( 'Size', 'ims' ),
+					'color' => __( 'Color', 'ims' ),
+					'finish' => __( 'Finish', 'ims' ),
+					'download' => __( 'Download', 'ims' ),
+				) );
+				break;
+			default:
+				return;
+		}
 	}
 	
 	/**
@@ -676,8 +699,8 @@ class ImStoreAdmin extends ImStore {
 		if ( isset( $_REQUEST['target'] ) && 'thumbnail' == $_REQUEST['target'] ) {
 			$resized_file = image_resize( 
 				$this->content_dir . "/$path/" . $metadata['sizes']['thumbnail']['file'],
-				get_option("mini_size_w"),
-				get_option("mini_size_h"), 
+				$this->get_option("mini_size_w"),
+				$this->get_option("mini_size_h"), 
 				true
 			);
 			if ( !is_wp_error( $resized_file ) && $resized_file && $info = getimagesize( $resized_file ) )
@@ -767,6 +790,21 @@ class ImStoreAdmin extends ImStore {
 	}
 	
 	/**
+	 * Make images interlace when they are risized
+	 *
+	 * @param resouce $image
+	 * @param unit $post_id
+	 * @return resource
+	 * @since 3.3.0 
+	 */
+	function image_save_pre( $image, $post_id ){
+		if ( 'ims_image' != get_post_type( $postid ) )
+			return $image;
+		imageinterlace( $image, true );
+		return $image;
+	}
+	
+	/**
 	 * Return image path for image (ims_image) to be edited
 	 *
 	 * @param string $filepath
@@ -812,7 +850,7 @@ class ImStoreAdmin extends ImStore {
 		$postid = isset( $_REQUEST['postid'] ) ? $_REQUEST['postid'] : false;
 		if ( $this->pagenow == 'upload-img.php' ||  'ims_image' == get_post_type( $postid ) ){
 			$pathinfo = pathinfo( $file );
-			$despath = "/" . $this->sanitize_path(  $pathinfo['dirname'], true ) . "/_resized/";
+			$despath = $this->sanitize_path( $pathinfo['dirname'], 'notrim' ) . "/_resized/";
 			
 			if ( !file_exists( $despath ) )
 				@mkdir( $despath, 0755, true );
@@ -864,7 +902,9 @@ class ImStoreAdmin extends ImStore {
 		if ( get_site_option( 'ims_sync_settings') && empty( $opts ) ) {
 			
 			include_once( IMSTORE_ABSPATH . '/admin/install.php' );
-			ImStoreInstaller::imstore_default_options( );
+			
+			$ImStoreInstaller = new ImStoreInstaller();
+			$ImStoreInstaller->imstore_default_options( );
 			
 		} else {
 			
@@ -967,6 +1007,9 @@ class ImStoreAdmin extends ImStore {
 			case 'profile_page_user-galleries':
 				$option['ims_user_galleries_per_page'] = __( 'Galleries', 'ims' );
 				break;
+			case 'profile_page_user-images':
+				$option['ims_user_images_per_page'] = __( 'Images', 'ims' );
+				break;
 			case 'ims_gallery_page_ims-customers':
 				$option['ims_sales_per_page'] = __( 'Customers', 'ims' );
 				break;
@@ -1048,7 +1091,8 @@ class ImStoreAdmin extends ImStore {
 			LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id
 			LEFT JOIN $wpdb->usermeta ur ON u.ID = ur.user_id 
 			WHERE um.meta_key = 'ims_status' AND um.meta_value = 'active' 
-			AND ( ur.meta_key = '{$wpdb->prefix}capabilities' AND ur.meta_value LIKE '%{$this->customer_role}%' ) 
+			AND ( ur.meta_key = '{$wpdb->prefix}capabilities' AND ur.meta_value 
+			LIKE '%\"". $wpdb->escape( $this->customer_role) ."\"%' ) 
 			GROUP BY u.id" );
 			
 			wp_cache_set( 'ims_customers', $customers, 'ims' );
@@ -1101,7 +1145,7 @@ class ImStoreAdmin extends ImStore {
 				$query = "SELECT um.meta_value status, count(um.meta_value) count 
 				FROM $wpdb->usermeta um LEFT JOIN $wpdb->usermeta ur ON um.user_id = ur.user_id 
 				WHERE um.meta_key = 'ims_status'  
-				AND ( ur.meta_key =  '{$wpdb->prefix}capabilities' AND ur.meta_value LIKE '%{$this->customer_role}%' ) GROUP by um.meta_value";
+				AND ( ur.meta_key =  '{$wpdb->prefix}capabilities' AND ur.meta_value LIKE '%\"". $wpdb->escape( $this->customer_role) ."\"%' ) GROUP by um.meta_value";
 				break;
 			case 'order':
 				$query = "SELECT post_status AS status, count(post_status) AS count FROM $wpdb->posts

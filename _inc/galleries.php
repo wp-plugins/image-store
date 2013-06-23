@@ -144,7 +144,9 @@ class ImStoreGallery extends ImStoreAdmin {
 		
 		foreach ( $this->metaboxes as $key => $label )
 			add_meta_box( $key, $label, array( &$this, $key ), "ims_gallery", "normal" );
-		add_meta_box( "ims_customers_box", __( 'Customers', 'ims' ), array( &$this, "customers_metabox" ), "ims_gallery", "side", "low" );
+			
+		if( $this->opts['store'] )
+			add_meta_box( "ims_customers_box", __( 'Customers', 'ims' ), array( &$this, "customers_metabox" ), "ims_gallery", "side", "low" );
 		
 		register_column_headers( 'ims_gallery', $this->columns );
 		$this->exts = apply_filters( 'ims_allowed_extensions', array( 'jpg', 'jpeg', 'gif', 'png' ) );

@@ -71,8 +71,8 @@ class ImStoreWidget extends WP_Widget {
 		
 		$show_options = apply_filters('ims_widget_display_options', array(
 			'gal' => __( 'Gallery', 'ims' ),
-			'ASC' => __( 'Oldest images', 'ims' ),
-			'DESC' => __( 'Latest images', 'ims' ),
+			'DESC' => __( 'Oldest images', 'ims' ),
+			'ASC' => __( 'Latest images', 'ims' ),
 			'rand' => __( 'Random images', 'ims' ),
 		) );
 		

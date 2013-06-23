@@ -49,7 +49,7 @@
 		
 		//image loop
 		foreach ( $this->cart['images'] as $imageid => $sizes )
-			$output .= ImStoreCart::image_row( $imageid, $sizes, $row );
+			$output .= $ImStoreCart->image_row( $imageid, $sizes, $row );
 		
 		$output .= apply_filters( 'ims_cart_image_list', '', $this );
 		$output .= '</tbody><tfoot>'; //end tbody - start tfoot
@@ -74,7 +74,7 @@
 		//shipping charge
 		if( $this->cart['shippingcost'] )
 			$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell"><label for="shipping">' . __( 'Shipping', 'ims' ) . '</label></td>
-			<td role="gridcell" class="shipping">' . ImStoreCart::shipping_options( ) . '</td></tr>';
+			<td role="gridcell" class="shipping">' . $ImStoreCart->shipping_options( ) . '</td></tr>';
 		
 		//display tax fields
 		if ( $this->cart['tax'] ) 

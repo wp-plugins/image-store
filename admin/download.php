@@ -35,12 +35,12 @@
 			function ImStoreDownloadImage() {
 		
 				//normalize nonce field
-				wp_set_current_user( 0 );
+				if( empty($_GET['usr'] ) ) 
+					wp_set_current_user( 0 );
 		
 				if ( empty( $_REQUEST['img'] ) || empty( $_REQUEST["_wpnonce"] ) ||
 				!wp_verify_nonce( $_REQUEST["_wpnonce"], "ims_download_img" ) ) 
 					die( );
-				
 				
 				global $ImStore;
 
@@ -50,7 +50,7 @@
 				if ( empty( $this->attachment ) )
 					wp_die( __( 'Sorry, we could find the image' ) );
 					
-				$sizes = get_option( 'ims_sizes', true );
+				$sizes = $ImStore->get_option( 'ims_sizes', true );
 				$imgsize = empty( $_REQUEST['sz'] ) ? 'preview' : $_REQUEST['sz'];
 				
 				$dimentions = array( );
@@ -135,6 +135,9 @@
 				
 				global $wpdb;
 				
+				if( ob_get_contents() )
+					ob_clean( );
+				
 				$type = wp_check_filetype( basename( $this->image_dir ) ); 
 				$filename = $wpdb->get_var( "SELECT post_title FROM $wpdb->posts WHERE ID = " . $this->id );
 				
@@ -150,7 +153,7 @@
 				$modified = gmdate( "D, d M Y H:i:s", @filemtime( $this->image_dir )  );
 				$etag = '"' . md5( $this->image_dir . $color . $modified ) . '"';
 				
-				header("Robots: none");
+				header( "Robots: none" );
 				header( 'X-Content-Type-Options: nosniff' );
 	
 				header( 'ETag: ' . $etag );
@@ -184,7 +187,7 @@
 				}
 				
 				//apply filter
-				$filters = get_option( 'ims_color_filters' );
+				$filters = $this->get_option( 'ims_color_filters' );
 				
 				if ( $color && isset( $filters[$color] ) ) {
 					if ( $filters[$color]['grayscale'] )

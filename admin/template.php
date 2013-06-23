@@ -64,7 +64,8 @@
 	$screens = array(
 		"ims-sales" => array( "sales", __( 'Sales', 'ims' ) ),
 		"ims-customers" => array( "users", __( 'Users', 'ims' ) ),
-		"user-galleries" => array( "galleries", __( 'Galleries', 'ims' ) ),
+		"user-galleries" => array( "galleries", __( 'My Galleries', 'ims' ) ),
+		"user-images" => array( "images", __( 'My Images', 'ims' ) ),
 		"ims-pricing" => array( "pricing", __( 'Pricing', 'ims' ) ),
 		"ims-settings" => array( "options-general", __( 'Settings', 'ims' ) )
 	);
@@ -101,23 +102,26 @@
     	<div id="poststuff" class="metabox-holder">
         	<?php if ($msnum) echo '<div class="updated fade" id="message"><p>', $message[$msnum], '</p></div>' ?>
             
-     	<?php switch ( $this->page) {
+     	<?php switch ( $this->page ) {
 				case "ims-settings":
-					include( IMSTORE_ABSPATH . '/admin/settings/settings.php' );
+					include( apply_filters( 'ims_settings_path', IMSTORE_ABSPATH . '/admin/settings/settings.php' ) );
 					break;
 				case "ims-customers":
-					include( IMSTORE_ABSPATH . '/admin/customers/customers.php' );
+					include( apply_filters( 'ims_customers_path', IMSTORE_ABSPATH . '/admin/customers/customers.php' ) );
 					break;
 				case "ims-pricing":
-					include( IMSTORE_ABSPATH . '/admin/sales/pricing.php' );
+					include( apply_filters( 'ims_pricing_path', IMSTORE_ABSPATH . '/admin/sales/pricing.php' ) );
 					break;
 				case "ims-sales":
 					if ( isset( $_GET['details'] ) )
-						include( IMSTORE_ABSPATH . '/admin/sales/sales-details.php' );
-					else include( IMSTORE_ABSPATH . '/admin/sales/sales.php' );
+						include( apply_filters( 'ims_sales_details_path', IMSTORE_ABSPATH . '/admin/sales/sales-details.php' ) );
+					else include( apply_filters( 'ims_sales_path', IMSTORE_ABSPATH . '/admin/sales/sales.php' ) );
 					break;
 				case "user-galleries":
-					include( IMSTORE_ABSPATH . '/admin/customers/customer-galleries.php' );
+					include( apply_filters( 'ims_user_galleries_path', IMSTORE_ABSPATH . '/admin/customers/customer-galleries.php' ) );
+					break;
+				case "user-images":
+					include( apply_filters( 'ims_user_images_path', IMSTORE_ABSPATH . '/admin/customers/customer-images.php' ) );
 					break;
 				default:
 			} ?>

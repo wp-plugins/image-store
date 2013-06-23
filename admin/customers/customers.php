@@ -29,6 +29,9 @@
 	if ( $this->status == 'inative' )
 		$user_status['delete'] = __( 'Delete', 'ims' );
 	
+	if( $usersearch ) 
+		$this->status = false;
+	
 	$user_status = apply_filters( 'ims_user_status', $user_status, $this->status );
 	
 	//search users
@@ -40,6 +43,13 @@
 			'offset' => ( $userspage * $this->per_page ),
 			'search_columns' => array( 'email', 'nicename', 'login' ),
 		) ;
+		
+		$args['meta_query'] = array( array(
+				'key' => 'ims_status',
+				'value' => $this->status,
+				'compare' => '='
+			)
+		);
 		
 		if( $usersearch && is_email( $usersearch ) )
 			$args['search'] =  $usersearch;
@@ -60,6 +70,10 @@
 			);
 			
 		$wp_user_search = new WP_User_Query( $args );
+		
+		if( isset( $_REQUEST['usersearch'] ) ) 
+			$wp_user_search->search_term = $_REQUEST['usersearch'];
+		
 	} else  $wp_user_search = new WP_User_Search( $usersearch, $userspage, $this->customer_role );
 	
 	$page_links = false;
@@ -174,15 +188,17 @@
 								( ( class_exists( 'MailPress' ) && $customer->_MailPress_sync_wordpress_user ) ? __( "Yes", 'ims' ) : __( "no", 'ims' ) ) . "</td>";
 								break;
 							case 'name':	
+								
 								$stat = ( $this->status == 'inative' ) ? 'active' : 'inative';
 							
 								$r .= "<td class='column-{$columnid}{$hide}'>$user->first_name<div class='row-actions'>";
 								
 								$r .= "<a href='$this->pageurl&amp;$nonce&amp;useraction=edit&amp;userid=$userid' title='" . 
-								__( "Edit information", 'ims' ) . "'>" . __( "Edit", 'ims' ) . "</a> | ";
+								__( "Edit information", 'ims' ) . "'>" . __( "Edit", 'ims' ) . "</a>";
 								
-								$r .= "<a href='$this->pageurl&amp;$nonce&amp;imsaction={$stat}&amp;customer=$userid' title='" . 
-								$user_status[$stat] . "'>" . $user_status[$stat] . "</a>";
+								if ( !$usersearch )
+									$r .= " | <a href='$this->pageurl&amp;$nonce&amp;imsaction={$stat}&amp;customer=$userid' title='" . 
+									$user_status[$stat] . "'>" . $user_status[$stat] . "</a>";
 								
 								if ( $this->status == 'inative' )
 									$r .= " | <span class='delete'><a href='$this->pageurl&amp;$nonce&amp;imsaction=delete&amp;customer=$userid' title='" .

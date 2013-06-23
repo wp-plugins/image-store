@@ -90,7 +90,9 @@ class ImStoreSales extends ImStoreAdmin {
 	 * @since 3.2.1
 	 */
 	function sales_link( $id ){
-		return $this->pageurl . "&amp;details=1&amp;id={$id}" ;
+		if( current_user_can( 'ims_manage_galleries' ) )
+			return admin_url( "edit.php?post_type=ims_gallery&amp;page=ims-sales&amp;details=1&amp;id={$id}" );
+		else return admin_url( "admin.php?page=ims-sales&amp;details=1&amp;id={$id}" );
 	}
 	
 	/**

@@ -87,9 +87,10 @@ class ImStoreCartPayPal {
 				$postdata .= $key . '=' . $_SERVER[$key] . ',';
 			$postdata .= "\n$url\n_________________\n";
 			
-			$hd = fopen( $file, 'a' );
-			fwrite( $hd, $web['host'] . "," . $postdata );
-			fclose( $hd );
+			if( $hd = fopen( $file, 'a' ) ){
+				fwrite( $hd, $web['host'] . "," . $postdata );
+				fclose( $hd );
+			}
 			
 			return;
 			

@@ -626,7 +626,7 @@ class ImStorePricing extends ImStoreAdmin {
                 <tbody>
                     <?php 
 					
-					if( !$sizes = get_option( 'ims_sizes') )
+					if( !$sizes = $this->get_option( 'ims_sizes') )
 						$sizes = array( );
 						
                     foreach( (array) $sizes as $key => $size ): 
@@ -713,7 +713,7 @@ class ImStorePricing extends ImStoreAdmin {
                 <tbody>
                 <?php 
 				
-				if( !$colors = get_option( 'ims_color_options' ) )
+				if( !$colors = $this->get_option( 'ims_color_options' ) )
 					$colors = array( );
 				
 				foreach ( (array) $colors as $key => $color) : ?>
@@ -782,7 +782,7 @@ class ImStorePricing extends ImStoreAdmin {
                 <tbody>
                 <?php 
 				
-				if( !$options = get_option( 'ims_shipping_options' ) )
+				if( !$options = $this->get_option( 'ims_shipping_options' ) )
 					$options = array( );
 				
 				foreach ( (	array) $options as $key => $option ) : ?>
@@ -838,7 +838,7 @@ class ImStorePricing extends ImStoreAdmin {
 		</p>
 	
 		<?php
-		$dlist = get_option( 'ims_pricelist' );
+		$dlist = $this->get_option( 'ims_pricelist' );
 		foreach ( $this->get_pricelists( ) as $key => $list ) :
 		
 			$meta = get_post_meta( $list->ID, '_ims_list_opts', true );
@@ -1045,7 +1045,7 @@ class ImStorePricing extends ImStoreAdmin {
               </thead>
           
                 <tbody>
-                <?php foreach ( (array) get_option( 'ims_print_finishes' ) as $key => $finish ) : ?>
+                <?php foreach ( (array) $this->get_option( 'ims_print_finishes' ) as $key => $finish ) : ?>
                   <tr class="finish row alternate">
                       <td class="move" title="<?php _e( 'Move to list', 'ims' ) ?>">&nbsp;</td>
                       <td colspan="3" class="name">
@@ -1177,7 +1177,7 @@ class ImStorePricing extends ImStoreAdmin {
 				</thead>
 				
 				<tbody>
-				<?php foreach ( (array) get_option('ims_color_filters') as $code => $filter ) : ?>
+				<?php foreach ( (array) $this->get_option('ims_color_filters') as $code => $filter ) : ?>
 				<tr class="filters row alternate">
 					<td class="name">
 						<input type="text" name="filters[<?php echo $code ?>][name]" value="<?php echo esc_attr( $filter['name'] ) ?>" class="name" />
@@ -1486,7 +1486,7 @@ class ImStorePricing extends ImStoreAdmin {
 							case 'expires':
 								$r .= '<td class="column-' . $column_id . $hide . '" > ';
 								if( $promo->post_expire != '0000-00-00 00:00:00' ) 
-									$r .= date_i18n( $this->dformat, strtotime( $promo->post_expire ) );
+									$r .= mysql2date( $this->dformat, $post->post_expire, true );
 								$r .= '</td>' ;
 								break;
 							case 'type':

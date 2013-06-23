@@ -9,5 +9,4 @@
  * @filesource  wp-content/plugins/image-store/_css/print.css
  * @since 1.0.0
  */
-
 ul#adminmenu,div#wpadminbar,div#adminmenuback,div#adminmenuwrap,div#footer,div#wphead,div.update-nag{display:none!important}div#wpbody,div#wpcontent,div#wpcontent .wrap{margin:0}

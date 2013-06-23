@@ -32,7 +32,7 @@ class ImStoreSet extends ImStoreAdmin {
 		add_action( 'admin_init', array( &$this, 'save_settings' ), 10 );
 		add_action( 'ims_settings', array( &$this, 'watermark_location'), 2 );
 		add_action( 'ims_setting_fields', array( &$this, 'show_user_caps' ), 11 );
-		add_action( 'ims_setting_fields', array( &$this, 'watermark_settings' ), 12 );
+		add_action( 'ims_setting_fields', array( &$this, 'dynamic_settings' ), 12 );
 		add_action( 'ims_setting_fields', array( &$this, 'add_gateway_fields' ), 10 );
 		
 		//script styles
@@ -56,8 +56,13 @@ class ImStoreSet extends ImStoreAdmin {
 	 * @since 3.2.1
 	 */
 	function settings_tabs( $tabs ){
-	
-		if( !$this->opts['disablestore'] )
+		
+		global $blog_id;			
+		if ( is_plugin_active_for_network( IMSTORE_FILE_NAME ) 
+			|| ( $this->sync && $blog_id != 1 ) )
+			unset( $tabs['reset'] );
+		
+		if( $this->opts['store'] )
 			return $tabs;
 		
 		foreach(array( 'payment', 'checkout', ) as $name )
@@ -66,16 +71,27 @@ class ImStoreSet extends ImStoreAdmin {
 		return $tabs;
 	}
 	
-	
-	function watermark_settings( $settings ){
+	/**
+	 * Show settings base on option
+	 *
+	 * @return array()
+	 * @since 3.3.0
+	 */
+	function dynamic_settings( $settings ){
 		
-		if( $this->opts['watermark'] != 1 )
-			unset( $settings['image']['watermark_'] );
+		if( empty( $this->opts['emailreceipt']) ){
+			unset( $settings['checkout']['receiptname'] );
+			unset( $settings['checkout']['receiptemail'] );
+			unset( $settings['checkout']['thankyoureceipt'] );
+		}
 		
-		if( $this->opts['watermark'] != 2 )
+		if( $this->opts['watermark'] != 1 && isset( $settings['image']['watermark_']) )
+				unset( $settings['image']['watermark_'] );
+		
+		if( $this->opts['watermark'] != 2 && isset( $settings['image']['watermarkurl'] ) )
 			unset( $settings['image']['watermarkurl'] );
 		
-		if( $this->opts['watermark'] == 0 )
+		if( $this->opts['watermark'] == 0 && isset( $settings['image']['watermarktile'] ) )
 			unset( $settings['image']['watermarktile'] );
 		
 		return $settings;	
@@ -94,7 +110,7 @@ class ImStoreSet extends ImStoreAdmin {
 		if( $this->opts['watermarktile'] || !$this->opts['watermark'] )
 			return;
 		
-		$option = get_option('ims_wlocal');
+		$option = $this->get_option('ims_wlocal');
 		$wlocal = empty($option) ? 5 : $option;
 
 		echo '<tr class="row-wlocal" valign="top"><td><label>' . __('Watermark location', 'ims') . '</label></td><td>';
@@ -290,6 +306,7 @@ class ImStoreSet extends ImStoreAdmin {
 	 * @since 3.0.0
 	 */
 	function get_users( ) {
+		
 		$users = wp_cache_get( 'ims_users', 'ims' );
 
 		if ( false == $users ) {
@@ -297,8 +314,10 @@ class ImStoreSet extends ImStoreAdmin {
 			$users = $wpdb->get_results( 
 				"SELECT ID, user_login name FROM $wpdb->users u 
 				JOIN $wpdb->usermeta um ON ( u.ID = um.user_id ) 
-				WHERE meta_key = '{$wpdb->prefix}capabilities' AND meta_value 
-				NOT LIKE '%{$this->customer_role}%' AND meta_value NOT LIKE '%administrator%'" 
+				WHERE meta_key = '{$wpdb->prefix}capabilities'
+				AND meta_value NOT LIKE '%\"administrator\"%'
+				AND meta_value NOT LIKE '%\"". $wpdb->escape( $this->customer_role ) ."\"%'
+				GROUP BY u.ID "
 			);
 			wp_cache_set( 'ims_users', $users, 'ims' );
 		}
@@ -335,9 +354,9 @@ class ImStoreSet extends ImStoreAdmin {
 			return stripslashes( $this->opts[$option . $key] );
 		elseif ( isset( $this->opts[$option] ) && is_string( $this->opts[$option] ) )
 			return stripslashes( $this->opts[$option] );
-		elseif ( $o = get_option( $option ) )
+		elseif ( $o = $this->get_option( $option ) )
 			return stripslashes( $o );
-		elseif ( $ok = get_option( $option . $key ) )
+		elseif ( $ok = $this->get_option( $option . $key ) )
 			return stripslashes( $ok );
 		return false;
 	}
@@ -391,12 +410,12 @@ class ImStoreSet extends ImStoreAdmin {
 		if ( isset( $_POST['resetsettings'] ) || isset( $_POST['uninstall'] ) ) {
 
 			include_once( IMSTORE_ABSPATH . '/admin/install.php' );
-
-			if ( isset( $_POST['uninstall'] ) )
-				ImStoreInstaller::imstore_uninstall( );
+			$ImStoreInstaller = new ImStoreInstaller();
 			
-			ImStoreInstaller::imstore_default_options( );
-							
+			if ( isset( $_POST['uninstall'] ) )
+				$ImStoreInstaller->imstore_uninstall( );
+			
+			$ImStoreInstaller->imstore_default_options( );
 			wp_redirect( $this->pageurl . '&flush=1&ms=3' );
 			die( );
 
@@ -445,9 +464,11 @@ class ImStoreSet extends ImStoreAdmin {
 					}
 				}elseif ( isset( $val['multi'] ) ) {
 					foreach ( $val['opts'] as $k2 => $v2 ) {
-						if ( get_option( $key . $k2 ) )
+						if ( $this->get_option( $key . $k2 ) ){
 							update_option($key . $k2, $_POST[$key][$k2]);
-						elseif ( isset( $this->opts[$key] ) && is_array( $this->opts[$key] ) )
+							if( $this->sync == true ) 
+								update_blog_option( 1, $key . $k2, $_POST[$key][$k2] );
+						}elseif ( isset( $this->opts[$key] ) && is_array( $this->opts[$key] ) )
 							$this->opts[$key][$k2] = isset($_POST[$key][$k2]) ? $_POST[$key][$k2] : false;
 						elseif ( !empty( $_POST[$key][$k2] ) )
 							$this->opts[$key . $k2] = $_POST[$key][$k2];
@@ -459,20 +480,20 @@ class ImStoreSet extends ImStoreAdmin {
 					$this->opts[$key] = $_POST[$key];
 				else $this->opts[$key] = false;
 			}
-
+					
 			//multisite support
 			if ( is_multisite( ) && $this->sync == true )
 				switch_to_blog( 1 );
-
+				
 			update_option( $this->optionkey, $this->opts );
 			
 			if ( isset( $_POST['wlocal'] ) )
 				update_option( 'ims_wlocal', $_POST['wlocal'] );
 
-			if ( isset( $_POST['ims_searchable'] ) ) 
-				update_option( 'ims_searchable', $_POST['ims_searchable'] );
+			if ( isset( $_POST['columns'] ) ) 
+				update_option( 'ims_searchable', ( isset($_POST['ims_searchable'] ) ? $_POST['ims_searchable'] : false ) );
 			
-			if ( $this->in_array( $action, array( 'taxonomies', 'image', 'gallery' ) )  )
+			if ( $this->in_array( $action, array( 'taxonomies', 'image', 'gallery', 'general' ) )  )
 				$this->pageurl .= "&flush=1";
 			
 			do_action( 'ims_save_settings', $action, $settings );

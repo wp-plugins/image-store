@@ -275,7 +275,7 @@ class ImStoreCustomers extends ImStoreAdmin {
 			'user_email' => $_POST['user_email'],
 			'first_name' => $_POST['first_name'],
 			'last_name' => $_POST['last_name'],
-			'user_pass' => wp_generate_password(12, false),
+			//'user_pass' => wp_generate_password(12, false),
 		);
 		
 		$user_id = wp_insert_user( $userdata );

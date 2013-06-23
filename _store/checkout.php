@@ -15,7 +15,8 @@
 	if ( !defined( 'ABSPATH' ) )
 		die( );
 		
-	$userdata = wp_get_current_user( )->data;
+	// todo: test on WP 3.0
+	$userdata = wp_get_current_user( ); 
 	$fields = array( 'last_name', 'first_name', 'user_email', 'ims_address', 'ims_city', 'ims_state', 'ims_zip', 'ims_phone' );
 	
 	foreach( $fields as $field ){
@@ -80,11 +81,14 @@
 	$output .= '<fieldset class="order-info">';
 	$output .= '<legend>' . __( "Order Information", 'ims' ) . '</legend>';
 	$output .= '<div class="ims-p order-info">';
-	$output .= '<span class="ims-items"><strong>' . __( "Total items: ", 'ims' ) . '</strong>' . $this->cart['items'] . '</span>';
-	$output .= '<span class="ims-total"><strong>' . __( "Order Total: ", 'ims ') . '</strong>' . $this->format_price( $this->cart['total'] ) . '</span>';
+	$output .= '<span class="ims-items"><strong>' . __( "Total items:", 'ims' ) . '</strong> ' . $this->cart['items'] . '</span>';
+	$output .= '<span class="ims-total"><strong>' . __( "Order Total:", 'ims ') . '</strong> ' . $this->format_price( $this->cart['total'] ) . '</span>';
 	$output .= '</div>';
 
 	$output .= apply_filters( 'ims_checkout_order_fields', '', $this->cart, $this->opts );
+	
+	if ( $this->opts['shippingmessage'] )
+	$output .='<div class="shipping-message">' . make_clickable(wpautop(stripslashes($this->opts['shippingmessage']))) . '</div>';
 	
 	$output .= '<div class="ims-p submit-buttons">';
 	$output .= '<input name="ims-cancel-checkout" type="submit" value="' . esc_attr__( 'Cancel', 'ims' ) . '" class="secundary secondary" /> ';

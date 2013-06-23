@@ -120,7 +120,7 @@
 			header( 'ETag: ' . $etag );
 			header( "Last-Modified: $modified GMT");
 			header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', time(  ) + 100000000 ) . ' GMT');
-			header( 'Cache-Control:max-age=' . ( time(  ) + 100000000 ) . ',must-revalidate' );
+			header( 'Cache-Control:max-age=' . ( time(  ) + 100000000 ) . ',must-revalidate,public' );
 			
 			if ( ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) && isset( $_SERVER['HTTP_IF_NONE_MATCH'] )
 			&& ( strtotime( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) == ( $cache_time ) ) ) || ( $client_etag == $etag )) {
@@ -139,8 +139,9 @@
 			}
 			
 			if ( get_site_option( 'ims_sync_settings' ) )
-				$this->opts = get_blog_option( 1, 'ims_front_options' );
-			else $this->opts = get_option( 'ims_front_options' );
+				switch_to_blog( 1 );
+			
+			$this->opts = get_option( 'ims_front_options' );
 			
 			switch ( $ext ) {
 				case "jpg":
@@ -346,6 +347,7 @@
 				imageconvolution( $image, $matrix, $divisor, 0);
 			}
 			
+			imageinterlace( $image, true );
 			$quality = get_option( 'preview_size_q', 85 );
 			
 			// create new image
@@ -402,7 +404,7 @@
 		 * @since 0.5.0 
 		 */
 		function HexToRGB( $hex ) {
-			$hex = ereg_replace( "#", "", $hex );
+			$hex = str_replace( "#", "", $hex );
 			$color = array( );
 	
 			if (strlen($hex) == 3) {

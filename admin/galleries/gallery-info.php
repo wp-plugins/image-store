@@ -47,7 +47,7 @@
 			<td><label for="gallery_id"><?php _e( 'Gallery ID', 'ims' ) ?></label></td>
 			<td><input type="text" name="_ims_gallery_id" id="gallery_id" value="<?php echo esc_attr( $_ims_gallery_id ) ?>"/></td>
 		</tr>
-		<?php if ( empty( $this->opts['disablestore'] ) ) { ?>
+		<?php if ( $this->opts['store'] ) { ?>
 			<tr>
 				<td><label for="_ims_tracking"><?php _e( 'Tracking Number', 'ims' ) ?></label></td>
 				<td class="long"><input type="text" name="_ims_tracking" id="_ims_tracking" value="<?php echo esc_attr( $_ims_tracking ) ?>" /></td>

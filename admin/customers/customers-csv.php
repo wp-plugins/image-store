@@ -42,7 +42,7 @@
 	$query = apply_filters( 'ims_customers_csv_query', 
 		"SELECT ID FROM $wpdb->users AS u
 		INNER JOIN $wpdb->usermeta AS um ON u.ID = um.user_id 
-		WHERE um.meta_key = '{$wpdb->prefix}capabilities' AND um.meta_value LIKE '%{$ImStore->customer_role}%' 
+		WHERE um.meta_key = '{$wpdb->prefix}capabilities' AND um.meta_value LIKE '%\"". $wpdb->escape( $this->customer_role )  ."\"%' 
 		GROUP BY u.ID"
 	);
 		

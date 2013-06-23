@@ -52,30 +52,31 @@
                     if( $image = (array) get_post_meta( $id, '_wp_attachment_metadata', true ))
                         $mini = wp_parse_args( $image['sizes']['mini'], $mini );
                     
-                    $r = '<tr><td class="column-thumb"><img src="' . $mini['url'] . '" width="'. $mini['width']. ' " height="' . $mini ['height'] . '" alt="' . $mini['file'] .'"/></td>';
+                    $r = '<tr><td class="column-thumb">
+					<img src="' . esc_attr( $mini['url'] ) . '" width="'. esc_attr( $mini['width'] ) . ' " height="' . esc_attr( $mini ['height'] ) . '" alt="' . esc_attr( $mini['file'] ) .'"/></td>';
                     $r .= '<td colspan="6">';
                     
                     foreach( $sizes as $size => $colors ){
                         foreach( $colors as $color => $item ){
 							
-														$finishprice = isset( $item['finish'] ) ? $item['finish']: 0;
-														$finishname = isset( $item['finish_name'] ) ? $item['finish_name']: '';
-														
-														if( isset( $item['color_name'] ) )
-															$colorname = $item['color_name'];
-														else  $colorname = isset( $this->color[$color] ) ? $this->color[$color] : '';
-														$colorprice = isset( $item['color'] ) ? $item['color']: 0;
+							$finishprice = isset( $item['finish'] ) ? $item['finish']: 0;
+							$finishname = isset( $item['finish_name'] ) ? $item['finish_name']: '';
+							
+							if( isset( $item['color_name'] ) )
+								$colorname = $item['color_name'];
+							else  $colorname = isset( $this->color[$color] ) ? $this->color[$color] : '';
+							$colorprice = isset( $item['color'] ) ? $item['color']: 0;
 							
                             $r .= '<div class="clear-row">';
                             $r .= '<span class="quantity">' .  $item['quantity'] . '</span>';
                             $r .= '<span class="size">' . ( isset($item['size']) ?$item['size']:$size). '</span>';
                             $r .= '<span class="color">' . $colorname . $this->format_price( $colorprice, true, ' + ' ) . '</span>';
-														$r .=  '<span class="fisnish">' . $finishname . $this->format_price( $finishprice,  true, ' + ' ) . '</span>';
+							$r .=  '<span class="fisnish">' . $finishname . $this->format_price( $finishprice,  true, ' + ' ) . '</span>';
                             $r .= '<span class="price">' . $this->format_price( $item['price'] ) . '</span>';
                             $r .= '<span class="subtotal">' . $this->format_price( $item['subtotal'] ) . '</span>';
                             $r .= '<span class="title">' .  get_the_title($id) . '</span>';
                             $r .= '<span class="imageid">' .  sprintf( "%05d", $id ) . '</span>';
-                            $r .= '<span class="gallery"><a href="' . get_edit_post_link($parentid) . '">';
+                            $r .= '<span class="gallery"><a href="' . esc_attr( get_edit_post_link( $parentid ) ) . '">';
                             $r .= '' .  get_the_title( $parentid ) . '</a></span>';
                             $r .= '</div>';	
                         }

@@ -16,7 +16,7 @@
 		die( );
 	
 	$css = '';
-	$this->shipping_opts = get_option( 'ims_shipping_options' );
+	$this->shipping_opts = $this->get_option( 'ims_shipping_options' );
 	$meta = get_post_meta( $this->pricelist_id, '_ims_list_opts', true );
 	$output = apply_filters( 'ims_before_pricelist_page', $output, $this->pricelist_id );
 	

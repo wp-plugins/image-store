@@ -52,8 +52,17 @@
 				<tbody>
                 
                 	<?php foreach( $settings[$boxid] as $name => $row ){ 
-					$name = esc_attr($name);
-					echo '<tr class="row row-'.$name.$css.'">';
+					
+					$active = false;
+					$name = esc_attr( $name );
+					
+					if ( isset( $row['type'] ) && $row['type'] == 'checkbox' && $this->vr( $name ) ) 
+						$active = " checkbox-on";
+					else 	if ( isset( $row['type'] ) && $row['type'] == 'checkbox' && !isset( $row['multi'] ) ) 
+						$active = " checkbox-off";
+						
+					
+					echo '<tr class="row row-' . $name . $css . $active . '">';
 						
 						if( isset( $row['col'] ) ){
 							
@@ -104,7 +113,7 @@
 								switch( $row['type'] ){
 									case 'select':
 										echo '<select name="', $name , '" id="', $name , '">';
-										foreach( (array)$row['opts'] as $val => $opt )
+										foreach( ( array ) $row['opts'] as $val => $opt )
 											echo '<option value="', esc_attr( $val ), '"', selected( $val, $this->vr( $name ) ) , '>', esc_html( $opt ) , '</option>';
 										echo '</select>';
 										break;
@@ -118,7 +127,7 @@
 										break;
 									case 'checkbox':
 										echo '<input type="', $row['type'] , '" name="'. $name , '" id="'. $name , '" value="'. 
-										esc_attr($row['val']) , '"'. checked( $row['val'], $this->vr( $name ), 0 ) , ' /> ';
+										esc_attr($row['val']) , '"'. checked( $row['val'], $this->vr( $name ) , 0 ) , ' /> ';
 										break;
 									case 'empty':
 										echo '&nbsp;';
@@ -134,7 +143,7 @@
 										break;
 									default:
 										echo '<input type="', $row['type'] , '" name="', $name , '" id="', $name , '" value="', 
-										esc_attr( ($val = $this->vr( $name ) ) ? $val : $row['val'] ) , '" /> ';
+										esc_attr( ( $val = $this->vr( $name ) ) ? $val : $row['val'] ) , '" /> ';
 								}
 									
 								echo ( isset( $row['desc'] ) ) ? ' <small> ' . esc_html( $row['desc'] ) . '</small>' : '';
@@ -142,23 +151,24 @@
 						}
 						
 					echo '</tr>';
-					$css = ($css == ' alternate') ? '' : ' alternate'; 
+					
+					$css = ( $css == ' alternate' ) ? '' : ' alternate'; 
 					}?>
-                    
-                	<?php do_action( 'ims_settings', $boxid) ?>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td class="submit">
-                            <input type="hidden" name="ims-action" value="<?php echo esc_attr( $boxid ) ?>" />
-                            <input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save', 'ims')?>" />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <?php endif?>
-			<?php wp_nonce_field( 'ims_settings')?>
+          
+        		<?php do_action( 'ims_settings', $boxid) ?>
+             	<tr>
+                    <td>&nbsp;</td>
+                    <td class="submit">
+                      <input type="hidden" name="ims-action" value="<?php echo esc_attr( $boxid ) ?>" />
+                      <input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save', 'ims')?>" />
+                    </td>
+             	</tr>
+            </tbody>
+          </table>
+          
+          <?php endif?>
+		  <?php wp_nonce_field( 'ims_settings')?>
         </form>
-    </div><!-- #<?php echo $boxid ?> -->
-    
+      </div><!-- #<?php echo $boxid ?> -->
+   
 	<?php endforeach?>

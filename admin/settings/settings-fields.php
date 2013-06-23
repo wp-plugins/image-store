@@ -24,7 +24,7 @@
 			'val' => 1,
 			'type' => 'checkbox',
 			'label' => __( 'Delete image files', 'ims' ),
-			'desc' => __( 'Delete files from server,when deleting a gallery/images', 'ims' ),
+			'desc' => __( 'Delete files from server, when deleting a gallery/images', 'ims' ),
 		 ),
 		'mediarss' => array( 
 			'val' => 1,
@@ -50,29 +50,29 @@
 			'label' => __( 'Tools Widget', 'ims' ),
 			'desc' => __( 'Disable default store navigation and use a widget instead', 'ims' ),
 		 ),
-		'disablestore' => array( 
+		'store' => array( 
 			'val' => 1,
 			'type' => 'checkbox',
-			'label' => __( 'Disable store features', 'ims' ),
-			'desc' => __( 'Use as a gallery manager only, not a store.', 'ims' ),
+			'label' => __( 'Store features', 'ims' ),
+			'desc' => __( 'Uncheck to use as a gallery manager only, not a store.', 'ims' ),
 		 ),
-		'hidephoto' => array( 
+		'photos' => array( 
 			'val' => 1,
 			'type' => 'checkbox',
-			'label' => __( 'Hide "Photo" link', 'ims' ),
-			'desc' => __( 'Hide Photo link from the store navigation.', 'ims' ),
+			'label' => __( 'Show "Photo" link', 'ims' ),
+			'desc' => __( 'Uncheck to hide Photo link from the store navigation.', 'ims' ),
 		 ),
-		'hideslideshow' => array( 
+		'slideshow' => array( 
 			'val' => 1,
 			'type' => 'checkbox',
-			'label' => __( 'Hide "Slideshow" link', 'ims' ),
-			'desc' => __( 'Hide Slideshow link from the store navigation.', 'ims' ),
+			'label' => __( 'Show "Slideshow" link', 'ims' ),
+			'desc' => __( 'Uncheck to hide Slideshow link from the store navigation.', 'ims' ),
 		 ),
-		'hidefavorites' => array( 
+		'favorites' => array( 
 			'val' => 1,
 			'type' => 'checkbox',
-			'label' => __( 'Hide "Favorites" link', 'ims' ),
-			'desc' => __( 'Hide Favorites link from the store navigation.', 'ims' ),
+			'label' => __( 'Show "Favorites" link', 'ims' ),
+			'desc' => __( 'Uncheck to hide Favorites link from the store navigation.', 'ims' ),
 		 ),
 		'ims_searchable' => array( 
 			'val' => 1,
@@ -80,11 +80,11 @@
 			'label' => __( 'Searchable galleries', 'ims' ),
 			'desc' => __( 'Allow galleries to show in search results.', 'ims' ),
 		 ),
-		 'disable_like' => array( 
+		 'voting_like' => array( 
 			'val' => 1,
 			'type' => 'checkbox',
-			'label' => __( 'Disable voting', 'ims' ),
-			'desc' => __( 'Disable voting/like feature.', 'ims' ),
+			'label' => __( 'Activate voting', 'ims' ),
+			'desc' => __( 'Enable voting/like feature.', 'ims' ),
 		 ),
 		 'columns' => array( 
 			'type' => 'select',
@@ -161,6 +161,12 @@
 			'label' => __( 'Secure galleries', 'ims' ),
 			'desc' => __( 'Secure all new galleries with a password by default.', 'ims' ),
 		 ),
+		'titleascaption' => array(
+			'val' => 1,
+			'type' => 'checkbox',
+			'label' => __( 'Use title as caption', 'ims' ),
+			'desc' => __( 'Use title field as caption instead of caption field.', 'ims' ),
+		),
 		'wplightbox' => array( 
 			'val' => 1,
 			'type' => 'checkbox',
@@ -419,17 +425,17 @@
 			'type' => 'text',
 			'label' => __( 'Currency Symbol', 'ims' ),
 		 ),
-		'disable_shipping' => array( 
+		'shipping' => array( 
 			'val' => 1,
 			'type' => 'checkbox',
-			'label' => __( 'Disable shipping', 'ims' ),
-			'desc' => __( 'Disable shopping cart shipping option.', 'ims' ),
+			'label' => __( 'Apply shipping', 'ims' ),
+			'desc' => __( 'Uncheck to disable shopping cart shipping option.', 'ims' ),
 		 ),
-		'disable_decimal' => array( 
+		'decimal' => array( 
 			'val' => 1,
 			'type' => 'checkbox',
-			'label' => __( 'Disable decimal point', 'ims' ),
-			'desc' => __( 'Disable auto format prices with a decimal points.', 'ims' ),
+			'label' => __( 'Show decimal point', 'ims' ),
+			'desc' => __( 'Uncheck to disable auto format prices with a decimal points.', 'ims' ),
 		 ),
 		'clocal' => array( 
 			'type' => 'radio',

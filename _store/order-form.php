@@ -19,7 +19,7 @@
 	  '<form id="ims-pricelist" method="post"> ' . apply_filters( 'ims_before_order_form', '', $this ) . '
 		  <div class="ims-image-count"><em></em> ' . __( 'Selected', 'ims' ) . '<span class="touch-close">' . __( 'Close', 'ims' ) . '</span></div>
 		  <div class="ims-add-error">' . __( 'There are no images selected', 'ims' ) . '</div>
-		  <div class="ims-instructions">' . __( 'These preferences will be apply to all the selected images', 'ims' ) . '</div>
+		  <div class="ims-instructions">' . __( 'These preferences will be apply to all selected images', 'ims' ) . '</div>
 		  
 		  <div class="ims-prlicelist-wrap">
 		  <div class="ims-field">

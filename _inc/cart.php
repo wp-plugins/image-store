@@ -250,7 +250,7 @@ class ImStoreCart {
 					}
 					
 					//check for downloadable images
-					if ( !$colors[$color]['download'] && !$ImStore->opts['disable_shipping'] )
+					if ( !$colors[$color]['download'] && $ImStore->opts['shipping'] )
 						$this->cart['shippingcost'] = true;
 					
 					$this->cart['images'][$id][$size][$color]['quantity'] = $request['ims-quantity'][$enc][$size][$color];
@@ -284,7 +284,7 @@ class ImStoreCart {
 		
 		$this->cart['total'] = $this->cart['subtotal'];
 		$this->cart['currency'] = $ImStore->opts['currency'];
-		$this->shipping_opts = get_option( 'ims_shipping_options' );
+		$this->shipping_opts = $ImStore->get_option( 'ims_shipping_options' );
 		
 		if( $this->validate_code( ) ){
 			
@@ -384,7 +384,7 @@ class ImStoreCart {
 		do_action( 'ims_after_checkout', $this->cart );
 		
 		// Create/update customer
-		if( $ImStore->user_id && current_user_can('customer') ){
+		if( $ImStore->user_id && current_user_can( 'customer' ) ){
 			
 			if( !function_exists( 'wp_update_user' ) )
 				require_once( ABSPATH . WPINC . '/registration.php');
@@ -467,9 +467,9 @@ class ImStoreCart {
 			foreach ( $sizes as $size => $colors ) {
 				foreach ($colors as $color => $item) {
 					if ( $item['download'] )
-						$downlinks[] = '<a href="' . IMSTORE_ADMIN_URL . "/download.php?$nonce&amp;img=" .
+						$downlinks[] = '<a href="' . esc_attr( IMSTORE_ADMIN_URL ) . "/download.php?$nonce&amp;img=" .
 						$enc . "&amp;sz=$size&amp;c=" . $item['color_code'] . '" class="ims-download">' .
-						get_the_title( $id ) . " " . $item['color_name'] . "</a>";
+						esc_html( get_the_title( $id ) . " " . $item['color_name'] ) . "</a>";
 				}
 			}
 		}
@@ -546,11 +546,158 @@ class ImStoreCart {
 		if ( !empty( $this->sizes[$size]['download'] ) )
 			$values['download'] = 1;
 			
-		if( !$ImStore->opts['disable_shipping'] && !$values['download'] ) 
+		if( $ImStore->opts['shipping'] && !$values['download'] ) 
 			$this->cart['shippingcost'] = 1;
 			
 		$values['subtotal'] = ( ( $price + $values['color'] + $values['finish'] ) *  $values['quantity'] );
 		return $values;
+	}
+	
+	/**
+	 * Marge an array into a primary array
+	 *
+	 * @param array $into
+	 * @param array $merge
+	 * @return array
+	 * @since 3.3.0
+	*/
+	function merge_recursive( $into, $merge ){
+		foreach( $merge as $key => $value ){
+			if ( is_array ( $value ) && isset ( $into[$key] )  && is_array ( $into[$key] ) )
+				$into[$key] = $this->merge_recursive( $into[$key], $value );
+			else $into[$key] = $value;
+		}
+		return $into;
+	}
+	
+	/**
+	 * Handles registering a new user.
+	 *
+	 * @param string $user_login
+	 * @param string $user_email
+	 * @return int|WP_Error 
+	 * @since 3.3.0
+	*/
+	function register_new_user( $user_login, $user_email ) {
+		
+		$errors = new WP_Error();
+		$sanitized_user_login = sanitize_user( $user_login );
+	
+		// Check the username
+		if ( $sanitized_user_login == '' ) {
+			$errors->add( 'empty_username', __( '<strong>ERROR</strong>: Please enter a username.' ) );
+		} elseif ( ! validate_username( $user_login ) ) {
+			$errors->add( 'invalid_username', __( '<strong>ERROR</strong>: This username is invalid because it uses illegal characters. Please enter a valid username.' ) );
+			$sanitized_user_login = '';
+		} elseif ( username_exists( $sanitized_user_login ) ) {
+			$errors->add( 'username_exists', __( '<strong>ERROR</strong>: This username is already registered. Please choose another one.' ) );
+		}
+	
+		// Check the e-mail address
+		if ( $user_email == '' ) {
+			$errors->add( 'empty_email', __( '<strong>ERROR</strong>: Please type your e-mail address.' ) );
+		} elseif ( ! is_email( $user_email ) ) {
+			$errors->add( 'invalid_email', __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.' ) );
+			$user_email = '';
+		} elseif ( email_exists( $user_email ) ) {
+			$errors->add( 'email_exists', __( '<strong>ERROR</strong>: This email is already registered, please choose another one.' ) );
+		}
+		
+		$errors = apply_filters( 'ims_registration_errors', $errors, $sanitized_user_login, $user_email );
+	
+		if ( $errors->get_error_code() )
+			return $errors;
+	
+		$user_pass = wp_generate_password( 12, false);
+		
+		if ( ! $user_id = $this->wp_create_user( $sanitized_user_login, $user_pass, $user_email )) {
+			$errors->add( 'registerfail', sprintf( __( '<strong>ERROR</strong>: Couldn&#8217;t register you&hellip; please contact the <a href="mailto:%s">webmaster</a> !' ), get_option( 'admin_email' ) ) );
+			return $errors;
+		}
+	
+		update_user_option( $user_id, 'default_password_nag', true, true );
+		wp_new_user_notification( $user_id, $user_pass );
+	
+		return $user_id;
+	}
+	
+	/**
+	 * Crea user using image store user role
+	 *
+	 * @param string $username
+	 * @param string $password
+	 * @param string $email
+	 * @return int|WP_Error
+	 * @since 3.3.0
+	 */
+	function wp_create_user( $username, $password, $email = '' ){
+		global $ImStore;
+		
+		 $user_pass = $password;
+		 $user_email = esc_sql( $email );
+		 $user_login = esc_sql( $username );
+		 $role = esc_sql( $ImStore->customer_role );
+		 
+		 $userdata = compact( 'user_login', 'user_email', 'user_pass', 'role' );
+		 return wp_insert_user( $userdata );
+	}
+	
+	/**
+	 * Validate receipt action forms
+	 *
+	 * @return array()
+	 * @since 3.3.0
+	 */
+	function validate_access_forms(  ){
+		
+		if( empty( $_POST ) || is_user_logged_in())
+			return array( );
+		
+		$user_id = false;
+		$data = array( 
+			'user_login' => $_POST['user_login'],
+			'user_email' => $this->data['payer_email'],
+		);
+		
+		if( isset( $_POST['ims-submit-register'] ) ){ // user register
+		
+			$data['active'] = 'register';
+			$data['user_email'] = $_POST['user_email'];
+			$user_id = $this->register_new_user( $data['user_login'] , $data['user_email']  );
+
+		} else if( isset( $_POST['ims-submit-login'] ) ){ // user login
+			
+			$user_pass = $_POST['user_pass'];
+			$user_id = wp_authenticate( $data['user_login'], $user_pass );
+		}
+				
+		if ( is_wp_error( $user_id ) &&  $user_id->get_error_code( ) ) {
+			
+			$errors = ''; $message =  '<div class="ims-message ims-error">';
+			 foreach ( $user_id->get_error_messages( ) as $error )
+				$errors .= '    ' . $error . "<br />\n";
+			$data['message'] = $message . apply_filters( 'ims_login_errors', $errors) . "</div>\n";
+			
+		} else if ( !is_wp_error( $user_id ) ) {
+			
+			$redirect = site_url( 'wp-login.php?checkemail=registered' );
+			
+			if( isset( $user_id->ID ) && !empty( $user_pass ) ){
+				$redirect = site_url( 'wp-admin' );
+				wp_set_auth_cookie( ($user_id = $user_id->ID), false, apply_filters( 'secure_signon_cookie', is_ssl( ), $data ) );
+			}
+			
+			//save purchased images
+			if( $user_images = get_user_meta( $user_id, "_ims_user_{$user_id}_images", true ) ){
+				if( $images = $this->merge_recursive( $user_images, $this->cart['images'] ) )
+					update_user_meta( $user_id, "_ims_user_{$user_id}_images", $images );
+			}else update_user_meta( $user_id, "_ims_user_{$user_id}_images", $this->cart['images'] );
+				
+			setcookie( 'ims_orderid_' . COOKIEHASH, false, ( time(  ) - 315360000 ), COOKIEPATH, COOKIE_DOMAIN );
+			wp_safe_redirect( apply_filters( 'ims_register_redirect',  $redirect ) );
+			exit( );
+		} 
+		return $data;
 	}
 	
 	/**
@@ -561,11 +708,10 @@ class ImStoreCart {
 	 */
 	function shipping_options( ) {
 		
-		if ( !$options = get_option( 'ims_shipping_options' ) )
+		global $ImStore;
+		if ( !$options = $ImStore->get_option( 'ims_shipping_options' ) )
 			return;
 		
-		global $ImStore;
-			
 		$select = '<select name="shipping" id="shipping" class="shipping-opt">';
 		foreach ( $options as $key => $val )
 			$select .= '<option value="' . esc_attr( $key ) . '"' . selected( $key, $this->cart['shipping_type'], false ) . '>' .

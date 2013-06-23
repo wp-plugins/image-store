@@ -26,17 +26,6 @@
 			
 		$n = ( isset( $_GET['n'] ) ) ? intval( $_GET['n'] ) : 0;
 		
-		
-		//using site sync only update main site
-		if( get_site_option( 'ims_sync_settings') && $n == 0 ){
-
-			include_once( IMSTORE_ABSPATH . '/admin/install.php' );
-			new ImStoreInstaller( );
-			
-			wp_redirect( admin_url( 'network/upgrade.php?ims-network-updated' ) );
-			die( );
-		}
-		
 		$blogs = $wpdb->get_results( 
 			"SELECT * FROM {$wpdb->blogs} WHERE site_id = '{$wpdb->siteid}' 
 			AND spam = '0' AND deleted = '0' AND archived = '0'
@@ -47,11 +36,14 @@
 			include_once( IMSTORE_ABSPATH . '/admin/install.php' );
 			foreach ( (array) $blogs as $details ) {
 				switch_to_blog( $details['blog_id'] );
-				new ImStoreInstaller( );
+				$ImStoreInstaller = new ImStoreInstaller( );
+				$ImStoreInstaller->init( );
 			}
 			wp_redirect( IMSTORE_ADMIN_URL . '/update.php?n=' . (  $n + 5 ) );
 			die( );
 		}
 		
-		wp_redirect( admin_url( 'network/upgrade.php?ims-network-updated' ) );
+		global $wp_version;
+		if( $wp_version < 3.1 )  wp_redirect ( admin_url( "/ms-upgrade-network.php" ) );
+		else wp_redirect( network_admin_url( 'upgrade.php?ims-network-updated' ) );
 		die( );

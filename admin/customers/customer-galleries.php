@@ -84,7 +84,7 @@
                 </thead>
                 <tbody id="galleries" class="list:galleries galleries-list">
                 	<?php
-					foreach( $galleries-> posts as $gallery ) {
+					foreach( $galleries->posts as $gallery ) {
 						
 						$style = ( ' alternate' == $style ) ? '' : ' alternate';
 						$r = "<tr id='gallery-{$gallery->ID}' class='gallery{$style}'>";
@@ -105,7 +105,7 @@
 									break;
 								case 'expire':
 									$r .= "<td class='column-{$columnid}{$hide}'>". (( $gallery->post_expire != '0000-00-00 00:00:00' ) ? 
-									date_i18n( $this->dformat, strtotime( $gallery->post_expire)) : '' ) ."</td>";
+									mysql2date( $this->dformat, $gallery->post_expire, true ) : '' ) ."</td>";
 									break;
 								case 'images':
 									$r .= "<td class='column-{$columnid}{$hide}'>". 
