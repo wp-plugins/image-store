@@ -231,9 +231,15 @@ class ImStoreCart {
 			return;
 		}
 		
+		//save instructions
+		if(  isset( $_POST['instructions'] ) )
+			$this->cart['instructions'] = esc_html( $_POST['instructions'] );
+		else $this->cart['instructions'] = false;
+		
+		
 		$this->cart['shippingcost'] = false;
 		if( isset( $request['shipping'] ) )
-		$this->cart['shipping_type'] = intval( $request['shipping']);
+			$this->cart['shipping_type'] = intval( $request['shipping']);
 		
 		$this->cart['items'] = $this->cart['subtotal'] = 0;
 		
