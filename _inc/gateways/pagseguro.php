@@ -103,6 +103,7 @@ class ImStoreCartPagSeguro {
 			$ImStoreCart->data['method'] =  'PagSeguro';
 			$ImStoreCart->data['mc_currency'] = $ImStore->opts['currency'];
 			$ImStoreCart->data['mc_gross'] = $ImStoreCart->data['payment_gross'];
+			$ImStoreCart->data['instructions'] = $ImStoreCart->cart['instructions'];
 			
 			$ImStoreCart->checkout( );
 			do_action( 'ims_after_pagseguro_ipn', $cartid, $ImStoreCart->data );

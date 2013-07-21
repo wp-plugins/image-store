@@ -73,10 +73,11 @@ class ImStoreCartGoogle {
 			if( isset( $_POST[ $key ] ) )
 				$ImStoreCart->data[ $reponse ] =  $_POST[$key];
 		} 
-			
+		
 		$ImStoreCart->data['method'] =  'Google Checkout';
 		$ImStoreCart->data['num_cart_items'] = $ImStoreCart->cart['items'];
 		$ImStoreCart->data['mc_gross'] = $ImStoreCart->data['payment_gross'];
+		$ImStoreCart->data['instructions'] = $ImStoreCart->cart['instructions'];
 
 		$ImStoreCart->checkout( );
 		do_action( 'ims_after_google_notice', $cartid, $ImStoreCart->data );

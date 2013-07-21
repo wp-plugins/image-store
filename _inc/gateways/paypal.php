@@ -107,6 +107,7 @@ class ImStoreCartPayPal {
 			
 			$ImStoreCart->data['method'] =  'PayPal';
 			$ImStoreCart->data['num_cart_items'] = $ImStoreCart->cart['items'];
+			$ImStoreCart->data['instructions'] = $ImStoreCart->cart['instructions'];
 			
 			$ImStoreCart->checkout( );
 			do_action( 'ims_after_paypal_ipn', $cartid, $ImStoreCart->data );

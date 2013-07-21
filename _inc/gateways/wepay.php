@@ -93,7 +93,8 @@ class ImStoreCartWePay {
 		
 		$ImStoreCart->data['method'] =  'WePay';
 		$ImStoreCart->data['num_cart_items'] = $ImStoreCart->cart['items'];
-		
+		$ImStoreCart->data['instructions'] = $ImStoreCart->cart['instructions'];
+
 		$ImStoreCart->checkout( );
 		do_action( 'ims_after_wepay_notice', $cartid, $ImStoreCart->data );
 	}
