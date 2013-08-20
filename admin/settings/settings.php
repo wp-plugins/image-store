@@ -112,38 +112,38 @@
 								
 								switch( $row['type'] ){
 									case 'select':
-										echo '<select name="', $name , '" id="', $name , '">';
+										echo '<select name="' . $name . '" id="' . $name  .'">';
 										foreach( ( array ) $row['opts'] as $val => $opt )
-											echo '<option value="', esc_attr( $val ), '"', selected( $val, $this->vr( $name ) ) , '>', esc_html( $opt ) , '</option>';
+											echo '<option value="' . esc_attr( $val ) . '"' . selected( $val, $this->vr( $name ) ) , '>', esc_html( $opt ) . '</option>';
 										echo '</select>';
 										break;
 									case 'textarea':
-										echo '<textarea name="', $name , '" id="'. $name , '" >', esc_html( $this->vr( $name ) ) , '</textarea>';
+										echo '<textarea name="' . $name . '" id="'. $name . '" >' . _wp_specialchars( $this->vr( $name ) ) . '</textarea>';
 										break;
 									case 'radio':
 										foreach( (array)$row['opts'] as $val => $opt )
-											echo '<label><input type="', $row['type'] , '" name="', $name , '" value="', 
-											esc_attr($val) , '"', checked( $val, $this->vr( $name ), 0 ) , ' /> ', $opt , '</label><br /> ';
+											echo '<label><input type="' . $row['type'] . '" name="' . $name . '" value="', 
+											esc_attr( $val ) . '"' . checked( $val, $this->vr( $name ), 0 ) , ' /> ' . $opt . '</label><br /> ';
 										break;
 									case 'checkbox':
 										echo '<input type="', $row['type'] , '" name="'. $name , '" id="'. $name , '" value="'. 
-										esc_attr($row['val']) , '"'. checked( $row['val'], $this->vr( $name ) , 0 ) , ' /> ';
+										esc_attr( $row['val'] ) . '"' . checked( $row['val'], $this->vr( $name ) , 0 )  . ' /> ';
 										break;
 									case 'empty':
 										echo '&nbsp;';
 										break;
 									case 'uninstall':
 										echo ( isset( $row['desc'] ) ) ? $row['desc'] : ''; unset( $row['desc'] );
-										echo '<p><input type="submit" name="', $name , '" id="', $name , '" value="', esc_attr( $row['val'] ) , '" class="button" /></p>';
+										echo '<p><input type="submit" name="' . $name . '" id="' . $name . '" value="' . esc_attr( $row['val'] ) . '" class="button" /></p>';
 										break;
 									case 'reset':
 									case 'submit':
 									case 'button':
-										echo '<input type="', $row['type'] , '" name="', $name , '" id="', $name , '" class="button" value="',esc_attr( $row['val'] ), '" /> ';
+										echo '<input type="' . $row['type'] . '" name="' . $name . '" id="' . $name . '" class="button" value="' . esc_attr( $row['val'] ) . '" /> ';
 										break;
 									default:
-										echo '<input type="', $row['type'] , '" name="', $name , '" id="', $name , '" value="', 
-										esc_attr( ( $val = $this->vr( $name ) ) ? $val : $row['val'] ) , '" /> ';
+										echo '<input type="' . $row['type'] . '" name="' . $name . '" id="' . $name  . '" value="' . 
+										esc_attr( ( $val = $this->vr( $name ) ) ? $val : $row['val'] ) . '" /> ';
 								}
 									
 								echo ( isset( $row['desc'] ) ) ? ' <small> ' . esc_html( $row['desc'] ) . '</small>' : '';

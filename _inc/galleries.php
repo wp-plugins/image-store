@@ -846,7 +846,7 @@ class ImStoreGallery extends ImStoreAdmin {
 			}else {
 				$wpdb->query( $wpdb->prepare( 
 					"UPDATE $wpdb->posts SET post_status = %s WHERE ID IN( " .
-					$wpdb->escape( implode( ', ', $_POST['galleries'] ) ) . " )", $_POST['actions']
+					esc_sql( implode( ', ', $_POST['galleries'] ) ) . " )", $_POST['actions']
 				 ) );
 			}
 		}

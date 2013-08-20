@@ -87,7 +87,7 @@
                     </div>
                     
                     <div>
-                        <label><span><?php _e( 'Sort by', 'ims'); ?></span> <select name="orderby" id="order">
+                        <label><span><?php _e( 'Sort by', 'ims'); ?></span> <select name="orderby" id="orderby">
                             <option value="0"><?php _e( 'Default', 'ims'); ?></option>
                             <option value="date" <?php selected( $sortby, 'date' )?>><?php _e( 'Date', 'ims'); ?></option>
                             <option value="title" <?php selected( $sortby, 'title' )?>><?php _e( 'Title', 'ims'); ?></option>
@@ -95,7 +95,7 @@
                             <option value="caption" <?php selected( $sortby, 'caption' )?>><?php _e( 'Caption', 'ims'); ?></option>
                         </select></label>
                         
-                        <label><?php _e( 'Order', 'ims'); ?> <select name="orderby" id="orderby">
+                        <label><?php _e( 'Order', 'ims'); ?> <select name="order" id="order">
                             <option value="0"><?php _e( 'Default', 'ims'); ?></option>
                             <option value="asc" <?php selected( $sort, 'asc' )?>><?php _e( 'Ascending', 'ims'); ?></option>
                             <option value="desc" <?php selected( $sort, 'desc' )?>><?php _e( 'Descending', 'ims'); ?></option>

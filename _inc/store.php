@@ -1374,7 +1374,7 @@ class ImStoreFront extends ImStore {
 		$output  = '<' . $imagetag . ' class="' . esc_attr( $css ) .  '" >';
 		$output .= '<span class="hmedia item">';
 		
-		$output .= '<a data-id="' . $enc . '" href="'. $link . '" class="url fn" title="' . esc_attr( $data['title'] ) . '" rel="enclosure">';
+		$output .= '<a data-id="' . $enc . '" href="'. $link . '" class="url fn item-url" title="' . esc_attr( $data['title'] ) . '" rel="enclosure">';
 		$output .= '<img src="' . $this->imgurl. '" alt="'. esc_attr( $data['alt'] ) . '" ' . $dimentions . ' data-ims-src="' . $url  . '" role="img" /></a>';
 		
 		if( !$this->is_taxonomy && !$this->is_widget ) {
@@ -1387,7 +1387,7 @@ class ImStoreFront extends ImStore {
 			
 			if( $this->active_store ){
 				$output .=  '<a id="'. esc_attr( $enc ) .'" href="#" rel="nofollow" title="' .
-				 __( 'Add to cart' ) . '" class="box-add-to-cart button">'. _( 'Add to cart' )  . '</a>';
+				 __( 'Add to cart', 'ims' ) . '" class="box-add-to-cart button">'. __( 'Add to cart', 'ims' )  . '</a>';
 			}
 			
 			if( !$this->is_taxonomy && $this->opts['voting_like'] ){
@@ -1982,7 +1982,7 @@ class ImStoreFront extends ImStore {
 			return array( );
 		
 		global $wpdb;
-		$ids = $wpdb->escape( $this->favorites_ids );
+		$ids = esc_sql( $this->favorites_ids );
 		
 		if( in_array( $this->opts['imgsortorder'] , array( 'date', 'title', 'excerpt' ) ))
 			$order = "post_" . $this->opts['imgsortorder'];
@@ -1992,8 +1992,8 @@ class ImStoreFront extends ImStore {
 			"SELECT  p.*, meta_value meta FROM $wpdb->posts AS p 
 			LEFT JOIN $wpdb->postmeta AS pm ON p.ID = pm.post_id WHERE post_type = 'ims_image'
 			AND meta_key = '_wp_attachment_metadata' AND p.ID IN ( $ids ) GROUP BY ID
-			ORDER BY " . $wpdb->escape( $order ) . " " . 
-			$wpdb->escape( $this->opts['imgsortdirect'] )
+			ORDER BY " . esc_sql( $order ) . " " . 
+			esc_sql( $this->opts['imgsortdirect'] )
 		);
 		
 		if ( empty( $this->attachments ) )
@@ -2047,7 +2047,7 @@ class ImStoreFront extends ImStore {
 				"SELECT SQL_CALC_FOUND_ROWS  im.ID, im.post_title, p.comment_status,
 				pm.meta_value meta, im.post_excerpt, im.post_parent, im.post_type, p.post_author
 				FROM ( SELECT * FROM $wpdb->posts ORDER BY
-				 " . $wpdb->escape( $this->opts['imgsortorder'] ) . " " . $wpdb->escape( $this->opts['imgsortdirect'] ) . " )  AS im
+				 " . esc_sql( $this->opts['imgsortorder'] ) . " " . esc_sql( $this->opts['imgsortdirect'] ) . " )  AS im
 				 
 				LEFT JOIN $wpdb->postmeta AS pm ON pm.post_id = im.ID
 				LEFT JOIN $wpdb->posts AS p ON p.ID =  im.post_parent

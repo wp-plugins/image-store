@@ -59,10 +59,11 @@
 				return;
 			
 			$sort = array(
-				'title' => 'title',
-				'date' => 'date',
-				'caption' => 'excerpt',
+				'title' => 'post_title',
+				'date' => 'post_date',
 				'custom' => 'menu_order',
+				'caption' => 'post_excerpt',
+				'excerpt' => 'post_excerpt',
 			);
 			
 			global $wpdb;
@@ -76,8 +77,8 @@
 			if ( empty( $this->galid ) )
 				return;
 			
-			$this->order = $order;
 			$this->sortby = $orderby;
+			$this->order = $sort[$order];
 			$this->limit = ( !$number || strtolower($number) == 'all' ) ? false : $number;
 			$slideshow = ( isset( $layout ) && strtolower( $layout ) == 'slideshow' ) ? true : false;
 			
@@ -102,7 +103,6 @@
 			$this->attachments = wp_cache_get( 'ims_shortcode_' . $this->galid . $this->limit  , 'ims' );
 			
 			if ( false == $this->attachments ) {
-				
 				$this->attachments = $wpdb->get_results( $wpdb->prepare(
 					"SELECT ID, post_title ,guid, post_author,
 					meta_value meta, post_excerpt, post_expire

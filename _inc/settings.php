@@ -85,8 +85,14 @@ class ImStoreSet extends ImStoreAdmin {
 			unset( $settings['checkout']['thankyoureceipt'] );
 		}
 		
-		if( $this->opts['watermark'] != 1 && isset( $settings['image']['watermark_']) )
-				unset( $settings['image']['watermark_'] );
+		if( $this->opts['watermark'] == 0 && isset( $settings['image']['watermark_']) )
+			unset( $settings['image']['watermark_'] );
+		
+		if( $this->opts['watermark'] == 2 && isset( $settings['image']['watermark_']['opts']) ){
+			unset( $settings['image']['watermark_']['opts']['text'] );
+			unset( $settings['image']['watermark_']['opts']['color'] );
+			unset( $settings['image']['watermark_']['opts']['size'] );
+		}
 		
 		if( $this->opts['watermark'] != 2 && isset( $settings['image']['watermarkurl'] ) )
 			unset( $settings['image']['watermarkurl'] );
@@ -316,7 +322,7 @@ class ImStoreSet extends ImStoreAdmin {
 				JOIN $wpdb->usermeta um ON ( u.ID = um.user_id ) 
 				WHERE meta_key = '{$wpdb->prefix}capabilities'
 				AND meta_value NOT LIKE '%\"administrator\"%'
-				AND meta_value NOT LIKE '%\"". $wpdb->escape( $this->customer_role ) ."\"%'
+				AND meta_value NOT LIKE '%\"". esc_sql( $this->customer_role ) ."\"%'
 				GROUP BY u.ID "
 			);
 			wp_cache_set( 'ims_users', $users, 'ims' );

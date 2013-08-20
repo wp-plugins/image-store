@@ -154,7 +154,15 @@
 							$r .= "<td class='column-{$columnid}{$hide}'>" . date_i18n( $this->dformat, strtotime( $sale->post_date ) ) . "</td>";
 							break;
 						case 'amount':
-							$r .= "<td class='column-{$columnid}{$hide}'>" . ( isset( $data['payment_gross'] ) ? $this->format_price($data['payment_gross'] ) : '' ) . "</td>";
+							$r .= "<td class='column-{$columnid}{$hide}'>" ;
+							
+							 if ( isset( $cart['total'] ) )
+							 	 $r .= $this->format_price( $cart['total'] );
+							 
+							else if ( isset( $data['payment_gross'] )  )
+								$r .= $this->format_price( $cart['payment_gross'] );
+							 
+							 $r .=  "</td>";
 							break;
 						case 'customer':
 							$r .= "<td class='column-{$columnid}{$hide}'>" . 

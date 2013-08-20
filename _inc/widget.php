@@ -154,7 +154,7 @@ class ImStoreWidget extends WP_Widget {
 			$orderby = '';
 			$order = " RAND( )";
 		} else {
-			$order = $wpdb->escape( $show );
+			$order = esc_sql( $show );
 		}
 		
 		if ( $limit ) $limit = "LIMIT $limit";

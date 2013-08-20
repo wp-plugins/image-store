@@ -400,6 +400,10 @@ class ImStoreInstaller extends ImStore {
 			
 			$ims_ft_opts['titleascaption'] = true;	
 			$ims_ft_opts['shippingmessage'] = '';
+		}
+		
+		if ( $this->ver <= "3.3.1" ){
+			$ims_ft_opts['loginform'] = true;
 			update_option( $this->optionkey, $ims_ft_opts );
 		}
 		

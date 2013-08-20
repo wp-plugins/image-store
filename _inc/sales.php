@@ -150,7 +150,7 @@ class ImStoreSales extends ImStoreAdmin {
 		$wpdb->query(
 			"DELETE p, pm FROM $wpdb->posts p 
 			LEFT JOIN $wpdb->postmeta pm ON( p.ID = pm.post_id ) 
-			WHERE ID IN( " . $wpdb->escape( implode( ',', $this->orders ) ) . ")
+			WHERE ID IN( " . esc_sql( implode( ',', $this->orders ) ) . ")
 			AND post_type = 'ims_order'"
 		);
 		
@@ -186,7 +186,7 @@ class ImStoreSales extends ImStoreAdmin {
 			
 			$wpdb->query( $wpdb->prepare( 
 				"UPDATE $wpdb->posts SET post_status = %s
-				WHERE ID IN( " . $wpdb->escape( implode( ',', $this->orders ) ) . ")"
+				WHERE ID IN( " . esc_sql( implode( ',', $this->orders ) ) . ")"
 			, $action ) );
 			
 			$s = $action == 'trash' ;
@@ -214,7 +214,7 @@ class ImStoreSales extends ImStoreAdmin {
 	function order_archive( ) {
 		
 		global $wpdb;
-		$status = empty( $this->status ) ? " NOT IN ( 'draft', 'trash' ) " : " = '". $wpdb->escape( $this->status ) ."' ";
+		$status = empty( $this->status ) ? " NOT IN ( 'draft', 'trash' ) " : " = '". esc_sql( $this->status ) ."' ";
 		$r = wp_cache_get( 'ims_order_archive_' . $this->status, 'ims' );
 	
 		if ( false == $r ) {
@@ -241,11 +241,11 @@ class ImStoreSales extends ImStoreAdmin {
 		global $wpdb;
 		
 		if ( $this->status )
-			$where .= " AND $wpdb->posts.post_status = '" . $wpdb->escape( $this->status ) . "' ";
+			$where .= " AND $wpdb->posts.post_status = '" . esc_sql( $this->status ) . "' ";
 		else $where = str_ireplace( "status = 'draft'", "status NOT IN ( 'draft', 'trash' )", $where );
 		
 		if ( $this->search ){
-			$search = $wpdb->escape( $this->search );
+			$search = esc_sql( $this->search );
 			$where .= " AND ( $wpdb->posts.post_title LIKE '%$this->search%'
 			OR  $wpdb->posts.post_excerpt LIKE '%$search%' 
 			OR $wpdb->postmeta.meta_value LIKE '%$search%' ) ";

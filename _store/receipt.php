@@ -43,7 +43,7 @@
 	wp_set_current_user( $user->ID );
 	
 	// Display registration form 
-	if( !is_user_logged_in( ) ){
+	if( ! is_user_logged_in( ) && $this->opts['loginform'] ){
 		
 		$active = 'login';
 		$user_login = $message = '';

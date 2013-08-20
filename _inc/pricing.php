@@ -431,7 +431,7 @@ class ImStorePricing extends ImStoreAdmin {
 		
 		global $wpdb;
 			
-		$ids = $wpdb->escape( implode( ', ', $ids ) );
+		$ids = esc_sql( implode( ', ', $ids ) );
 		if( $count = $wpdb->query( "DELETE FROM $wpdb->posts WHERE ID IN ($ids) " ) )
 			$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE post_id IN ($ids) " );
 		

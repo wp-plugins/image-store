@@ -34,7 +34,7 @@ class ImStore {
 	public $promo_types = array( );
 	public $rules_property = array( );
 	
-	public $version = '3.3.1';
+	public $version = '3.3.2';
 	public $customer_role = 'customer';
 	public $optionkey = 'ims_front_options';
 	
@@ -247,6 +247,7 @@ class ImStore {
 			'show_in_nav_menus' => false,
 			'rewrite' => array( 'slug' => $this->opts['image_slug'], 'with_front' => false ),
 		) );
+	
 		
 		//gallery post type assign
 		$posttype = apply_filters( 'ims_gallery_post_type', array(

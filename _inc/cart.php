@@ -832,10 +832,11 @@ class ImStoreCart {
 		
 		$ImStore->is_widget = true;
 		$enc = $ImStore->url_encrypt( $imageid );
+		$imgtitle = ( $title = get_the_title( $imageid ) ) ? $title : $enc;
 		$meta = (array) get_post_meta( $imageid, '_wp_attachment_metadata', true );
 		
 		if( isset( $meta['sizes']['mini'] ) && is_array( $meta['sizes']['mini'] ) )
-			$meta += array( 'link' => $ImStore->get_image_url( $imageid ), 'alt' => $meta['sizes']['mini']['file'], 'title' => $meta['sizes']['mini']['file'] );
+			$meta += array( 'link' => $ImStore->get_image_url( $imageid ), 'alt' => $imgtitle, 'title' => $imgtitle, 'caption' => $imgtitle );
 		
 		$output = '<tr role="row"> <td role="gridcell" class="ims-preview">'; //start row
 		$output .= $ImStore->image_tag( $imageid, $meta, 3 );
@@ -846,7 +847,6 @@ class ImStoreCart {
 		foreach ( $sizes as $size => $colors ) :
 			foreach ( $colors as $color => $item ) :
 			
-			$imgtitle = ( $title = get_the_title( $imageid ) ) ? $title : $enc;
 			$colorname = ( $item['color_name'] ) ? trim( $item['color_name'], " + ") : false;
 			
 			$output .= '<div class="ims-clear-row">';

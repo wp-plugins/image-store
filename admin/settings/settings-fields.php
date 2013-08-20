@@ -505,6 +505,12 @@
 			'label' => __( 'Tax', 'ims' ),
 			'desc' => __( 'Set tax to zero (0) to remove tax calculation.', 'ims' ),
 		 ),
+		 'loginform' => array( 
+			'val' => 1,
+			'type' => 'checkbox',
+			'label' => __( 'Checkout login form', 'ims' ),
+			'desc' => __( 'Add the login / register form at  the end of the receipt page.', 'ims' ),
+		 ),
 		'taxtype' => array( 
 			'type' => 'select',
 			'label' => __( 'Tax calculation type', 'ims' ),

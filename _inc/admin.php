@@ -1092,7 +1092,7 @@ class ImStoreAdmin extends ImStore {
 			LEFT JOIN $wpdb->usermeta ur ON u.ID = ur.user_id 
 			WHERE um.meta_key = 'ims_status' AND um.meta_value = 'active' 
 			AND ( ur.meta_key = '{$wpdb->prefix}capabilities' AND ur.meta_value 
-			LIKE '%\"". $wpdb->escape( $this->customer_role) ."\"%' ) 
+			LIKE '%\"". esc_sql( $this->customer_role) ."\"%' ) 
 			GROUP BY u.id" );
 			
 			wp_cache_set( 'ims_customers', $customers, 'ims' );
@@ -1145,7 +1145,7 @@ class ImStoreAdmin extends ImStore {
 				$query = "SELECT um.meta_value status, count(um.meta_value) count 
 				FROM $wpdb->usermeta um LEFT JOIN $wpdb->usermeta ur ON um.user_id = ur.user_id 
 				WHERE um.meta_key = 'ims_status'  
-				AND ( ur.meta_key =  '{$wpdb->prefix}capabilities' AND ur.meta_value LIKE '%\"". $wpdb->escape( $this->customer_role) ."\"%' ) GROUP by um.meta_value";
+				AND ( ur.meta_key =  '{$wpdb->prefix}capabilities' AND ur.meta_value LIKE '%\"". esc_sql( $this->customer_role) ."\"%' ) GROUP by um.meta_value";
 				break;
 			case 'order':
 				$query = "SELECT post_status AS status, count(post_status) AS count FROM $wpdb->posts

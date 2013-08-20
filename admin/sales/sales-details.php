@@ -187,7 +187,7 @@
                     <td><?php //echo get_post_meta($order->post_parent,'_ims_gallery_id',true)?>&nbsp;</td>
                     <td>&nbsp;</td>
                     <td><?php _e('Total', 'ims')?></td>
-                    <td><span class="total"><?php echo   $this->format_price( $this->cart['total'] )?></span></td>
+                    <td><span class="total"><?php echo $this->format_price( $this->cart['total'] )?></span></td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>

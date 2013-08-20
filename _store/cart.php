@@ -102,7 +102,7 @@
 		</table><!--.ims-table-->'; //end table
 		
 		//terms and conditions
-		$output .= '<div class="ims-terms-condtitions">' . esc_html( $this->opts['termsconds'] ) . '</div>';
+		$output .= '<div class="ims-terms-condtitions">' .  $this->opts['termsconds'] . '</div>';
 		
 		$output .= apply_filters( 'ims_cart_hidden_fields', '', $this->cart );
 		$output .= '<input type="hidden" name="_xmvdata" data-value-ims="' . esc_attr( $this->cart['total'] ) . '" />';

@@ -1,10 +1,10 @@
 === Image Store ===
 Contributors: Hax
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YM9GXCFBND89E
-Tags: e-commerce,photo store,galleries,imstore,image-store,secure,watermark,slideshow,rate,wepay,shopping,cart,paypal,widget,prints,pagseguro,nextgen,alternative
+Tags: e-commerce,photo store,gallery,imstore,image-store,secure,watermark,slideshow,rate,wepay,shopping,cart,paypal,widget,prints,pagseguro,nextgen,alternative
 Requires at least: 3.0.0
 Tested up to: 3.6.0
-Stable tag: 3.3.1
+Stable tag: 3.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,9 +84,17 @@ The plugin fully integrated with the WordPress database it only creates a post_e
 
 == Changelog ==
 
+= 3.3.2 =
+* Fixed: PHP notices.
+* Fixed: Translation issues.
+* Fixed: Shortcode sort issue.
+* Fixed: Image transparency setting.
+* Added: Image title to cart images.
+* Added: Option to remove login form.
+* Added: HTML support for cart messages.
+
 = 3.3.1 =
 * Fixed: Additional instructions not saving.
-
 
 = 3.3.0 =
 * Security Update
