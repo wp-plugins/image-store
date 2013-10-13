@@ -76,6 +76,7 @@ class ImStoreCart {
 		$this->data['first_name'] = false;
 		$this->data['user_email'] =false;
 		$this->data['payer_email'] =false;
+		$this->data['email_checkout'] = false;
 		
 		$this->data['txn_id'] = false;
 		$this->data['mc_gross'] = false;
@@ -149,7 +150,7 @@ class ImStoreCart {
 	 */
 	function add_to_cart( $request ){
 	
-		if( 	!$this->validated )
+		if( ! $this->validated )
 			return false;
 		
 		$color = $finish = 0;
@@ -412,10 +413,10 @@ class ImStoreCart {
 		
 		//send emails 
 		$this->get_download_links( );
-		$message = preg_replace( $ImStore->opts['tags'], $this->substitutions, $ImStore->opts['notifymssg'] );
+		$message = @preg_replace( $ImStore->opts['tags'], $this->substitutions, $ImStore->opts['notifymssg'] );
 		
 		$headers = 'From: "' . esc_attr( $ImStore->opts['receiptname'] ). '" <' . esc_attr( $ImStore->opts['receiptemail'] ) . ">\r\n";
-		$headers .= "Content-type: text/html; charset=utf8\r\n";
+		$headers .= "Content-type: text/html; charset=". get_bloginfo( 'charset' ) ."\r\n";
 		
 		$headers = apply_filters( 'ims_email_headers', $headers, $ImStore->opts['tags'], $this->substitutions );
 		$message = apply_filters( 'ims_admin_message', $message, $ImStore->opts['tags'], $this->substitutions );
@@ -428,7 +429,7 @@ class ImStoreCart {
 		//notify buyers
 		if ( is_email( $this->data['payer_email'] ) && !get_post_meta( $this->orderid, '_ims_email_sent', true ) ){
 			$message = make_clickable( wpautop( 
-				stripslashes( preg_replace( $ImStore->opts['tags'], $this->substitutions, $ImStore->opts['thankyoureceipt'] ) ) 
+				stripslashes( @preg_replace( $ImStore->opts['tags'], $this->substitutions, $ImStore->opts['thankyoureceipt'] ) ) 
 			) );
 			
 			$message = apply_filters( 'ims_customer_message', $message, $ImStore->opts['tags'], $this->substitutions );
@@ -456,7 +457,7 @@ class ImStoreCart {
 			$this->data['txn_id'], $this->data['last_name'], $this->data['first_name'], $this->data['payer_email'], $this->data['instructions'], $this->cart['items'] 
 		) );
 	
-		if ( $this->cart['total'] === false || !$this->data['data_integrity']  )
+		if ( $this->cart['total'] === false || ! $this->data['data_integrity'] || $this->data['email_checkout']  )
 			return false;
 		
 		if ( $this->download_links !== false )
