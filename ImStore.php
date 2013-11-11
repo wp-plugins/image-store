@@ -8,7 +8,7 @@
   Version: 3.3.4
   Author URI:http://www.xparkmedia.com
   Requires at least: 3.0.0
-  Tested up to: 3.6.0
+  Tested up to: 3.7.1
   Text Domain: ims
 
   Copyright 2010-2013 by Hafid Trujillo http://www.xparkmedia.com
