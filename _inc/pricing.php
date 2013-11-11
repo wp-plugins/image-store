@@ -195,7 +195,7 @@ class ImStorePricing extends ImStoreAdmin {
 	function new_pricelist( ) {
 		echo '<form method="post" action="#price-list" >
 			<p><label>' . __( 'Name', 'ims' ) . ' <input type="text" name="pricelist_name" class="regular-text" /></label>
-			<input type="submit" name="newpricelist" value="' . esc_attr__('Add List', 'ims') . '" class="button" /></p>';
+			<input type="submit" name="newpricelist" value="' . esc_attr__('Add List', 'ims') . '" class="button-primary" /></p>';
 		wp_nonce_field( 'ims_new_pricelist' );
 		echo '</form>';
 	}
@@ -209,7 +209,7 @@ class ImStorePricing extends ImStoreAdmin {
 	function new_package( ) {
 		echo '<form method="post" action="#packages" >
 			<p><label>' . __( 'Name', 'ims' ) . ' <input type="text" name="package_name" class="regular-text" /></label>
-			<input type="submit" name="newpackage" value="' . esc_attr__( 'Add Package', 'ims' ) . '" class="button" /></p>';
+			<input type="submit" name="newpackage" value="' . esc_attr__( 'Add Package', 'ims' ) . '" class="button-primary" /></p>';
 		wp_nonce_field( 'ims_new_packages' );
 		echo '</form>';
 	}
@@ -1446,7 +1446,7 @@ class ImStorePricing extends ImStoreAdmin {
 					<option value="delete"><?php _e( 'Delete', 'ims' )?></option>
 				</select>
 				<input type="submit" value="<?php esc_attr_e( 'Apply', 'ims' );?>" name="doaction" class="button-secondary" />
-				<a href="<?php echo $this->pageurl ."&amp;iaction=new#promotions"?>" class="button"><?php _e( 'New Promotion', 'ims' )?></a>
+				<a href="<?php echo $this->pageurl ."&amp;iaction=new#promotions"?>" class="button-primary"><?php _e( 'New Promotion', 'ims' )?></a>
 			</div><!--.actions-->
 		</div><!--.tablenav-->
 		
@@ -1486,7 +1486,7 @@ class ImStorePricing extends ImStoreAdmin {
 							case 'expires':
 								$r .= '<td class="column-' . $column_id . $hide . '" > ';
 								if( $promo->post_expire != '0000-00-00 00:00:00' ) 
-									$r .= mysql2date( $this->dformat, $post->post_expire, true );
+									$r .= mysql2date( $this->dformat, $promo->post_expire, true );
 								$r .= '</td>' ;
 								break;
 							case 'type':

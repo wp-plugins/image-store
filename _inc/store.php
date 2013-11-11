@@ -300,7 +300,7 @@ class ImStoreFront extends ImStore {
 	 */
 	function secure_images( ) {
 
-		if ( !is_singular( 'ims_image' ) )
+		if ( ! is_singular( 'ims_image' ) )
 			return;
 			
 		global $post, $wp_version, $wp_hasher, $wp_query, $user_ID;
@@ -404,8 +404,10 @@ class ImStoreFront extends ImStore {
 			$this->update_cart( );
 		
 		//upate cart
-		if ( isset( $_POST['ims-enotification'] ) )
+		if ( isset( $_POST['ims-enotification'] ) ){
 			$this->imspage = 'checkout';
+			$this->show_comments = false;
+		}
 		
 		//submit notification order
 		if ( isset( $_POST['ims-enotice-checkout' ] ) )
@@ -508,6 +510,7 @@ class ImStoreFront extends ImStore {
 		$ImStoreCart->sizes = $this->sizes;
 		$ImStoreCart->gallery_id = $this->galid;
 		$ImStoreCart->listmeta = $this->listmeta;
+		$ImStoreCart->pricelist_id = $this->pricelist_id;
 				
 		/*load gateways: to add new gateway add a new field using "ims_setting_fields" 
 		and gateway informaiton using "ims_gateways" field key must match gateway key */
@@ -557,6 +560,10 @@ class ImStoreFront extends ImStore {
 	function update_cart( ) {
 		
 		global $ImStoreCart;
+		
+		if( ! empty( $_POST['ims-enotification'] ) )
+			$ImStoreCart->cart['email_checkout'] = true;
+		
 		$ImStoreCart->update_cart( $_REQUEST );
 				
 		if( $ImStoreCart->error )
@@ -595,22 +602,24 @@ class ImStoreFront extends ImStore {
 		
 		global $ImStoreCart;
 		
-		if ( !empty( $_POST['user_email'] ) && !is_email( $_POST['user_email'] ) )
+		if ( ! empty( $_POST['user_email'] ) && !is_email( $_POST['user_email'] ) )
 			$this->error .= __( 'Wrong email format.', 'ims' ) . "<br />";
 
 		if ( empty( $this->cart['items'] ) || empty( $ImStoreCart->orderid ) || $ImStoreCart->status != 'draft' )
 			$this->error .= __( 'Your shopping cart is empty.', 'ims' );
 
-		if ( !empty( $this->error ) )
+		if ( ! empty( $this->error ) )
 			return;
 		
 		foreach( array(  'user_email' => 'payer_email', 'first_name' => 'first_name', 'ims_address' => 'address_street',
 		 'last_name' => 'last_name', 'ims_phone' => 'ims_phone',  'ims_zip' => 'address_zip', 'ims_state' => 'address_state',  
 		 'ims_city' => 'address_city', 'address_country', 'instructions' => 'instructions' ) as $field => $cart_key ){
-			if( !empty( $_POST[ $field ] ) )	 $ImStoreCart->data[ $cart_key ] = $_POST[ $field ];
+			if( ! empty( $_POST[ $field ] ) ){
+				$ImStoreCart->data[ $field ] = $_POST[ $field ];
+				$ImStoreCart->data[ $cart_key ] = $_POST[ $field ];
+			}
 		}
-				
-		$ImStoreCart->data['email_checkout'] = true;
+		
 		$ImStoreCart->data['mc_gross'] = $this->cart['total'];
 		$ImStoreCart->data['custom'] = $ImStoreCart->orderid;
 		
@@ -1367,8 +1376,6 @@ class ImStoreFront extends ImStore {
 		$link 		= esc_attr( apply_filters( 'ims_image_link', $data['link'], $data ) );
 		$css		= esc_attr( implode( ' ',  ( array( 'ims-img', 'imgid-' . $enc) + ( array ) $classes ) ) );
 		
-		if( ! $this->is_taxonomy ) $css  .= ' hreview';
-		
 		// use default gallery tags
 		extract( $this->gallery_tags );
 		
@@ -1379,12 +1386,12 @@ class ImStoreFront extends ImStore {
 		$output .= '<a data-id="' . $enc . '" href="'. $link . '" class="url fn item-url" title="' . esc_attr( $data['title'] ) . '" rel="bookmark">';
 		$output .= '<img src="' . esc_attr( $this->imgurl ) . '" alt="'. esc_attr( $data['alt'] ) . '" ' . ' data-ims-src="' . $url  . '" role="img" /></a>';
 		
-		if( !$this->is_taxonomy && !$this->is_widget ) {
+		if( ! $this->is_taxonomy && ! $this->is_widget ) {
 			$output .= '<span class="img-metadata">';
 			
 			$buttons = array();
 			if( $this->active_store || $this->opts['favorites'] ){
-				$buttons[] = ' <label><input name="imgs[]" type="checkbox" value="' . $enc . '" />
+				$buttons[] = ' <label title="' . __( 'Select', 'ims' ) . '"><input name="imgs[]" type="checkbox" value="' . $enc . '" />
 				<span class="ims-label"> ' . __( 'Select', 'ims' ) . '</span></label>';
 			}
 			
@@ -1402,8 +1409,7 @@ class ImStoreFront extends ImStore {
 			$output  .= apply_filters( 'ims_image_tag_meta', '', $data, $img_id, $size, $enc );
 			$output  .= '</span><!--.img-metadata-->';
 		}
-		
-		$output  .= '</span><!--.item-->';
+		$output  .= '</span><!--.hmedia-->';
 		
 		// add image caption 
 		if( isset( $data['caption'] ) )
@@ -1592,10 +1598,10 @@ class ImStoreFront extends ImStore {
 		$output .= "<{$gallerytag} id='ims-gallery-" . $this->galid . "' class='ims-gallery ims-cols-" . $this->opts['columns'] . $lightbox . "' >";
 		
 		foreach ( $this->attachments as $image ) {
-			
 			$classes = array( );
+			
+			$title = $alt = $image->post_title;
 			$caption = $image->post_excerpt;
-			$title = $alt = get_the_title( $image->ID );
 			$link = $this->get_image_url( $image->ID );
 			
 			if ( $this->is_taxonomy ) {
@@ -1726,7 +1732,7 @@ class ImStoreFront extends ImStore {
 		if ( $this->active_store ) 
 			$output .= '<div class="add-images-to-cart-single"><a href="#" role="button" rel="nofollow">' . __( 'Add to cart', 'ims' ) . '</a></div>' . "\n";
 	
-		return $output .= $this->display_order_form( );
+		return $output .= $this->display_order_form( ) . '<div class="ims-cl"></div>';
 	}
 	
 	/* Display taxonomy post description

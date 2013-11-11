@@ -703,13 +703,15 @@ class ImStoreAdmin extends ImStore {
 				$this->get_option("mini_size_h"), 
 				true
 			);
+			
 			if ( !is_wp_error( $resized_file ) && $resized_file && $info = getimagesize( $resized_file ) )
 				$metadata['sizes']['mini'] = array( 'file' => basename( $resized_file ), 'width' => $info[0], 'height' => $info[1] );
 		}
 		
+		// if original is smaller than mini use mini as original
 		if ( empty($metadata['sizes']['mini'] ) || empty( $metadata['sizes']['preview'] ) || empty( $metadata['sizes']['thumbnail'] ) ) {
 			$orginal_data = array( 'file' => $filename, 'width' => $metadata['width'], 'height' => $metadata['height'] );
-			if ( !file_exists( $this->content_dir . "/$path/" . $filename ) )
+			if ( ! file_exists( $this->content_dir . "/$path/" . $filename ) )
 				@copy( $this->content_dir . '/' . $metadata['file'], $this->content_dir . "/$path/" . $filename );
 		}
 		

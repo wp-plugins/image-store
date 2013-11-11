@@ -68,8 +68,17 @@
 						foreach ( $user_images[$image->ID] as $size => $colors ) {
 							foreach ( $colors as $color => $item ) {
 								
+								//backwards compatibilty allow old images to be downloaded by default
+								$status = 'completed';	
 								$downlink = '';
-								if( $item['download'] ){
+								
+								if( isset( $item['orderid'] ) ){
+									$data = get_post_meta( $item['orderid'], '_response_data', true );
+									if( isset( $data['payment_status'] ) )
+										$status = $data['payment_status'];
+								}
+								
+								if( $item['download'] && $status == 'completed' ){
 									$downlink = '<a href="' . esc_attr( IMSTORE_ADMIN_URL ) . "/download.php?$nonce&amp;img=" . 
 									$enc . "&amp;sz=$size&amp;usr=1&amp;c=" . $item['color_code'] . '" >' . __( 'Download', 'imgs' ) . "</a>";
 								}

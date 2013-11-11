@@ -81,6 +81,7 @@ class ImStoreInstaller extends ImStore {
 
 		$ims_ft_opts['emailreceipt'] = '1';
 		$ims_ft_opts['favorites'] = true;
+		$ims_ft_opts['loginform'] = true;
 
 		$ims_ft_opts['galleriespath'] = '/_imsgalleries';
 		$ims_ft_opts['gallery_template'] = false;
@@ -270,7 +271,7 @@ class ImStoreInstaller extends ImStore {
 
 		//update options if updating from 2.0.8
 		if ( $this->ver <= "2.0.8") {
-			$ims_ft_opts['album_template'] = 'page . php';
+			$ims_ft_opts['album_template'] = 'page.php';
 			$ims_ft_opts['tags'][] = __('/%instructions%/', 'ims');
 		}
 		
@@ -402,7 +403,7 @@ class ImStoreInstaller extends ImStore {
 			$ims_ft_opts['shippingmessage'] = '';
 		}
 		
-		if ( $this->ver <= "3.3.1" ){
+		if ( $this->ver <= "3.3.3" ){
 			$ims_ft_opts['loginform'] = true;
 			update_option( $this->optionkey, $ims_ft_opts );
 		}

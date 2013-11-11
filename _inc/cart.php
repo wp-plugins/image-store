@@ -18,6 +18,7 @@ class ImStoreCart {
 	public $orderid = false;
 	public $validated = false;
 	public $gallery_id = false;
+	public $pricelist_id = false;
 	public $substitutions = false;
 	public $download_links = false;
 	
@@ -98,13 +99,14 @@ class ImStoreCart {
 		$this->cart['images'] = false;
 		$this->cart['tracking'] = false;
 		$this->cart['subtotal'] = false;
-						
+			
 		$this->cart['currency'] = false;
 		$this->cart['gallery_id'] = false;
 		$this->cart['shipping_type'] = 0;
 		$this->cart['discounted'] = false;
 		$this->cart['instructions'] = false;
 		$this->cart['shippingcost'] = false;
+		$this->cart['email_checkout'] = false;		
 		
 		$this->cart['promo'] = array( 
 			'code' => false,
@@ -257,7 +259,7 @@ class ImStoreCart {
 					}
 					
 					//check for downloadable images
-					if ( !$colors[$color]['download'] && $ImStore->opts['shipping'] )
+					if ( ! $colors[$color]['download'] && $ImStore->opts['shipping'] )
 						$this->cart['shippingcost'] = true;
 					
 					$this->cart['images'][$id][$size][$color]['quantity'] = $request['ims-quantity'][$enc][$size][$color];
@@ -330,7 +332,7 @@ class ImStoreCart {
 		do_action( 'ims_before_save_cart', $this->cart );
 		do_action( "ims_before_save_cart_{$action}", $this->cart );
 		
-		if ( !$this->orderid || $this->status != 'draft' ) {
+		if ( ! $this->orderid || $this->status != 'draft' ) {
 			
 			$order = array(
 				'ping_status' => 'close',
@@ -341,9 +343,9 @@ class ImStoreCart {
 				'post_title' => 'Ims Order - ' . date( 'Y-m-d H:i', current_time( 'timestamp' ) ),
 			);
 			
-			if ( $orderid = wp_insert_post( apply_filters( 'ims_new_order', $order, $this->cart ) ) ){
-				add_post_meta( $orderid, '_ims_order_data', $this->cart );
-				setcookie( 'ims_orderid_' . COOKIEHASH, $orderid, time(  ) + 31536000, COOKIEPATH, COOKIE_DOMAIN );
+			if ( $this->orderid = wp_insert_post( apply_filters( 'ims_new_order', $order, $this->cart ) ) ){
+				add_post_meta( $this->orderid, '_ims_order_data', $this->cart );
+				setcookie( 'ims_orderid_' . COOKIEHASH, $this->orderid, time(  ) + 31536000, COOKIEPATH, COOKIE_DOMAIN );
 			}
 			
 		} else update_post_meta( $this->orderid, '_ims_order_data', $this->cart );
@@ -372,8 +374,10 @@ class ImStoreCart {
 				$this->data['data_integrity'] = true;
 		
 		sleep( 1 ); 
+		
 		$ImStore->imspage = 'receipt';
-			
+		$ImStore->show_comments = false;
+
 		wp_update_post( array(
 			'post_expire' => '0', 'ID' => $this->orderid,
 			'post_status' => 'pending', 'post_date' => current_time( 'timestamp' )
@@ -457,7 +461,7 @@ class ImStoreCart {
 			$this->data['txn_id'], $this->data['last_name'], $this->data['first_name'], $this->data['payer_email'], $this->data['instructions'], $this->cart['items'] 
 		) );
 	
-		if ( $this->cart['total'] === false || ! $this->data['data_integrity'] || $this->data['email_checkout']  )
+		if ( $this->cart['total'] === false || ! $this->data['data_integrity'] || $this->cart['email_checkout']  )
 			return false;
 		
 		if ( $this->download_links !== false )
@@ -522,8 +526,13 @@ class ImStoreCart {
 			
 			'price' => $price,
 			'quantity' => $quantity,
+			'list' => $this->pricelist_id,
+			'orderid' => $this->orderid,
 			'gallery' => $this->gallery_id,
 		);
+		
+		if( isset( $this->sizes[$size]['unit'] ) )
+			$values['unit'] = $this->sizes[$size]['unit'];
 		
 		if( isset( $this->cart['images'][$id][$size][$color]['quantity'] )  )
 			$values['quantity'] = $this->cart['images'][$id][$size][$color]['quantity'] + $quantity;
@@ -662,8 +671,8 @@ class ImStoreCart {
 		
 		$user_id = false;
 		$data = array( 
-			'user_login' => $_POST['user_login'],
 			'user_email' => $this->data['payer_email'],
+			'user_login' => isset( $_POST['user_login'] ) ? $_POST['user_login'] : false,
 		);
 		
 		if( isset( $_POST['ims-submit-register'] ) ){ // user register
@@ -685,7 +694,7 @@ class ImStoreCart {
 				$errors .= '    ' . $error . "<br />\n";
 			$data['message'] = $message . apply_filters( 'ims_login_errors', $errors) . "</div>\n";
 			
-		} else if ( !is_wp_error( $user_id ) ) {
+		} else if ( ! is_wp_error( $user_id ) ) {
 			
 			$redirect = site_url( 'wp-login.php?checkemail=registered' );
 			
@@ -809,11 +818,11 @@ class ImStoreCart {
 		
 		global $ImStore;
 		
-		if ( isset( $ImStore->sizes[$size]['ID'] ) )
-			return get_post_meta( $ImStore->sizes[$size]['ID'], '_ims_price', true );
+		if ( isset( $this->sizes[$size]['ID'] ) )
+			return get_post_meta( $this->sizes[$size]['ID'], '_ims_price', true );
 			
-		else if( isset( $ImStore->sizes[$size]['price'] ) )
-		 return str_replace( $ImStore->sym, '', $ImStore->sizes[$size]['price'] );
+		else if( isset( $this->sizes[$size]['price'] ) )
+		 return str_replace( $ImStore->sym, '', $this->sizes[$size]['price'] );
 		 
 		 return false;
 	}

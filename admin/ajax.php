@@ -234,17 +234,21 @@
 		
 		global $ImStore, $user_ID;
 		
-		if ( empty( $user_ID ) ) 
+		$userid = $user_ID;
+		if( $gallery_user = $_GET['gallery_user'] );
+			$userid = 1;
+
+		if ( empty( $userid )  && ! $gallery_user ) 
 			die( );
 		
 		$action = $_GET['action'];
 		$imgid = $ImStore->url_decrypt( $_GET['imgid'] );
 		
 		if( $action == 'remove-vote' )
-			delete_user_meta( $user_ID, '_ims_image_like', $imgid );
+			delete_user_meta( $userid, '_ims_image_like', $imgid );
 			
 		else if( $action == 'vote' )
-			add_user_meta( $user_ID, '_ims_image_like', $imgid, false );
+			add_user_meta( $userid, '_ims_image_like', $imgid, false );
 		
 		echo $ImStore->get_image_vote_count( $imgid );
 	
@@ -285,7 +289,6 @@
 		else if( isset( $_COOKIE['ims_favorites_' . COOKIEHASH] ) )
 			$join = explode( ',', $_COOKIE['ims_favorites_' . COOKIEHASH] );
 	
-		
 		if( $action == 'remove-favorites' ){
 			
 			if( empty( $_GET['count'] ) )
@@ -305,14 +308,13 @@
 
 		} else if ( $action == 'favorites' ) {
 			
-			 $join = array_filter( array_unique( array_merge( $join, $dec_ids ) ) ); 
+			$join = array_filter( array_unique( array_merge( $join, $dec_ids ) ) ); 
 			 
-			 if( $user_ID ) update_user_meta( $user_ID, '_ims_favorites',  implode( ',', $join ) );
+			if( $user_ID ) update_user_meta( $user_ID, '_ims_favorites',  implode( ',', $join ) );
 			else  setcookie( 'ims_favorites_' . COOKIEHASH, implode( ',', $join ), 0, COOKIEPATH, COOKIE_DOMAIN);
 
 			if ( count( $new ) < 2 ) echo __( 'Image added to favorites', 'ims' ) . '|ims-success|' . count( $join );
 			else echo sprintf( __( '%d images added to favorites', 'ims' ), count( $new ) ) . '|ims-success|' . count( $join );
-			
 		}
 		
 		die( );	
