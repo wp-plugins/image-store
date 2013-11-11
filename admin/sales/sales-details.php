@@ -46,11 +46,13 @@
             <?php
                 foreach( $this->cart['images'] as $id => $sizes ){
                     
-					$parentid  	= $this->get_post_parent_id( $id );
+					$parentid  = $this->get_post_parent_id( $id );
                     $mini  		= array('url' => false, 'width' => false, 'height' => false, 'file' => false);
                     
-                    if( $image = (array) get_post_meta( $id, '_wp_attachment_metadata', true ))
-                        $mini = wp_parse_args( $image['sizes']['mini'], $mini );
+                    if( $image = (array) get_post_meta( $id, '_wp_attachment_metadata', true )){
+						if( isset( $image['sizes']['mini'] ) )
+                        	$mini = wp_parse_args( $image['sizes']['mini'], $mini );
+					}
                     
                     $r = '<tr><td class="column-thumb">
 					<img src="' . esc_attr( $mini['url'] ) . '" width="'. esc_attr( $mini['width'] ) . ' " height="' . esc_attr( $mini ['height'] ) . '" alt="' . esc_attr( $mini['file'] ) .'"/></td>';

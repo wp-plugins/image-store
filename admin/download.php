@@ -90,13 +90,12 @@
 						$image_editor = wp_get_image_editor( $full_image_path );
 						
 						if ( ! is_wp_error( $image_editor ) ) {
-							$image_editor->resize( $dimentions['w'], $dimentions['h'], true );
+							$image_editor->resize( $dimentions['w'], $dimentions['h'], false );
 							$image_data = $image_editor->save( );
 							$this->image_dir = $image_data['path'];
 						}
 							
-							
-					} else $this->image_dir = image_resize( $full_image_path, $dimentions['w'], $dimentions['h'], 0, 0, 0, 100 );
+					} else $this->image_dir = image_resize( $full_image_path, $dimentions['w'], $dimentions['h'], false, 0, 0, 100 );
 					
 					
 					if ( is_wp_error( $this->image_dir ) && isset( $this->attachment['sizes']['preview']['path'] ) ) {
@@ -187,7 +186,8 @@
 				}
 				
 				//apply filter
-				$filters = $this->get_option( 'ims_color_filters' );
+				global $ImStore;
+				$filters = $ImStore->get_option( 'ims_color_filters' );
 				
 				if ( $color && isset( $filters[$color] ) ) {
 					if ( $filters[$color]['grayscale'] )
@@ -215,13 +215,13 @@
 				switch ( $ext ) {
 					case "jpg":
 					case "jpeg":
-						imagejpeg( $image, NULL, 100 );
+						imagejpeg( $image );
 						break;
 					case "gif":
 						imagegif( $image );
 						break;
 					case "png":
-						imagepng( $image, NULL, 9 );
+						imagepng( $image );
 						break;
 				}
 		

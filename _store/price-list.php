@@ -39,7 +39,10 @@
 			</thead>';
 	
 	$output .= '<tbody>';
-	foreach ( $this->sizes as $size) :
+	foreach ( $this->sizes as $size ) :
+			
+		if( empty( $size['name']  ) )
+			continue;
 	
 		$package_sizes = '';
 		$css = ( $css == ' alternate' ) ? '' : ' alternate';

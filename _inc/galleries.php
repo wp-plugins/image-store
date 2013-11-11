@@ -370,21 +370,20 @@ class ImStoreGallery extends ImStoreAdmin {
 	 * @since 3.0.0
 	 */
 	function change_upload_path( $data ) {
-		if ( $this->pagenow != "upload-img.php" )
+		
+		if ( $this->pagenow != "upload-img.php" || empty($_REQUEST['folderpath'] ) )
 			return $data;
 			
-		if( isset( $_REQUEST['folderpath'] ) )
-			$this->galpath = "/" . $this->sanitize_path( $_REQUEST['folderpath'] );
+		$this->galpath = "/" . $this->sanitize_path( $_REQUEST['folderpath'] );
 
-		$path['error'] = false;
-		$path['subdir'] = $this->galpath;
-		$path['baseurl'] = $this->content_url;
-		$path['basedir'] = $this->content_dir;
-		$path['url'] = $this->content_url . $this->galpath;
-		$path['path'] = $this->content_dir . $this->galpath;
+		$path['error'] 		= false;
+		$path['subdir'] 	= $this->galpath;
+		$path['baseurl'] 	= $this->content_url;
+		$path['basedir']	= $this->content_dir;
+		$path['url'] 		= $this->content_url . $this->galpath;
+		$path['path'] 		= $this->content_dir . $this->galpath;
 
-		$path = apply_filters( 'ims_upload_path', $path, $data );
-		return $path;
+		return apply_filters( 'ims_upload_path', $path, $data );
 	}
 	
 	/**

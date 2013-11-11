@@ -34,7 +34,7 @@ class ImStore {
 	public $promo_types = array( );
 	public $rules_property = array( );
 	
-	public $version = '3.3.3';
+	public $version = '3.3.4';
 	public $customer_role = 'customer';
 	public $optionkey = 'ims_front_options';
 	
@@ -391,11 +391,13 @@ class ImStore {
 	 * @since 3.0.0
 	 */
 	function flush_rules( ) {
+		
 		$rules = get_option( 'rewrite_rules' );
-		if ( !isset( $rules[$this->opts['gallery_slug'] . "/([^/]+)/feed/(imstore)/?$"]) ) {
-			global $wp_rewrite;
-			$wp_rewrite->flush_rules( );
-		}
+		if ( isset( $rules[$this->opts['gallery_slug'] . "/([^/]+)/feed/(imstore)/?$"]) ) 
+			return;
+			
+		global $wp_rewrite;
+		$wp_rewrite->flush_rules( );
 	}
 	
 	/**
@@ -407,7 +409,7 @@ class ImStore {
 	 * @since 3.0.0
 	 */
 	function posts_orderby($orderby, $query) {
-		if (empty($query->query_vars['orderby'])
+		if ( empty($query->query_vars['orderby'] )
 		|| empty($query->query['orderby'])
 		|| $query->query['orderby'] != 'excerpt')
 			return $orderby;
@@ -451,11 +453,11 @@ class ImStore {
 	function set_user_caps( ) {
 		global $current_user;
 		
-		if ( !isset( $current_user->ID ) || isset( $current_user->caps['administrator'] ) )
+		if ( ! isset( $current_user->ID ) || isset( $current_user->caps['administrator'] ) )
 			return; 
 		
 		$ims_caps = $this->get_option( 'ims_user_options' );
-		$core_caps = ( array) get_option( 'ims_core_caps', true );
+		$core_caps = ( array ) get_option( 'ims_core_caps', true );
 		$ims_user_caps = ( array ) get_user_meta( $current_user->ID, 'ims_user_caps', true );
 		
 		foreach( $ims_caps['caplist'] as $cap => $label ){
@@ -464,6 +466,7 @@ class ImStore {
 			else if( isset( $current_user->allcaps["ims_{$cap}"] ) )
 				$current_user->remove_cap( "ims_{$cap}" ); 
 		}
+		
 		foreach( $core_caps as $cap ){
 			if( isset( $ims_user_caps["ims_manage_galleries"]  ) )
 				$current_user->add_cap( $cap );
@@ -483,23 +486,15 @@ class ImStore {
 	 * @since 3.2.1
 	 */
 	function get_image_vote_count( $image_id ){
-		
 		if( empty( $image_id ) )
 			return 0;
-		
-		$image_id = (int) $image_id;
-		if( $count = wp_cache_get( "ims_vote_count_{$image_id}", 'ims' ) )
-			return $count;
-			
+
 		global $wpdb;
-		$count = $wpdb->get_var (  $wpdb->prepare( 
+		return $wpdb->get_var (  $wpdb->prepare( 
 			"SELECT count( meta_value ) FROM $wpdb->usermeta 
 			WHERE meta_key = '_ims_image_like' 
-			AND meta_value = %d " , $image_id )
+			AND meta_value = %d " , (int) $image_id )
 		);
-		
-		wp_cache_set( "ims_vote_count_{$image_id}", $count, 'ims' );
-		return $count;
 	}
 	
 	/**
@@ -570,8 +565,8 @@ class ImStore {
 			}
 		}
 				
-		$wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
 		$wp_rewrite->rules["/page/?([0-9]+)/?$"] = "index.php?paged=" . $wp_rewrite->preg_index( 1 );
+		$wp_rewrite->rules =  apply_filters( 'ims_rewrite_rules', ( $new_rules + $wp_rewrite->rules ) );
 		
 		return $wp_rewrite;
 	}
@@ -637,7 +632,7 @@ class ImStore {
 	 * @since 3.1.0
 	 */
 	function get_memory_limit( ){
-		if( !defined( 'WP_MAX_MEMORY_LIMIT' ) )
+		if( ! defined( 'WP_MAX_MEMORY_LIMIT' ) )
 			return '256M';
 		elseif( WP_MAX_MEMORY_LIMIT == false || WP_MAX_MEMORY_LIMIT == '' )
 			return '256M';
@@ -652,7 +647,7 @@ class ImStore {
 	 */
 	function get_post_parent_id( $post_ID ) {
 		$post = get_post( $post_ID );
-		if ( !$post || is_wp_error( $post ) )
+		if ( ! $post || is_wp_error( $post ) )
 			return false;
 		return (int) $post->post_parent;
 	}
@@ -666,6 +661,9 @@ class ImStore {
 	 */
 	function url_encrypt( $string ) {
 		
+		if ( $url_encrypted = wp_cache_get( 'url_encrypt_' . $string , 'ims' ) )
+			return $url_encrypted;
+				
 		$str = '';
 		for ( $i = 0; $i < strlen( $string ); $i++ ) {
 			$char = substr( $string, $i, 1 );
@@ -674,13 +672,16 @@ class ImStore {
 			$str .= $char;
 		}
 		
-		return urlencode( 
+		$url_encrypted = urlencode( 
 			implode( '::', 
 				explode( '/',
 					str_replace( '=', '', base64_encode( $str ) )
 				) 
 			) 
 		);
+		
+		wp_cache_set( 'url_encrypt_' . $string , $url_encrypted, 'ims' );
+		return $url_encrypted;
 	}
 	
 	/**

@@ -69,7 +69,7 @@ class ImStoreWidget extends WP_Widget {
 			'post_excerpt' => __( 'Caption', 'ims' ),
 		);
 		
-		$show_options = apply_filters('ims_widget_display_options', array(
+		$show_options = apply_filters( 'ims_widget_display_options', array(
 			'gal' => __( 'Gallery', 'ims' ),
 			'DESC' => __( 'Oldest images', 'ims' ),
 			'ASC' => __( 'Latest images', 'ims' ),
@@ -78,10 +78,12 @@ class ImStoreWidget extends WP_Widget {
 		
 		?>
         
-    <p>
+    	<p>
 			<label for="<?php echo $this->get_field_id( 'title' ) ?>"><?php _e( 'Title', 'ims' ) ?>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ) ?>" name="<?php echo $this->get_field_name( 'title' ) ?>" type="text" value="<?php echo esc_attr( $title )?>" /></label>
 		</p>
+		
+		<?php  do_action( 'ims_widget_admin_options', $instance, $this ); ?>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id( 'filmstrip' )?>"> <?php _e( 'Filmstrip mode', 'ims')?> 
@@ -120,6 +122,7 @@ class ImStoreWidget extends WP_Widget {
 		</p>
         
 		<?php
+		
 	}
 	
 	/**
@@ -215,7 +218,7 @@ class ImStoreWidget extends WP_Widget {
 		<div class='ims-gal-innner'>";
 		
 		foreach ( $this->attachments as $image ) {
-			if ( !isset( $image->meta['sizes']['mini'] ) )
+			if ( ! isset( $image->meta['sizes']['mini'] ) )
 				continue;
 			
 			$title = $image->post_title;
