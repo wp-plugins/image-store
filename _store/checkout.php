@@ -14,10 +14,11 @@
 	// Stop direct access of the file
 	if ( !defined( 'ABSPATH' ) )
 		die( );
-		
-	// todo: test on WP 3.0
+	
 	$userdata = wp_get_current_user( ); 
-	$fields = array( 'last_name', 'first_name', 'user_email', 'ims_address', 'ims_city', 'ims_state', 'ims_zip', 'ims_phone' );
+	$fields = apply_filters( 'ims_user_checkout_fields', array(
+		'last_name', 'first_name', 'user_email', 'ims_address', 'ims_city', 'ims_state', 'ims_zip', 'ims_phone' 
+	));
 	
 	foreach( $fields as $field ){
 		if( isset( $_POST[ $field ] ) )
@@ -30,8 +31,10 @@
 	}
 	
 	$output .= '<form method="post" action="#" class="shipping-info">';
-
-	$output .= '<fieldset>';
+	
+	$output .= apply_filters( 'ims_before_checkout_order', '', $this->cart, $this->opts );
+		
+	$output .= '<fieldset class="ims-shipping">';
 	$output .= '<legend>' . __( "Shipping Information", 'ims' ) . '</legend>';
 	
 	$output .= '<div class="ims-p user-info">';
@@ -47,7 +50,7 @@
 	$output .= '<input type="text" name="user_email" id="user_email" value="' . esc_attr( $userdata->user_email ) . '" class="ims-input" />';
 	$output .= '</div><!--.email-info-->';
 	
-	$output .= '<div class="ims-p adress-info">';
+	$output .= '<div class="ims-p address-info">';
 	$output .= '<label for="ims_address">' . __( 'Address', 'ims' ) . ( $this->opts['required_ims_address'] ? ' <span class="req">*</span>' : '' ) . ' </label>';
 	$output .= '<input type="text" name="ims_address" id="ims_address" value="' . esc_attr( $userdata->ims_address ) . '" class="ims-input" />';
 	$output .= '<span class="ims-break"></span>';
@@ -68,7 +71,7 @@
 	$output .= '<input type="text" name="ims_phone" id="ims_phone" value="' . esc_attr( $userdata->ims_phone ) . '" class="ims-input" />';
 	$output .= '</div>';
 
-	$output .= apply_filters( 'ims_checkout_user_fields', '', $this->cart, $this->opts );
+	$output .= apply_filters( 'ims_after_checkout_order', '', $this->cart, $this->opts );
 
 	$output .= '<div class="ims-p">';
 	$output .= '<label for="ims_instructions">' . __( 'Additional Instructions', 'ims' ) . ' </label>';
@@ -77,6 +80,8 @@
 	
 	$output .= '<div class="ims-p"><small><span class="req">*</span>' . __( "Required fields", 'ims' ) . '</small></div>';
 	$output .= '</fieldset><!--.shipping-info-->';
+	
+	$output .= apply_filters( 'ims_checkout_order_fieldset', '', $this->cart, $this->opts );
 	
 	$output .= '<fieldset class="order-info">';
 	$output .= '<legend>' . __( "Order Information", 'ims' ) . '</legend>';

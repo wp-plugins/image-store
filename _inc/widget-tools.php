@@ -55,10 +55,11 @@ class ImStoreWidgetTools extends WP_Widget {
 		
 		extract( $args ); extract( $instance );
 		
+		// do not display image tools on widgets
 		global $ImStore;
-		$parent_id = 0;
 		$ImStore->is_widget = true;
 		
+		$parent_id = 0;
 		echo $before_widget . "\n";
 		if ( $title ) echo $before_title . $title . $after_title . "\n";
 		echo '<div class="ims-innner-widget">';
@@ -77,13 +78,16 @@ class ImStoreWidgetTools extends WP_Widget {
 				$title 		= esc_attr( get_the_title( $id ) );
 				 
 				if( $meta = (array) get_post_meta( $id, '_wp_attachment_metadata', true ) ){
-					$meta+= array( 'link' => $link, 'alt' => $title, 'title' => $title );
+					$meta+= array( 'link' => $link, 'alt' => $title, 'title' => $title, 'location' => 'tools-widget' );
 					echo $ImStore->image_tag( $id, $meta, 3, false );
 				}
 			}
 			
 			echo '</div><!--.ms-tools-gal-inner--></div><!--.ims-tools-gal-->';
 		}
+		
+		// restore setting to allow content to display after sidebar
+		$ImStore->is_widget = false;
 		
 		$link = '<a href="' . $ImStore->get_permalink( 'shopping-cart', true, false, $parent_id ) . 
 		'" role="link" class="ims-checkout" title="' . __( 'Checkout', 'ims' ) . '">%s</a>';

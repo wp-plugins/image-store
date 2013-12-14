@@ -36,7 +36,9 @@ class ImStoreCartWePay {
 			return;
 			
 		global $ImStore;
-		if( !is_numeric( $_REQUEST['checkout_id'] ) || empty( $ImStore->opts['wepayclientid'] ) 
+		$cartid = trim($ImStore->url_decrypt($checkout->reference_id));
+
+		if( ! is_numeric( $_REQUEST['checkout_id'] ) || empty( $ImStore->opts['wepayclientid'] ) || ! is_numeric( $cartid )
 		|| empty( $ImStore->opts['wepayclientsecret'] )  || empty( $ImStore->opts['wepayaccesstoken'] ) )
 			return;
 		
@@ -73,8 +75,6 @@ class ImStoreCartWePay {
 			),
 		); 
 		
-		$cartid = $checkout->reference_id;
-		
 		global $ImStoreCart;
 		$ImStoreCart->setup_cart( $cartid );
 		
@@ -93,6 +93,7 @@ class ImStoreCartWePay {
 		
 		$ImStoreCart->data['method'] =  'WePay';
 		$ImStoreCart->data['num_cart_items'] = $ImStoreCart->cart['items'];
+		$ImStoreCart->data['user_email'] = $ImStoreCart->data['payer_email'];
 		$ImStoreCart->data['instructions'] = $ImStoreCart->cart['instructions'];
 
 		$ImStoreCart->checkout( );
@@ -110,9 +111,9 @@ class ImStoreCartWePay {
 		
 		global $ImStore;
 		
-		 if( $ImStore->opts['gateway']['wepaystage'] ){
+		 if( $ImStore->opts['gateway']['sagepaydev'] ){
 			$this->button_request( 'wepaystage' );
-		 	$output .= '<input name="ims-wepaystage" type="submit" value="' . esc_attr( $ImStore->gateways['wepaystage']['name'] ) . 
+		 	$output .= '<input name="ims-sagepaydev" type="submit" value="' . esc_attr( $ImStore->gateways['wepaystage']['name'] ) . 
 			'" class="primary ims-wepaystage" data-submit-url="' . esc_attr( urlencode( $ImStore->gateways['wepaystage']['url'] ) ) . '" /> ';
 		}
 		
@@ -141,10 +142,10 @@ class ImStoreCartWePay {
 		$data = array(
 			'type' => 'GOODS', 
 			'amount' => $ImStoreCart->cart['total'],
-			'reference_id' => $ImStoreCart->orderid,
 			'short_description' => __("Image Purchase"),
 			'account_id' => $ImStore->opts['wepayaccountid'],
 			'redirect_uri' => $ImStore->get_permalink( 'receipt' ),
+			'reference_id' => $ImStore->url_encrypt($ImStoreCart->orderid),
 			'callback_uri' =>$ImStore->get_permalink( $ImStore->imspage ),
 		);
 		

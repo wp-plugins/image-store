@@ -36,10 +36,11 @@ class ImStoreCart {
 	 */
 	function setup_cart( $orderid = false ){
 		
+		global $ImStore;
 		$this->setup_defaults( );
 		
 		if ( isset( $_COOKIE['ims_orderid_' . COOKIEHASH] ) )
-			$this->orderid = $_COOKIE[ 'ims_orderid_' . COOKIEHASH ];
+			$this->orderid =  $ImStore->url_decrypt( $_COOKIE[ 'ims_orderid_' . COOKIEHASH ] );
 		else if ( $orderid )	
 			$this->orderid = $orderid;
 		else  return $this->cart;
@@ -339,13 +340,13 @@ class ImStoreCart {
 				'post_status' => 'draft',
 				'post_type' => 'ims_order',
 				'comment_status' => 'close',
-				'post_expire' => date( 'Y-m-d H:i', current_time( 'timestamp' ) + 86400 ),
 				'post_title' => 'Ims Order - ' . date( 'Y-m-d H:i', current_time( 'timestamp' ) ),
 			);
 			
 			if ( $this->orderid = wp_insert_post( apply_filters( 'ims_new_order', $order, $this->cart ) ) ){
 				add_post_meta( $this->orderid, '_ims_order_data', $this->cart );
-				setcookie( 'ims_orderid_' . COOKIEHASH, $this->orderid, time(  ) + 31536000, COOKIEPATH, COOKIE_DOMAIN );
+				add_post_meta( $this->orderid, '_ims_post_expire', date( 'Y-m-d H:i', current_time( 'timestamp' ) + 86400 ) );
+				setcookie( 'ims_orderid_' . COOKIEHASH, $ImStore->url_encrypt($this->orderid), time(  ) + 31536000, COOKIEPATH, COOKIE_DOMAIN );
 			}
 			
 		} else update_post_meta( $this->orderid, '_ims_order_data', $this->cart );
@@ -370,7 +371,7 @@ class ImStoreCart {
 		$total = $this->cart['discounted']  ?  $this->cart['discounted'] :  $this->cart['total'] ;
 		
 		if ( $this->cart['items'] && $this->data['mc_currency'] == $this->cart['currency'] &&
-			abs( $this->data['mc_gross'] - $ImStore->format_price( $total, false ) ) < 0.00001 )
+		abs( $this->data['mc_gross'] - $ImStore->format_price( $total, false ) ) < 0.00001 )
 				$this->data['data_integrity'] = true;
 		
 		sleep( 1 ); 
@@ -379,11 +380,13 @@ class ImStoreCart {
 		$ImStore->show_comments = false;
 
 		wp_update_post( array(
-			'post_expire' => '0', 'ID' => $this->orderid,
-			'post_status' => 'pending', 'post_date' => current_time( 'timestamp' )
+			'ID' => $this->orderid,
+			'post_status' => 'pending', 
+			'post_date' => current_time( 'timestamp' )
 		) );
 		
 	 	update_post_meta( $this->orderid, '_response_data', $this->data );
+		update_post_meta( $this->orderid, '_ims_post_expire', '0000-00-00 00:00:00' );
 	 
 		//update promotional count
 		if( $this->cart['promo']['promo_id'] ){
@@ -407,6 +410,7 @@ class ImStoreCart {
 				'user_email' => $this->data['payer_email'], 
 			) );
 			
+			update_user_meta( $ImStore->user_id, 'ims_status', 'active' );
 			update_user_meta( $ImStore->user_id, 'user_email', $this->data['payer_email'] );
 			
 			foreach ( $ImStore->opts['checkoutfields'] as $key => $label ) {
@@ -822,7 +826,7 @@ class ImStoreCart {
 			return get_post_meta( $this->sizes[$size]['ID'], '_ims_price', true );
 			
 		else if( isset( $this->sizes[$size]['price'] ) )
-		 return str_replace( $ImStore->sym, '', $this->sizes[$size]['price'] );
+		return str_replace( $ImStore->sym, '', $this->sizes[$size]['price'] );
 		 
 		 return false;
 	}
@@ -848,11 +852,9 @@ class ImStoreCart {
 		if( isset( $meta['sizes']['mini'] ) && is_array( $meta['sizes']['mini'] ) )
 			$meta += array( 'link' => $ImStore->get_image_url( $imageid ), 'alt' => $imgtitle, 'title' => $imgtitle, 'caption' => $imgtitle );
 		
-		$output = '<tr role="row"> <td role="gridcell" class="ims-preview">'; //start row
+		$output = '<div class="ims-subrows"> <div class="ims-preview">'; //start row
 		$output .= $ImStore->image_tag( $imageid, $meta, 3 );
-		$output .= '</td>';
-		
-		$output .= '<td role="gridcell" class="ims-subrows" colspan="2">';
+		$output .= '</div>';
 		
 		foreach ( $sizes as $size => $colors ) :
 			foreach ( $colors as $color => $item ) :
@@ -863,10 +865,12 @@ class ImStoreCart {
 			$output .= apply_filters( 'ims_cart_image_before_list_row', '', $imageid, $item, $color, $enc, $row, $title, $size );
 			$output .= 
 			'<span class="ims-quantity">
-				<input type="text" name="ims-quantity' . "[$enc][$size][$color]" . '" value="' . esc_attr( $item['quantity'] ).'" class="input" />
+				<input type="number" name="ims-quantity' . "[$enc][$size][$color]" . '" value="' . esc_attr( $item['quantity'] ).'" class="input" />
 			</span>';
 			
-			$output .= '<span class="ims-size">' . esc_html( $item['size'] ) . ' <span class="ims-unit">' . esc_html( $item['unit'] ) . '</span></span>';
+			//$link = '<a href="#'. $item['list'] . '" class="ims-edit-size">' . esc_html( $item['size'] ) . ' <span class="ims-unit">' . esc_html( $item['unit'] ) . '</span></a>';
+			
+			$output .= '<span class="ims-size">' . esc_html( $item['size'] ) . ' <span class="ims-unit">' . esc_html( $item['unit'] ) . '</span>' . '</span>';
 			$output .= '<span class="ims-color">' . esc_html( $item['color_name'] ) . ' ' . $ImStore->format_price( $item['color'] ) . '</span>';
 			$output .= '<span class="ims-fisnish">' . esc_html( $item['finish_name'] ) . ' ' . $ImStore->format_price( $item['finish'] )  . '</span>';
 			$output .= '<span class="ims-price">' . $ImStore->format_price( $item['price'] )  . '</span>';
@@ -881,7 +885,7 @@ class ImStoreCart {
 			endforeach;
 		endforeach;
 		
-		$output .= '</td></tr>'; //end row
+		$output .= '</div>'; //end row
 		$output .= apply_filters( 'ims_cart_image_list_row', '', $imageid, $item, $color, $enc, $row, $title, $size );
 		
 		return $output;
@@ -904,14 +908,15 @@ class ImStoreCart {
 		global $wpdb;
 		$promo_id = $wpdb->get_var( $wpdb->prepare (
 			"SELECT ID FROM $wpdb->posts AS p
-			INNER JOIN $wpdb->postmeta AS pm
-			ON p.ID = pm.post_id
-			WHERE meta_key = '_ims_promo_code'
-			AND meta_value = BINARY '%s'
+			INNER JOIN $wpdb->postmeta AS pm ON p.ID = pm.post_id
+			INNER JOIN $wpdb->postmeta AS pm2 ON p.ID = pm2.post_id
+			WHERE pm.meta_key = '_ims_promo_code'
+			AND pm2.meta_key = '_ims_post_expire' 
+			AND pm.meta_value = BINARY '%s'
 			AND post_status = 'publish'
 			AND post_date <= '" . date( 'Y-m-d', current_time( 'timestamp' ) ) . "'
-			AND post_expire >= '" . date( 'Y-m-d', current_time( 'timestamp' ) ) . "' "
-		, $this->cart['promo']['code'] ) );
+			AND pm2.meta_value >= '" . date( 'Y-m-d', current_time( 'timestamp' ) ) . "' "
+		, $this->cart['promo']['code'] ));
 		
 		if ( empty( $promo_id ) ) {
 			$this->error = __( "Invalid promotion code", 'ims' );

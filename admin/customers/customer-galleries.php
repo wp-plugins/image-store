@@ -104,8 +104,8 @@
 									$r .= "<td class='column-{$columnid}{$hide}'>". $gallery->post_password ."</td>";
 									break;
 								case 'expire':
-									$r .= "<td class='column-{$columnid}{$hide}'>". (( $gallery->post_expire != '0000-00-00 00:00:00' ) ? 
-									mysql2date( $this->dformat, $gallery->post_expire, true ) : '' ) ."</td>";
+									$r .= "<td class='column-{$columnid}{$hide}'>". (( $expires = get_post_meta( $gallery->ID, '_ims_post_expire', true ) ) ? 
+									mysql2date( $this->dformat, $expires, true ) : '' ) ."</td>";
 									break;
 								case 'images':
 									$r .= "<td class='column-{$columnid}{$hide}'>". 

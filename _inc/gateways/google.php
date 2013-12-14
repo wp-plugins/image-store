@@ -39,15 +39,14 @@ class ImStoreCartGoogle {
 		
 		if ( empty( $_POST['google-order-number'] ) || 
 		empty( $_POST['shopping-cart_merchant-private-data'] ) )
-		return;
-		
-		global $ImStore;
-		
-		if( empty( $ImStore->opts['googleid'] ) || empty( $ImStore->opts['googlekey'] ) ||
-		$_POST['_type'] != 'new-order-notification' || !is_numeric( $_POST['shopping-cart_merchant-private-data'] ) )
 			return;
 		
-		$cartid = intval( trim( $_POST['shopping-cart_merchant-private-data'] ) );
+		global $ImStore;
+		$cartid = trim( $ImStore->url_decrypt( $_POST['shopping-cart_merchant-private-data'] ) );
+		
+		if( empty( $ImStore->opts['googleid'] ) || empty( $ImStore->opts['googlekey'] ) ||
+		$_POST['_type'] != 'new-order-notification' || ! is_numeric( $cartid ) )
+			return;		
 		
 		global $ImStoreCart;
 		$ImStoreCart->setup_cart( $cartid );
@@ -76,8 +75,9 @@ class ImStoreCartGoogle {
 		
 		$ImStoreCart->data['method'] =  'Google Checkout';
 		$ImStoreCart->data['num_cart_items'] = $ImStoreCart->cart['items'];
-		$ImStoreCart->data['mc_gross'] = $ImStoreCart->data['payment_gross'];
 		$ImStoreCart->data['instructions'] = $ImStoreCart->cart['instructions'];
+		$ImStoreCart->data['user_email'] = $ImStoreCart->data['payer_email'];
+		$ImStoreCart->data['mc_gross'] = $ImStoreCart->data['payment_gross'];
 
 		$ImStoreCart->checkout( );
 		do_action( 'ims_after_google_notice', $cartid, $ImStoreCart->data );
@@ -153,7 +153,7 @@ class ImStoreCartGoogle {
 		'<input type="hidden" name="edit-cart-url"  data-value-ims="' . esc_attr( $ImStore->get_permalink( ) ) . '" />
 		<input type="hidden" name="tax_country"  data-value-ims="' . esc_attr( $ImStore->opts['taxcountry'] )  . '" />
 		<input type="hidden" name="tax_rate"  data-value-ims="' . esc_attr( $ImStore->opts['taxamount'] / 100 ) . '" />
-		<input type="hidden" name="shopping-cart.merchant-private-data"  data-value-ims="' . esc_attr( $ImStoreCart->orderid ) . '" />';
+		<input type="hidden" name="shopping-cart.merchant-private-data"  data-value-ims="' . esc_attr( $ImStore->url_encrypt($ImStoreCart->orderid)) . '" />';
 		
 		$output .=
 		 '<input type="hidden" name="checkout-flow-support.merchant-checkout-flow-support.edit-cart-url"  data-value-ims="' . esc_attr( $ImStore->get_permalink( $ImStore->imspage ) ) . '" />

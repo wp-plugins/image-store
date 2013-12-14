@@ -50,6 +50,7 @@ class ImStoreGallery extends ImStoreAdmin {
 		add_filter( 'ims_async_upload', array( &$this, 'display_image_columns' ), 0, 3 );
 		add_filter( 'ims_image_row_actions_metadata', array( &$this, 'iptc_data' ), 100, 3 );
 
+
 		//speed up wordpress load
 		if ( defined( 'DOING_AJAX' ) || defined( 'DOING_AUTOSAVE' ) || SHORTINIT )
 			return;
@@ -515,7 +516,7 @@ class ImStoreGallery extends ImStoreAdmin {
 						$r .= '<a href="#' . $id . '" class="imsdelete">' . __( 'Delete', 'ims' ) . '</a> | 
 						<a name="publish" href="#' . $id . '" class="imsrestore">' . __( 'Restore', 'ims' ) . '</a>';
 					} else {
-						$r .= '<a href="' . IMSTORE_ADMIN_URL . '/galleries/image-edit.php?height=520&editimage=' . 
+						$r .= '<a href="' . IMSTORE_ADMIN_URL . '/galleries/image-edit.php?height=520&width=782&editimage=' . 
 								$id . $this->imgnonce . '" class="thickbox">' . __( 'Edit', 'ims' ) . '</a> |  
 								<a href="#' . $id . '" class="imsupdate">' . __( 'Update', 'ims' ) . '</a> | 
 								<a name="trash" href="#' . $id . '" class="imstrash">' . __( 'Trash', 'ims' ) . '</a>';
@@ -797,17 +798,23 @@ class ImStoreGallery extends ImStoreAdmin {
 
 			update_post_meta( $postid, '_ims_folder_path', $this->galpath );
 			
-			$metakeys = array( '_ims_order', '_ims_customer', '_ims_sortby', '_ims_visits', '_to_attach',
-				'_ims_tracking', '_ims_downloads', '_ims_price_list', '_ims_gallery_id', '_dis_store', );
+			$metakeys = array(
+				 '_ims_order', '_ims_customer', '_ims_sortby', '_ims_visits', '_to_attach',  '_to_vote',
+				'_ims_tracking', '_ims_downloads', '_ims_price_list', '_ims_gallery_id', '_dis_store',
+			);
 
 			foreach ( $metakeys as $key ) {
 				$val = ( empty( $_POST[$key] ) ) ? '' : $_POST[$key];
 				update_post_meta( $postid, $key, $val );
 			}
 		
-			$expire = ( isset( $_POST['_ims_expire'] ) && !empty( $_POST['imsexpire'] ) ) ? $_POST['_ims_expire'] : 0;
-			$wpdb->update( $wpdb->posts, array( 'post_expire' => $expire ), array( 'ID' => $postid ), array( "%s" ), array( '%d' ) );
-
+			// save expiration date
+			$expire = '0000-00-00 00:00:00';
+			if ( isset( $_POST['_ims_expire'] ) && ! empty( $_POST['imsexpire'] ) ) 
+				$expire = $_POST['_ims_expire'];
+			
+			update_post_meta( $postid, '_ims_post_expire', $expire );
+			
 			//update image information
 			if ( isset( $_POST['img_title'] ) ) {
 				foreach ( ( array ) $_POST['img_title'] as $key => $val ) {

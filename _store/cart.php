@@ -28,23 +28,20 @@
 		
 		$output .=
 		'<noscript><div class="ims-message ims-error">' . __( 'Please enable Javascript, it is required to submit payment.' ) . '</div></noscript>
-			<table class="ims-table" role="grid">
-			<thead>
-				<tr>
-					<th scope="col" class="ims-preview">&nbsp;</th>
-					<th colspan="2" class="ims-subrows" >
-						<span class="ims-quantity">' . __( 'Quantity', 'ims' ) . '</span>
-						<span class="ims-size">' . __( 'Size', 'ims' ) . '</span>
-						<span class="ims-color">' . __( 'Color', 'ims' ) . '</span>
-						<span class="ims-fisnish">' . __( 'Finish', 'ims' ) . '</span>
-						<span class="ims-price">' . __( 'Unit Price', 'ims' ) . '</span>
-						<span class="ims-subtotal">' . __( 'Subtotal', 'ims' ) . '</span>
-						<span class="ims-delete">' . __( 'Delete', 'ims' ) . '</span>
-					</th>
-				</tr>
-			</thead>';
-		$output .= '<tbody>';
-		
+		<div class="ims-table" role="grid">
+			<div class="ims-subrows ims-header">
+				<span class="ims-preview">' . __( 'Image', 'ims' ) . '</span>
+				<div class="ims-clear-row">
+					<span class="ims-quantity">' . __( 'Quantity', 'ims' ) . '</span>
+					<span class="ims-size">' . __( 'Size', 'ims' ) . '</span>
+					<span class="ims-color">' . __( 'Color', 'ims' ) . '</span>
+					<span class="ims-fisnish">' . __( 'Finish', 'ims' ) . '</span>
+					<span class="ims-price">' . __( 'Unit Price', 'ims' ) . '</span>
+					<span class="ims-subtotal">' . __( 'Subtotal', 'ims' ) . '</span>
+					<span class="ims-delete">' . __( 'Delete', 'ims' ) . '</span>
+				</div>
+			</div><!--.ims-header-->';
+			
 		$row = 1;
 		
 		//image loop
@@ -52,55 +49,70 @@
 			$output .= $ImStoreCart->image_row( $imageid, $sizes, $row );
 		
 		$output .= apply_filters( 'ims_cart_image_list', '', $this );
-		$output .= '</tbody><tfoot>'; //end tbody - start tfoot
+		$output .= '<div class="ims-footer">'; //start tfoot
 		
 		//display subtotal
-		$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell"><label>' . __( 'Item subtotal', 'ims' ) . '</label></td>
-		<td role="gridcell" class="total">' . $this->format_price( $this->cart['subtotal'] ) . '</td></tr>';
+		$output .= '<div role="row" class="ims-subrows subtotal-row">
+			<span role="gridcell" class="ims-empty">&nbsp;</span>
+			<span role="gridcell" class="ims-th"><label>' . __( 'Item subtotal', 'ims' ) . '</label></span>
+			<span role="gridcell" class="subtotal">' . $this->format_price( $this->cart['subtotal'] ) . '</span>
+		</div>';
 		
 		//promotional code
-		$output .= '<tr role="row">
-		<td role="gridcell" >&nbsp;</td><td role="gridcell"><label for="ims-promo-code">' . __( 'Promotional code', 'ims' ) . '</label></td>
-		<td role="gridcell" class="total promo-code">
-		<input name="promocode" id="ims-promo-code" type="text" value="' . esc_attr( $this->cart['promo']['code'] ) . '" />
-		<span class="ims-break"></span> <small>' . __( 'Update cart to apply promotional code.', 'ims' ) . '</small></td>
-		</tr>';
+		$output .= '<div role="row" class="ims-subrows promo-row">
+			<span role="gridcell" class="ims-empty">&nbsp;</span>
+			<span role="gridcell" class="ims-th"><label for="ims-promo-code">' . __( 'Promotional code', 'ims' ) . '</label></span>
+			<span role="gridcell" class="total promo-code">
+			<input name="promocode" id="ims-promo-code" type="text" value="' . esc_attr( $this->cart['promo']['code'] ) . '" />
+			<span class="ims-break"></span> <small>' . __( 'Update cart to apply promotional code.', 'ims' ) . '</small></span>
+		</div>';
 		
 		//display discounted data
 		if ( $this->cart['promo']['discount'] )
-			$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell">' . __( 'Discount', 'ims' ) . '</td>
-			<td role="gridcell" class="discount">' . $this->format_price( $this->cart['promo']['discount'], true, ' - ' ) . '</td></tr>';
+			$output .= '<div role="row" class="ims-subrows discount-row">
+			<span role="gridcell" class="ims-empty">&nbsp;</span>
+			<span role="gridcell" class="ims-th">' . __( 'Discount', 'ims' ) . '</span>
+			<span role="gridcell" class="discount">' . $this->format_price( $this->cart['promo']['discount'], true, ' - ' ) . 
+		'</span></div>';
 		
 		//shipping charge
 		if( $this->cart['shippingcost'] )
-			$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell"><label for="shipping">' . __( 'Shipping', 'ims' ) . '</label></td>
-			<td role="gridcell" class="shipping">' . $ImStoreCart->shipping_options( ) . '</td></tr>';
+			$output .= '<div role="row" class="ims-subrows shipping-row">
+			<span role="gridcell" class="ims-empty">&nbsp;</span>
+			<span role="gridcell" class="ims-th"><label for="shipping">' . __( 'Shipping', 'ims' ) . '</label></span>
+			<span role="gridcell" class="shipping">' . $ImStoreCart->shipping_options( ) . 
+		'</span></div>';
 		
 		//display tax fields
 		if ( $this->cart['tax'] ) 
-			$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell">' . __( 'Tax', 'ims' ) . '</td><td role="gridcell" class="tax">' .
-			$this->format_price( $this->cart['tax'], true, ' + ' ) . '<input type="hidden" name="tax_cart" data-value-ims="' . 
-			$this->format_price( $this->cart['tax'], false ) . '"/> </td></tr>';
+			$output .= '<div role="row" class="ims-subrows tax-row">
+			<span role="gridcell" class="ims-empty">&nbsp;</span>
+			<span role="gridcell" class="ims-th">' . __( 'Tax', 'ims' ) . '</span>
+			<span role="gridcell" class="tax">' . $this->format_price( $this->cart['tax'], true, ' + ' ) . 
+			'<input type="hidden" name="tax_cart" data-value-ims="' . $this->format_price( $this->cart['tax'], false ) . '"/> </span></div>';
 		
 		//display total
-		$output .= '<tr role="row"><td role="gridcell">&nbsp;</td> <td role="gridcell"><label>' . __( 'Total', 'ims' ) . '</label></td>
-		<td role="gridcell" class="total">' . $this->format_price( $this->cart['total'] ) . ' </td></tr>';
+		$output .= '<div role="row" class="ims-subrows total-row">
+		<span role="gridcell" class="ims-empty">&nbsp;</span> 
+		<span role="gridcell" class="ims-th"><label>' . __( 'Total', 'ims' ) . '</label></span>
+		<span role="gridcell" class="total">' . $this->format_price( $this->cart['total'] ) . ' </span></div>';
 		
 		//display notification
-		$output .= '<tr role="row"><td role="gridcell">&nbsp;</td><td role="gridcell" colspan="2"><label>' . __( 'Additional Instructions', 'ims' ) . '<br />
-		<textarea name="instructions" class="ims-instructions">' . esc_html( $this->cart['instructions'] ) . '</textarea></label></td></tr>';
+		$output .= '<div role="row" class="ims-subrows">
+		<span role="gridcell" class="ims-empty">&nbsp;</span><span role="gridcell"><label>' . __( 'Additional Instructions', 'ims' ) . '<br />
+		<textarea name="instructions" class="ims-instructions">' . esc_html( $this->cart['instructions'] ) . '</textarea></label></span></div>';
 		
-		$output .= '<tr role="row" class="ims-checkout-fileds"><td role="gridcell">&nbsp;</td><td role="gridcell" colspan="2">';
+		//display buttons
+		$output .= '<div role="row" class="ims-checkout-fileds"><span role="gridcell" class="ims-empty">&nbsp;</span><span role="gridcell">';
 		$output .= '<input name="ims-apply-changes" type="submit" value="' . esc_attr__( 'Update Cart', 'ims' ) . '" class="secondary" />';
 		
 		$output .= '<span class="ims-bk"></span>';
-		$output .= '<div class="ims-cart-actions"> <span class="ims-checkout-label">' . __( 'Checkout using:', 'ims' ) . ' </span>';
+		$output .= '<span class="ims-cart-actions"><span class="ims-checkout-label">' . __( 'Checkout using:', 'ims' ) . ' </span>';
+		$output .= apply_filters( 'ims_store_cart_actions', '', $this->cart ) . '</span></span></div>';
 		
-		$output .= apply_filters( 'ims_store_cart_actions', '', $this->cart ) . '</div></td></tr>';
-
-		$output .= '</tfoot>
-		</table><!--.ims-table-->'; //end table
-		
+		$output .= '</div><!--.ims-footer-->
+		</div><!--.ims-table-->'; //end table*/
+	
 		//terms and conditions
 		$output .= '<div class="ims-terms-condtitions">' .  $this->opts['termsconds'] . '</div>';
 		

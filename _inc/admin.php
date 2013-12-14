@@ -68,9 +68,6 @@ class ImStoreAdmin extends ImStore {
 		add_action( 'delete_post', array( &$this, 'delete_post' ), 1 );
 		add_action( 'before_delete_post', array( &$this, 'delete_post' ), 1 );
 		
-		//save data
-		add_filter( 'wp_insert_post_data', array( &$this, 'insert_post_data' ), 20 );
-		
 		//taxonomy row actions
 		add_filter( 'ims_tags_row_actions', array( &$this, 'add_taxonomy_link' ), 1, 2 );
 		add_filter( 'ims_album_row_actions', array( &$this, 'add_taxonomy_link' ), 1, 2 );
@@ -87,11 +84,13 @@ class ImStoreAdmin extends ImStore {
 		//add galleries columns
 		add_filter( 'manage_edit-ims_gallery_columns', array( &$this, 'add_columns' ), 10 );
 		add_filter( 'manage_edit-ims_gallery_sortable_columns', array( &$this, 'add_columns' ), 15 );
+		add_filter( 'manage_edit-ims_gallery_sortable_columns', array( &$this, 'remove_select_column' ), 20 );
 		add_filter( 'manage_posts_custom_column', array( &$this, 'add_columns_gallery_val' ), 15, 2 );
 		
 		//ad columns
 		add_filter( 'manage_users_columns', array( &$this, 'add_columns' ), 10 );
 		add_filter( 'manage_users_sortable_columns', array( &$this, 'add_columns' ), 10 );
+		add_filter( 'manage_users_sortable_columns', array( &$this, 'remove_select_column' ), 20 );
 		add_filter( 'manage_users_custom_column', array( &$this, 'add_columns_user_val' ), 15, 3 );
 		
 		//sort galleries columns
@@ -143,6 +142,7 @@ class ImStoreAdmin extends ImStore {
 		//admin menus
 		add_action( 'admin_menu', array( &$this, 'add_menu' ), 20 );
 	}
+	
 	
 	/**
 	 * Minial Initial actions
@@ -478,6 +478,20 @@ class ImStoreAdmin extends ImStore {
 	}
 	
 	/**
+	 * Remove input column from
+	 * sort columns
+	 *
+	 * @param array $columns
+	 * @return array
+	 * @since 3.4.0
+	 */
+	function remove_select_column( $columns ){
+		if( isset( $columns['cb'] ) )
+			unset( $columns['cb'] );
+		return $columns;
+	}
+	
+	/**
 	 * Display aditional colums for 
 	 * cutomer status
 	 *
@@ -566,9 +580,8 @@ class ImStoreAdmin extends ImStore {
 				"SELECT COUNT(*) FROM $wpdb->posts WHERE post_parent = %d AND post_status = 'publish'", $postid ));
 				break;
 			case 'expire':
-				global $post;
-				if ( $post->post_expire != '0000-00-00 00:00:00' )
-					echo mysql2date( $this->dformat, $post->post_expire, true );
+				if ( $post_expire = get_post_meta( $postid, '_ims_post_expire', true ) )
+					echo mysql2date( $this->dformat, $post_expire, true );
 				break;
 			default:
 		}
@@ -583,19 +596,7 @@ class ImStoreAdmin extends ImStore {
 	 * @since 0.5.0 
 	 */
 	function insert_post_data( $data ) {
-		
-		if ( $data['post_type'] == 'ims_gallery' ) {
-			if ( empty( $data['post_content'] ) )
-				$data['post_content'] = '[ims-gallery-content]';
-				
-			if ( $this->pagenow !== 'post-new.php' )
-				$data['post_expire'] = ( isset( $_POST['_ims_expire'] ) ) ? $_POST['_ims_expire'] : false;
-		}
-		
-		if ( $data['post_type'] == 'ims_promo' )
-			$data['post_expire'] = $_POST['expiration_date'];
-	
-		return $data;
+		_deprecated_function( __FUNCTION__, '3.4' );
 	}
 	
 	/**
@@ -921,8 +922,6 @@ class ImStoreAdmin extends ImStore {
 				
 				if ( empty( $customer ) )
 					add_role( $this->customer_role, 'Customer', array( 'read' => 1, 'ims_read_galleries' => 1 ) );
-					
-				$wpdb->query( "ALTER IGNORE TABLE  $wpdb->posts ADD post_expire DATETIME NOT NULL");
 			}
 			restore_current_blog( );
 		}
@@ -1211,7 +1210,7 @@ class ImStoreAdmin extends ImStore {
 		if ( empty( $wp_query->query['orderby'] ) )
 			return false;
 
-		if ($wp_query->query['orderby'] == 'image_count' )
+		if ( $wp_query->query['orderby'] == 'image_count' )
 			return true;
 
 		return false;
@@ -1228,14 +1227,14 @@ class ImStoreAdmin extends ImStore {
 	function posts_orderby_request( $sortby, $query ) {
 		if ( empty( $_REQUEST['orderby'] ) )
 			return $sortby;
-
+		
+		global $wpdb;
 		switch ( $_REQUEST['orderby'] ) {
 			case 'Expires':
-				return "post_expire " . $query->query['order'];
+				return "({$wpdb->postmeta}.meta_value+0) " . $query->query['order'];
 			case 'Images':
 				return "image_count " . $query->query['order'];
 			case 'Visits':
-				global $wpdb;
 				return "({$wpdb->postmeta}.meta_value+0) " . $query->query['order'];
 			default: return $sortby;
 		}
@@ -1249,7 +1248,7 @@ class ImStoreAdmin extends ImStore {
 	 * @since 3.0.7
 	 */
 	function posts_fields_request( $distinct ) {
-		if ( !$this->if_column( ) )
+		if ( ! $this->if_column( ) )
 			return $distinct;
 		return $distinct . ", (COUNT(images.ID)+0) image_count";
 	}
@@ -1262,7 +1261,7 @@ class ImStoreAdmin extends ImStore {
 	 * @since 3.0.7
 	 */
 	function galleries_column_join( $join ) {
-		if ( !$this->if_column( ) )
+		if ( ! $this->if_column( ) )
 			return $join;
 		global $wpdb;
 		return $join . " LEFT JOIN $wpdb->posts images ON images.post_parent = $wpdb->posts.ID ";
@@ -1276,7 +1275,7 @@ class ImStoreAdmin extends ImStore {
 	 * @since 3.0.7
 	 */
 	function posts_where_request( $where ) {
-		if ( !$this->if_column( ) )
+		if ( ! $this->if_column( ) )
 			return $where;
 		return $where . " AND images.post_type = 'ims_image' AND images.post_status IN( 'publish', 'draft', 'trash')";
 	}
@@ -1289,7 +1288,7 @@ class ImStoreAdmin extends ImStore {
 	 * @since 3.0.7
 	 */
 	function posts_groupby_request( $groupby ) {
-		if (!$this->if_column( ) )
+		if ( ! $this->if_column( ) )
 			return $groupby;
 		return "images.post_parent";
 	}
@@ -1307,6 +1306,7 @@ class ImStoreAdmin extends ImStore {
 		switch ( $vars['orderby'] ) {
 			case 'Expires':
 				$vars['orderby'] = 'post_expire';
+				$vars['meta_key'] = '_ims_post_expire';
 				break;
 			case 'Visits':
 				$vars['orderby'] = 'meta_value';
@@ -1349,14 +1349,14 @@ class ImStoreAdmin extends ImStore {
 	}
 	
 	/**
-	 * Depricated
+	 * Deprecated
 	 */
 	function add_columns_val_gal( $column_name, $postid ) {
 		$this->add_columns_gallery_val( $column_name, $postid );
 	}
 	
 	/**
-	 * Depricated
+	 * Deprecated
 	 */
 	function add_columns_val( $column_name, $postid ) {
 		$this->add_columns_user_val( $column_name, $postid );

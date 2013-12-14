@@ -33,8 +33,9 @@ class ImStoreCartPagSeguro {
 	 */
 	function process_notice( ){
 	
-		if ( empty( $_POST['TransacaoID'] ) || empty( $_POST['Reference'] ) ||  !
-		is_numeric( $_POST['Reference'] ) || empty( $_POST['VendedorEmail'] ) )
+		if ( empty( $_POST['TransacaoID'] ) 
+		|| empty( $_POST['Reference'] )
+		|| empty( $_POST['VendedorEmail'] ) )
 			return;
 		
 		global $ImStore;
@@ -72,7 +73,10 @@ class ImStoreCartPagSeguro {
 			
 		}else{
 			
-			$cartid = intval( trim( $_POST['Reference'] ) );
+			
+			$cartid = trim( $ImStore->url_decrypt($_POST['Reference'] ) );
+			if( ! is_numeric( $cartid ) )
+				return;
 			
 			global $ImStoreCart;
 			$ImStoreCart->setup_cart( $cartid );
@@ -102,8 +106,9 @@ class ImStoreCartPagSeguro {
 			
 			$ImStoreCart->data['method'] =  'PagSeguro';
 			$ImStoreCart->data['mc_currency'] = $ImStore->opts['currency'];
-			$ImStoreCart->data['mc_gross'] = $ImStoreCart->data['payment_gross'];
 			$ImStoreCart->data['instructions'] = $ImStoreCart->cart['instructions'];
+			$ImStoreCart->data['user_email'] = $ImStoreCart->data['payer_email'];
+			$ImStoreCart->data['mc_gross'] = $ImStoreCart->data['payment_gross'];
 			
 			$ImStoreCart->checkout( );
 			do_action( 'ims_after_pagseguro_ipn', $cartid, $ImStoreCart->data );
@@ -174,8 +179,8 @@ class ImStoreCartPagSeguro {
 		
 		$output .= '
 		<input type="hidden" name="currency" data-value-ims="' . esc_attr( $ImStore->opts['currency'] ) . '" />
-		<input type="hidden" name="reference" data-value-ims="' . esc_attr( $ImStoreCart->orderid  ) . '" />
 		<input type="hidden" name="receiverEmail" data-value-ims="' . esc_attr( $ImStore->opts['pagseguroemail'] ) . '" />
+		<input type="hidden" name="reference" data-value-ims="' . esc_attr( $ImStore->url_encrypt( $ImStoreCart->orderid )  ) . '" />
 		
 		<input type="hidden" name="page_style" data-value-ims="' . get_bloginfo( 'name' ) . '" />
 		<input type="hidden" name="return" data-value-ims="' . $ImStore->get_permalink( 'receipt' ) . '" />

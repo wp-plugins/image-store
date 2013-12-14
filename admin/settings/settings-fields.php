@@ -11,7 +11,7 @@
 	 * @since 3.0.0
 	 */
 	 
-	 if ( !current_user_can( 'ims_change_settings' ) )
+	 if ( ! current_user_can( 'ims_change_settings' ) )
 		die( );
 	
 	//page option
@@ -303,7 +303,7 @@
 					'val' => '',
 					'type' => 'text',
 					'label' => __( 'Transparency', 'ims' ),
-					'desc' => ' ( 0-127 )'
+					'desc' => ' ( 0-100 )'
 				 ),
 			 ),
 		 ),
@@ -492,6 +492,8 @@
 				'wepayprod' => array( 'val' => 1, 'label' => __( 'WePay Production (live)', 'ims' ), 'type' => 'checkbox' ),
 				'pagsegurosand' => array( 'val' => 1, 'label' => __( 'Pago Seguro Sandbox (test)', 'ims' ), 'type' => 'checkbox' ),
 				'pagseguroprod' => array( 'val' => 1, 'label' => __( 'Pago Seguro Production (live)', 'ims' ), 'type' => 'checkbox' ),
+				'sagepaydev' => array( 'val' => 1, 'label' => __( 'sagePay Sandbox (test)', 'ims' ), 'type' => 'checkbox' ),
+				'sagepay' => array( 'val' => 1, 'label' => __( 'sagePay Production (live)', 'ims' ), 'type' => 'checkbox' ),
 				'custom' => array( 'val' => 1, 'label' => __( 'Other', 'ims' ), 'type' => 'checkbox' ),
 			 )
 		 ),
