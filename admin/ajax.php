@@ -321,6 +321,22 @@
 	}
 	
 	
+	function ajax_imstore_get_image_options(){
+		
+		check_ajax_referer( "ims_ajax_favorites" );
+				
+		if ( empty( $_GET['action'] ) )
+			die( );
+		
+		if ( empty( $_GET['list'] ) ) {
+			echo __( 'Can not update options.', 'ims' ) . '|ims-error';
+			die( );
+		}
+		
+		echo json_encode( get_post_meta( $_GET['list'], '_ims_list_opts', true ) ) ;
+		die();
+	}
+	
 	
 	//do that thing you do
 	switch ( $_GET['action'] ) {
@@ -348,6 +364,9 @@
 			break;
 		case 'editimstatus':
 			ajax_imstore_edit_image_status( );
+			break;
+		case 'imageoptions':
+			ajax_imstore_get_image_options ();
 			break;
 		case 'searchgals':
 			ajax_ims_search_galleries( );

@@ -19,7 +19,7 @@
     <ul class="ims-tabs add-menu-item-tabs">
         <?php
         foreach ( $this->tabs as $tabid => $tab ) 
-            echo '<li class="tabs"><a href="#' . $tabid . '">' . $tab . '</a></li>';
+            echo '<li class="tabs"><a href="#' . $tabid . '">' . $tab . '</a></li> ';
         ?>
     </ul>
     

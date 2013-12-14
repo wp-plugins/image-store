@@ -87,8 +87,11 @@ class ImStorePricing extends ImStoreAdmin {
 		add_meta_box( 'new_package', __( 'New Package', 'ims' ), array( &$this,'new_package' ), 'ims_packages', 'normal' );
 		add_meta_box( 'packages-list', __( 'Packages', 'ims' ),  array( &$this,'package_list' ), 'ims_packages', 'normal' );
 		
-		if( isset( $_REQUEST['iaction'] ) ) 
-			add_meta_box( 'new_promo', __( 'Promotion', 'ims' ),  array( &$this,'new_promotion' ), 'ims_promotions', 'normal' );
+		if( isset( $_REQUEST['iaction'] ) ) {
+			if( $_REQUEST['iaction'] == 'new' )
+				add_meta_box( 'new_promo', __( 'New Promotion', 'ims' ),  array( &$this,'new_promotion' ), 'ims_promotions', 'normal' );
+			else add_meta_box( 'new_promo', __( 'Edit Promotion', 'ims' ),  array( &$this,'new_promotion' ), 'ims_promotions', 'normal' );
+		}
 		add_meta_box( 'promotions_table', __( 'Promotion list', 'ims' ),  array( &$this,'promotions_table' ), 'ims_promotions', 'normal' );
 	}
 	
@@ -369,16 +372,16 @@ class ImStorePricing extends ImStoreAdmin {
 		, $_POST['promo_code'] ) ) ) 
 			$error->add( 'discount', __( 'Promotion code is already in use', 'ims' ) );
 		
-		if ( !empty( $error->errors ) )
+		if ( ! empty( $error->errors ) )
 			return $error;
-			
+		
 		$promotion = array(
 			'ID' => $promo_id,
 			'post_status' => 'publish',
 			'post_type' => 'ims_promo',
 			'post_date' => $_POST['start_date'],
+			'post_date_gmt' => $_POST['start_date'],
 			'post_title' => $_POST['promo_name'],
-			'post_expire' => $_POST['expiration_date'],
 		);
 		
 		$promo_id = ( $promotion['ID'] ) ? wp_update_post( $promotion ) : wp_insert_post( $promotion );
@@ -386,7 +389,8 @@ class ImStorePricing extends ImStoreAdmin {
 		if ( empty( $promo_id ) ) {
 			$error->add( 'promo_error', __(' There was a problem creating the promotion.', 'ims' ) );
 			return $error;
-		}
+		} else update_post_meta( $promo_id, '_ims_post_expire', $_POST['expiration_date'] );
+
 		
 		$defaults = array(
 			'free-type' => false, 'discount' => false,
@@ -1314,7 +1318,7 @@ class ImStorePricing extends ImStoreAdmin {
 		
 		$defaults =  array( 
 			'promo_name' => false, 'promo_code' => false, 'starts' => false, 'startdate' =>false,
-			'expires' => false, 'expiration_date' => false, 'promo_type' => false, 'discount' =>false,
+			'expires' => false, 'expiration_date' => false, 'promo_type' => 1, 'discount' =>false,
 			'rules' => array( 'logic' => false, 'property' => false, 'value' => false), 'promo_limit' => false,
 		);
 		
@@ -1325,7 +1329,7 @@ class ImStorePricing extends ImStoreAdmin {
 			$data = get_post_meta( $promo_id, '_ims_promo_data', true );
 			
 			$date = strtotime( $promo->post_date );
-			$expire	= strtotime( $promo->post_expire );
+			$expire	= strtotime( get_post_meta( $promo_id, '_ims_post_expire', true ) );
 			
 			$data['promo_name'] = $promo->post_title;
 			$data['startdate'] = date_i18n( 'Y-m-d', $date );
@@ -1346,7 +1350,11 @@ class ImStorePricing extends ImStoreAdmin {
 				<tbody>
 				
 					<tr>
-						<td colspan="5">
+						<td colspan="6" align="right">&nbsp;</td>
+					</tr>
+				
+					<tr class="selector">
+						<td>
 							<label><?php _e( 'Type', 'ims' )?>
 								<select name="promo_type" id="promo_type">
 									<?php foreach( $this->promo_types as $key => $label ) : ?>
@@ -1354,6 +1362,20 @@ class ImStorePricing extends ImStoreAdmin {
 									<?php endforeach ?>
 								</select>
 							</label>
+						</td>
+						<td colspan="5">
+							<?php _e( 'Conditions', 'ims' )?> 
+							<select name="rules[property]">
+								<?php foreach( $this->rules_property as $val => $label ) 
+									echo '<option value="' . esc_attr( $val ) . '"' . selected( $rules['property'], $val, false ) . '>' . esc_html( $label ) . '</option>';
+								?>
+							</select>
+							<select name="rules[logic]">
+									<?php foreach( $this->rules_logic as $val => $label ) 
+										echo '<option value="' . esc_attr( $val ) . '"' . selected( $rules['logic'], $val, false ) . '>' . esc_html( $label ). '</option>';
+									?>
+							</select>
+							<input name="rules[value]" type="text" class="inpsm" value="<?php echo esc_attr( $rules['value'] ) ?>"/>
 						</td>
 					</tr>
 					
@@ -1382,23 +1404,9 @@ class ImStorePricing extends ImStoreAdmin {
 					</tr>
 					
 					<tr>
-						<td colspan="4">
-							<?php _e( 'Conditions', 'ims' )?> 
-							<select name="rules[property]">
-								<?php foreach( $this->rules_property as $val => $label ) 
-									echo '<option value="' . esc_attr( $val ) . '"' . selected( $rules['property'], $val, false ) . '>' . esc_html( $label ) . '</option>';
-								?>
-							</select>
-							<select name="rules[logic]">
-									<?php foreach( $this->rules_logic as $val => $label ) 
-										echo '<option value="' . esc_attr( $val ) . '"' . selected( $rules['logic'], $val, false ) . '>' . esc_html( $label ). '</option>';
-									?>
-							</select>
-							<input name="rules[value]" type="text" class="inpsm" value="<?php echo esc_attr( $rules['value'] ) ?>"/>
-						</td>
-						<td colspan="2" align="right">
+						<td colspan="6" align="right">
 							<input type="hidden" name="promotion_id" value="<?php echo esc_attr( $promo_id ) ?>"/>
-							<input type="submit" name="cancel" value="<?php esc_attr_e( 'Cancel', 'ims' )?>" class="button" />
+							<input type="submit" name="cancel" value="<?php esc_attr_e( 'Cancel', 'ims' )?>" class="button-secondary" />
 							<input type="submit" name="promotion" value="<?php echo esc_attr( $action )?>" class="button-primary" />
 						</td>
 					</tr>
@@ -1445,9 +1453,9 @@ class ImStorePricing extends ImStoreAdmin {
 					<option value="" selected="selected"><?php _e( 'Bulk Actions', 'ims' )?></option>
 					<option value="delete"><?php _e( 'Delete', 'ims' )?></option>
 				</select>
-				<input type="submit" value="<?php esc_attr_e( 'Apply', 'ims' );?>" name="doaction" class="button-secondary" />
-				<a href="<?php echo $this->pageurl ."&amp;iaction=new#promotions"?>" class="button-primary"><?php _e( 'New Promotion', 'ims' )?></a>
+				<input type="submit" value="<?php esc_attr_e( 'Apply', 'ims' );?>" name="doaction" class="button" />
 			</div><!--.actions-->
+			<a href="<?php echo $this->pageurl ."&amp;iaction=new#promotions"?>" class="button-primary alignright"><?php _e( 'New Promotion', 'ims' )?></a>
 		</div><!--.tablenav-->
 		
 		<table class="widefat post fixed ims-table">
@@ -1485,8 +1493,8 @@ class ImStorePricing extends ImStoreAdmin {
 								break;
 							case 'expires':
 								$r .= '<td class="column-' . $column_id . $hide . '" > ';
-								if( $promo->post_expire != '0000-00-00 00:00:00' ) 
-									$r .= mysql2date( $this->dformat, $promo->post_expire, true );
+								if( $expires = get_post_meta( $promo->ID, '_ims_post_expire', true ) ) 
+									$r .= mysql2date( $this->dformat, $expires, true );
 								$r .= '</td>' ;
 								break;
 							case 'type':

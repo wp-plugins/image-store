@@ -68,7 +68,7 @@
     </head>
     <body id="media-upload">
     
-        <div class="ims-edit-image">
+        <div class="ims-edit-image ims_image">
          <table class="slidetoggle describe form-table">
              <thead class="media-item-info" id="media-head-<?php echo $id?>">
                  <tr valign="top">

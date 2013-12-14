@@ -34,9 +34,18 @@ class ImStore {
 	public $promo_types = array( );
 	public $rules_property = array( );
 	
-	public $version = '3.3.4';
+	public $version = '3.4';
 	public $customer_role = 'customer';
 	public $optionkey = 'ims_front_options';
+	
+	public $sort = array(
+		'title' => 'post_title',
+		'date' => 'post_date',
+		'custom' => 'menu_order',
+		'caption' => 'post_excerpt',
+		'excerpt' => 'post_excerpt',
+		'menu_order' => 'menu_order',
+	);
 	
 	/**
 	 * Constructor
@@ -248,7 +257,6 @@ class ImStore {
 			'rewrite' => array( 'slug' => $this->opts['image_slug'], 'with_front' => false ),
 		) );
 	
-		
 		//gallery post type assign
 		$posttype = apply_filters( 'ims_gallery_post_type', array(
 			'labels' => array(
@@ -273,7 +281,7 @@ class ImStore {
 			'show_in_nav_menus' => false,
 			'capability_type' => 'ims_gallery',
 			'exclude_from_search' => $searchable,
-			'menu_icon' => IMSTORE_URL . '/_img/imstore.png',
+			'menu_icon' => IMSTORE_URL . '/_img/imstore.svg',
 			'supports' => array( 'title', 'comments', 'author', 'excerpt', 'page-attributes' ),
 			'rewrite' => array( 'slug' => $this->opts['gallery_slug'], 'with_front' => false ),
 			'taxonomies' => array( 'ims_album' )
@@ -322,6 +330,7 @@ class ImStore {
 
 		register_post_type( 'ims_image', $image );
 		register_post_type( 'ims_gallery', $posttype );
+		register_post_type( 'ims_promo', array( 'publicly_queryable' => false, 'show_ui' => false ) );
 		
 		register_post_status( 'expire', array(
 			'public' => false,
@@ -409,11 +418,12 @@ class ImStore {
 	 * @since 3.0.0
 	 */
 	function posts_orderby($orderby, $query) {
-		if ( empty($query->query_vars['orderby'] )
-		|| empty($query->query['orderby'])
-		|| $query->query['orderby'] != 'excerpt')
-			return $orderby;
 
+		if ( empty($query->query_vars['orderby'] )
+		|| empty($query->query['orderby'] )
+		|| $query->query['orderby'] != 'post_excerpt' )
+			return $orderby;
+		
 		global $wpdb;
 		return $wpdb->posts . ".post_excerpt";
 	}
@@ -430,7 +440,7 @@ class ImStore {
 	function gallery_permalink( $permalink, $post ) {
 		if ( $post->post_type != 'ims_gallery' )
 			return $permalink;
-		return trim( str_replace('%imspage%', '', $permalink), '/' );
+		return str_replace('/%imspage%', '', $permalink );
 	}
 	
 	/**
@@ -441,6 +451,7 @@ class ImStore {
 	 */
 	function logout_ims_user( ) {
 		setcookie( 'ims_galid_' . COOKIEHASH, false, ( time(  ) - 315360000 ), COOKIEPATH, COOKIE_DOMAIN );
+		setcookie( 'ims_orderid_' . COOKIEHASH, false, ( time(  ) - 315360000 ), COOKIEPATH, COOKIE_DOMAIN );
 		setcookie( 'wp-postpass_' . COOKIEHASH, false, ( time(  ) - 315360000 ), COOKIEPATH, COOKIE_DOMAIN );
 	}
 	
@@ -511,15 +522,16 @@ class ImStore {
 		$time = date( 'Y-m-d', current_time( 'timestamp' ) );
 		
 		//change status for expired galleries
-		$wpdb->query(
-			"UPDATE $wpdb->posts SET post_status = 'expire'  WHERE post_expire <= '$time'
-			AND post_expire != '0000-00-00 00:00:00' AND post_type = 'ims_gallery'"
-		);
-		
+ 		$wpdb->query( $wpdb->prepare ( 
+			"UPDATE $wpdb->posts p INNER JOIN $wpdb->postmeta AS m ON p.ID = m.post_id 
+			SET p.post_status =  'expire' WHERE m.meta_key =  '_ims_post_expire' 
+			AND post_type =  'ims_gallery' AND m.meta_value !=  '0000-00-00 00:00:00' AND m.meta_value <=  '%s' "
+		, $time ) );
+
 		//delete orders not proccessed
-		$wpdb->query( "DELETE p,pm FROM $wpdb->posts p  LEFT JOIN $wpdb->postmeta pm ON(p.ID = pm.post_id)
-			WHERE post_expire <= '$time' AND post_type = 'ims_order' AND post_status = 'draft'"
-		);
+		$wpdb->query(  $wpdb->prepare ( "DELETE p, m FROM $wpdb->posts p  LEFT JOIN $wpdb->postmeta m ON p.ID = m.post_id
+			WHERE  m.meta_value <= '%s' AND p.post_type = 'ims_order' AND p.post_status = 'draft'"
+		, $time ) );
 
 		do_action( 'ims_after_cron' );
 	}
@@ -541,8 +553,13 @@ class ImStore {
 		$wp_rewrite->add_rewrite_tag( '%imsmessage%', '([0-9]+)', 'imsmessage=');
 		$wp_rewrite->add_permastruct( 'ims_gallery', $this->opts['gallery_slug'] . '/%ims_gallery%/%imspage%/', false );
 		
-		$new_rules[$this->opts['gallery_slug'] . "/([^/]+)/feed/(imstore)/?$"] =
+		// gallery rss feeds
+		$new_rules[$this->opts['gallery_slug'] . "/([^/]+)/feed/(feed|rdf|rss|rss2|atom|imstore)/?$"] =
 		"index.php?ims_gallery=" . $wp_rewrite->preg_index( 1 ) . "&feed=" . $wp_rewrite->preg_index( 2 );
+		$new_rules[$this->opts['gallery_slug'] . "/([^/]+)/feed/?$"] =
+		"index.php?ims_gallery=" . $wp_rewrite->preg_index( 1 ) . "&feed=rss";
+		
+		// logout gallery
 		$new_rules[ $this->opts['gallery_slug'] . "/([^/]+)/logout/?$"] = "index.php?ims_gallery=" . $wp_rewrite->preg_index( 1 ) . '&imslogout=1';
 		
 		foreach ( $this->pages as $id => $page ) {			
@@ -564,9 +581,10 @@ class ImStore {
 				"index.php?pagename=" . $wp_rewrite->preg_index( 1 ) .  "&imspage=$id";
 			}
 		}
-				
+	
 		$wp_rewrite->rules["/page/?([0-9]+)/?$"] = "index.php?paged=" . $wp_rewrite->preg_index( 1 );
 		$wp_rewrite->rules =  apply_filters( 'ims_rewrite_rules', ( $new_rules + $wp_rewrite->rules ) );
+		//print_r( $wp_rewrite );
 		
 		return $wp_rewrite;
 	}

@@ -54,16 +54,16 @@
                     
                     <?php do_action( 'ims_cutomer_data_row', $userid ) ?>
                     
-                    <tr>
-						<td colspan="3">
+                    <tr class="ims-actions">
+						<td colspan="2">
 							<?php if ( class_exists( 'MailPress' ) ) { ?>
                             <input type="checkbox" name="_MailPress_sync_wordpress_user" id="_MailPress_sync_wordpress_user" value="<?php 
                             echo $_MailPress_sync_wordpress_user ?>" />
                             <label for="_MailPress_sync_wordpress_user"><?php _e( 'Include user in the eNewsletters', 'ims' ) ?></label>
                             <?php } ?>
                         </td>
-                        <td class="textright">
-							<input type="submit" name="cancel" value="<?php esc_attr_e( 'Cancel', 'ims' ) ?>" class="button" />
+                        <td colspan="2" class="textright">
+							<input type="submit" name="cancel" value="<?php esc_attr_e( 'Cancel', 'ims' ) ?>" class="button-secondary" />
 							<input type="submit" name="update_customer" value="<?php esc_attr_e( 'Save', 'ims' ) ?>" class="button-primary" />
 							<input type="hidden" name="userid" value="<?php echo esc_attr( $userid ) ?>" />
 							<input type="hidden" name="useraction" value="<?php echo esc_attr( $action ) ?>" />

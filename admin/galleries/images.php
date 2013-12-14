@@ -14,9 +14,9 @@
 	if ( !current_user_can( 'ims_manage_galleries') )
 		die( );
 
-	$css 		= ' alternate';
+	$css 			= ' alternate';
 	$page 		= empty( $_GET['p'] ) ? 1 : (int) $_GET['p'];
-	$status 		= isset( $_GET['status'] ) ? $_GET['status'] : 'publish';
+	$status 	= isset( $_GET['status'] ) ? $_GET['status'] : 'publish';
 	$order 		= empty( $this->meta['_ims_order'][0] ) ? $this->opts['imgsortdirect'] : $this->meta['_ims_order'][0];
 	$orderby 	= empty( $this->meta['_ims_sortby'][0] ) ? $this->opts['imgsortorder'] : $this->meta['_ims_sortby'][0];
 	
@@ -40,8 +40,8 @@
 		'post_status' => $status,
 		'post_type' => 'ims_image',
 		'post_parent' => $this->galid,
+		'orderby' => $this->sort[$orderby],
 		'posts_per_page' => $this->per_page,
-		'orderby' => str_replace( 'post_', '', $orderby ),
 	),  $this );
 	
 	$images = new WP_Query( $args );

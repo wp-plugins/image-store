@@ -247,6 +247,34 @@ class ImStoreSet extends ImStoreAdmin {
 			);
 		}
 		
+		// sagepay
+		if( $this->opts['gateway']['sagepay']){
+			
+			$settings['payment']['vpsprotocol'] = array(
+				'val' => '',
+				'type' => 'text',
+				'label' => __('SagePay VPS Protocol', 'ims'),
+			);
+			$settings['payment']['spvendor'] = array(
+				'val' => '',
+				'type' => 'text',
+				'label' => __('SagePay Vendor Name', 'ims'),
+			);
+			$settings['payment']['sppassword'] = array(
+				'val' => '',
+				'type' => 'text',
+				'label' => __('SagePay Password', 'ims'),
+			);
+			
+			$settings['payment']['required_'] = array(
+				'multi' => true,
+				'label' => __('Required Fields', 'ims'),
+			);
+			
+			foreach ((array) $this->opts['checkoutfields'] as $key => $label)
+				$settings['payment']['required_']['opts'][$key] = array( 'val' => 1, 'label' => $label, 'type' => 'checkbox' );
+		}
+		
 		//custom
 		if ($this->opts['gateway']['custom']) {
 			$settings['payment']['gateway_name'] = array(

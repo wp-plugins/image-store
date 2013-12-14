@@ -23,7 +23,7 @@
 		'slideshow' => __( 'Slideshow', 'ims'),
 		'payment' 	=> __( 'Payment', 'ims'),
 		'checkout' 	=> __( 'Checkout', 'ims'),
-		'permissions' => __( 'User permissions', 'ims'),
+		'permissions' => __( 'Permissions', 'ims'),
 		'reset' 	=> __( 'Reset', 'ims'),
 	));
 	

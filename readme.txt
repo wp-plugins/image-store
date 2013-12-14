@@ -1,10 +1,10 @@
 === Image Store ===
 Contributors: Hax
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YM9GXCFBND89E
-Tags: e-commerce,photo store,gallery,imstore,image-store,secure,watermark,slideshow,rate,wepay,shopping,cart,paypal,widget,prints,pagseguro,nextgen,alternative
+Tags: sagepay,photo store,gallery,imstore,image-store,secure,watermark,slideshow,rate,wepay,shopping,cart,paypal,widget,prints,pagseguro,nextgen,alternative
 Requires at least: 3.0.0
-Tested up to: 3.7.1
-Stable tag: 3.3.4
+Tested up to: 3.8
+Stable tag: 3.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,7 +13,7 @@ Image Store (ImStore) is a photo gallery and store plugin for WordPress with Pay
 == Description ==
 This plugin was created because there was a need in the WordPress community to have an images store that did not required the installation of multiple plugins. Enjoy!! and please support the plugin. :@) 
 
-The plugin fully integrated with the WordPress database it only creates a post_expire column on the posts table. so you will not find extra tables on your database(Cool!.. at least for me, I hate extra tables). NextGEN Gallery alternative.
+The plugin fully integrated with the WordPress database, so you will not find any extra tables on your database (Cool!.. at least for me, I hate extra tables). NextGEN Gallery alternative.
 
 * Example http://xparkmedia.com/image-store/demos/
 * Support http://xparkmedia.com/support/plugin/image-store
@@ -83,6 +83,19 @@ The plugin fully integrated with the WordPress database it only creates a post_e
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+
+= 3.4.0 =
+* Improved: Security.
+* Improved: Admin UI.
+* Improved: Performance.
+* Improved: Image display script.
+* Added: Front-end HTML5 forms.
+* Added: SagePay gateway.
+* Added: WordPress 3.8 support.
+* Added: Support for premium theme.
+* Fixed: Minor bugs.
+* Fixed: Expire database column removed.
+* Fixed: Shortcode sort issue on widgets.
 
 = 3.3.4 =
 * Improved: Performace.

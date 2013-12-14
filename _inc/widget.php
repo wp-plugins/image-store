@@ -42,7 +42,7 @@ class ImStoreWidget extends WP_Widget {
 		if ( $title ) echo $before_title . $title . $after_title . "\n";
 		
 		$this->get_widget_images( $instance );
-		$this->display_images( !empty( $filmstrip ) );
+		$this->display_images( ! empty( $filmstrip ), $instance );
 
 		echo $after_widget . "\n";
 	}
@@ -192,24 +192,25 @@ class ImStoreWidget extends WP_Widget {
 	 * @return array
 	 * @since 0.5.3 
 	 */
-	function display_images( $filmstrip ) {
+	function display_images( $filmstrip, $instance ) {
 		
 		if ( empty( $this->attachments ) )
 			return;
 		
-		$output = apply_filters( 'ims_widget_images', false, $this->attachments );
+		// do not display image tools on widgets
+		global $ImStore;
+		$ImStore->is_widget = true;
+		
+		$output = apply_filters( 'ims_widget_images', false, $this->attachments, $instance );
 		
 		if ( false != $output ) {
-			echo output;
+			echo $output;
+			$ImStore->is_widget = false;
 			return true;
 		}
-		
-		global $ImStore;
-		
-		$ImStore->is_widget = true;
-		$css = 'ims-gallery wgt-ims-gallery';
-		
+	
 		extract( $ImStore->gallery_tags );
+		$css = 'ims-gallery wgt-ims-gallery';
 		
 		if( $filmstrip )
 			$css .=" ims-filmstrip";
@@ -224,9 +225,12 @@ class ImStoreWidget extends WP_Widget {
 			$title = $image->post_title;
 			$link = get_permalink( $image->post_parent );
 			
-			$image->meta += array( 'link' => $link, 'alt' => $title, 'title' => $title );
+			$image->meta += array( 'link' => $link, 'alt' => $title, 'title' => $title, 'class' => array() );
 			$output .= $ImStore->image_tag( $image->ID, $image->meta, 3, false );
 		}
+		
+		// restore setting to allow content to display after sidebar
+		$ImStore->is_widget = false;
 		
 		$output .= "</div></{$gallerytag}><!--.ims-gallery-->";
 		echo $output .= '<div class="ims-cl"></div>';

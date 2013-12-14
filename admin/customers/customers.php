@@ -11,7 +11,7 @@
 	 * @since 0.5.9
 	 */
 	 
-	if ( !current_user_can( 'ims_manage_customers' ) )
+	if ( ! current_user_can( 'ims_manage_customers' ) )
 		die( );
 		
 	$style = '';
@@ -77,7 +77,7 @@
 	} else  $wp_user_search = new WP_User_Search( $usersearch, $userspage, $this->customer_role );
 	
 	$page_links = false;
-	if( !isset( $wp_user_search->search_term ) ){
+	if( ! isset( $wp_user_search->search_term ) ){
 		
 		$start = ( $userspage - 1 ) * $this->per_page;
 		$wp_user_search->search_term = $wp_user_search->get( 'search' );
@@ -92,8 +92,6 @@
 		) );
 	}
 	
-	do_action( 'ims_before_user_list', $user_action, $edit_userid );
-	
 	?>
     
     <div class="filter">
@@ -103,7 +101,6 @@
             </ul>
         </form>
     </div><!--.filter-->
-    
     
     <form class="search-form" action="<?php echo admin_url( 'edit.php?' ) ?>" method="get">
         <p class="search-box">
@@ -116,10 +113,16 @@
         </p>
     </form><!--.search-form-->
     
+	<?php do_action( 'ims_before_user_list', $user_action, $edit_userid ); ?>
     
-    <form id="posts-filter" action="<?php echo $this->pageurl ?>" method="get">
+    <form id="posts-filter" class="customer-actions-form" action="<?php echo $this->pageurl ?>" method="get">
         <div class="tablenav">
-    
+    		
+			<div class="alignright">
+            	<a href="<?php echo IMSTORE_ADMIN_URL, "/customers/customers-csv.php?$nonce" ?>" class="button-secondary"><?php _e( 'Download CSV', 'ims' ) ?></a> 
+            	<a href="<?php echo $this->pageurl . "&amp;$nonce&amp;useraction=new" ?>" class="button-primary"><?php _e( 'New Customer', 'ims' )  ?></a>
+   			</div>
+			
             <select name="imsaction">
                 <option selected="selected"><?php _e( 'Bulk Actions', 'ims' ) ?></option>
                 <?php
@@ -129,11 +132,8 @@
                 }
                 ?>
             </select>
-            <input type="submit" value="<?php esc_attr_e('Apply', 'ims'); ?>" name="doaction" class="button-secondary" /> |
-    
-            <a href="<?php echo IMSTORE_ADMIN_URL, "/customers/customers-csv.php?$nonce" ?>" class="button"><?php _e( 'Download CSV', 'ims' ) ?></a> 
-            <a href="<?php echo $this->pageurl . "&amp;$nonce&amp;useraction=new" ?>" class="button"><?php _e( 'New Customer', 'ims' )  ?></a>
-    
+            <input type="submit" value="<?php esc_attr_e('Apply', 'ims'); ?>" name="doaction" class="button" />
+			
             <br class="clear" />
         </div><!--.tablenav-->
         

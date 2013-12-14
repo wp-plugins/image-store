@@ -156,6 +156,7 @@ class ImStoreInstaller extends ImStore {
 		
 		$ims_ft_opts['wepayaccesstoken'] = false;
 		$ims_ft_opts['wepayclientid'] = false;
+		$ims_ft_opts['wepayaccountid'] = false;
 		$ims_ft_opts['wepayclientsecret'] = false;		
 			
 		//dont change array order
@@ -205,6 +206,7 @@ class ImStoreInstaller extends ImStore {
 			'wepayprod' => false,
 			'pagseguroprod'=> false,
 			'pagsegurosand' => false,
+			'sagepay' => false,
 			'custom' => false,
 		);
 
@@ -241,9 +243,8 @@ class ImStoreInstaller extends ImStore {
 		else
 			update_option($this->optionkey, $ims_ft_opts);
 
-		//stop table optiomize
-		$optimize = apply_filters('ims_optimize', true, 'install');
-		if ($optimize)
+		//allow plugins to stop table optimazation
+		if ( $optimize = apply_filters( 'ims_optimize', true, 'install' ) )
 			$wpdb->query("OPTIMIZE TABLE $wpdb->options, $wpdb->postmeta, $wpdb->posts, $wpdb->users, $wpdb->usermeta");
 	}
 
@@ -255,12 +256,11 @@ class ImStoreInstaller extends ImStore {
 	 * @since 2.0.0 
 	 */
 	function update( ) {
+		
 		global $wpdb;
-
 		wp_cache_flush();
 
-		//update database if updating before 2.0.0
-		if ($this->ver < "2.0.0") {
+		if ( $this->ver < "2.0.0" ) {
 			$wpdb->query("DELETE FROM $wpdb->postmeta WHERE meta_key 
 			IN( 'ims_downloads', 'ims_download_max', '_ims_image_count', '_ims_customer' )");
 			$wpdb->query("UPDATE $wpdb->postmeta SET meta_key = '_ims_visits' WHERE meta_key = 'ims_visits'");
@@ -269,13 +269,11 @@ class ImStoreInstaller extends ImStore {
 
 		$ims_ft_opts = get_option( $this->optionkey );
 
-		//update options if updating from 2.0.8
 		if ( $this->ver <= "2.0.8") {
 			$ims_ft_opts['album_template'] = 'page.php';
 			$ims_ft_opts['tags'][] = __('/%instructions%/', 'ims');
 		}
 		
-		//update options if updating to 3.0.0
 		if ($this->ver <= "3.0.0" || empty($ims_ft_opts['carttags'])) {
 			$ims_ft_opts['gateway_method'] = 'post';
 			$ims_ft_opts['carttags'] = array(
@@ -298,7 +296,6 @@ class ImStoreInstaller extends ImStore {
 			);
 		}
 			
-		//update options if updating to 3.1.0
 		if ( $this->ver <= "3.1.0" ){
 			
 			$ims_ft_opts['googleid'] =  '';
@@ -330,7 +327,6 @@ class ImStoreInstaller extends ImStore {
 			update_option( 'ims_site_url', get_option( 'siteurl' ) );
 		}
 		
-		//update options if updating to 3.1.5
 		if ( $this->ver <= "3.1.5" ){	
 			$ims_ft_opts['tags'] = array(
 				__('/%total%/', 'ims'),
@@ -345,7 +341,6 @@ class ImStoreInstaller extends ImStore {
 			);
 		}
 	
-		//update options if updating to 3.2.0
 		if ( $this->ver <= "3.2.0" ){	
 		
 			$ims_ft_opts['tags'][] = __('/%items_count%/', 'ims');
@@ -403,11 +398,30 @@ class ImStoreInstaller extends ImStore {
 			$ims_ft_opts['shippingmessage'] = '';
 		}
 		
-		if ( $this->ver <= "3.3.3" ){
+		if ( $this->ver <= "3.3.3" )
 			$ims_ft_opts['loginform'] = true;
-			update_option( $this->optionkey, $ims_ft_opts );
+		
+		if ( $this->ver <= "3.3.2" ){
+			$ims_ft_opts['watermark_trans']  = round( abs( ( ( $ims_ft_opts['watermark_trans'] / 127) * 100 ) - 100 ));
+			update_option( 'ims_cache_time', time(  ) );
 		}
 		
+		if ( $this->ver <= "3.4" ){
+			// remove post_expire database column
+			$post  = get_posts( array( 'posts_per_page' => 1 ) );
+			if( isset( $post[0]->post_expire ) ){
+				$galleries = $wpdb->get_results( 
+					"Select ID, post_expire from $wpdb->posts where post_expire != '0000-00-00 00:00:00' AND post_type IN () LIMIT 1000" 
+				);
+				foreach( $galleries as $gallery )
+					update_post_meta( $gallery->ID, '_ims_post_expire',  $gallery->post_expire );	
+				$wpdb->query( "ALTER TABLE $wpdb->posts DROP post_expire" );
+			}
+			
+			$ims_ft_opts['wepayaccountid'] = '';
+			update_option( $this->optionkey, $ims_ft_opts );
+		}
+			
 		//add imstore capabilities
 		$ims_caps = array(
 			'read_sales' => __('Read sales', 'ims'),
@@ -418,6 +432,7 @@ class ImStoreInstaller extends ImStore {
 			'manage_customers' => __('Manage Customers', 'ims'),
 			'change_permissions' => __('Change Permissions', 'ims'),
 		); $ims_caps = apply_filters( 'ims_user_caps', $ims_caps);
+
 
 		//user options
 		$ims_user_opts['swfupload'] = '1';
@@ -459,10 +474,7 @@ class ImStoreInstaller extends ImStore {
 		update_option( 'ims_options', array( 'ims_front_options', $this->optionkey, 'ims_back_options', 'ims_page_secure', 'ims_searchable', 
 		'ims_print_finishes','ims_shipping_options', 'ims_pricelist', 'ims_options', 'ims_page_galleries', 'ims_sizes', 'ims_image_key', 'ims_download_sizes',
 		'ims_dis_images', 'ims_user_options', 'ims_site_url', 'ims_color_filters', 'ims_page_cart', 'ims_color_options','ims_gateways', 'ims_core_caps'));
-
-		//add expire column
-		if (empty($this->ver) || ( $this->ver <= "3.0.1" && is_multisite() ))
-			$wpdb->query("ALTER IGNORE TABLE  $wpdb->posts ADD post_expire DATETIME NOT NULL");
+		
 
 		//create secure page
 		$page_secure = get_option('ims_page_secure');
@@ -768,9 +780,6 @@ class ImStoreInstaller extends ImStore {
 		$optimize = apply_filters('ims_optimize', true);
 		if ($optimize)
 			$wpdb->query("OPTIMIZE TABLE $wpdb->options, $wpdb->postmeta, $wpdb->posts, $wpdb->users, $wpdb->usermeta");
-
-		//delete expire table
-		$wpdb->query("ALTER TABLE $wpdb->posts DROP post_expire");
 
 		//destroy active cookies
 		setcookie('ims_orderid_' . COOKIEHASH, ' ', ( time( ) - 31536000), COOKIEPATH, COOKIE_DOMAIN);

@@ -34,7 +34,7 @@ class ImStoreCartPayPal {
 	 */
 	function process_notice( ){
 		
-		if ( empty( $_POST['txn_id'] ) || empty( $_POST['custom'] ) || !is_numeric( $_POST['custom'] ) )
+		if ( empty( $_POST['txn_id'] ) || empty( $_POST['custom'] ) )
 			return;
 		
 		global $ImStore;
@@ -95,8 +95,10 @@ class ImStoreCartPayPal {
 			return;
 			
 		} else {
-			
-			$cartid = intval( trim( $_POST['custom'] ) );
+						
+			$cartid = trim( $ImStore->url_decrypt($_POST['custom'] ) );
+			if( ! is_numeric( $cartid ) )
+				return;
 			
 			global $ImStoreCart;
 			$ImStoreCart->setup_cart( $cartid );
@@ -188,13 +190,13 @@ class ImStoreCartPayPal {
 		<input type="hidden" name="lc" data-value-ims="' . esc_attr( get_bloginfo( 'language' ) ) . '" />
 		<input type="hidden" name="shipping_1" data-value-ims="' . esc_attr( $cart['shipping'] ) . '" />
 		<input type="hidden" name="page_style" data-value-ims="' . get_bloginfo( 'name' ) . '" />
-		<input type="hidden" name="custom" data-value-ims="' . esc_attr( $ImStoreCart->orderid  ) . '" />
 		<input type="hidden" name="return" data-value-ims="' . $ImStore->get_permalink( 'receipt' ) . '" />
 		<input type="hidden" name="business" data-value-ims="' . esc_attr( $ImStore->opts['paypalname'] ) . '" />
 		<input type="hidden" name="currency_code" data-value-ims="' . esc_attr( $ImStore->opts['currency'] ) . '" />
 		<input type="hidden" name="notify_url" data-value-ims="' . $ImStore->get_permalink( $ImStore->imspage ) . '" />
 		<input type="hidden" name="discount_amount_cart" data-value-ims="' . esc_attr( $cart['promo']['discount'] )  . '" />
 		<input type="hidden" name="cancel_return" data-value-ims="' . $ImStore->get_permalink( $ImStore->imspage ) . '" />
+		<input type="hidden" name="custom" data-value-ims="' . esc_attr( $ImStore->url_decrypt( $ImStoreCart->orderid )) . '" />
 		<input type="hidden" name="cbt" data-value-ims="' . esc_attr( sprintf( __( 'Return to %s', 'ims' ), get_bloginfo( 'name' ) ) ) . '" />';
 		
 		return $output = apply_filters( 'ims_cart_paypal_hidden_fields', $output, $cart );

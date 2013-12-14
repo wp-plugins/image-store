@@ -39,9 +39,9 @@
 		 */
 		function ims_gallery_shortcode( $atts ) {
 			
-			if ( !is_singular( ) )
+			if ( ! is_singular( ) )
 				return;
-					
+								
 			extract( $atts = shortcode_atts( array(
 				'id' => '',
 				'filmstrip' => 1,
@@ -51,22 +51,14 @@
 				'slideshow' => false,
 				'size' => 'thumbnail',
 				'layout' => 'lightbox',
-				'order' => $this->opts['imgsortorder'],
-				'orderby' => $this->opts['imgsortdirect'],
-			), $atts ) );
+				'sort' => $this->opts['imgsortdirect'],
+				'sortby' => $this->opts['imgsortorder'],
+			), $atts,  'ims_gallery' ) );
 			
 			if ( empty( $id ) )
 				return;
 			
-			$sort = array(
-				'title' => 'post_title',
-				'date' => 'post_date',
-				'custom' => 'menu_order',
-				'caption' => 'post_excerpt',
-				'excerpt' => 'post_excerpt',
-			);
-			
-			global $wpdb;
+			global $wpdb, $ImStore;
 			
 			$this->galid = $wpdb->get_var( $wpdb->prepare(
 				"SELECT post_id FROM $wpdb->postmeta 
@@ -77,8 +69,8 @@
 			if ( empty( $this->galid ) )
 				return;
 			
-			$this->sortby = $orderby;
-			$this->order = $sort[$order];
+			$this->order = $sort;
+			$this->sortby = $ImStore->sort[$sortby];
 			$this->limit = ( !$number || strtolower($number) == 'all' ) ? false : $number;
 			$slideshow = ( isset( $layout ) && strtolower( $layout ) == 'slideshow' ) ? true : false;
 			
@@ -104,15 +96,14 @@
 			
 			if ( false == $this->attachments ) {
 				$this->attachments = $wpdb->get_results( $wpdb->prepare(
-					"SELECT ID, post_title ,guid, post_author,
-					meta_value meta, post_excerpt, post_expire
+					"SELECT *, meta_value meta
 					FROM $wpdb->posts AS p 
 					LEFT JOIN $wpdb->postmeta AS pm
 					ON p.ID = pm.post_id
 					WHERE post_type = 'ims_image'
 					AND meta_key = '_wp_attachment_metadata'
 					AND post_status = 'publish' AND post_parent = %d
-					ORDER BY $this->order $this->sortby $limit"
+					ORDER BY $this->sortby $this->order $limit"
 				, $this->galid ) );
 			}
 			

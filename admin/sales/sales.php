@@ -79,9 +79,10 @@
     </div><!--.filter-->
     
     
-    <form id="posts-filter" action="<?php echo $this->pageurl ?>" method="get">
+    <form id="posts-filter" action="<?php echo $this->pageurl ?>" class="sales-actions-form" method="get">
     
     	<div class="tablenav">
+			 <a href="<?php echo IMSTORE_ADMIN_URL . "/sales/sales-csv.php?$nonce"?>" class="button-primary alignright"><?php _e( 'Download CSV', 'ims' ) ?></a>
             <div class="alignleft actions">
                 <select name="order-action">
                     <option value=""><?php esc_attr_e( 'Order Status', 'ims' ) ?></option>
@@ -103,7 +104,7 @@
                 </select>
                 <?php } ?>
                 
-                <input type="submit" name="doaction" value="<?php esc_attr_e( 'Apply', 'ims' ) ?>" class="button-secondary action" />
+                <input type="submit" name="doaction" value="<?php esc_attr_e( 'Apply', 'ims' ) ?>" class="button action" />
                 
                 <select name="m">
 					<option value=""><?php esc_attr_e( 'Select order date', 'ims' ) ?></option>
@@ -114,8 +115,6 @@
                 </select>
                 
                 <input type="submit" value="<?php _e( 'Filter', 'ims' ) ?>" class="button" />
-                <a href="<?php echo IMSTORE_ADMIN_URL . "/sales/sales-csv.php?$nonce"?>" class="button"><?php _e( 'Download CSV', 'ims' ) ?></a>
-
              </div><!--.actions-->
          </div><!--.tablenav-->
          

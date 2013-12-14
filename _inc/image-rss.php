@@ -42,17 +42,15 @@ class ImStoreFeeds {
 	 */
 	function print_rss_link( ) {
 		
-		if ( !is_singular( "ims_gallery" ) && !is_tax("ims_album") && !is_tax( "ims_tags" )  )
+		if ( ! is_singular( "ims_gallery" ) && !is_tax("ims_album") && !is_tax( "ims_tags" )  )
 			return; 
-		
-		$permalinks = get_option( 'permalink_structure' );
-		
-		global $post;
+				
+		global $post, $ImStore;
 		if( is_singular( "ims_gallery" ) && $post->post_password )
 			return;
 
 		if ( is_singular( "ims_gallery" ) ) {
-			$query = ( empty( $permalinks ) ) ? '&amp;feed=imstore' : '/feed/imstore/';
+			$query = ( ! $ImStore->permalinks ) ? '&amp;feed=imstore' : '/feed/imstore/';
 			echo '<link rel="alternate" type="application/rss+xml" title="' . get_bloginfo( 'name' ) . " &raquo; " .
 			__( 'Gallery Feed', 'ims' ) . '" href="' . trim( get_permalink( ), '/' ) . $query . '" />' . "\n";
 		}
@@ -60,14 +58,14 @@ class ImStoreFeeds {
 		$tag = get_query_var( 'ims_tags' );
 		$album = get_query_var( 'ims_album' );
 		
-		if ( is_tax( "ims_album" )  && $album ) {
-			$query = ( empty(  $permalinks ) ) ? '&amp;feed=rss' : '/feed/';
+		if ( is_tax( "ims_album" ) && $album ) {
+			$query = ( ! $ImStore->permalinks ) ? '&amp;feed=rss' : '/feed/';
 			echo '<link rel="alternate" type="application/rss+xml" title="' . get_bloginfo( 'name' ) . " &raquo; " .
 			__( 'Galleries album feed', 'ims' ) . '" href="' . trim( get_term_link( $album, "ims_album"), '/') . $query . '" />' . "\n";
 		}
 		
 		if ( is_tax( "ims_tags" ) && $tag ) {
-			$query = ( empty(  $permalinks ) ) ? '&amp;feed=rss' : '/feed/';
+			$query = ( ! $ImStore->permalinks ) ? '&amp;feed=rss' : '/feed/';
 			echo '<link rel="alternate" type="application/rss+xml" title="' . get_bloginfo( 'name' ) . " &raquo; " .
 			__( 'Galleries tag feed', 'ims' ) . '" href="' . trim( get_term_link( $tag, "ims_tags"), '/') . $query . '" />' . "\n";
 		}

@@ -14,8 +14,19 @@
 	if ( !current_user_can( 'ims_manage_galleries') )
 		die( );
 
-	$default = array( '_ims_visits' => 0, '_ims_sortby' => '', '_ims_tracking' => '', '_ims_order' => '', 'expire' => '', 'ims_expire' => '',
-	'_dis_store' => false, '_ims_price_list' => 0, '_to_attach' => $this->opts['attchlink'], '_ims_gallery_id' => $this->unique_id( ) );
+	$default = array( 
+		'expire' => '', 
+		'ims_expire' => '',	
+		'_ims_order' => '', 
+		'_ims_visits' => 0, 
+		'_ims_sortby' => '', 
+		'_dis_store' => false, 
+		'_ims_tracking' => '', 
+		'_ims_price_list' => 0,
+		'_to_vote' => $this->opts['voting_like'],  
+		'_to_attach' => $this->opts['attchlink'],  
+		'_ims_gallery_id' => $this->unique_id( ), 
+	 );
 	
 	$instance = array( );
 	foreach ( $this->meta as $key => $val ) {
@@ -27,7 +38,7 @@
 	
 	if ( $this->pagenow == 'post-new.php' && $this->opts['galleryexpire'] ) 
 		$time = ( current_time( 'timestamp' ) ) + ( $this->opts['galleryexpire'] * 86400 );
-	 else $time = strtotime( $this->gallery->post_expire );
+	 else $time = strtotime( get_post_meta( $this->gallery->ID, '_ims_post_expire', true ) );
 	
 	if ( $this->pagenow != 'post-new.php' )
 		$this->disabled = ' disabled="disabled"';
@@ -63,7 +74,7 @@
 		<?php } ?>
 		<tr>
 			<td><label for="sortby"><?php _e( 'Sort Order', 'ims' ) ?></label></td>
-			<td colspan="3">
+			<td>
 				<select name="_ims_sortby" id="sortby">
 					<option value="0"><?php _e( 'Default', 'ims' ) ?></option>
 					<?php foreach ( $this->sortby as $val => $label ) : ?>
@@ -77,6 +88,8 @@
 					<?php endforeach ?>
 				</select>
 			</td>
+			<td><label for="_to_attach"><?php _e( 'Voting enabled', 'ims' ) ?></label></td>
+			<td><input type="checkbox" name="_to_vote" id="_to_vote" <?php checked( true, $_to_vote ) ?> value="1" /></td>
 		</tr>
 		<tr>
 			<td><label for="imsexpire" class="date-icon"><?php _e( 'Expiration Date', 'ims' ) ?></label></td>
@@ -88,7 +101,7 @@
 			<td><input type="text" name="_ims_visits" id="_ims_visits" value="<?php echo esc_attr( $_ims_visits ) ?>" /></td>
 		</tr>
 		<tr>
-			<td><label for="_dis_store" ><?php _e( 'Disable Store', 'ims' ) ?></label></td>
+			<td><label for="_dis_store" ><?php _e( 'Disable store', 'ims' ) ?></label></td>
 			<td><input type="checkbox" name="_dis_store" id="_dis_store" <?php checked( true, $_dis_store ) ?> value="1" /></td>
 			<td><label for="_to_attach"><?php _e( 'Link to attachment', 'ims' ) ?></label></td>
 			<td><input type="checkbox" name="_to_attach" id="_to_attach" <?php checked( true, $_to_attach ) ?> value="1" /></td>
