@@ -34,7 +34,7 @@ class ImStore {
 	public $promo_types = array( );
 	public $rules_property = array( );
 	
-	public $version = '3.4';
+	public $version = '3.4.1';
 	public $customer_role = 'customer';
 	public $optionkey = 'ims_front_options';
 	
@@ -131,7 +131,7 @@ class ImStore {
 		
 		do_action( 'ims_define_constants', $this );
 		
-		define( 'IMSTORE_URL', WP_PLUGIN_URL . "/" . IMSTORE_FOLDER );
+		define( 'IMSTORE_URL', plugins_url( IMSTORE_FOLDER ) );
 		define( 'IMSTORE_ADMIN_URL', IMSTORE_URL . '/admin' );
 		
 		if ( !defined( 'WP_SITE_URL' ) )

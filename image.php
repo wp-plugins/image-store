@@ -132,7 +132,7 @@
 		 */
 		function display_image( ) {
 			
-			$ext = trim( substr( strrchr( $this->image_dir, '.' ),1 ) );
+			$ext = trim( substr( strrchr( $this->image_dir, '.' ),1 ));
 			
 			$color = isset( $_GET['c'] ) ? $_GET['c'] : false;
 			$cache = get_option( 'ims_cache_time', time(  ) );
@@ -142,21 +142,26 @@
 			$etag = '"' . md5( $this->image_dir . $color . $this->watermark . $modified ) . '"';
 			$client_etag = isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) ? stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) : false;
 			
-			header( 'Content-Type: image/' . $ext );
 			header( 'ETag: ' . $etag );
 			header( "Last-Modified: $modified GMT");
+			header( 'Content-Type: image/' . ( $this->size == 'original' ? $ext : 'jpg' ));
 			header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', time(  ) + 100000000 ) . ' GMT');
 			header( 'Cache-Control:max-age=' . ( time(  ) + 100000000 ) . ',must-revalidate,public' );
 			
 			if ( ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) && isset( $_SERVER['HTTP_IF_NONE_MATCH'] )
 			&& ( strtotime( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) == ( $cache_time ) ) ) || ( $client_etag == $etag ))
 				status_header( 304 );
-			
+
+			$quality = get_option( 'preview_size_q', 85 );
+
 			if ( empty( $color ) && ! $this->watermark && ! $this->resize ) {
-				@readfile( $this->image_dir );
-				status_header( 304 );
+				if( $this->size == 'original' )
+					@readfile( $this->image_dir );
+				if( $this->create_image( $ext ) );
+					imagejpeg( $this->image, NULL, $quality );
+				status_header( 200 );
 			}
-			
+
 			// multisize is not supported exit
 			if ( ! function_exists( 'get_site_option' ) ) 
 				status_header( 204 );
@@ -177,8 +182,6 @@
 			if (  ! empty( $color ) ) 
 				$this->apply_color_filter( $color );
 			
-			$quality = get_option( 'preview_size_q', 85 );
-			
 			//sharpen image
 			$matrix = array(  array(-1, -1, -1),  array(-1, 16, -1),  array(-1, -1, -1) );
 			$divisor = array_sum( array_map( 'array_sum', $matrix) );
@@ -187,14 +190,9 @@
 			switch ( $ext ) {
 				case "jpg":
 				case "jpeg":
-					imagejpeg( $this->image, NULL, $quality );
-					break;
 				case "gif":
-					imagegif( $this->image );
-					break;
 				case "png":
-					$quality = ( ceil( $quality / 10 ) > 9 ) ? 9 : ceil( $quality / 10 );
-					imagepng( $this->image, NULL, $quality );
+					imagejpeg( $this->image, NULL, $quality );
 					break;
 				default: status_header( 204 );
 			}
@@ -239,8 +237,12 @@
 					
 					imagedestroy( $this->image );	
 					$this->image = $image_new;
+					return true;
 				}
-			}		
+			} 
+			
+			if( is_resource( $this->image ) )
+				return true;
 		}
 	
 		
