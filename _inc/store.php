@@ -166,7 +166,7 @@ class ImStoreFront extends ImStore {
 		if ( is_feed( ) && ( is_tax( 'ims_album' ) || is_tax( 'ims_tags' ) ) ) 
 			add_filter( 'the_content', array( &$this, 'taxonomy_description' ) );
 		
-		add_shortcode( 'ims-gallery-content', array( &$this, 'gallery_shortcode' ) );
+		add_shortcode( 'ims-gallery-content', array( &$this, 'deprecated_shortcode' ) );
 		
 		//return if is a feed page
 		if ( is_feed( ) ) 
@@ -217,6 +217,7 @@ class ImStoreFront extends ImStore {
 			
 		if ( is_singular( 'ims_gallery' ) || $allow ) { 
 			
+			add_filter( 'the_content', array( &$this, 'gallery_shortcode' ) );
 			add_filter( 'comments_array', array( &$this, 'hide_comments' ), 1, 1 ); 
 			add_filter( 'comments_open', array( &$this, 'close_comments' ), 1, 1 );
 			add_filter( 'redirect_canonical', array( &$this, 'redirect_canonical' ), 20, 2 );
@@ -2177,5 +2178,15 @@ class ImStoreFront extends ImStore {
 			default:
 		}
 		return $where . " AND p.post_parent = $post->post_parent";
+	}
+	
+	
+	/**
+	 * Notify developer that the shortcode has been deprecated
+	 *
+	 * @since 3.4.1
+	 */
+	function deprecated_shortcode(){
+		_deprecated_function( 'ims-gallery-content', '4.0' );
 	}
 }

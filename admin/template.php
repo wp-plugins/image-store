@@ -88,12 +88,12 @@
         <div class="adunitbox postbox">
 			<script type="text/javascript">
 				/* <![CDATA[ */
-				(function() {  var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];  s.type = 'text/javascript';  s.async = true; s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto'; t.parentNode.insertBefore(s, t); })();
+				(function() {  var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];  s.type = 'text/javascript';  s.async = true; s.src = 'https://api.flattr.com/js/0.6/load.js?mode=auto'; t.parentNode.insertBefore(s, t); })();
 				/* ]]> */</script>
 			<a class="FlattrButton" style="display:none;" href="http://imstore.xparkmedia.com"></a>
 
 			<div id="adunit">
-				<iframe allowtransparency="true" src="http://xparkmedia.com/_rsc/ad.html" frameborder="0" marginheight="0" marginwidth="0" scrolling="no" height="60" width="468"></iframe>
+				<iframe allowtransparency="true" src="https://xparkmedia.com/_rsc/ad.html" frameborder="0" marginheight="0" marginwidth="0" scrolling="no" height="60" width="468"></iframe>
 			</div><!--.adunit-->
 		</div><!--.adunitbox-->
 
