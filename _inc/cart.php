@@ -188,6 +188,8 @@ class ImStoreCart {
 				$this->cart['subtotal'] += $this->cart['images'][$id][$size][$color]['subtotal'];
 			}
 		}
+		
+		do_action( 'ims_after_add_to_cart', $this->cart );
 
 		$this->save_cart( 'add' );
 		return $this->cart;

@@ -73,8 +73,8 @@ class ImStoreCartPagSeguro {
 			
 		}else{
 			
+			$cartid = trim( $ImStore->url_decrypt($_POST['Reference'] ), true );
 			
-			$cartid = trim( $ImStore->url_decrypt($_POST['Reference'] ) );
 			if( ! is_numeric( $cartid ) )
 				return;
 			

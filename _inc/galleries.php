@@ -764,7 +764,7 @@ class ImStoreGallery extends ImStoreAdmin {
 					continue;
 
 				if ( !file_exists( $fullpath ) )
-					@mkdir( $fullpath, 0755, true );
+					@mkdir( $fullpath, 0751, true );
 
 				$filepath = $fullpath . $filename;
 				

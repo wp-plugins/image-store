@@ -36,9 +36,8 @@ class ImStoreCartWePay {
 			return;
 			
 		global $ImStore;
-		$cartid = trim($ImStore->url_decrypt($checkout->reference_id));
 
-		if( ! is_numeric( $_REQUEST['checkout_id'] ) || empty( $ImStore->opts['wepayclientid'] ) || ! is_numeric( $cartid )
+		if( ! is_numeric( $_REQUEST['checkout_id'] ) || empty( $ImStore->opts['wepayclientid'] ) 
 		|| empty( $ImStore->opts['wepayclientsecret'] )  || empty( $ImStore->opts['wepayaccesstoken'] ) )
 			return;
 		
@@ -76,8 +75,9 @@ class ImStoreCartWePay {
 		); 
 		
 		global $ImStoreCart;
+		$cartid = trim($ImStore->url_decrypt($checkout->reference_id),true);
+
 		$ImStoreCart->setup_cart( $cartid );
-		
 		do_action( 'ims_before_wepay_notice', false, $cartid );
 		
 		foreach( $response_data as $key => $reponse ){

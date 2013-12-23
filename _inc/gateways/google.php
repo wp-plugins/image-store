@@ -42,7 +42,7 @@ class ImStoreCartGoogle {
 			return;
 		
 		global $ImStore;
-		$cartid = trim( $ImStore->url_decrypt( $_POST['shopping-cart_merchant-private-data'] ) );
+		$cartid = trim( $ImStore->url_decrypt( $_POST['shopping-cart_merchant-private-data'] ), true );
 		
 		if( empty( $ImStore->opts['googleid'] ) || empty( $ImStore->opts['googlekey'] ) ||
 		$_POST['_type'] != 'new-order-notification' || ! is_numeric( $cartid ) )

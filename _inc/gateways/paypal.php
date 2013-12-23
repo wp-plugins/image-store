@@ -51,7 +51,7 @@ class ImStoreCartPayPal {
 		foreach ( $_POST as $i => $v )
 			$postdata .= $i . '=' . urlencode( $v ) . '&';
 		$postdata .= 'cmd=_notify-validate';
-		
+	
 		$web = parse_url( $url );
 		if ( $web['scheme'] == 'https' ||
 			strpos( $url, 'sandbox') !== false ) {
@@ -96,7 +96,8 @@ class ImStoreCartPayPal {
 			
 		} else {
 						
-			$cartid = trim( $ImStore->url_decrypt($_POST['custom'] ) );
+			$cartid = trim( $ImStore->url_decrypt($_POST['custom'] ), true );
+			
 			if( ! is_numeric( $cartid ) )
 				return;
 			
@@ -196,7 +197,7 @@ class ImStoreCartPayPal {
 		<input type="hidden" name="notify_url" data-value-ims="' . $ImStore->get_permalink( $ImStore->imspage ) . '" />
 		<input type="hidden" name="discount_amount_cart" data-value-ims="' . esc_attr( $cart['promo']['discount'] )  . '" />
 		<input type="hidden" name="cancel_return" data-value-ims="' . $ImStore->get_permalink( $ImStore->imspage ) . '" />
-		<input type="hidden" name="custom" data-value-ims="' . esc_attr( $ImStore->url_decrypt( $ImStoreCart->orderid )) . '" />
+		<input type="hidden" name="custom" data-value-ims="' . esc_attr( $ImStore->url_encrypt( $ImStoreCart->orderid )) . '" />
 		<input type="hidden" name="cbt" data-value-ims="' . esc_attr( sprintf( __( 'Return to %s', 'ims' ), get_bloginfo( 'name' ) ) ) . '" />';
 		
 		return $output = apply_filters( 'ims_cart_paypal_hidden_fields', $output, $cart );
