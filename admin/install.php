@@ -777,8 +777,7 @@ class ImStoreInstaller extends ImStore {
 		);
 
 		//optomize wp tables
-		$optimize = apply_filters('ims_optimize', true);
-		if ($optimize)
+		if ( $optimize = apply_filters( 'ims_optimize', true, 'uninstall' ) )
 			$wpdb->query("OPTIMIZE TABLE $wpdb->options, $wpdb->postmeta, $wpdb->posts, $wpdb->users, $wpdb->usermeta");
 
 		//destroy active cookies

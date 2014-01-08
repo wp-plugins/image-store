@@ -694,7 +694,7 @@ class ImStoreAdmin extends ImStore {
 		}
 		
 		if ( !file_exists( $path ) )
-			@mkdir( $path, 0755, true );
+			@mkdir( $path, 0751, true );
 		
 		//generate mini image for thumbnail edit
 		if ( isset( $_REQUEST['target'] ) && 'thumbnail' == $_REQUEST['target'] ) {
@@ -784,7 +784,7 @@ class ImStoreAdmin extends ImStore {
 				'2#135' => 'languague',
 			);
 
-			foreach ( apply_filters('ims_image_meta', $iptcTags, $file) as $key => $label ) {
+			foreach ( apply_filters('ims_image_iptc_meta', $iptcTags, $file) as $key => $label ) {
 				if ( isset( $iptc[$key][0] ) )
 					$meta[$label] = $iptc[$key][0];
 			}
@@ -856,7 +856,7 @@ class ImStoreAdmin extends ImStore {
 			$despath = $this->sanitize_path( $pathinfo['dirname'], 'notrim' ) . "/_resized/";
 			
 			if ( !file_exists( $despath ) )
-				@mkdir( $despath, 0755, true );
+				@mkdir( $despath, 0751, true );
 			if ( copy( $file, $despath . $pathinfo['basename'] ) ) {
 				@unlink( $file );
 				$file = $despath . $pathinfo['basename'];

@@ -629,7 +629,7 @@ class ImStoreGallery extends ImStoreAdmin {
 			return false;
 		}
 		
-		if ( !is_wp_error( $attach_id ) ) {
+		if ( ! is_wp_error( $attach_id ) ) {
 			do_action( 'ims_before_attachment_metadata', $attach_id, $filepath, $file );
 			
 			$metadata = wp_generate_attachment_metadata( $attach_id, $filepath );
@@ -764,7 +764,7 @@ class ImStoreGallery extends ImStoreAdmin {
 					continue;
 
 				if ( !file_exists( $fullpath ) )
-					@mkdir( $fullpath, 0755, true );
+					@mkdir( $fullpath, 0751, true );
 
 				$filepath = $fullpath . $filename;
 				

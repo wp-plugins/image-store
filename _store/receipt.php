@@ -49,7 +49,7 @@
 		$user_login = $message = '';
 		$user_email = $ImStoreCart->data['payer_email'];
 		
-		if( !empty( $_POST ) && empty( $_POST['ims-enotice-checkout'] ) )	
+		if( ! empty( $_POST ) && empty( $_POST['ims-enotice-checkout'] ) )	
 			extract( $ImStoreCart->validate_access_forms( )) ;
 		
 		$output .= apply_filters( 'ims_access_forms',  

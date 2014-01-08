@@ -190,7 +190,7 @@
 		);
 		
 		//don't display error message possible hack
-		if( empty( $crypt_array['VendorTxCode'] ) || empty( $crypt_array['CustomerEmail'] ) || empty( $crypt_array['Status']  ) )
+		if( empty( $crypt_array['VendorTxCode'] ) || empty( $crypt_array['Status']  ) )
 			return; 
 		
 		//  problem with paymet display error message in cart page
@@ -204,6 +204,8 @@
 
 		global $ImStoreCart;
 		$ImStoreCart->setup_cart( $cartid );
+		
+		$crypt_array['Status'] = 'processed';
 		
 		do_action( 'ims_before_sagepay_notice', false, $cartid );
 		
@@ -312,48 +314,51 @@
 		global $ImStoreCart, $ImStore;
 		$data = $ImStoreCart->data;
 				
-		$stuff = 'VendorTxCode=' . $ImStoreCart->orderid . '&';
-		$stuff .= 'Amount=' .  $ImStoreCart->cart['total'] . '&';
-		$stuff .= 'Currency=GBP&';
-		$stuff .= 'Description=4lifephotography eStore&';
-		$stuff .= 'SuccessURL=' . $ImStore->get_permalink( 'receipt' ) . '&';
-		$stuff .= 'FailureURL=' . $ImStore->get_permalink( 'shopping-cart' ) . '&';
+		$crypt = 'VendorTxCode=' . $ImStoreCart->orderid . '&';
+		$crypt .= 'Amount=' .  $ImStoreCart->cart['total'] . '&';
+		$crypt .= 'Currency=' . $ImStore->opts['currency'] .'&';
+		$crypt .= 'Description=' . $ImStore->opts['spdescription'] .'&';
+		$crypt .= 'SuccessURL=' . $ImStore->get_permalink( 'receipt' ) . '&';
+		$crypt .= 'FailureURL=' . $ImStore->get_permalink( 'shopping-cart' ) . '&';
 			
-		$stuff .= 'CustomerName=' . $data['billing_first_name'] . ' ' . $data['billing_last_name'] . '&';
-		$stuff .= 'CustomerEmail=' . $data['payer_email'] . '&';
-		$stuff .= 'VendorEmail='. esc_attr( $ImStore->opts['spemail'] ) . '&';
+		$crypt .= 'CustomerName=' . $data['billing_first_name'] . ' ' . $data['billing_last_name'] . '&';
+		$crypt .= 'CustomerEmail=' . $data['payer_email'] . '&';
+		$crypt .= 'VendorEmail='. $ImStore->opts['spemail'] . '&';
 				
-		$stuff .= 'BillingSurname=' . $data['billing_last_name'] . '&';
-		$stuff .= 'BillingFirstnames=' . $data['billing_first_name'] . '&';
-		$stuff .= 'BillingAddress1=' . $data['billing_address'] . '&';
-		$stuff .= 'BillingCity=' . $data['billing_city'] . '&';
-		$stuff .= 'BillingPostCode=' . $data['billing_zip'] . '&';
-		$stuff .= 'BillingCountry=GB&';
-		$stuff .= 'BillingPhone=' . $data['billing_phone'] . '&';
+		$crypt .= 'BillingSurname=' . $data['billing_last_name'] . '&';
+		$crypt .= 'BillingFirstnames=' . $data['billing_first_name'] . '&';
+		$crypt .= 'BillingAddress1=' . $data['billing_address'] . '&';
+		$crypt .= 'BillingCity=' . $data['billing_city'] . '&';
+		$crypt .= 'BillingState=' . $data['billing_state'] . '&';
+		$crypt .= 'BillingPostCode=' . $data['billing_zip'] . '&';
+		$crypt .= 'BillingCountry=' . $ImStore->opts['taxcountry']  .'&';
+		$crypt .= 'BillingPhone=' . $data['billing_phone'] . '&';
 		
-		$stuff .= 'DeliverySurname=' . $data['last_name'] . '&';
-		$stuff .= 'DeliveryFirstnames=' . $data['first_name'] . '&';
-		$stuff .= 'DeliveryAddress1=' . $data['address_street'] . '&';
-		$stuff .= 'DeliveryCity=' . $data['address_city'] . '&';
-		$stuff .= 'DeliveryState=' . $data['address_state'] . '&';
-		$stuff .= 'DeliveryPostCode=' . $data['address_zip'] . '&';
-		$stuff .= 'DeliveryCountry=GB&';
-		$stuff .= 'DeliveryPhone=' . $data['ims_phone'] . '&';
-		$stuff .= 'CartItems=' . $ImStoreCart->cart['items']  . '&';
+		$crypt .= 'DeliverySurname=' . $data['last_name'] . '&';
+		$crypt .= 'DeliveryFirstnames=' . $data['first_name'] . '&';
+		$crypt .= 'DeliveryAddress1=' . $data['address_street'] . '&';
+		$crypt .= 'DeliveryCity=' . $data['address_city'] . '&';
+		$crypt .= 'DeliveryState=' . $data['address_state'] . '&';
+		$crypt .= 'DeliveryPostCode=' . $data['address_zip'] . '&';
+		$crypt .= 'DeliveryCountry=' . $ImStore->opts['taxcountry']  .'&';
+		$crypt .= 'DeliveryPhone=' . $data['ims_phone'] . '&';
+		//$crypt .= 'CartItems=' . $ImStoreCart->cart['items']  . '&';
 		
 		//test status
-		//$stuff .= 'Status=INVALID&';
+		//$crypt .= 'Status=INVALID&';
 		
-		$stuff .= 'SendEmail=1&';
-		$stuff .= 'AllowGiftAid=0&';
-		$stuff .= 'ApplyAVSCV2=0&';
-		$stuff .= 'Apply3DSecure=0';
+		$crypt .= 'SendEmail=1&';
+		$crypt .= 'AllowGiftAid=0&';
+		$crypt .= 'ApplyAVSCV2=0&';
+		$crypt .= 'Apply3DSecure=0';
+		
+		update_post_meta( $ImStoreCart->orderid, '_response_data', $ImStoreCart->data );
 		
 		$output .= '<div id="sagepay-data" >';
 		$output .= '<input type="hidden" name="TxType" value="PAYMENT" />';
 		$output .= '<input type="hidden" name="Vendor" value="'. esc_attr( $ImStore->opts['spvendor'] ) . '" />';
 		$output .= '<input type="hidden" name="VPSProtocol" value="'. esc_attr( $ImStore->opts['vpsprotocol'] ) . '" />';
-		$output .= '<input type="hidden" name="Crypt" value="' . $this->crypt_string( $stuff, $ImStore->opts['sppassword'] ) . '" />';
+		$output .= '<input type="hidden" name="Crypt" value="' . $this->crypt_string( $crypt, $ImStore->opts['sppassword'] ) . '" />';
 		return $output .= '</div>';
 	}
 	
