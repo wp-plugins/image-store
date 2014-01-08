@@ -1314,9 +1314,12 @@ class ImStoreFront extends ImStore {
 	 */
 	function gallery_shortcode( ) {
 		
-		// display only the excerpt on feeds
+		// display only the excerpt on feeds			
 		if( is_feed() )
 			return get_the_excerpt();
+	
+		if( post_password_required() )
+			return get_the_password_form();
 		
 		$css = ( $this->opts['widgettools'] ) ? 'ims-widget-s' : '';
 		
@@ -1416,7 +1419,7 @@ class ImStoreFront extends ImStore {
 		
 		$data	= apply_filters( 'ims_image_data', $data, $sz );
 		$url 		= esc_attr( $this->get_image_url( $img_id, $sz ) );
-		$link 		= esc_attr( apply_filters( 'ims_image_link', $data['link'], $data ) );
+		$link 		= esc_attr( apply_filters( 'ims_image_link', $data['link'], $data, $sz ) );
 		$css		= esc_attr( implode( ' ',  ( array( 'ims-img', 'imgid-' . $enc) + ( array ) $classes ) ) );
 		
 		// use default gallery tags
@@ -1539,7 +1542,7 @@ class ImStoreFront extends ImStore {
 			return;
 		
 		$this->subnav = array(
-		  'ims-scroll-up' => __( "Scroll to Top", 'ims' ),
+			'ims-scroll-up' => __( "Scroll to Top", 'ims' ),
 			'ims-select-all' => __( "Select all", 'ims' ),
 			'ims-unselect-all' => __( "Unselect all", 'ims' ),
 		);

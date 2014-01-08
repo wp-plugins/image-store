@@ -167,6 +167,7 @@ class ImStoreCart {
 		$images = explode( ',', $request['ims-to-cart-ids'] );
 		
 		do_action( 'ims_berofe_add_to_cart', $this->cart );
+		do_action( 'ims_before_add_to_cart', $this->cart );
 			
 		global $ImStore;		
 		foreach ( $images as $id ){
@@ -189,7 +190,7 @@ class ImStoreCart {
 			}
 		}
 		
-		do_action( 'ims_after_add_to_cart', $this->cart );
+		//do_action( 'ims_after_add_to_cart', $this->cart );
 
 		$this->save_cart( 'add' );
 		return $this->cart;

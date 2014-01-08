@@ -784,7 +784,7 @@ class ImStoreAdmin extends ImStore {
 				'2#135' => 'languague',
 			);
 
-			foreach ( apply_filters('ims_image_meta', $iptcTags, $file) as $key => $label ) {
+			foreach ( apply_filters('ims_image_iptc_meta', $iptcTags, $file) as $key => $label ) {
 				if ( isset( $iptc[$key][0] ) )
 					$meta[$label] = $iptc[$key][0];
 			}

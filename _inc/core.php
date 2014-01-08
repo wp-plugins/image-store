@@ -34,7 +34,7 @@ class ImStore {
 	public $promo_types = array( );
 	public $rules_property = array( );
 	
-	public $version = '3.4.2';
+	public $version = '3.4.3';
 	public $customer_role = 'customer';
 	public $optionkey = 'ims_front_options';
 	
@@ -558,6 +558,12 @@ class ImStore {
 		"index.php?ims_gallery=" . $wp_rewrite->preg_index( 1 ) . "&feed=" . $wp_rewrite->preg_index( 2 );
 		$new_rules[$this->opts['gallery_slug'] . "/([^/]+)/feed/?$"] =
 		"index.php?ims_gallery=" . $wp_rewrite->preg_index( 1 ) . "&feed=rss";
+		
+		// image rss feeds
+		$new_rules[$this->opts['image_slug'] . "/([^/]+)/feed/(feed|rdf|rss|rss2|atom|imstore)/?$"] =
+		"index.php?ims_image=" . $wp_rewrite->preg_index( 1 ) . "&feed=" . $wp_rewrite->preg_index( 2 );
+		$new_rules[$this->opts['image_slug'] . "/([^/]+)/feed/?$"] =
+		"index.php?ims_image=" . $wp_rewrite->preg_index( 1 ) . "&feed=rss";
 		
 		// logout gallery
 		$new_rules[ $this->opts['gallery_slug'] . "/([^/]+)/logout/?$"] = "index.php?ims_gallery=" . $wp_rewrite->preg_index( 1 ) . '&imslogout=1';

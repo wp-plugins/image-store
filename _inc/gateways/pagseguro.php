@@ -195,6 +195,6 @@ class ImStoreCartPagSeguro {
 		if ( $cart['shippingcost'] )
 			$output .= 	'<input type="hidden" name="itemShippingCost1"  data-value-ims="' . esc_attr( $cart['shipping'] )  . '" />';
 		
-		return $output = apply_filters( 'ims_cart_paypal_hidden_fields', $output, $cart );
+		return $output = apply_filters( 'ims_cart_pagseguro_hidden_fields', $output, $cart );
 	}
 }
