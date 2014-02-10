@@ -1261,7 +1261,7 @@ class ImStoreFront extends ImStore {
 			return false;
 		
 		$atts = shortcode_atts( array(
-			'all' => false, 	'list' => false, 'cart' => false, 'count' => false,
+			'all' => false, 'list' => false, 'cart' => false, 'count' => false, 'tag' => false,
 			'album' => false, 'secure' => false, 'favorites' => false, 'securelist' => false
 		),  $atts, 'image_store' ) ;
 		

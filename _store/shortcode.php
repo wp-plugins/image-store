@@ -51,6 +51,7 @@
 				'slideshow' => false,
 				'size' => 'thumbnail',
 				'layout' => 'lightbox',
+				'simple_slideshow' => false,
 				'sort' => $this->opts['imgsortdirect'],
 				'sortby' => $this->opts['imgsortorder'],
 			), $atts,  'ims_gallery' ) );
@@ -72,12 +73,12 @@
 			$this->order = $sort;
 			$this->sortby = $ImStore->sort[$sortby];
 			$this->limit = ( !$number || strtolower($number) == 'all' ) ? false : $number;
-			$slideshow = ( isset( $layout ) && strtolower( $layout ) == 'slideshow' ) ? true : false;
+			$slideshow = ( isset( $layout ) && preg_match( '/slideshow/i', $layout ) ) ? true : false;
 			
-			$this->get_galleries( );
+			$this->get_gallery( );
 			
 			if ( $slideshow )
-				return $this->display_slideshow( );
+				return $this->display_slideshow( '', $layout, $caption );
 			return $this->display_galleries( $atts );
 		}
 		
@@ -87,7 +88,7 @@
 		 * @return void
 		 * @since 2.0.0
 		 */
-		function get_galleries( ) {
+		function get_gallery( ) {
 			
 			global $wpdb;
 			
@@ -160,16 +161,31 @@
 		 * Display slideshow
 		 *
 		 * @param string $output
+		 * @param string|bool $layout
 		 * @return string
 		 * @since 0.5.3 
 		 */
-		function display_slideshow( $output = '' ) {
+		function display_slideshow( $output = '', $layout = false, $caption = false ) {
 			
 			$this->active_store = false;
 			$this->opts['favorites'] = false;
 
-			include( apply_filters( 'ims_slideshow_path', IMSTORE_ABSPATH . '/_store/slideshow.php' ) );
+			$include_file = apply_filters( 'ims_slideshow_path', IMSTORE_ABSPATH . '/_store/' .
+				 ( $layout == 'simple_slideshow' ? 'simple_slideshow.php'  : 'slideshow.php' )
+			);
+			
+			if( file_exists( $include_file ) )
+				include( $include_file );
+				
 			return $output;
+		}
+		
+		/**
+		 * Depricated  use get_gallery
+		 */
+		function get_galleries(){
+			_deprecated_function( 'get_galleries', '4.4.3', 'get_gallery');
+			$this->get_gallery( );
 		}
 		
 	}	

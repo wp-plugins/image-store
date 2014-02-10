@@ -3,8 +3,8 @@ Contributors: Hax
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YM9GXCFBND89E
 Tags: sagepay,photo store,gallery,imstore,image-store,secure,watermark,slideshow,rate,wepay,shopping,cart,paypal,widget,prints,pagseguro,nextgen,alternative
 Requires at least: 3.0.0
-Tested up to: 3.8
-Stable tag: 3.4.3
+Tested up to: 3.9
+Stable tag: 3.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,11 @@ The plugin fully integrated with the WordPress database, so you will not find an
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+
+= 3.4.4 =
+* Added: Initial WP 3.9 support.
+* Added: Simple slideshow shortcode.
+* Fixed: Slider display issue on mobile.
 
 = 3.4.3 =
 * Fixed: some hooks.
