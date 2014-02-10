@@ -83,6 +83,8 @@
 						<?php checked( $layout , 'lightbox' )?>/><?php _e( 'Lightbox', 'ims'); ?></label>
                         <label><input type="radio" name="layout" value="slideshow" id="slideshow"
                          <?php checked( $layout, 'slideshow' )?> /><?php _e( 'Slideshow', 'ims'); ?></label>
+						 <label><input type="radio" name="layout" value="simple_slideshow" id="slideshow"
+                         <?php checked( $layout, 'simple_slideshow' )?> /><?php _e( 'Simple Slideshow', 'ims'); ?></label>
                         <label><input type="radio" name="layout"  value="list" id="list" <?php checked( $layout, 'list' )?> /><?php _e( 'List', 'ims'); ?></label>
                     </div>
                     

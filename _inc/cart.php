@@ -375,7 +375,7 @@ class ImStoreCart {
 		
 		if ( $this->cart['items'] && $this->data['mc_currency'] == $this->cart['currency'] &&
 		abs( $this->data['mc_gross'] - $ImStore->format_price( $total, false ) ) < 0.00001 )
-				$this->data['data_integrity'] = true;
+			$this->data['data_integrity'] = true;
 		
 		sleep( 1 ); 
 		
