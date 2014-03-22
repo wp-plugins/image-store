@@ -191,10 +191,10 @@ class ImStoreSales extends ImStoreAdmin {
 			
 			$s = $action == 'trash' ;
 		}
-		
-		if ( $this->count > 1 && !$s )
+
+		if ( $this->count >= 1 && !$s )
 			$a = 25;
-		elseif ( $this->count > 1 && $s)
+		elseif ( $this->count >= 1 && $s)
 			$a = 26;
 		elseif ( $s )
 			$a = 22;

@@ -34,7 +34,7 @@ class ImStore {
 	public $promo_types = array( );
 	public $rules_property = array( );
 	
-	public $version = '3.4.3';
+	public $version = '3.4.5';
 	public $customer_role = 'customer';
 	public $optionkey = 'ims_front_options';
 	
@@ -174,6 +174,24 @@ class ImStore {
 		
 		do_action( 'ims_set_variables', $this );
 	}
+	
+	
+	/**
+	 * include php file
+	 *
+	 * @return void
+	 * @since 3.4.5
+	 */
+	function include_file( $name, $dir = '', $once = false ){
+		
+		$include = apply_filters( "ims_include_{$name}", IMSTORE_ABSPATH . "/{$dir}/{$name}.php", $dir );
+		if ( ! file_exists( $include) )
+			return;
+		
+		if( $once ) include_once( $include );
+		else include( $include );
+	}
+	
 	
 	/**
 	 * Initial actions

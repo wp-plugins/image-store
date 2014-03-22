@@ -42,7 +42,7 @@ class ImStoreCartWePay {
 			return;
 		
 		$checkout_id = intval( trim( $_REQUEST['checkout_id'] ) );
-		include_once( IMSTORE_ABSPATH . '/_inc/gateways/wepaysdk.php' );
+		$this->include_file( 'wepaysdk', '_inc/gateways', true );
 		
 		$wepay = new WePay(
 		  $ImStore->opts['wepayaccesstoken'],
@@ -137,7 +137,7 @@ class ImStoreCartWePay {
 	function button_request( $env ){
 	
 		global $ImStore, $ImStoreCart;
-		include_once( IMSTORE_ABSPATH . '/_inc/gateways/wepaysdk.php' );
+		$this->include_file( 'wepaysdk', '_inc/gateways', true );
 
 		$data = array(
 			'type' => 'GOODS', 

@@ -520,7 +520,7 @@ class ImStoreFront extends ImStore {
 			),
 		));
 		
-		include_once( IMSTORE_ABSPATH . '/_inc/cart.php' );
+		$this->include_file( 'cart', '_inc', true );
 		
 		$ImStoreCart = new ImStoreCart( );
 		$this->cart = $ImStoreCart->setup_cart( );
@@ -1261,7 +1261,7 @@ class ImStoreFront extends ImStore {
 			return false;
 		
 		$atts = shortcode_atts( array(
-			'all' => false, 	'list' => false, 'cart' => false, 'count' => false,
+			'all' => false, 'list' => false, 'cart' => false, 'count' => false, 'tag' => false,
 			'album' => false, 'secure' => false, 'favorites' => false, 'securelist' => false
 		),  $atts, 'image_store' ) ;
 		

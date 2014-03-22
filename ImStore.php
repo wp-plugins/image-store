@@ -5,10 +5,10 @@
   Plugin URI: http://xparkmedia.com/plugins/image-store/
   Description: Your very own image store within wordpress "ImStore"
   Author: Hafid R. Trujillo Huizar
-  Version: 3.4.3
+  Version: 3.4.5
   Author URI:http://www.xparkmedia.com
   Requires at least: 3.0.0
-  Tested up to: 3.8
+  Tested up to: 3.9
   Text Domain: ims
 
   Copyright 2010-2013 by Hafid Trujillo http://www.xparkmedia.com

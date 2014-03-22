@@ -177,7 +177,7 @@ class ImStoreCustomers extends ImStoreAdmin {
 		
 		
 		extract( wp_parse_args( $data, $default ) );
-		include( IMSTORE_ABSPATH . '/admin/customers/customer-edit.php' );
+		$this->include_file( 'customer-edit', 'admin/customers' );
 	}
 	
 	/**

@@ -279,7 +279,7 @@ class ImStoreGallery extends ImStoreAdmin {
 	 * @since 3.0.0
 	 */
 	function ims_info_box( ) {
-		include( IMSTORE_ABSPATH . '/admin/galleries/gallery-info.php' );
+		$this->include_file( 'gallery-info', 'admin/galleries' );
 	}
 	
 	/**
@@ -289,7 +289,7 @@ class ImStoreGallery extends ImStoreAdmin {
 	 * @since 3.0.0
 	 */
 	function ims_images_box( ) {
-		include( IMSTORE_ABSPATH . '/admin/galleries/images.php' );
+		$this->include_file( 'images', 'admin/galleries');
 	}
 	
 	/**
@@ -323,7 +323,7 @@ class ImStoreGallery extends ImStoreAdmin {
 	 * @since 3.0.0
 	 */
 	function upload_images_tab( ) {
-		include( IMSTORE_ABSPATH . '/admin/galleries/upload-swf.php' );
+		$this->include_file( 'upload-swf', 'admin/galleries' );
 	}
 	
 	/* Import zip tab content
@@ -829,7 +829,7 @@ class ImStoreGallery extends ImStoreAdmin {
 		}
 
 		//bulk actions 
-		if ( isset( $_POST['doactions'] ) && !empty( $_POST['galleries'] ) ) {
+		if ( isset( $_POST['doactions'] ) && ! empty( $_POST['galleries'] ) ) {
 			if ( empty( $_POST['actions'] ) )
 				return;
 
