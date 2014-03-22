@@ -197,6 +197,7 @@
 		if( $crypt_array['Status'] != 'OK' ){
 			$ImStore->imspage = 'shopping-cart';
 			$ImStore->error = $this->get_error_message( $crypt_array['Status'] );
+			do_action( 'ims_sagepay_notice_error', $ImStore->error, $cartid );
 			return;
 		}
 		

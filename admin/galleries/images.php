@@ -78,7 +78,7 @@
                     <option value="trash"><?php _e('Move to Trash', 'ims') ?></option>
                 	<?php } ?>
             </select>
-            <input type="submit" value="<?php _e('Apply', 'ims') ?>" name="doactions" class="button action" />
+            <input type="submit" id="gallery-image-action" value="<?php _e('Apply', 'ims') ?>" name="doactions" class="button action" />
         </div><!--.actions-->
     </div><!--.tablenav-->
 	

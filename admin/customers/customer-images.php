@@ -54,7 +54,10 @@
                 <tbody>
                 	<?php
 					foreach( $images->posts as $image ) {
-						
+
+						if( get_post_status( $image->post_parent) != 'publish' )
+								continue;
+									
 						$enc = $this->url_encrypt( $image->ID );
 						$style = ( ' alternate' == $style ) ? '' : ' alternate';
 						$r = "<tr id='image-{$image->ID}' class='image{$style}'>";
@@ -70,8 +73,8 @@
 								
 								//backwards compatibilty allow old images to be downloaded by default
 								$status = 'completed';	
-								$downlink = '';
 								
+								$downlink = '';
 								if( isset( $item['orderid'] ) ){
 									$data = get_post_meta( $item['orderid'], '_response_data', true );
 									if( isset( $data['payment_status'] ) )

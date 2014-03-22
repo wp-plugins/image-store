@@ -96,7 +96,7 @@
                     </strong></td>
             </tr>
             <?php endif ?>
-            
+            <?php do_action( 'ims_before_sales_details', $this->sale, $this->cart, $this->data );?>
             <tr>
                     <td class="column-thumb" scope="row">&nbsp;</td>
                     <td><?php _e('Method', 'ims')?></td>
@@ -198,7 +198,7 @@
                     <td scope="row" colspan="5"><?php if( isset( $this->data['instructions'] ) ) echo wp_strip_all_tags( $this->data['instructions'] ) ?></td>
                 </tr>
                 <tr><td scope="row" colspan="7">&nbsp;</td></tr>
-    
+    			<?php do_action( 'ims_after_sales_details', $this->sale, $this->cart, $this->data );?>
             </tbody>
         </table>
          

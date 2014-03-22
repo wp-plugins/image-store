@@ -520,7 +520,7 @@ class ImStoreFront extends ImStore {
 			),
 		));
 		
-		include_once( IMSTORE_ABSPATH . '/_inc/cart.php' );
+		$this->include_file( 'cart', '_inc', true );
 		
 		$ImStoreCart = new ImStoreCart( );
 		$this->cart = $ImStoreCart->setup_cart( );

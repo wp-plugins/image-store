@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: sagepay,photo store,gallery,imstore,image-store,secure,watermark,slideshow,rate,wepay,shopping,cart,paypal,widget,prints,pagseguro,nextgen,alternative
 Requires at least: 3.0.0
 Tested up to: 3.9
-Stable tag: 3.4.4
+Stable tag: 3.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,8 +16,8 @@ This plugin was created because there was a need in the WordPress community to h
 The plugin fully integrated with the WordPress database, so you will not find any extra tables on your database (Cool!.. at least for me, I hate extra tables). NextGEN Gallery alternative.
 
 * Example http://xparkmedia.com/image-store/store/
-* Support http://xparkmedia.com/support/plugin/image-store
-* Languages http://xparkmedia.com/plugins/image-store/#languages
+* Support http://xparkmedia.com/support/plugin/image-store/
+* Languages http://xparkmedia.com/plugins/image-store/languages/
 * Shortcode guide http://xparkmedia.com/image-store/usage/
 
 = Features =
@@ -83,6 +83,12 @@ The plugin fully integrated with the WordPress database, so you will not find an
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+
+= 3.4.5 =
+* Added: Additional WP 3.9 support.
+* Added: Additional hooks.
+* Fixed: Lightbox second image display issue.
+* Fixed: Customer images page issue.
 
 = 3.4.4 =
 * Added: Initial WP 3.9 support.

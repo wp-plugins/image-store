@@ -214,7 +214,7 @@ class ImStoreAdmin extends ImStore {
 	 */
 	function show_menu( ) {
 		global $wpdb;
-		include( IMSTORE_ABSPATH . '/admin/template.php' );
+		$this->include_file( 'template', 'admin' );
 	}
 	
 	/**

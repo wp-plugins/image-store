@@ -43,13 +43,27 @@ class ImStoreCart {
 			$this->orderid =  $ImStore->url_decrypt( $_COOKIE[ 'ims_orderid_' . COOKIEHASH ] );
 		else if ( $orderid )	
 			$this->orderid = $orderid;
-		else  return $this->cart;
-		
+			
 		$this->status = get_post_status( $this->orderid );
+		
+		if ( ! $this->orderid || $this->status != 'draft' ) {
+			$order = array(
+				'ping_status' => 'close',
+				'post_status' => 'draft',
+				'post_type' => 'ims_order',
+				'comment_status' => 'close',
+				'post_title' => 'Ims Order - ' . date( 'Y-m-d H:i', current_time( 'timestamp' ) ),
+			);
+			
+			if ( $this->orderid = wp_insert_post( apply_filters( 'ims_new_order', $order, $this->cart ) ) ){
+				add_post_meta( $this->orderid, '_ims_post_expire', date( 'Y-m-d H:i', current_time( 'timestamp' ) + 86400 ) );
+				setcookie( 'ims_orderid_' . COOKIEHASH, $ImStore->url_encrypt($this->orderid), time(  ) + 31536000, COOKIEPATH, COOKIE_DOMAIN );
+			}
+		}
 		
 		if ( $cart = get_post_meta( $this->orderid, '_ims_order_data', true ) )
 			$this->cart = wp_parse_args( $cart, $this->cart );
-		
+	
 		if( $data = get_post_meta( $this->orderid, '_response_data', true ) )
 			$this->data = wp_parse_args( $data, $this->data );
 		
@@ -336,24 +350,7 @@ class ImStoreCart {
 		do_action( 'ims_before_save_cart', $this->cart );
 		do_action( "ims_before_save_cart_{$action}", $this->cart );
 		
-		if ( ! $this->orderid || $this->status != 'draft' ) {
-			
-			$order = array(
-				'ping_status' => 'close',
-				'post_status' => 'draft',
-				'post_type' => 'ims_order',
-				'comment_status' => 'close',
-				'post_title' => 'Ims Order - ' . date( 'Y-m-d H:i', current_time( 'timestamp' ) ),
-			);
-			
-			if ( $this->orderid = wp_insert_post( apply_filters( 'ims_new_order', $order, $this->cart ) ) ){
-				add_post_meta( $this->orderid, '_ims_order_data', $this->cart );
-				add_post_meta( $this->orderid, '_ims_post_expire', date( 'Y-m-d H:i', current_time( 'timestamp' ) + 86400 ) );
-				setcookie( 'ims_orderid_' . COOKIEHASH, $ImStore->url_encrypt($this->orderid), time(  ) + 31536000, COOKIEPATH, COOKIE_DOMAIN );
-			}
-			
-		} else update_post_meta( $this->orderid, '_ims_order_data', $this->cart );
-		
+		update_post_meta( $this->orderid, '_ims_order_data', $this->cart );
 		
 		do_action( 'ims_after_add_to_cart', $this->cart );
 		do_action( "ims_after_add_to_cart_{$action}", $this->cart );
