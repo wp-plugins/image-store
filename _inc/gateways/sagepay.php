@@ -193,6 +193,8 @@
 		if( empty( $crypt_array['VendorTxCode'] ) || empty( $crypt_array['Status']  ) )
 			return; 
 		
+		$cartid = trim( $crypt_array['VendorTxCode'] );
+		
 		//  problem with paymet display error message in cart page
 		if( $crypt_array['Status'] != 'OK' ){
 			$ImStore->imspage = 'shopping-cart';
@@ -200,8 +202,6 @@
 			do_action( 'ims_sagepay_notice_error', $ImStore->error, $cartid );
 			return;
 		}
-		
-		$cartid = trim( $crypt_array['VendorTxCode'] );
 
 		global $ImStoreCart;
 		$ImStoreCart->setup_cart( $cartid );
