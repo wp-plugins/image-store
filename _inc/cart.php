@@ -46,7 +46,7 @@ class ImStoreCart {
 			
 		$this->status = get_post_status( $this->orderid );
 		
-		if ( ! $this->orderid || $this->status != 'draft' ) {
+		if ( ! $this->orderid ) {
 			$order = array(
 				'ping_status' => 'close',
 				'post_status' => 'draft',
@@ -582,7 +582,7 @@ class ImStoreCart {
 	 * @since 3.3.0
 	*/
 	function merge_recursive( $into, $merge ){
-		foreach( $merge as $key => $value ){
+		foreach( (array)$merge as $key => $value ){
 			if ( is_array ( $value ) && isset ( $into[$key] )  && is_array ( $into[$key] ) )
 				$into[$key] = $this->merge_recursive( $into[$key], $value );
 			else $into[$key] = $value;
