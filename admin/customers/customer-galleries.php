@@ -15,7 +15,7 @@
 		die( );
 	
 	$style = '';
-	global $user_ID; 
+	global $user_ID, $wpdb; 
 	
 	$search 	= isset( $_GET['s'] ) ? $_GET['s'] : NULL;
 	$page		= empty( $_GET['p'] ) ? 1 : ( int ) $_GET['p'];
@@ -108,9 +108,9 @@
 									mysql2date( $this->dformat, $expires, true ) : '' ) ."</td>";
 									break;
 								case 'images':
-									$r .= "<td class='column-{$columnid}{$hide}'>". 
+									$r .= "<td class='column-{$columnid}{$hide}'>".
 									$wpdb->get_var( "SELECT COUNT( * ) FROM $wpdb->posts 
-									WHERE post_parent = $gallery->ID AND post_status = 'publish' AND post_type = 'ims_image' " )
+									WHERE post_parent = $gallery->ID AND post_status = 'publish' AND post_type = 'ims_image' " ) 
 									. "</td>";
 									break;
 							}

@@ -22,15 +22,22 @@
 	$page = empty( $_GET['p'] ) ? 1 : ( int ) $_GET['p'];
 	
 	$hidden 	= get_hidden_columns( 'ims_gallery_page_ims-images' );
-	$nonce 		= "_wpnonce=" . wp_create_nonce( "ims_download_img" );
+	$nonce 	= "_wpnonce=" . wp_create_nonce( "ims_download_img" );
 
 	if( $user_images = get_user_meta( $user_ID, "_ims_user_{$user_ID}_images", true ) ){
 		foreach( $user_images as $imageid => $sizes )
 			$imageids[] = $imageid;
-		$args = array( 'post__in' => $imageids, 'post_type' => 'ims_image' );
+		$args = array( 
+			'orderby' => 'post__in', 
+			'post_type' => 'ims_image', 
+			'posts_per_page' => $this->per_page,
+			'post__in' => array_reverse($imageids), 
+		);
 	}
 
 	$images = new WP_Query( apply_filters( 'ims_pre_get_customer_images', $args ) );
+
+	$start = ( $page - 1 ) * $this->per_page;
 	$page_links = paginate_links( array(
 		'base' => $this->pageurl . '%_%',
 		'format' => '&p=%#%',
@@ -39,7 +46,6 @@
 		'total' => $images->max_num_pages,
 		'current' => $page,
 	) );
-	
 	?>
     	
     <div id="poststuff" class="metabox-holder">
@@ -54,10 +60,10 @@
                 <tbody>
                 	<?php
 					foreach( $images->posts as $image ) {
-
+						
 						if( get_post_status( $image->post_parent) != 'publish' )
 								continue;
-									
+							
 						$enc = $this->url_encrypt( $image->ID );
 						$style = ( ' alternate' == $style ) ? '' : ' alternate';
 						$r = "<tr id='image-{$image->ID}' class='image{$style}'>";

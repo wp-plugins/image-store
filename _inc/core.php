@@ -34,7 +34,7 @@ class ImStore {
 	public $promo_types = array( );
 	public $rules_property = array( );
 	
-	public $version = '3.4.5';
+	public $version = '3.4.7';
 	public $customer_role = 'customer';
 	public $optionkey = 'ims_front_options';
 	
@@ -348,7 +348,9 @@ class ImStore {
 
 		register_post_type( 'ims_image', $image );
 		register_post_type( 'ims_gallery', $posttype );
-		register_post_type( 'ims_promo', array( 'publicly_queryable' => false, 'show_ui' => false ) );
+		
+		register_post_type( 'ims_order', array( 'publicly_queryable' => false, 'show_ui' => false, 'public' => false ) );
+		register_post_type( 'ims_promo', array( 'publicly_queryable' => false, 'show_ui' => false, 'public' => false ) );
 		
 		register_post_status( 'expire', array(
 			'public' => false,

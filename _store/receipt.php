@@ -15,10 +15,7 @@
 	if ( !defined( 'ABSPATH' ) )
 		die( );
 	
-	//normalize nonce field
 	$user = wp_get_current_user( );
-	wp_set_current_user( 0 );
-	 
 	global $ImStoreCart;
 	
 	//redirect empty data
@@ -40,7 +37,6 @@
 	$output .= $ImStoreCart->download_links;
 	$output .= '<div class="cl"></div>';
 	
-	wp_set_current_user( $user->ID );
 	
 	// Display registration form 
 	if( ! is_user_logged_in( ) && $this->opts['loginform'] ){
