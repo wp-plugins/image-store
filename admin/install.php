@@ -78,6 +78,7 @@ class ImStoreInstaller extends ImStore {
 		
 		$ims_ft_opts['deletefiles'] = '1';
 		$ims_ft_opts['decimal'] = true;
+		$ims_ft_opts['downloadlinks'] = false;
 
 		$ims_ft_opts['emailreceipt'] = '1';
 		$ims_ft_opts['favorites'] = true;
@@ -419,6 +420,10 @@ class ImStoreInstaller extends ImStore {
 			}
 			
 			$ims_ft_opts['wepayaccountid'] = '';
+		}
+		
+		if ( $this->ver <= "3.4.6" ){
+			$ims_ft_opts['downloadlinks'] = false;
 			update_option( $this->optionkey, $ims_ft_opts );
 		}
 			

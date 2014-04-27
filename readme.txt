@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: sagepay,photo store,gallery,imstore,image-store,secure,watermark,slideshow,rate,wepay,shopping,cart,paypal,widget,prints,pagseguro,nextgen,alternative
 Requires at least: 3.0.0
 Tested up to: 3.9
-Stable tag: 3.4.6
+Stable tag: 3.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,14 @@ The plugin fully integrated with the WordPress database, so you will not find an
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+
+= 3.4.7 =
+* Code cleanup.
+* Added: Additional js hooks.
+* Added: Additional php hooks.
+* Added: Setting to display download links with email checkout.
+* Fixed: PHP notices.
+* Fixed: Customer gallery and image pages.
 
 = 3.4.6 =
 * Code clean up.

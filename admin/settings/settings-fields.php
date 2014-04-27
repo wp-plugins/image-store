@@ -513,6 +513,12 @@
 			'label' => __( 'Checkout login form', 'ims' ),
 			'desc' => __( 'Add the login / register form at  the end of the receipt page.', 'ims' ),
 		 ),
+		  'downloadlinks' => array( 
+			'val' => 1,
+			'type' => 'checkbox',
+			'label' => __( 'Email only downloads', 'ims' ),
+			'desc' => __( 'Display download link on email only checkout receipt even if payment has not been verified.', 'ims' ),
+		 ),
 		'taxtype' => array( 
 			'type' => 'select',
 			'label' => __( 'Tax calculation type', 'ims' ),
