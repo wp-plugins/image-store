@@ -226,6 +226,7 @@
 				}
 		
 				
+				do_action( 'ims_image_downloaded', $image );
 				@imagedestroy( $image );
 
 				if ( $this->clean )

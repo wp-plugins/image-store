@@ -3,8 +3,8 @@ Contributors: Hax
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YM9GXCFBND89E
 Tags: sagepay,photo store,gallery,imstore,image-store,secure,watermark,slideshow,rate,wepay,shopping,cart,paypal,widget,prints,pagseguro,nextgen,alternative
 Requires at least: 3.0.0
-Tested up to: 3.9
-Stable tag: 3.4.5
+Tested up to: 4.0
+Stable tag: 3.4.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,21 @@ The plugin fully integrated with the WordPress database, so you will not find an
 
 == Changelog ==
 
+= 3.4.8 =
+* Fixed: Image selection bug.
+
+= 3.4.7 =
+* Code cleanup.
+* Added: Additional js hooks.
+* Added: Additional php hooks.
+* Added: Setting to display download links with email checkout.
+* Fixed: PHP notices.
+* Fixed: Customer gallery and image pages.
+
+= 3.4.6 =
+* Code clean up.
+* Fixed: empty receipt page.
+
 = 3.4.5 =
 * Added: Additional WP 3.9 support.
 * Added: Additional hooks.
@@ -160,94 +175,6 @@ The plugin fully integrated with the WordPress database, so you will not find an
 * Fixed: Tools Widget.
 * Fixed: Multisite sync update issue.
 * Fixed: User auto populate email checkout.
-
-= 3.2.9 =
-* Security Update
-* Fixed: MySQL query error.
-
-= 3.2.8 =
-* Fixed: Folder permission issues on some servers.
-* Fixed: MySQL query error.
-* Fixed: User permission display.
-* Fixed: Filter issue with sales reports.
-* Fixed: Missing button on shopping cart shortcode.
-* Fixed: Shortcode taxonomy issue.
-* Added: Watermark tile option.
-* Added: Additional support for WP 3.6.
-
-= 3.2.7 =
-* Fixed: PHP error on php 5.3.
-* Fixed: jquery issue with some themes.
-* Fixed: email notification issues.
-* Fixed: TinyMCE issue on IE.
-
-= 3.2.6 =
-* Fixed: cart error
-* Fixed: admin ajax columns.
-* Fixed: saving some settings.
-* Fixed: expired galleries not showing on admin area.
-* Improved: custom mysql queries.
-* Improved: Fixed gallery menu.
-* Added: Initial support for WP 3.6
-
-= 3.2.5 =
-* Fixed: Email checkout issues.
-* Fixed: Price list display issues.
-* Fixed: Bug on password-protected images.
-* Fixed: GoogleCheckout image download.
-* Added: ligthbox keyboard navigation.
-* Added: Pagseguro payment gateway (beta).
-
-= 3.2.4 =
-* Fixed: Email checkout issues.
-* Fixed: Price list display issues.
-* Fixed: Digital downloads and shipping issue.
-* Fixed: Navigation display issue.
-* Fixed: PHP notices.
-
-= 3.2.3 =
-* Fixed: Checkout issues.
-* Fixed: Lightbox showing wrong image.
-* Fixed: Deactivate voting issue.
-* Fixed: Shipping issue.
-* Fixed: Add price list issue.
-* Fixed: Add image ajax issue.
-* Fixed: PHP notices.
-
-= 3.2.2 =
-* Fixed: foder path issue
-* Fixed: Permalink issue
-* Fixed: Visits counter
-* Fixed: A few php notices.
-* Fixed: Sort issue.
-* Added: Floating tools menu.
-
-= 3.2.1 =
-* Fixed: A few php notices / warnings.
-* Fixed: Issues with JetPack plugin.
-* Fixed: Missing finish information on sale details.
-* Fixed: Watermark breaks image display on some servers
-* Fixed: Metabox location breaks image upload.
-* Change: Lightbox, colorbox is no longer supported.
-* Change: Removed message subpath.
-* Change: Improved customer experience.
-* Improved: More mobile friendly.
-* Added: Column display option.
-* Added: Multi-language plugins support.
-* Added: Groups (albums,tags) settings.
-* Added: Voting feature.
-
-= 3.2.0 =
-* Fixed: Image URL encoding issue
-* Fixed: Slash issue on setting.
-* Fixed: Translation issue on checkout
-* Fixed: Email checkout data issues.
-* Fixed: Email checkout data issues.
-* Fixed: Add to favorites issue.
-* Fixed: Image download issue.
-* Fixed: Sales missing information.
-* Change: scan folder process to keep original image id.
-* Added: multisite upgrade feature.
 
 = Full change log =
 * http://xparkmedia.com/image-store/changelog/

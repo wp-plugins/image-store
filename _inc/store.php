@@ -406,10 +406,8 @@ class ImStoreFront extends ImStore {
 			$this->add_to_cart( );
 		
 		//upate cart
-		if ( isset( $_POST['ims-enotification'] ) ){
+		if ( isset( $_POST['ims-enotification'] ) )
 			$this->imspage = 'checkout';
-			$this->show_comments = false;
-		}
 		
 		//upate cart
 		if ( isset( $_POST['ims-apply-changes'] ) )
@@ -1360,6 +1358,7 @@ class ImStoreFront extends ImStore {
 				break;
 			
 			case 'checkout':
+				$this->show_comments  = false;
 				include( apply_filters( 'ims_checkout_path', IMSTORE_ABSPATH . '/_store/checkout.php' ) );
 				break;
 				
