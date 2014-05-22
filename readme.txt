@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: sagepay,photo store,gallery,imstore,image-store,secure,watermark,slideshow,rate,wepay,shopping,cart,paypal,widget,prints,pagseguro,nextgen,alternative
 Requires at least: 3.0.0
 Tested up to: 4.0
-Stable tag: 3.4.8
+Stable tag: 3.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
