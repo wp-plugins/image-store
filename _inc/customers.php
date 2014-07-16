@@ -155,7 +155,7 @@ class ImStoreCustomers extends ImStoreAdmin {
 		if( empty( $action ) )
 			return;
 		
-		$data = array( );
+		$data = $user = array( );
 		
 		$user_box_title = array(
 			'new' => __( 'New Customer', 'ims' ),
@@ -175,9 +175,10 @@ class ImStoreCustomers extends ImStoreAdmin {
 			$data['user_email'] = get_the_author_meta(  'user_email', $userid );
 		} else if( !empty( $_POST ) ) $data = $_POST;
 		
-		
-		extract( wp_parse_args( $data, $default ) );
-		$this->include_file( 'customer-edit', 'admin/customers' );
+		$values = wp_parse_args( $data, $default );
+		$this->include_file( 'customer-edit', 'admin/customers', false, 
+			array_merge( $values, array( 'user_box_title' => $user_box_title, 'user' => $user, 'userid' => $userid, 'action' => $action  ))
+		);
 	}
 	
 	/**

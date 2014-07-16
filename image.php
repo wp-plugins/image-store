@@ -96,8 +96,9 @@
 			$this->original_file 	= $this->content_dir .  '/' . $this->metadata['file'];
 			$this->gallery_path 	= str_ireplace( '/_resized', '', dirname( $this->original_file ));
 				
-			$this->set_path_data( $url_data );	
-			$this->display_image( );	
+			$this->set_path_data( $url_data );
+			if( is_readable( $this->image_dir ))
+				$this->display_image( );	
 		}
 		
 		
@@ -175,7 +176,8 @@
 			$this->opts = get_option( 'ims_front_options' );
 			
 			//add watermark		
-			if ( $this->opts['watermark'] ) 
+			if ( $this->opts['watermark'] 
+			&& is_resource( $this->image ) ) 
 				$this->add_water_mark( );
 			
 			//apply color filter

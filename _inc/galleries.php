@@ -48,8 +48,7 @@ class ImStoreGallery extends ImStoreAdmin {
 		//image actions
 		add_filter( 'upload_dir', array( &$this, 'change_upload_path' ), 20 );
 		add_filter( 'ims_async_upload', array( &$this, 'display_image_columns' ), 0, 3 );
-		add_filter( 'ims_image_row_actions_metadata', array( &$this, 'iptc_data' ), 100, 3 );
-
+		//add_filter( 'ims_image_row_actions_metadata', array( &$this, 'iptc_data' ), 100, 3 );
 
 		//speed up wordpress load
 		if ( defined( 'DOING_AJAX' ) || defined( 'DOING_AUTOSAVE' ) || SHORTINIT )
@@ -259,7 +258,7 @@ class ImStoreGallery extends ImStoreAdmin {
 			foreach ( $customers as $customer ) {
 				$checked = ( $this->in_array( $customer->ID, $meta ) ) ? ' checked="checked"' : '';
 				echo '<li><label><input type="checkbox" name="_ims_customer[]" value="' . 
-				esc_attr( $customer->ID ) . '"' . $checked . ' /> ' . $customer->user_login . '</label></li>';
+				esc_attr( $customer->ID ) . '"' . $checked . ' />' . $customer->user_login . '</label></li>';
 			}
 		} else {
 			foreach ( $customers as $customer ) {
@@ -502,7 +501,7 @@ class ImStoreGallery extends ImStoreAdmin {
 				case 'imthumb':
 					$ir = '<td class="column-' . $column_id . $hide . '">
 						<a href="' . esc_attr( $this->content_url . $this->galpath . "/" . basename( $data['file'] ) ) . '?" title="' . 
-						esc_attr( $attch['post_title'] ) . '" class="thickbox" >
+						esc_attr( $attch['post_title'] ) . '" class="thickbox" rel="gallery" >
 						<img src="' . $this->content_url . $this->galpath . "/_resized/" . $data['sizes']['mini']['file'] . '" /></a>';
 					$r .= apply_filters( 'ims_image_row_image', $ir, $id, $data, $attch );
 					$r .= '</td>';
@@ -516,7 +515,7 @@ class ImStoreGallery extends ImStoreAdmin {
 						$r .= '<a href="#' . $id . '" class="imsdelete">' . __( 'Delete', 'ims' ) . '</a> | 
 						<a name="publish" href="#' . $id . '" class="imsrestore">' . __( 'Restore', 'ims' ) . '</a>';
 					} else {
-						$r .= '<a href="' . IMSTORE_ADMIN_URL . '/galleries/image-edit.php?height=520&width=782&editimage=' . 
+						$r .= '<a href="' . IMSTORE_ADMIN_URL . '/galleries/image-edit.php?height=80%&width=90%&editimage=' . 
 								$id . $this->imgnonce . '" class="thickbox">' . __( 'Edit', 'ims' ) . '</a> |  
 								<a href="#' . $id . '" class="imsupdate">' . __( 'Update', 'ims' ) . '</a> | 
 								<a name="trash" href="#' . $id . '" class="imstrash">' . __( 'Trash', 'ims' ) . '</a>';

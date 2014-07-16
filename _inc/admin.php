@@ -49,6 +49,8 @@ class ImStoreAdmin extends ImStore {
 		$this->pagenow = trim( $pagenow );
 		
 		add_action( 'init', array( &$this, 'min_init' ), 0, 2 );
+		add_action( 'init', array( &$this, 'save_image_ipc_data' ), 6 );
+		add_filter( 'admin_body_class', array( &$this, 'admin_body_class' ) );
 		add_filter( 'current_screen', array( &$this, 'set_screen_id' ), 50 );
 		//add_filter('posts_request', array(&$this, 'posts_request'));
 		
@@ -105,8 +107,6 @@ class ImStoreAdmin extends ImStore {
 		if ( defined( 'DOING_AJAX' ) || defined( 'DOING_AUTOSAVE' ) || SHORTINIT )
 			return;
 			
-		add_filter( 'admin_body_class', array( &$this, 'admin_body_class' ) );
-
 		//register hooks
 		register_activation_hook( IMSTORE_FILE_NAME, array( &$this, 'activate' ) );
 		register_deactivation_hook( IMSTORE_FILE_NAME, array( &$this, 'deactivate' ) );
@@ -196,6 +196,8 @@ class ImStoreAdmin extends ImStore {
 	 * @since 3.2.1
 	 */
 	function admin_body_class( $classes ){
+		$classes .= " wp-". sanitize_title( $this->wp_version  );
+		
 		if( empty( $_GET[ 'taxonomy' ] ) )
 			return $classes;
 			
@@ -292,9 +294,18 @@ class ImStoreAdmin extends ImStore {
 		//display network sucessfull upgrade message
 		if( isset( $_REQUEST['ims-network-updated'] ) )
 			echo '<div class="updated fade"><p>'.__( "Image Store has been updated across the network." ).'</p></div>';
-
+		
+		//display single sucessfull upgrade message
+		if( isset( $_REQUEST['ims-updated'] ) )
+			echo '<div class="updated fade"><p>'.__( "Image Store has been updated." ).'</p></div>';
+		
+		global $blog_id;
+		
 		//display upgrade message
-		$message = sprintf( __( 'Deactive and activate <a href="%s">Image Store plugin</a> to apply updates','ims' ), admin_url( 'plugins.php' ) ); 
+		$message = sprintf( 
+			__( 'Click to run <a href="%s">Image Store\'s</a> updates','ims' ), 
+			IMSTORE_ADMIN_URL . '/update.php?single=' . (is_multisite() ? $blog_id : 1)
+		); 
 		
 		//multisite installed message
 		if( current_user_can( 'manage_network' ) && is_plugin_active_for_network( IMSTORE_FILE_NAME ))
@@ -566,13 +577,13 @@ class ImStoreAdmin extends ImStore {
 	function add_columns_gallery_val( $column_name, $postid ){
 		switch ( $column_name ) {
 			case 'galleryid':
-				echo get_post_meta( $postid, '_ims_gallery_id', true);
+				echo esc_html(get_post_meta( $postid, '_ims_gallery_id', true));
 				break;
 			case 'visits':
-				echo get_post_meta( $postid, '_ims_visits', true );
+				echo esc_html( get_post_meta( $postid, '_ims_visits', true ));
 				break;
 			case 'tracking':
-				echo get_post_meta( $postid, '_ims_tracking', true );
+				echo esc_html( get_post_meta( $postid, '_ims_tracking', true ) );
 				break;
 			case 'images':
 				global $wpdb;
@@ -597,6 +608,35 @@ class ImStoreAdmin extends ImStore {
 	 */
 	function insert_post_data( $data ) {
 		_deprecated_function( __FUNCTION__, '3.4' );
+	}
+	
+	/**
+	 * Save iptc metadata
+	 *
+	 * @since 3.2.1
+	 * return void
+	 */
+	function save_image_ipc_data( ){
+		if ( isset( $_POST['save-metadata'] ) && isset( $_POST['imageid'] ) ) {
+			
+			$id = (int) $_POST['imageid'];
+			
+			unset( $_POST['imageid'] );
+			unset( $_POST['save-metadata'] );
+			
+			$nonce = isset( $_POST['imgnonce']  ) ? $_POST['imgnonce']  : false;
+			$meta = (array) get_post_meta( $id, '_wp_attachment_metadata', true );
+		
+			foreach ( $_POST as $key => $val )
+				$meta['image_meta'][$key] = $val;
+				
+			update_post_meta( $id, '_wp_attachment_metadata', $meta );
+			
+			wp_redirect( 
+				IMSTORE_ADMIN_URL . '/galleries/image-edit.php?height=520&width=782&editimage=' . $id . '&_wpnonce=' .$nonce ."#attachment-meta" 
+			);
+			die();
+		}
 	}
 	
 	/**
@@ -1088,13 +1128,15 @@ class ImStoreAdmin extends ImStore {
 		if ( false == $customers ) {
 			global $wpdb;
 
-			$customers = $wpdb->get_results( "SELECT  ID, user_login FROM $wpdb->users AS u 
-			LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id
-			LEFT JOIN $wpdb->usermeta ur ON u.ID = ur.user_id 
-			WHERE um.meta_key = 'ims_status' AND um.meta_value = 'active' 
-			AND ( ur.meta_key = '{$wpdb->prefix}capabilities' AND ur.meta_value 
-			LIKE '%\"". esc_sql( $this->customer_role) ."\"%' ) 
-			GROUP BY u.id" );
+			$customers = $wpdb->get_results(
+				"SELECT  ID, user_login FROM $wpdb->users AS u 
+				LEFT JOIN $wpdb->usermeta um ON u.ID = um.user_id
+				LEFT JOIN $wpdb->usermeta ur ON u.ID = ur.user_id 
+				WHERE um.meta_key = 'ims_status' AND um.meta_value = 'active' 
+				AND ( ur.meta_key = '{$wpdb->prefix}capabilities' AND ur.meta_value 
+				LIKE '%\"". esc_sql( $this->customer_role) ."\"%' ) 
+				GROUP BY u.id ORDER BY user_login+0 ASC" 
+			);
 			
 			wp_cache_set( 'ims_customers', $customers, 'ims' );
 		}

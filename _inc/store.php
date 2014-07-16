@@ -833,10 +833,10 @@ class ImStoreFront extends ImStore {
 		
 		$localize = array( 
 			'is_logged_in' => is_user_logged_in( ),
-			'imstoreurl' => IMSTORE_ADMIN_URL,
+			'imstoreurl' => esc_url( IMSTORE_ADMIN_URL ),
 			'wplightbox' => $this->opts['wplightbox'],
 			'gallery_user' =>  isset( $_COOKIE['wp-postpass_' . COOKIEHASH] ),
-			'singin' =>__( 'Please, sign into your account to vote.' , 'ims' ),
+			'singin' => esc_html__( 'Please, sign into your account to vote.' , 'ims' ),
 			'ajaxnonce' => wp_create_nonce( "ims_ajax_favorites" ),
 		);
 		
@@ -891,18 +891,18 @@ class ImStoreFront extends ImStore {
 		
 		return array_merge( $vars, array(
 			'galleriffic' => true,
-			'numThumbs' => $this->opts['numThumbs'],
-			'autoStart' => $this->opts['autoStart'],
-			'playLinkText' => $this->opts['playLinkText'],
-			'pauseLinkTex' => $this->opts['pauseLinkTex'],
-			'prevLinkText' => $this->opts['prevLinkText'],
-			'nextLinkText' => $this->opts['nextLinkText'],
-			'closeLinkText' => $this->opts['closeLinkText'],
-			'maxPagesToShow' => $this->opts['maxPagesToShow'],
-			'slideshowSpeed' => $this->opts['slideshowSpeed'],
-			'transitionTime' => $this->opts['transitionTime'],
-			'nextPageLinkText' => $this->opts['nextPageLinkText'],
-			'prevPageLinkText' => $this->opts['prevPageLinkText'],
+			'numThumbs' => urlencode($this->opts['numThumbs']),
+			'autoStart' => urlencode($this->opts['autoStart']),
+			'playLinkText' => urlencode($this->opts['playLinkText']),
+			'pauseLinkTex' => urlencode($this->opts['pauseLinkTex']),
+			'prevLinkText' => urlencode($this->opts['prevLinkText']),
+			'nextLinkText' => urlencode($this->opts['nextLinkText']),
+			'closeLinkText' => urlencode($this->opts['closeLinkText']),
+			'maxPagesToShow' => urlencode($this->opts['maxPagesToShow']),
+			'slideshowSpeed' => urlencode($this->opts['slideshowSpeed']),
+			'transitionTime' => urlencode($this->opts['transitionTime']),
+			'nextPageLinkText' => urlencode($this->opts['nextPageLinkText']),
+			'prevPageLinkText' => urlencode($this->opts['prevPageLinkText']),
 		) );
 		
 	}
