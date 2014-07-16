@@ -30,15 +30,15 @@
 		'<noscript><div class="ims-message ims-error">' . __( 'Please enable Javascript, it is required to submit payment.' ) . '</div></noscript>
 		<div class="ims-table" role="grid">
 			<div class="ims-subrows ims-header">
-				<span class="ims-preview">' . __( 'Image', 'ims' ) . '</span>
+				<span class="ims-preview">' . esc_html__( 'Image', 'ims' ) . '</span>
 				<div class="ims-clear-row">
-					<span class="ims-quantity">' . __( 'Quantity', 'ims' ) . '</span>
-					<span class="ims-size">' . __( 'Size', 'ims' ) . '</span>
-					<span class="ims-color">' . __( 'Color', 'ims' ) . '</span>
-					<span class="ims-fisnish">' . __( 'Finish', 'ims' ) . '</span>
-					<span class="ims-price">' . __( 'Unit Price', 'ims' ) . '</span>
-					<span class="ims-subtotal">' . __( 'Subtotal', 'ims' ) . '</span>
-					<span class="ims-delete">' . __( 'Delete', 'ims' ) . '</span>
+					<span class="ims-quantity">' . esc_html__( 'Quantity', 'ims' ) . '</span>
+					<span class="ims-size">' . esc_html__( 'Size', 'ims' ) . '</span>
+					<span class="ims-color">' . esc_html__( 'Color', 'ims' ) . '</span>
+					<span class="ims-fisnish">' . esc_html__( 'Finish', 'ims' ) . '</span>
+					<span class="ims-price">' . esc_html__( 'Unit Price', 'ims' ) . '</span>
+					<span class="ims-subtotal">' .esc_html__( 'Subtotal', 'ims' ) . '</span>
+					<span class="ims-delete">' . esc_html__( 'Delete', 'ims' ) . '</span>
 				</div>
 			</div><!--.ims-header-->';
 			

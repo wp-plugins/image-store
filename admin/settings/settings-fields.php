@@ -119,7 +119,7 @@
 		 ),
 		'album_per_page' => array( 
 			'val' => '',
-			'type' => 'text',
+			'type' => 'number',
 			'label' => __( 'Galleries per album', 'ims' ),
 			'desc' => __( 'How many galleries to display per page on albums.', 'ims' ),
 		 ),
@@ -140,7 +140,7 @@
 		 ),
 		'tag_per_page' => array( 
 			'val' => '',
-			'type' => 'text',
+			'type' => 'number',
 			'label' => __( 'Galleries per tag', 'ims' ),
 			'desc' => __( 'How many galleries to display per page on tags.', 'ims' ),
 		 ),
@@ -204,13 +204,13 @@
 		 ),
 		'imgs_per_page' => array( 
 			'val' => '',
-			'type' => 'text',
+			'type' => 'number',
 			'label' => __( 'Images per page', 'ims' ),
 			'desc' => __( 'How many images to display per page on the front-end.', 'ims' ),
 		 ),
 		'galleryexpire' => array( 
 			'val' => '',
-			'type' => 'text',
+			'type' => 'number',
 			'label' => __( 'Galleries expire after', 'ims' ),
 			'desc' => __( 'In days, set to 0 to remove expiration default.', 'ims' ),
 		 ),
@@ -253,18 +253,18 @@
 			'opts' => array( 
 				'w' => array( 
 					'val' => '',
-					'type' => 'text',
+					'type' => 'number',
 					'label' => __( 'Max Width', 'ims' ),
 				 ),
 				'h' => array( 
 					'val' => '',
-					'type' => 'text',
+					'type' => 'number',
 					'label' => __( 'Max Height', 'ims' ),
 				 ),
 				'q' => array( 
 					'val' => '',
 					'label' => __( 'Quality', 'ims' ),
-					'type' => 'text',
+					'type' => 'number',
 					'desc' => '( 1-100 )',
 				 ),
 			 ),
@@ -296,7 +296,7 @@
 				 ),
 				'size' => array( 
 					'val' => '',
-					'type' => 'text',
+					'type' => 'number',
 					'label' => __( 'Font size', 'ims' )
 				 ),
 				'trans' => array( 
@@ -327,11 +327,11 @@
 			'col' => true,
 			'opts' => array( 
 				'numThumbs' => array( 
-					'type' => 'text',
+					'type' => 'number',
 					'label' => __( 'Number of thumbnails to show', 'ims' ),
 				 ),
 				'maxPagesToShow' => array( 
-					'type' => 'text',
+					'type' => 'number',
 					'label' => __( 'Maximun number of pages', 'ims' ),
 				 )
 			 ),
@@ -340,12 +340,12 @@
 			'col' => true,
 			'opts' => array( 
 				'transitionTime' => array( 
-					'type' => 'text',
+					'type' => 'number',
 					'label' => __( 'Transition time', 'ims' ),
 					'desc' => __( '1000 = 1 second', 'ims' ),
 				 ),
 				'slideshowSpeed' => array( 
-					'type' => 'text',
+					'type' => 'number',
 					'label' => __( 'Slideshow speed', 'ims' ),
 					'desc' => __( '1000 = 1 second', 'ims' ),
 				 )

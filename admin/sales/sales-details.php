@@ -89,7 +89,7 @@
             ?>
             <?php 
             if( empty( $this->data['data_integrity'] ) && $this->sale->post_status == 'pending' ): ?>
-            <tr class="not-verified">
+            <tr class="not-verified form-invalid error">
                     <td colspan="7"><strong>
                     <?php _e( "Review payment information for this order before shipping items,
                      the data provided by the gateway couldn't be verified. To remove message change the order status" , 'ims')?>
@@ -136,7 +136,12 @@
                 <tr>
                     <td class="column-thumb" scope="row">&nbsp;</td>
                     <td><?php _e('Shipping Adress', 'ims')?></td>
-                    <td><?php if( isset( $this->data['address_street'] ) ) echo $this->data['address_street'] ?></td>
+                    <td><?php 
+						if( isset( $this->data['address_street'] ) ) 
+							echo $this->data['address_street'];
+						else if ( isset( $this->data['ims_address']))
+							echo $this->data['ims_address']; 
+					?></td>
                     <td>&nbsp;</td>
                     <td><?php _e('Discount', 'ims')?></td>
                     <td> <?php if ( isset($this->cart['promo']['discount']) ) echo $this->format_price( $this->cart['promo']['discount'] ) ?></td>
@@ -147,9 +152,9 @@
                     <td><?php _e('Shipping Adress 2', 'ims')?></td>
                     <td colspan="2">
                     <?php
-                    foreach( array( 'address_city', 'address_state', 'address_zip', 'address_country', 'ims_address', 'ims_city', 'ims_state', 'ims_zip', 'ims_contry' ) as $key  ){
-                        if( !empty( $this->data[$key]  ) ) 
-                            echo  $this->data[$key].", ";
+                    foreach( array( 'ims_city', 'ims_state', 'ims_zip', 'ims_contry' ) as $key  ){
+                        if( ! empty( $this->data[$key]  ) ) 
+                            echo esc_html( $this->data[$key] ) . ", ";
                     }
                     ?>
                     </td>
@@ -164,9 +169,9 @@
                     <td colspan="2">
                     <?php
                     if ( isset( $this->data['payer_email'])  ) 
-                        echo $this->data['payer_email'];
+                        echo esc_html( $this->data['payer_email'] );
                     elseif( isset( $this->data['user_email']) ) 
-                        echo $this->data['user_email']
+                        echo esc_html( $this->data['user_email'] )
                     ?>
                     </td>
                     <td>&nbsp;</td>
@@ -195,7 +200,10 @@
                 <tr>
                     <td class="column-thumb" scope="row">&nbsp;</td>
                     <td><?php _e('Additional Instructions', 'ims')?></td>
-                    <td scope="row" colspan="5"><?php if( isset( $this->data['instructions'] ) ) echo wp_strip_all_tags( $this->data['instructions'] ) ?></td>
+                    <td scope="row" colspan="5">
+					<?php if( isset( $this->data['instructions'] ) )
+					 echo wp_strip_all_tags( $this->data['instructions'] ) 
+					 ?></td>
                 </tr>
                 <tr><td scope="row" colspan="7">&nbsp;</td></tr>
     			<?php do_action( 'ims_after_sales_details', $this->sale, $this->cart, $this->data );?>

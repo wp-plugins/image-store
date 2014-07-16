@@ -8,4 +8,5 @@
  * @filesource  wp-content/plugins/image-store/_css/tinymce.css
  * @since 3.0.0
  */
-img.imsGallery{display:block;border:1px dashed #888;width:100%;height:100px;background:#fafafa url("../_img/ims-gallery.png") no-repeat 50% 50%}#ims_editbtns{z-index:100;position:absolute}#ims_editbtns img{margin:2px;background:#eee;padding:1px 3px;border-radius:2px;border:solid 1px #ddd}
+ 
+@font-face{font-family:"dashicons";src:url("../_fonts/dashicons.eot");} @font-face{font-family:"dashicons";src:url("../_fonts/dashicons.woff") format("woff"),url("../_fonts/dashicons.ttf") format("truetype"),url("../_fonts/dashicons.svg#dashicons") format("svg");font-weight:normal;font-style:normal;}img.imsGallery{display:block;border:1px dashed #888;width:100%;height:100px;background:#fafafa url("../_img/ims-gallery.png") no-repeat 50% 50%}#ims-image-toolbar{position:absolute;margin:0;}#ims-image-toolbar i{margin-top:7px;margin-left:7px;padding:2px;width:30px;height:30px;box-shadow:0 1px 3px rgba(0,0,0,0.5);background-color:#ccc;background-color:rgba(241,241,241,0.9);cursor:pointer;color:#0083CE;font-size:30px;display:inline-block;}.dashicons{line-height:1;font-family:dashicons;font-style:normal;vertical-align:top;text-align:center;}.dashicons-no-alt:before{content:"\f335";}.dashicons-edit:before{content:"\f464";}

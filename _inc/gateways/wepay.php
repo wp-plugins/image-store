@@ -42,7 +42,7 @@ class ImStoreCartWePay {
 			return;
 		
 		$checkout_id = intval( trim( $_REQUEST['checkout_id'] ) );
-		$this->include_file( 'wepaysdk', '_inc/gateways', true );
+		$this->include_file( 'wepaysdk', '_inc/gateways', true, array( 'checkout_id' => $checkout_id ) );
 		
 		$wepay = new WePay(
 		  $ImStore->opts['wepayaccesstoken'],
