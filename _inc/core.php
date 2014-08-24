@@ -34,7 +34,7 @@ class ImStore {
 	public $promo_types = array( );
 	public $rules_property = array( );
 	
-	public $version = '3.4.9';
+	public $version = '3.4.10';
 	public $customer_role = 'customer';
 	public $optionkey = 'ims_front_options';
 	
@@ -552,12 +552,13 @@ class ImStore {
  		$wpdb->query( $wpdb->prepare ( 
 			"UPDATE $wpdb->posts p INNER JOIN $wpdb->postmeta AS m ON p.ID = m.post_id 
 			SET p.post_status =  'expire' WHERE m.meta_key =  '_ims_post_expire' 
-			AND post_type =  'ims_gallery' AND m.meta_value !=  '0000-00-00 00:00:00' AND m.meta_value <=  '%s' "
+			AND post_type =  'ims_gallery' AND m.meta_value !=  '0000-00-00 00:00:00' 
+			AND FROM_DAYS( m.meta_value ) <=  FROM_DAYS( '%s' ) "
 		, $time ) );
 
 		//delete orders not proccessed
 		$wpdb->query(  $wpdb->prepare ( "DELETE p, m FROM $wpdb->posts p  LEFT JOIN $wpdb->postmeta m ON p.ID = m.post_id
-			WHERE  m.meta_value <= '%s' AND p.post_type = 'ims_order' AND p.post_status = 'draft'"
+			WHERE  FROM_DAYS( m.meta_value ) <= FROM_DAYS( '%s' ) AND p.post_type = 'ims_order' AND p.post_status = 'draft'"
 		, $time ) );
 
 		do_action( 'ims_after_cron' );
