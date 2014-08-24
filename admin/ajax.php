@@ -195,7 +195,7 @@
 			die( );
 		
 		$q = empty($_GET['q']) ? false : $_GET['q'];
-		$qfilter = ( $q ) ? " AND p.post_title LIKE '%%%s%%' " : false;
+		$qfilter = ( $q ) ? " AND p.post_title LIKE '%%%s%%' " : '%s';
 		$limit = ( isset( $_GET['c'] ) && is_numeric( $_GET['c'] ) ) ? $_GET['c'] . "," . $_GET['c'] + 10 : "0, 30 ";
 		
 		global $wpdb, $ImStore;

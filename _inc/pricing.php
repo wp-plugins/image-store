@@ -171,10 +171,10 @@ class ImStorePricing extends ImStoreAdmin {
 	 * @since 1.1.0
 	 */
 	function dropdown_units( $name, $selected ) {
-		$output = '<select name="' . $name . '" class="unit">';
+		$output = '<select name="' . esc_attr($name) . '" class="unit">';
 		foreach ( $this->units as $unit => $label ) {
 			$select = ( $selected == $unit ) ? ' selected="selected"' : '';
-			$output .= '<option value="' . esc_attr( $unit ) . '" ' . $select . '>' . $label . '</option>';
+			$output .= '<option value="' . esc_attr( $unit ) . '" ' . $select . '>' . esc_html($label) . '</option>';
 		}
 		echo $output .= '</select>';
 	}
@@ -725,15 +725,15 @@ class ImStorePricing extends ImStoreAdmin {
                         <td class="move" title="<?php _e( 'Move to list', 'ims' ) ?>">&nbsp;</td>
                         <td colspan="3" class="name">
                             <span class="hidden"><?php echo $color['name'] ?></span>
-                            <input type="text" name="colors[<?php echo $key ?>][name]" value="<?php echo esc_attr( $color['name'] ) ?>"  class="name" />
+                            <input type="text" name="colors[<?php echo esc_attr($key) ?>][name]" value="<?php echo esc_attr( $color['name'] ) ?>"  class="name" />
                         </td>
                         <td colspan="2" class="price">
                             <span class="hidden"><?php echo $this->format_price( $color['price'] ) ?></span>
-                            <input type="text" name="colors[<?php echo $key ?>][price]" value="<?php echo esc_attr( $color['price'] ) ?>" class="price" />
+                            <input type="text" name="colors[<?php echo esc_attr($key) ?>][price]" value="<?php echo esc_attr( $color['price'] ) ?>" class="price" />
                         </td>
                         <td class="code">
                             <span class="hidden"><?php echo $color['code'] ?></span>
-                            <input type="text" name="colors[<?php echo $key ?>][code]" value="<?php echo esc_attr( $color['code'] ) ?>" class="code" />
+                            <input type="text" name="colors[<?php echo  esc_attr($key) ?>][code]" value="<?php echo esc_attr( $color['code'] ) ?>" class="code" />
                         </td>
                         <td class="x" title="<?php _e( 'Delete', 'ims' ) ?>">x</td>
                     </tr><!--.row-->
@@ -793,11 +793,11 @@ class ImStorePricing extends ImStoreAdmin {
                     <tr class="shipping row alternate">
                         <td colspan="3" class="name">
                             <span class="hidden"><?php echo $option['name'] ?></span>
-                            <input type="text" name="shipping[<?php echo $key ?>][name]" value="<?php echo esc_attr( $option['name'] ) ?>"  class="name" />
+                            <input type="text" name="shipping[<?php echo esc_attr($key) ?>][name]" value="<?php echo esc_attr( $option['name'] ) ?>"  class="name" />
                         </td>
                         <td colspan="3" class="price">
                             <span class="hidden"><?php echo $this->format_price( $option['price'] ) ?></span>
-                            <input type="text" name="shipping[<?php echo $key ?>][price]" value="<?php echo esc_attr( $option['price'] ) ?>" class="price" />
+                            <input type="text" name="shipping[<?php echo esc_attr($key) ?>][price]" value="<?php echo esc_attr( $option['price'] ) ?>" class="price" />
                         </td>
                         <td class="x" title="<?php _e( 'Delete', 'ims' ) ?>">x</td>
                     </tr><!--.row-->
@@ -854,7 +854,7 @@ class ImStorePricing extends ImStoreAdmin {
 				$meta['finishes'] = array( );
 			?>
 	
-			<form method="post" id="ims-list-<?php echo $list->ID ?>" action="<?php echo $this->pageurl . "#price-list" ?>" >
+			<form method="post" id="ims-list-<?php echo $list->ID ?>" action="<?php echo esc_attr($this->pageurl . "#price-list") ?>" >
                 <table class="ims-table price-list">
 					
 					<thead>
@@ -871,7 +871,7 @@ class ImStorePricing extends ImStoreAdmin {
 							<?php endif ?>
 							<th colspan="3" class="itemtop inactive name">
 								<label>
-									<span class="list-name"><?php echo $list->post_title ?></span>
+									<span class="list-name"><?php echo esc_html($list->post_title) ?></span>
 									<input type="text" name="list_name" value="<?php echo esc_attr( $list->post_title ) ?>" class="regular-text" />
 								</label>
 							</th>
@@ -932,19 +932,19 @@ class ImStorePricing extends ImStoreAdmin {
                                     if ( isset( $size['ID'] ) ) {
                                         echo $this->format_price( get_post_meta( $size['ID'], '_ims_price', true ) );
                                         ?>
-                                        <input type="hidden" name="sizes[<?php echo $key ?>][ID]" class="id" value="<?php echo esc_attr( $size['ID'] ) ?>"/>
-                                        <input type="hidden" name="sizes[<?php echo $key ?>][name]" class="name" value="<?php echo esc_attr( $size['name'] ) ?>"/> <?php
+                                        <input type="hidden" name="sizes[<?php echo esc_attr($key) ?>][ID]" class="id" value="<?php echo esc_attr( $size['ID'] ) ?>"/>
+                                        <input type="hidden" name="sizes[<?php echo esc_attr($key) ?>][name]" class="name" value="<?php echo esc_attr( $size['name'] ) ?>"/> <?php
                                     } else {
                                         echo $this->format_price($size['price']);
                                         ?>
-                                        <input type="hidden" name="sizes[<?php echo $key ?>][name]" class="name"value="<?php echo esc_attr( $size['name'] ) ?>"/>
-                                        <input type="hidden" name="sizes[<?php echo $key ?>][price]" class="price" value="<?php echo esc_attr( $size['price'] ) ?>"/><?php
+                                        <input type="hidden" name="sizes[<?php echo esc_attr($key) ?>][name]" class="name"value="<?php echo esc_attr( $size['name'] ) ?>"/>
+                                        <input type="hidden" name="sizes[<?php echo esc_attr($key) ?>][price]" class="price" value="<?php echo esc_attr( $size['price'] ) ?>"/><?php
                                     }
                                     ?>
                                 </td>
                                 <td >
                                 <?php if( isset( $size['unit'] ) ) : ?>
-                                    <input type="hidden" class="unit" name="sizes[<?php echo $key ?>][unit]" value="<?php echo esc_attr($size['unit']) ?>" />
+                                    <input type="hidden" class="unit" name="sizes[<?php echo esc_attr($key) ?>][unit]" value="<?php echo esc_attr($size['unit']) ?>" />
                                 <?php endif ?>
                                 </td>
                                 <td title="<?php _e('Check to make size downloadable', 'ims') ?>" class="download">
@@ -967,15 +967,15 @@ class ImStorePricing extends ImStoreAdmin {
 								<td class="move" title="<?php _e( 'Move', 'ims' ) ?>">&nbsp;</td>
 								<td colspan="3">
 									<?php echo $color['name'] ?>
-									<input type="text" name="colors[<?php echo $key ?>][name]" value="<?php echo $color['name'] ?>" class="name" />
+									<input type="text" name="colors[<?php echo esc_attr($key) ?>][name]" value="<?php echo esc_attr($color['name']) ?>" class="name" />
 								</td>
 								<td>
 									<?php echo $this->format_price( $color['price'] ) ?>
-									<input type="text" name="colors[<?php echo $key ?>][price]" value="<?php echo $color['price'] ?>" class="price" />
+									<input type="text" name="colors[<?php echo esc_attr($key) ?>][price]" value="<?php echo esc_attr($color['price'])?>" class="price" />
 								</td>
 								<td colspan="2">
 									<?php if( isset( $color['code'] ) ) : echo $color['code'] ?>
-									<input type="text" name="colors[<?php echo $key ?>][code]" value="<?php echo $color['code'] ?>" class="code" />
+									<input type="text" name="colors[<?php echo esc_attr($key) ?>][code]" value="<?php echo esc_attr($color['code']) ?>" class="code" />
 									<?php endif;?>
 								</td>
 								<td class="x" title="<?php _e( 'Delete', 'ims' ) ?>">x</td>
@@ -992,11 +992,11 @@ class ImStorePricing extends ImStoreAdmin {
 								<td class="move" title="<?php _e('Move', 'ims') ?>">&nbsp;</td>
 								<td colspan="3" class="name">
 									<span class="hidden"><?php echo $finish['name'] ?></span>
-									<input type="text" name="finishes[<?php echo $key ?>][name]" value="<?php echo esc_attr( $finish['name'] ) ?>" class="name" />
+									<input type="text" name="finishes[<?php echo esc_attr($key) ?>][name]" value="<?php echo esc_attr( $finish['name'] ) ?>" class="name" />
 								</td>
 								<td colspan="2" class="cost">
 									<span class="hidden"><?php echo ( $finish['type'] == 'percent' ) ? $finish['price']  : $this->format_price($finish['price']) ?></span>
-									<input type="text" name="finishes[<?php echo $key ?>][price]" value="<?php echo $finish['price'] ?>" class="price">
+									<input type="text" name="finishes[<?php echo esc_attr($key) ?>][price]" value="<?php echo esc_attr($finish['price'] )?>" class="price">
 								</td>
 								<td class="type">
 									<span class="hidden"><?php echo $finish['type'] ?></span>
@@ -1054,7 +1054,7 @@ class ImStorePricing extends ImStoreAdmin {
                       <td class="move" title="<?php _e( 'Move to list', 'ims' ) ?>">&nbsp;</td>
                       <td colspan="3" class="name">
                           <span class="hidden"><?php echo $finish['name'] ?></span>
-                          <input type="text" name="finishes[<?php echo $key ?>][name]" value="<?php echo esc_attr( $finish['name'] ) ?>" class="name" />
+                          <input type="text" name="finishes[<?php echo esc_attr($key) ?>][name]" value="<?php echo esc_attr( $finish['name'] ) ?>" class="name" />
                       </td>
                       <td colspan="2" class="price">
                       
@@ -1062,7 +1062,7 @@ class ImStorePricing extends ImStoreAdmin {
                            echo ( $finish['type'] == 'amount' ) ? $this->format_price($finish['price']) : $finish['price'] . "%";
                            ?></span>
                            
-                          <input type="text" name="finishes[<?php echo $key ?>][price]" value="<?php echo esc_attr( $finish['price'] ) ?>" class="price" />
+                          <input type="text" name="finishes[<?php echo esc_attr($key) ?>][price]" value="<?php echo esc_attr( $finish['price'] ) ?>" class="price" />
                       </td>
                       <td class="type">
                           <span class="hidden"><?php echo $finish['type'] ?></span>
@@ -1131,7 +1131,7 @@ class ImStorePricing extends ImStoreAdmin {
 			<?php foreach( $this->get_packages( ) as $key => $package ):?>
 				<tr class="packages row alternate">
 					<td class="move" title="<?php _e( 'Move to list', 'ims' )?>">&nbsp;</td>
-					<td colspan="3" class="name"><?php echo $package->post_title?>: 
+					<td colspan="3" class="name"><?php echo esc_html( $package->post_title )?>: 
 					<?php $sizes = ''; 
 						foreach( (array) get_post_meta( $package->ID, '_ims_sizes', true ) as $size => $count){
 							if( is_array( $count ) ) $sizes .= $size.' '.$count['unit'].' ( '.$count['count'].' ), ';
@@ -1146,7 +1146,7 @@ class ImStorePricing extends ImStoreAdmin {
 					</td>
 					<td class="hidden">&nbsp;</td>
 					<td title="<?php _e( 'Check to make size downloadable', 'ims' ) ?>" class="downloadable">
-						<input type="checkbox" name="packages[<?php echo $key ?>][download]" class="downloadable" value="1"  />
+						<input type="checkbox" name="packages[<?php echo esc_attr($key)  ?>][download]" class="downloadable" value="1"  />
 					</td>
 					<td class="x" title="<?php _e( 'Delete', 'ims' )?>">x</td>
 				</tr>
@@ -1184,22 +1184,22 @@ class ImStorePricing extends ImStoreAdmin {
 				<?php foreach ( (array) $this->get_option('ims_color_filters') as $code => $filter ) : ?>
 				<tr class="filters row alternate">
 					<td class="name">
-						<input type="text" name="filters[<?php echo $code ?>][name]" value="<?php echo esc_attr( $filter['name'] ) ?>" class="name" />
+						<input type="text" name="filters[<?php echo esc_attr($code) ?>][name]" value="<?php echo esc_attr( $filter['name'] ) ?>" class="name" />
 					</td>
 					<td class="code">
-						<input type="text" name="filters[<?php echo $code ?>][code]" value="<?php echo esc_attr( $filter['code'] ) ?>" class="code" />
+						<input type="text" name="filters[<?php echo esc_attr($code) ?>][code]" value="<?php echo esc_attr( $filter['code'] ) ?>" class="code" />
 					</td>
 					<td class="contrast">
-						<input type="text" name="filters[<?php echo $code ?>][contrast]" value="<?php echo esc_attr( $filter['contrast'] ) ?>" class="contrast" />
+						<input type="text" name="filters[<?php echo esc_attr($code) ?>][contrast]" value="<?php echo esc_attr( $filter['contrast'] ) ?>" class="contrast" />
 					</td>
 					<td class="brightness">
-						<input type="text" name="filters[<?php echo $code ?>][brightness]" value="<?php echo esc_attr( $filter['brightness'] ) ?>" class="brightness" />
+						<input type="text" name="filters[<?php echo esc_attr($code) ?>][brightness]" value="<?php echo esc_attr( $filter['brightness'] ) ?>" class="brightness" />
 					</td>
 					<td class="colorize">
-						<input type="text" name="filters[<?php echo $code ?>][colorize]" value="<?php echo esc_attr( $filter['colorize'] ) ?>" class="colorize" />
+						<input type="text" name="filters[<?php echo esc_attr($code) ?>][colorize]" value="<?php echo esc_attr( $filter['colorize'] ) ?>" class="colorize" />
 					</td>
                     <td class="grayscale">
-						<input type="checkbox" name="filters[<?php echo $code ?>][grayscale]" <?php checked( $filter['grayscale'], true ) ?>value="1" class="grayscale" />
+						<input type="checkbox" name="filters[<?php echo esc_attr($code) ?>][grayscale]" <?php checked( $filter['grayscale'], true ) ?>value="1" class="grayscale" />
 					</td>
 					<td class="x" title="<?php _e( 'Delete', 'ims' )?>">x</td>
 				</tr><!--.row-->
@@ -1246,7 +1246,7 @@ class ImStorePricing extends ImStoreAdmin {
 		<?php foreach( $this->get_packages( ) as $key => $package ): ?>
 			<?php $price = get_post_meta( $package->ID, '_ims_price', true ) ?>
             
-            <form method="post" id="package-list-<?php echo $package->ID?>" action="<?php echo $this->pageurl."#{$tabid}"?>" >
+            <form method="post" id="package-list-<?php echo $package->ID?>" action="<?php echo esc_attr($this->pageurl."#{$tabid}") ?>" >
                 <table class="ims-table package-list"> 
                     <thead>
                         <tr class="bar">
@@ -1274,11 +1274,11 @@ class ImStorePricing extends ImStoreAdmin {
                                 <td colspan="3" class="pck-name"><?php echo "$size ".$count['unit']?></td>
                                 <td class="price">
                                 <?php $count_val = ( is_array( $count) ) ?  $count['count'] : $count ?>
-                                <input type="hidden" name="packages[<?php echo $size ?>][name]" class="name" value="<?php echo esc_attr( $size )?>" />
-                                <input type="text" name="packages[<?php echo $size ?>][count]" value="<?php
+                                <input type="hidden" name="packages[<?php echo esc_attr( $size ) ?>][name]" class="name" value="<?php echo esc_attr( $size )?>" />
+                                <input type="text" name="packages[<?php echo esc_attr( $size ) ?>][count]" value="<?php
                                  echo esc_attr( $count_val ) ?>" class="count" title="<?php _e( 'Quantity', 'ims' )?>" />
                                 </td>
-                                <td><input type="hidden" name="packages[<?php echo $size ?>][unit]" class="unit" value="<?php echo esc_attr( $count['unit'] )?>" /></td>
+                                <td><input type="hidden" name="packages[<?php echo esc_attr( $size ) ?>][unit]" class="unit" value="<?php echo esc_attr( $count['unit'] )?>" /></td>
                                 <td class="x" title="<?php _e( 'Delete', 'ims' )?>">x</td>
                             </tr><!--.row-->
                             
@@ -1478,14 +1478,14 @@ class ImStorePricing extends ImStoreAdmin {
 								$r .= '<input type="checkbox" name="promo[]" value="' . esc_attr( $promo->ID ) . '" /> </th>';
 								break;
 							case 'name':
-								$r .= '<td class="column-' . $column_id . '" > ' . $promo->post_title . '<div class="row-actions">' ;
-								$r .= '<span><a href="' . $this->pageurl . "&amp;iaction={$promo->ID}#promotions" . '">' . __( "Edit", 'ims' ) . '</a></span> |';
-								$r .= '<span class="delete"><a href="' . $this->pageurl . "&amp;$nonce&amp;delete={$promo->ID}#promotions" . '"> ' . __( "Delete", 'ims' ) . '</a></span>';
+								$r .= '<td class="column-' . $column_id . '" > ' . esc_html( $promo->post_title ) . '<div class="row-actions">' ;
+								$r .= '<span><a href="' . esc_attr( $this->pageurl ) . "&amp;iaction={$promo->ID}#promotions" . '">' . __( "Edit", 'ims' ) . '</a></span> |';
+								$r .= '<span class="delete"><a href="' . esc_attr( $this->pageurl ) . "&amp;$nonce&amp;delete={$promo->ID}#promotions" . '"> ' . __( "Delete", 'ims' ) . '</a></span>';
 								$r .= '</div></td>';
 								break;
 							case 'code':
 								$r .= '<td class="column-' . $column_id . $hide . '" > ' ;
-								if( isset( $meta['promo_code'] ) ) $r .= $meta['promo_code'];
+								if( isset( $meta['promo_code'] ) ) $r .=  esc_html( $meta['promo_code'] );
 								$r .= '</td>' ;
 								break;
 							case 'starts':
@@ -1504,13 +1504,13 @@ class ImStorePricing extends ImStoreAdmin {
 								break;
 							case 'discount':
 								$r .= '<td class="column-' . $column_id . $hide . '" > ' ;
-								if( isset( $meta['discount'] ) ) $r .= $meta['discount'];
-								if( isset( $meta['items'] ) ) $r .= $meta['items'];
+								if( isset( $meta['discount'] ) ) $r .= esc_html( $meta['discount']);
+								if( isset( $meta['items'] ) ) $r .= esc_html($meta['items']);
 								$r .= '</td>' ;
 								break;
 							case 'limit':
 								$r .= '<td class="column-' . $column_id . $hide . '" > ' ;
-								if( isset( $meta['promo_limit'] ) ) $r .= $meta['promo_limit'] ;
+								if( isset( $meta['promo_limit'] ) ) $r .= esc_html($meta['promo_limit']);
 								$r .= '</td>' ;
 								break;
 							case 'redeemed':

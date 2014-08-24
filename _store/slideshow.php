@@ -35,10 +35,10 @@
 	$output .= '<form method="post" class="ims-slideshow-tools">' . "\n";
 	
 	if ( $this->active_store ) 
-		$output .= '<div class="add-images-to-cart-single"><a href="#" role="button" rel="nofollow">' . __( 'Add to cart', 'ims' ) . '</a></div>' . "\n";
+		$output .= '<div class="add-images-to-cart-single"><a href="#" role="button" rel="nofollow">' . esc_html__( 'Add to cart', 'ims' ) . '</a></div>' . "\n";
 	
 	if( $this->opts['favorites'] )
-		$output .= '<div class="add-to-favorite-single"><a href="#" role="button" rel="nofollow">' . __( 'Add to favorites', 'ims' ) . '</a></div>' . "\n";
+		$output .= '<div class="add-to-favorite-single"><a href="#" role="button" rel="nofollow">' . esc_html__( 'Add to favorites', 'ims' ) . '</a></div>' . "\n";
 	
 	$output .= apply_filters( 'ims_slideshow_actions', '' );
 	
@@ -54,8 +54,8 @@
 		$output .= '<span class="ims-color-label">' . __( 'Color Preview:', 'ims' ) . '</span>' . "\n";
 		foreach ( $this->listmeta['colors'] as $key => $color ){
 			if( isset( $color['code'] ) && $color['code'] )
-				$output .= '<label><input type="checkbox" name="ims-color[]" value="'.$color['code'].
-				'" class="ims-color ims-color-'.$color['code'].'" /> ' . $color['name'] . '</label>	' . "\n";
+				$output .= '<label><input type="checkbox" name="ims-color[]" value="'. esc_attr( $color['code'] ) .
+				'" class="ims-color ims-color-'. esc_attr( $color['code'] ) .'" /> ' . esc_html( $color['name'] ) . '</label>	' . "\n";
 		}
 	}
 	

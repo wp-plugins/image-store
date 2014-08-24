@@ -18,10 +18,26 @@
 		//load wp
 		require_once '../../../../wp-load.php';
 		
-		if ( !is_multisite( ) )
+		
+		if( isset( $_GET['single'] ) && is_numeric( $_GET['single']  ) ){
+			
+			if ( is_multisite( ) )
+				switch_to_blog( $_GET['single'] );
+			
+			include_once( IMSTORE_ABSPATH . '/admin/install.php' );
+			$ImStoreInstaller = new ImStoreInstaller( );
+			$ImStoreInstaller->init( );
+			
+			if ( is_multisite( ) )
+				wp_redirect( network_admin_url( '?post_type=ims_gallery&ims-updated' ) );
+			else wp_redirect( admin_url( '/edit.php?post_type=ims_gallery&ims-updated' ) );
+			die( );
+		}
+		
+		if ( ! is_multisite( ) )
 			wp_die( __( 'Multisite support is not enabled.' ) );
 			
-		if ( !current_user_can( 'manage_network' ) )
+		if ( ! current_user_can( 'manage_network' ) )
 			wp_die(  __( 'You do not have permission to access this page.' ) );
 			
 		$n = ( isset( $_GET['n'] ) ) ? intval( $_GET['n'] ) : 0;

@@ -98,7 +98,7 @@
 				<input type="hidden" name="_ims_expire" id="_ims_expire" value="<?php echo $ims_expire ?>"/>
 			</td>
 			<td><label for="_ims_visits"><?php _e( 'Visits', 'ims' ) ?></label></td>
-			<td><input type="text" name="_ims_visits" id="_ims_visits" value="<?php echo esc_attr( $_ims_visits ) ?>" /></td>
+			<td><input type="number" name="_ims_visits" id="_ims_visits" value="<?php echo esc_attr( $_ims_visits ) ?>" /></td>
 		</tr>
 		<tr>
 			<td><label for="_dis_store" ><?php _e( 'Disable store', 'ims' ) ?></label></td>

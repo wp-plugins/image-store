@@ -79,8 +79,11 @@
 	$page_links = false;
 	if( ! isset( $wp_user_search->search_term ) ){
 		
+		$wp_user_search->search_term = false;
 		$start = ( $userspage - 1 ) * $this->per_page;
-		$wp_user_search->search_term = $wp_user_search->get( 'search' );
+		
+		if( method_exists( $wp_user_search, 'get' ) )
+			$wp_user_search->search_term = $wp_user_search->get( 'search' );
 		
 		$page_links = paginate_links( array(
 			'current' => $userspage,
@@ -169,19 +172,19 @@
 								$r .= "<th scope='row' class='check-column'><input type='checkbox' name='customer[]' value='" . esc_attr( $userid ) . "' /></th>";
 								break;
 							case 'lastname':
-								$r .= "<td class='column-{$columnid}{$hide}'>" . ( empty( $user->last_name ) ? '&nbsp;' : $user->last_name ) . "</td>";
+								$r .= "<td class='column-{$columnid}{$hide}'>" . ( empty( $user->last_name ) ? '&nbsp;' : esc_html($user->last_name) ) . "</td>";
 								break;
 							case 'email':
-								$r .= "<td class='column-{$columnid}{$hide}'>" . ( empty( $user->user_email ) ? '&nbsp;' : $user->user_email ) . "</td>";
+								$r .= "<td class='column-{$columnid}{$hide}'>" . ( empty( $user->user_email ) ? '&nbsp;' : esc_html($user->user_email) ) . "</td>";
 								break;
 							case 'phone':
-								$r .= "<td class='column-{$columnid}{$hide}'>" . ( empty( $user->ims_phone ) ? '&nbsp;' : $user->ims_phone ) . "</td>";
+								$r .= "<td class='column-{$columnid}{$hide}'>" . ( empty( $user->ims_phone ) ? '&nbsp;' : esc_html($user->ims_phone) ) . "</td>";
 								break;
 							case 'city':
-								$r .= "<td class='column-{$columnid}{$hide}'>" . ( empty( $user->ims_city ) ? '&nbsp;' : $user->ims_city ) . "</td>";
+								$r .= "<td class='column-{$columnid}{$hide}'>" . ( empty( $user->ims_city ) ? '&nbsp;' : esc_html($user->ims_city) ) . "</td>";
 								break;
 							case 'state':
-								$r .= "<td class='column-{$columnid}{$hide}'>" . ( empty( $user->ims_state ) ? '&nbsp;' : $user->ims_state ) . "</td>";
+								$r .= "<td class='column-{$columnid}{$hide}'>" . ( empty( $user->ims_state ) ? '&nbsp;' : esc_html($user->ims_state) ) . "</td>";
 								break;
 							case 'newsletter':
 								$r .= "<td class='column-{$columnid}{$hide}'>" .
@@ -198,11 +201,11 @@
 								
 								if ( !$usersearch )
 									$r .= " | <a href='$this->pageurl&amp;$nonce&amp;imsaction={$stat}&amp;customer=$userid' title='" . 
-									$user_status[$stat] . "'>" . $user_status[$stat] . "</a>";
+									$user_status[$stat] . "'>" . esc_html( $user_status[$stat] ) . "</a>";
 								
 								if ( $this->status == 'inative' )
 									$r .= " | <span class='delete'><a href='$this->pageurl&amp;$nonce&amp;imsaction=delete&amp;customer=$userid' title='" .
-									$user_status['delete'] . "'>" . $user_status['delete'] . "</a></span>";
+									$user_status['delete'] . "'>" .esc_html( $user_status['delete'] ) . "</a></span>";
 									
 								$r .= "</div></td>";
 								break;

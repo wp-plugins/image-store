@@ -37,15 +37,15 @@
     
     <ul class="ims-tabs add-menu-item-tabs">
 		<?php foreach( $settings_tabs as $name => $tab ):?>
-        <li class="tabs"><a href="#<?php echo $name ?>"><?php echo $tab ?></a></li>
+        <li class="tabs"><a href="#<?php echo $name ?>-box"><?php echo $tab ?></a></li>
         <?php endforeach?>
     </ul>
     
     
     <?php foreach($settings_tabs as $boxid => $box ): ?>
     
-    <div id="<?php echo $boxid ?>" class="ims-box">
-		<form method="post" class="<?php echo "$boxid-table" ?>" action="<?php echo $this->pageurl , '#', $boxid ?>" >
+    <div id="<?php echo $boxid ?>-box" class="ims-box">
+		<form method="post" class="<?php echo "$boxid-table" ?>" action="<?php echo $this->pageurl , '#', $boxid ?>-box" >
         	<?php if( isset( $settings[$boxid] ) && is_array( $settings[$boxid] ) ) : //start setting ?>
            	
             <table class="ims-table">
