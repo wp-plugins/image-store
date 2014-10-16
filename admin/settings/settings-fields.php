@@ -152,7 +152,7 @@
 		'galleriespath' => array( 
 			'val' => '',
 			'type' => 'text',
-			'label' => __( 'Gallery folder path', 'ims' ),
+			'label' => __( 'Galleries folder path', 'ims' ),
 			'desc' => __( 'Default folder path for all the galleries images', 'ims' ),
 		 ),
 		'securegalleries' => array( 

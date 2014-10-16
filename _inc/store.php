@@ -70,7 +70,6 @@ class ImStoreFront extends ImStore {
 		'images' => array( ),
 	);
 	
-	
 	/**
 	 * Constructor
 	 *
@@ -263,7 +262,8 @@ class ImStoreFront extends ImStore {
 	 * Allow customer role to access images 
 	 * without loging into each post
 	 *
-	 * @return void
+	 * @param object $post
+	 * @return void | null
 	 * @since 3.0.5
 	 */
 	function bypass_protected_galleries( &$post ){
@@ -298,7 +298,7 @@ class ImStoreFront extends ImStore {
 	 * Return 404 for secure images
 	 * if the user is not loged in
 	 *
-	 * @return void
+	 * @return void | null
 	 * @since 3.0.5
 	 */
 	function secure_images( ) {
@@ -391,7 +391,7 @@ class ImStoreFront extends ImStore {
 	/**
 	 * Request post actions
 	 *
-	 * @return void
+	 * @return void | null
 	 * @since 3.1.7
 	 */
 	function post_actions( ) {
@@ -425,7 +425,8 @@ class ImStoreFront extends ImStore {
 	/**
 	 * Add gateway information
 	 *
-	 * @return void
+	 * @param array $gateways
+	 * @return array
 	 * @since 3.2.5
 	 */
 	function add_gateways( $gateways ){
@@ -544,7 +545,7 @@ class ImStoreFront extends ImStore {
 	/**
 	 * Add items to cart
 	 *
-	 * @return void
+	 * @return null | object
 	 * @since 0.5.0
 	 */
 	function add_to_cart( ) {
@@ -570,7 +571,7 @@ class ImStoreFront extends ImStore {
 	/**
 	 * update cart information
 	 *
-	 * @return void
+	 * @return null | object
 	 * @since 3.0.0
 	 */
 	function update_cart( ) {
@@ -597,7 +598,7 @@ class ImStoreFront extends ImStore {
 	 * shipping information
 	 *
 	 * @since 1.0.2
-	 * return array|errors
+	 * return void | null
 	 */
 	function validate_user_input( ) {
 		
@@ -657,7 +658,7 @@ class ImStoreFront extends ImStore {
 	/**
 	 * Populate favorites variables
 	 *
-	 * @return void
+	 * @return void | null
 	 * @since 3.1.7
 	 */
 	function set_favorites( ){

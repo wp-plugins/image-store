@@ -207,6 +207,7 @@ class ImStoreInstaller extends ImStore {
 			'wepayprod' => false,
 			'pagseguroprod'=> false,
 			'pagsegurosand' => false,
+			'sagepaydev' => false,
 			'sagepay' => false,
 			'custom' => false,
 		);

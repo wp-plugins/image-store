@@ -84,6 +84,11 @@ The plugin fully integrated with the WordPress database, so you will not find an
 
 == Changelog ==
 
+= 3.5.0=
+* Added: Support for xclusive theme.
+* Fixed: Expiration date issue.
+* Fixed: lightbox issues.
+
 = 3.4.10=
 * Fixed: Expiration date issue.
 * Fixed: Mobile styles.
