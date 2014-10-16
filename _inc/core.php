@@ -34,7 +34,7 @@ class ImStore {
 	public $promo_types = array( );
 	public $rules_property = array( );
 	
-	public $version = '3.4.10';
+	public $version = '3.5.0';
 	public $customer_role = 'customer';
 	public $optionkey = 'ims_front_options';
 	
@@ -222,6 +222,9 @@ class ImStore {
 			register_widget( 'ImStoreWidgetTools' );
 		}
 		
+		// base image url
+		$this->baseurl = apply_filters( 'ims_base_image_url', IMSTORE_URL . '/image.php?i=' );
+		
 		//speed up wordpress load
 		if ( defined( 'DOING_AJAX' ) || defined( 'DOING_AUTOSAVE' ) || SHORTINIT )
 			return;
@@ -234,7 +237,6 @@ class ImStore {
 		
 		$this->dformat = get_option( 'date_format' );
 		$this->perma = get_option( 'permalink_structure' );
-		$this->baseurl = apply_filters( 'ims_base_image_url', IMSTORE_URL . '/image.php?i=' );
 		$this->cformat = array( '', "$this->sym%s", "$this->sym %s", "%s$this->sym", "%s $this->sym");
 		
 		$this->units = apply_filters( 'ims_units', array(
@@ -553,7 +555,7 @@ class ImStore {
 			"UPDATE $wpdb->posts p INNER JOIN $wpdb->postmeta AS m ON p.ID = m.post_id 
 			SET p.post_status =  'expire' WHERE m.meta_key =  '_ims_post_expire' 
 			AND post_type =  'ims_gallery' AND m.meta_value !=  '0000-00-00 00:00:00' 
-			AND FROM_DAYS( m.meta_value ) <=  FROM_DAYS( '%s' ) "
+			AND DATE( m.meta_value ) <=  DATE( '%s' ) "
 		, $time ) );
 
 		//delete orders not proccessed
