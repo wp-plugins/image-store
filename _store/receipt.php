@@ -32,12 +32,13 @@
 		(  make_clickable( wpautop( stripslashes( preg_replace( $this->opts['tags'], $ImStoreCart->substitutions, $this->opts['thankyoureceipt'] )) ) ) )
 		 . '</div>
 	</div>';
-	
+		
 	$ImStoreCart->get_download_links( );
 	$output .= $ImStoreCart->download_links;
 	$output .= '<div class="cl"></div>';
 	
-	
+	$output  .= '<a href="' . $this->get_permalink( 'photos' ) . '" class="button return-shopping" rel="prev">' . __( 'Continue Shopping' , 'ims') . '</a>';
+	 
 	// Display registration form 
 	if( ! is_user_logged_in( ) && $this->opts['loginform'] ){
 		
@@ -77,5 +78,6 @@
 			if( $images = $ImStoreCart->merge_recursive( $user_images, $ImStoreCart->cart['images'] ) )
 				update_user_meta( $user->ID, "_ims_user_{$user->ID}_images", $images );
 		}else update_user_meta( $user->ID, "_ims_user_{$user->ID}_images", $ImStoreCart->cart['images'] );
+		
 		setcookie( 'ims_orderid_' . COOKIEHASH, false, ( time(  ) - 315360000 ), COOKIEPATH, COOKIE_DOMAIN );
 	}

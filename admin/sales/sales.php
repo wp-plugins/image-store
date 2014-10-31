@@ -42,19 +42,24 @@
 		'in_progress' => __( 'In Progress', 'ims' ),
 	) );
 	
-	$args = apply_filters( 'ims_pre_get_sales', array(
+	$args = array(
 		'paged' => $page,
 		'post_type' => 'ims_order',
 		'post_status' => $this->status,
 		'year' => substr( $this->cdate, 0, 4 ),
 		'monthnum' => substr( $this->cdate, -2 ),
 		'posts_per_page' => $this->per_page,
-		'meta_query' => array( array(
+	);
+	
+	if( !empty( $this->payment_status ) )
+		$args['meta_query'] = array( array(
 			'compare' => 'LIKE',
 			'key' => '_response_data', 
 			'value' => $this->payment_status,
-		) )
-	) );
+		) );
+	
+	$args = apply_filters( 'ims_pre_get_sales', $args );
+	
 	
 	$sales = new WP_Query( $args );
 	$start = ($page - 1) * $this->per_page;

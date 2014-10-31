@@ -142,7 +142,7 @@ class ImStoreCustomers extends ImStoreAdmin {
 		add_filter( 'screen_settings', array( &$this, 'screen_settings' ), 15, 2 );
 
 		register_column_headers( 'ims_gallery_page_ims-customers', $this->columns );
-		$this->hidden = ( array) get_hidden_columns( 'ims_gallery_page_ims-customers' );
+		$this->hidden = ( array ) get_hidden_columns( 'ims_gallery_page_ims-customers' );
 	}
 	
 	/**

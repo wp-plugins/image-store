@@ -151,12 +151,20 @@
                     <td class="column-thumb" scope="row">&nbsp;</td>
                     <td><?php _e('Shipping Adress 2', 'ims')?></td>
                     <td colspan="2">
-                    <?php
-                    foreach( array( 'ims_city', 'ims_state', 'ims_zip', 'ims_contry' ) as $key  ){
-                        if( ! empty( $this->data[$key]  ) ) 
-                            echo esc_html( $this->data[$key] ) . ", ";
+                   
+				    <?php
+                    foreach( array( 
+						'ims_city', 'ims_state', 'ims_zip', 'ims_contry', 
+						'address_city', 'address_state', 'address_zip', 'address_country' 
+					) as $key ){
+                        if( ! empty( $this->data[$key]  ) ) {
+							if( in_array( $key, array( 'address_country', 'ims_contry' ) ) )
+                            	echo esc_html( $this->data[$key] );
+							else  echo esc_html( $this->data[$key] ) . ", ";
+						}
                     }
                     ?>
+					
                     </td>
                     <td><?php _e( 'Tax', 'ims' )?></td>
         

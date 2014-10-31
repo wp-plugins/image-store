@@ -1761,7 +1761,12 @@ class ImStoreFront extends ImStore {
 		if( $this->opts['titleascaption'] )
 			$caption = $title;
 		
-		$meta += array( 'link' => get_permalink( $next_post->ID ), 'alt' => $title, 'class' => array(), 'caption' => wptexturize( $caption ), 'title' => $title );
+		$meta += array( 
+			'title' => $title,
+			'alt' => $title, 
+			'link' => get_permalink( $next_post->ID ), 
+			'class' => array(), 'caption' => wptexturize( $caption ),
+		);
 		
 		$mcss = '';
 		if ( $this->error )
@@ -1769,7 +1774,7 @@ class ImStoreFront extends ImStore {
 		if ( $this->message )
 			$mcss = ' ims-success';
 		
-		$output = '<div class="ims-message' . $mcss . '">' . $this->message . $this->error . '</div>';
+		$output = '<div class="ims-message' . $mcss . '">' . esc_html( $this->message . $this->error ) . '</div>';
 		$output .= $this->image_tag( $post->ID, $meta, 1 );
 		
 		if( $this->opts['favorites'] )
@@ -1829,7 +1834,12 @@ class ImStoreFront extends ImStore {
 		if( post_password_required( $post->ID ) )
 			$classes[] = 'ims-protected';
 		
-		$meta += array( 'link' => get_permalink( ), 'alt' => $title, 'caption' => $title, 'class' => $classes, 'title' => sprintf( __( 'View &quot;%s&quot; gallery', 'ims' ), $title ) );
+		$meta += array( 
+			 'class' => $classes, 
+			'link' => get_permalink( ),
+			 'alt' => $title, 'caption' => $title,
+			 'title' => sprintf( __( 'View &quot;%s&quot; gallery', 'ims' ), $title ) 
+		);
 		return $this->image_tag( $image->ID, $meta );
 	}
 	

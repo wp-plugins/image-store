@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: sagepay,photo store,gallery,imstore,image-store,secure,watermark,slideshow,rate,wepay,shopping,cart,paypal,widget,prints,pagseguro,nextgen,alternative
 Requires at least: 3.1.0
 Tested up to: 4.0
-Stable tag: 3.5.0
+Stable tag: 3.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,11 @@ The plugin fully integrated with the WordPress database, so you will not find an
 * http://checkout.google.com/support/sell/bin/answer.py?hl=en&answer=70647
 
 == Changelog ==
+
+= 3.5.1=
+* Fixed: Sales report shipping address issue.
+* Fixed: Some sales reports not saving.
+* Added: Check out option on image size selection.
 
 = 3.5.0=
 * Added: Support for xclusive theme.

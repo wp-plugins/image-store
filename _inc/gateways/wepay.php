@@ -75,7 +75,7 @@ class ImStoreCartWePay {
 		); 
 		
 		global $ImStoreCart;
-		$cartid = trim($ImStore->url_decrypt($checkout->reference_id),true);
+		$cartid = trim($ImStore->url_decrypt($checkout->reference_id));
 
 		$ImStoreCart->setup_cart( $cartid );
 		do_action( 'ims_before_wepay_notice', false, $cartid );

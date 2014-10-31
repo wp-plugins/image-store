@@ -26,8 +26,6 @@
 			  <label for="ims-quantity">' . __( 'Quantity', 'ims' ) . ' </label>
 			  <input name="ims-quantity" type="text" class="inputsm" id="ims-quantity" value="1" />
 		  </div><!--.ims-field-->';
-	
-	 
 	 
 		//color options
 		if ( !empty( $this->listmeta['colors'] ) ) :
@@ -89,13 +87,14 @@
 		
 	$form .= '</div><!--.ims-image-sizes-->';  
 	  
-	 
 	$form .=
-			  '<div class="ims-field ims-submit">
-			  <input type="submit" name="ims-add-to-cart" value="' . esc_attr__( 'Add to cart', 'ims' ) . '" class="button" />
-			  <input type="hidden" name="_wpnonce" value="' . wp_create_nonce( "ims_add_to_cart" ) . '" />
+		'<div class="ims-field ims-submit">
+			  <a href="' . esc_url( apply_filters( 'ims_form_checkout_url', $this->get_permalink( 'shopping-cart' )  ) ) . '" rel="nofollow" class="button checkout-button">' . 
+			  esc_html__( 'Checkout', 'ims' ) . '</a>
+			  <input type="submit" name="ims-add-to-cart" value="' . esc_attr__( 'Add to cart', 'ims' ) . '" class="button primary" />
+			  <input type="hidden" name="_wpnonce" value="' . esc_attr( wp_create_nonce( "ims_add_to_cart" ) ) . '" />
 			  <input type="hidden" name="ims-to-cart-ids" id="ims-to-cart-ids" />
-		  </div>
+		 </div>
 	  </div><!--.ims_prlicelist-wrap-->';
 
 	
