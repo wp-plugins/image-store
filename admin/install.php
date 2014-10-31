@@ -312,15 +312,19 @@ class ImStoreInstaller extends ImStore {
 			if( !is_array( $ims_ft_opts['gateway'] ) ){
 				$key = $ims_ft_opts['gateway'];
 				$ims_ft_opts['gateway'] = array(
-					'paypalsand' => 1,
-					'paypalprod' => false,
-					'googlesand' => false,
-					'googleprod' => false,
-					'googleprod' => false,
-					'wepaystage' => false,
-					'wepayprod' => false,
-					'enotification' => false,
-					'custom' => false,
+						'paypalsand' => 1,
+						'paypalprod' => false,
+						'googlesand' => false,
+						'googleprod' => false,
+						'googleprod' => false,
+						'enotification' => false,
+						'wepaystage'=> false,
+						'wepayprod' => false,
+						'pagseguroprod'=> false,
+						'pagsegurosand' => false,
+						'sagepaydev' => false,
+						'sagepay' => false,
+						'custom' => false,
 				);
 				$ims_ft_opts['gateway'][$key] = 1;
 			}
@@ -423,8 +427,15 @@ class ImStoreInstaller extends ImStore {
 			$ims_ft_opts['wepayaccountid'] = '';
 		}
 		
-		if ( $this->ver <= "3.4.6" ){
+		if ( $this->ver <= "3.4.6" )
 			$ims_ft_opts['downloadlinks'] = false;
+		
+		if ( $this->ver <= "3.4.6" )
+			$ims_ft_opts['downloadlinks'] = false;
+		
+		if ( $this->ver <= "3.5.1" ){
+			if( ! isset( $ims_ft_opts['gateway']['sagepaydev'] ) )
+				$ims_ft_opts['gateway']['sagepaydev'] = false;
 			update_option( $this->optionkey, $ims_ft_opts );
 		}
 			

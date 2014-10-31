@@ -96,7 +96,7 @@ class ImStoreCartPayPal {
 			
 		} else {
 						
-			$cartid = trim( $ImStore->url_decrypt($_POST['custom'] ), true );
+			$cartid = trim( $ImStore->url_decrypt( $_POST['custom'] ) );
 			
 			if( ! is_numeric( $cartid ) )
 				return;

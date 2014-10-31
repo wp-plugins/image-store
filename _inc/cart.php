@@ -26,6 +26,7 @@ class ImStoreCart {
 	public $data = array( );
 	public $sizes = array( );
 	public $listmeta = array( );
+
 	
 	/**
 	 * Setup cart data
@@ -43,9 +44,9 @@ class ImStoreCart {
 			$this->orderid =  $ImStore->url_decrypt( $_COOKIE[ 'ims_orderid_' . COOKIEHASH ] );
 		else if ( $orderid )	
 			$this->orderid = $orderid;
-			
-		$this->status = get_post_status( $this->orderid );
 		
+		$this->get_order_status();
+				
 		if ( ! $this->orderid ) {
 			$order = array(
 				'ping_status' => 'close',
@@ -156,6 +157,33 @@ class ImStoreCart {
 			return false;
 		
 		return $this->validated = true;
+	}
+	
+	/**
+	 * Get the order status
+	 *
+	 * @return bool | Null
+	 * @since 3.5.1
+	 */
+	function get_order_status( ){
+		
+		if( empty( $this->orderid ) )
+			return false;
+			
+		if( $status = get_post_status( $this->orderid ) )
+			return $this->status = $status;
+			
+		$post = get_posts( array( 
+			'posts_per_page' => 1, 
+			'include' => $this->orderid,
+			'post_status' => 'any',
+			'post_type' => 'ims_order', 
+		));
+		
+		if( isset( $post[0] ) )
+			return $this->status = $post[0]->post_status;
+			
+		return false;
 	}
 	
 	/**
@@ -790,7 +818,7 @@ class ImStoreCart {
 			__('%cart_shipping%', 'ims') => $this->cart['shipping'],
 			__('%cart_currency%', 'ims') => $ImStore->opts['currency'],
 			__('%cart_subtotal%', 'ims') => $this->cart['subtotal'],
-			__('%cart_status%', 'ims') => get_post_status( $this->orderid ),
+			__('%cart_status%', 'ims') => $this->status,
 			__('%cart_discount%', 'ims') => $this->cart['promo']['discount'],
 			__('%cart_discount_code%', 'ims') => $this->cart['promo']['code'],
 			__('%cart_total_items%', 'ims') => $this->cart['items'],

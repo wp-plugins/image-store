@@ -543,7 +543,7 @@ class ImStoreAdmin extends ImStore {
 	 * @return string
 	 * @since 3.2.1
 	 */
-	function add_columns_user_val( $null, $column_name, $user_id ) {
+	function add_columns_user_val( $value, $column_name, $user_id ) {
 		$data = get_userdata( $user_id );
 		switch ( $column_name ) {
 			case 'fistname':
@@ -562,6 +562,7 @@ class ImStoreAdmin extends ImStore {
 				return isset( $data->ims_status ) ? $this->user_status[$data->ims_status] : false;
 				break;
 			default:
+				return $value;
 		}
 	}
 	
@@ -1319,7 +1320,7 @@ class ImStoreAdmin extends ImStore {
 	function posts_where_request( $where ) {
 		if ( ! $this->if_column( ) )
 			return $where;
-		return $where . " AND images.post_type = 'ims_image' AND images.post_status IN( 'publish', 'draft', 'trash')";
+		return $where . " AND images.post_type = 'ims_image' AND images.post_status IN( 'publish', 'draft', 'trash') ";
 	}
 
 	/**
@@ -1366,8 +1367,8 @@ class ImStoreAdmin extends ImStore {
 				$vars['meta_key'] = '_ims_tracking';
 				break;
 			default:
+				return $vars;
 		}
-		return $vars;
 	}
 	
 	/**

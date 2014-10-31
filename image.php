@@ -245,6 +245,7 @@
 			
 			if( is_resource( $this->image ) )
 				return true;
+			else return false;
 		}
 	
 		
