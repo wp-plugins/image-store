@@ -138,7 +138,9 @@
 				$data = get_post_meta( $sale->ID, '_response_data', true );
 				$cart = get_post_meta( $sale->ID, '_ims_order_data', true );
 				
-				if( empty( $data['txn_id']  ) ) $data['txn_id']  = __( 'No order id', 'ims' );
+				if( empty( $data['txn_id']  ) ) 
+					$data['txn_id']  = __( 'No order id', 'ims' );
+					
 				$integrety = ( empty( $data['data_integrity'] ) && $sale->post_status == 'pending' ) ? ' not-verified' : '';
 				$payment = ( isset( $data['payment_status'] ) ) ? trim( strtolower( $data['payment_status'] ) ) : 'pending';
 				

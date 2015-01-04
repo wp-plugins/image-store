@@ -739,15 +739,23 @@ class ImStoreAdmin extends ImStore {
 		
 		//generate mini image for thumbnail edit
 		if ( isset( $_REQUEST['target'] ) && 'thumbnail' == $_REQUEST['target'] ) {
-			$resized_file = image_resize( 
-				$this->content_dir . "/$path/" . $metadata['sizes']['thumbnail']['file'],
-				$this->get_option("mini_size_w"),
-				$this->get_option("mini_size_h"), 
-				true
-			);
 			
-			if ( !is_wp_error( $resized_file ) && $resized_file && $info = getimagesize( $resized_file ) )
-				$metadata['sizes']['mini'] = array( 'file' => basename( $resized_file ), 'width' => $info[0], 'height' => $info[1] );
+			$resized_file = false;
+			$width = $this->get_option("mini_size_w");
+			$height = $this->get_option("mini_size_h");
+			$file_path = $this->content_dir . "/$path/" . $metadata['sizes']['thumbnail']['file'];
+			
+			if( function_exists( 'wp_get_image_editor') ){
+				$editor = wp_get_image_editor( $file_path );
+				if ( ! is_wp_error( $editor ) && ! is_wp_error( $editor->resize( $width, $height, true ) ) )
+					$resized_file = $editor->save( );
+				if ( ! is_wp_error( $resized_file ) && $resized_file )
+					$metadata['sizes']['mini'] = $resized_file;
+			} else { 
+				$resized_file = image_resize( $file_path, $width, $height, true );
+				if ( ! is_wp_error( $resized_file ) && $resized_file && $info = getimagesize( $resized_file ) )
+					$metadata['sizes']['mini'] = array( 'file' => basename( $resized_file ), 'width' => $info[0], 'height' => $info[1] );
+			}
 		}
 		
 		// if original is smaller than mini use mini as original
