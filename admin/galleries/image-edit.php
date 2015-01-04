@@ -84,8 +84,8 @@ addLoadEvent = function(func){if(typeof jQuery!="undefined")jQuery(document).rea
 	
 	<div class="media-frame-router">
 		<div class="media-router">
-			<a href="#attachment-meta" class="media-menu-item"><?php _e('Edit IPTC', 'ims' )?></a>
 			<a href="#image-editor" class="media-menu-item active"><?php _e('Edit Image',  'ims' )?></a>
+			<a href="#attachment-meta" class="media-menu-item"><?php _e('Edit IPTC', 'ims' )?></a>
 		</div>
 	</div>
 	
@@ -110,8 +110,8 @@ addLoadEvent = function(func){if(typeof jQuery!="undefined")jQuery(document).rea
 					<form action="" method="post" class="attachment-fields" >
 						<?php 	foreach ( $meta['image_meta'] as $key => $data ) {
 						echo '<div class="ims-meta-field">
-							<label class="setting" for="' . esc_attr( $key ) . '">' . ucwords( str_replace( array( '_', '-' ), ' ', $key) ) . '
-							<input type="text" name="' . esc_attr( $key ) . '" value="' . esc_attr( $data ) . '" /></label>
+							<label class="setting" for="' . esc_attr( $key ) . '">' . ucwords( str_replace( array( '_', '-' ), ' ', $key) ) . '</label>
+							<input type="text" name="' . esc_attr( $key ) . '" id="' .  esc_attr( $key ) . '" value="' . esc_attr( $data ) . '" />
 						</div>';
 					}?>
 						<input name="imageid" type="hidden"  value="<?php esc_attr_e( $id ) ?>" />
@@ -131,7 +131,7 @@ addLoadEvent = function(func){if(typeof jQuery!="undefined")jQuery(document).rea
 			
 			get_ims_tubmnail = function( ){
 				var postid = <?php echo $id?>; 
-				var data,history = imageEdit.filterHistory( postid, 0 );
+				var data, history = imageEdit.filterHistory( postid, 0 );
 								
 				data = {
 					imgid			:postid,
@@ -139,12 +139,11 @@ addLoadEvent = function(func){if(typeof jQuery!="undefined")jQuery(document).rea
 					action		:'edit-mini-image',
 					_wpnonce	:'<?php echo $nonce?>'
 				};
-				
 				setTimeout( function( ){ 
 					$.get( '<?php echo IMSTORE_ADMIN_URL . '/ajax.php'?>', data, function( url ){
 						if( url ) parent.ims_image_edit_update( <?php echo $id?>, url );
 					})
-				}, 1000 );
+				}, 400 );
 			}
 			
 			var target = 'all'; //what to edit

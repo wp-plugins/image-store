@@ -332,7 +332,6 @@ class ImStorePricing extends ImStoreAdmin {
 				$processed[ $filter['code'] ] = $filter;
 			}
 				
-			update_option( 'ims_cache_time', current_time( 'timestamp' ) );
 			update_option( 'ims_color_filters', $processed );
 			
 			wp_redirect( $this->pageurl . "&ms=45" );

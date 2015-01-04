@@ -358,11 +358,11 @@ class ImStoreFront extends ImStore {
 
 		$this->galid 						= $this->gal->ID;
 		$this->meta 						= get_post_custom( $this->galid );
-		$this->gallery_expire 		= strtotime( get_post_meta( $this->galid , '_ims_post_expire', true ) );	
+		$this->gallery_expire 			= strtotime( get_post_meta( $this->galid , '_ims_post_expire', true ) );	
 
 		$this->post_logged_in 		= isset( $_COOKIE['wp-postpass_' . COOKIEHASH] );
 		$this->is_grid 					= $this->in_array( $this->imspage, array( 'favorites', 'photos' ) );
-		$this->show_comments 	= $this->in_array( $this->imspage, array( 'photos', 'slideshow', '' ) );
+		$this->show_comments 		= $this->in_array( $this->imspage, array( 'photos', 'slideshow', '' ) );
 		
 		// is store active
 		if( $this->opts['store'] && empty( $this->meta['_dis_store'][0] ) )
@@ -523,7 +523,7 @@ class ImStoreFront extends ImStore {
 		
 		$ImStoreCart = new ImStoreCart( );
 		$this->cart = $ImStoreCart->setup_cart( );
-		
+				
 		$ImStoreCart->sizes = $this->sizes;
 		$ImStoreCart->gallery_id = $this->galid;
 		$ImStoreCart->listmeta = $this->listmeta;

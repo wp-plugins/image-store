@@ -18,6 +18,7 @@
 	$user = wp_get_current_user( );
 	global $ImStoreCart;
 	
+	
 	//redirect empty data
 	if( empty( $ImStoreCart->orderid ) || empty( $ImStoreCart->data ) ){
 		wp_redirect( get_permalink( ) );
@@ -41,12 +42,12 @@
 	 
 	// Display registration form 
 	if( ! is_user_logged_in( ) && $this->opts['loginform'] ){
-		
+				
 		$active = 'login';
 		$user_login = $message = '';
 		$user_email = $ImStoreCart->data['payer_email'];
 		
-		if( ! empty( $_POST ) && empty( $_POST['ims-enotice-checkout'] ) )	
+		if( isset ( $_POST['ims-submit-login'] ) || isset ( $_POST['ims-submit-register'] ) )	
 			extract( $ImStoreCart->validate_access_forms( )) ;
 		
 		$output .= apply_filters( 'ims_access_forms',  
@@ -70,7 +71,8 @@
 			</div>
 			<p class="submit"><input type="submit" name="ims-submit-register" class="button button-primary" value="' . esc_attr__( 'Register' ) . '" />	</p>		
 		</form>', $user_login, $user_email, $message );
-	
+		
+
 	} else {
 		
 		//save purchased images
@@ -81,3 +83,4 @@
 		
 		setcookie( 'ims_orderid_' . COOKIEHASH, false, ( time(  ) - 315360000 ), COOKIEPATH, COOKIE_DOMAIN );
 	}
+	

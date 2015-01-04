@@ -731,10 +731,11 @@ class ImStoreSet extends ImStoreAdmin {
 			}
 
 			//clear image cache data
-			update_option( 'ims_cache_time', current_time( 'timestamp' ) );
+			if( isset( $_POST['watermark'] ) )
+				update_option( 'ims_cache_time', current_time( 'timestamp' ) );
 
 			if ( 'permissions' == $action ) {
-				if ( !is_numeric( $_POST['userid'] ) ) {
+				if ( ! is_numeric( $_POST['userid'] ) ) {
 					
 					wp_redirect( $this->pageurl );
 					die( );
