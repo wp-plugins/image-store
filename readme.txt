@@ -84,28 +84,28 @@ The plugin fully integrated with the WordPress database, so you will not find an
 
 == Changelog ==
 
-= 3.5.2=
+= 3.5.2 =
 * Fixed: Receipt rediect.
 * Fixed: PHP notices.
 * Fixed: image edit script.
 * Improved: image script performace.
 * Added: Check out option on image size selection.
 
-= 3.5.1=
+= 3.5.1 =
 * Fixed: Sales report shipping address issue.
 * Fixed: Some sales reports not saving.
 * Added: Check out option on image size selection.
 
-= 3.5.0=
+= 3.5.0 =
 * Added: Support for xclusive theme.
 * Fixed: Expiration date issue.
 * Fixed: lightbox issues.
 
-= 3.4.10=
+= 3.4.10 =
 * Fixed: Expiration date issue.
 * Fixed: Mobile styles.
 
-= 3.4.9=
+= 3.4.9 =
 * Changed: WP 3.1 minimum required.
 * Improved: Update process.
 * Added: WP 3.4 support.
